@@ -3,7 +3,8 @@
  * Do not make changes to this file directly
  */
 
-import { core } from 'nexus';
+import { FieldAuthorizeResolver } from 'nexus/dist/plugins/fieldAuthorizePlugin';
+import { core, connectionPluginCore } from 'nexus';
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
     /**
@@ -24,6 +25,15 @@ declare global {
       fieldName: FieldName,
       ...opts: core.ScalarOutSpread<TypeName, FieldName>
     ): void; // "Date";
+    /**
+     * Adds a Relay-style connection to the type, with numerous options for configuration
+     *
+     * @see https://nexusjs.org/docs/plugins/connection
+     */
+    connectionField<FieldName extends string>(
+      fieldName: FieldName,
+      config: connectionPluginCore.ConnectionFieldConfig<TypeName, FieldName>,
+    ): void;
   }
 }
 
@@ -31,7 +41,14 @@ declare global {
   interface NexusGen extends NexusGenTypes {}
 }
 
-export interface NexusGenInputs {}
+export interface NexusGenInputs {
+  UpdateRetreatInput: {
+    // input type
+    content?: string | null; // String
+    maxParticipants?: number | null; // Int
+    title?: string | null; // String
+  };
+}
 
 export interface NexusGenEnums {
   StatusEnum: 'ARCHIVED' | 'DRAFT' | 'PUBLISHED';
@@ -47,60 +64,110 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Mutation: {};
+  PageInfo: {
+    // root type
+    endCursor?: string | null; // String
+    hasNextPage: boolean; // Boolean!
+    hasPreviousPage: boolean; // Boolean!
+    startCursor?: string | null; // String
+  };
   Query: {};
   Retreat: {
     // root type
-    content?: string | null; // String
-    created?: NexusGenScalars['Date'] | null; // Date
-    id?: string | null; // ID
-    maxParticipants?: number | null; // Int
-    slug?: string | null; // String
-    status?: NexusGenEnums['StatusEnum'] | null; // StatusEnum
-    title?: string | null; // String
-    totalParticipants?: number | null; // Int
-    updated?: NexusGenScalars['Date'] | null; // Date
+    content: string; // String!
+    created: NexusGenScalars['Date']; // Date!
+    id: string; // ID!
+    maxParticipants: number; // Int!
+    slug: string; // String!
+    status: NexusGenEnums['StatusEnum']; // StatusEnum!
+    title: string; // String!
+    totalParticipants: number; // Int!
+    updated: NexusGenScalars['Date']; // Date!
+  };
+  RetreatConnection: {
+    // root type
+    edges?: Array<NexusGenRootTypes['RetreatEdge'] | null> | null; // [RetreatEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  };
+  RetreatEdge: {
+    // root type
+    cursor: string; // String!
+    node?: NexusGenRootTypes['Retreat'] | null; // Retreat
   };
 }
 
-export interface NexusGenInterfaces {
-  Node: NexusGenRootTypes['Retreat'];
-}
+export interface NexusGenInterfaces {}
 
 export interface NexusGenUnions {}
 
-export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects;
+export type NexusGenRootTypes = NexusGenObjects;
 
 export type NexusGenAllTypes = NexusGenRootTypes &
   NexusGenScalars &
   NexusGenEnums;
 
 export interface NexusGenFieldTypes {
+  Mutation: {
+    // field return type
+    createRetreatDraft: NexusGenRootTypes['Retreat'] | null; // Retreat
+    setRetreatStatus: NexusGenRootTypes['Retreat'] | null; // Retreat
+    updateRetreat: NexusGenRootTypes['Retreat'] | null; // Retreat
+  };
+  PageInfo: {
+    // field return type
+    endCursor: string | null; // String
+    hasNextPage: boolean; // Boolean!
+    hasPreviousPage: boolean; // Boolean!
+    startCursor: string | null; // String
+  };
   Query: {
     // field return type
-    listRetreats: Array<NexusGenRootTypes['Retreat'] | null>; // [Retreat]!
+    retreat: NexusGenRootTypes['Retreat'] | null; // Retreat
+    retreats: NexusGenRootTypes['RetreatConnection'] | null; // RetreatConnection
   };
   Retreat: {
     // field return type
-    content: string | null; // String
-    created: NexusGenScalars['Date'] | null; // Date
-    id: string | null; // ID
-    maxParticipants: number | null; // Int
-    slug: string | null; // String
-    status: NexusGenEnums['StatusEnum'] | null; // StatusEnum
-    title: string | null; // String
-    totalParticipants: number | null; // Int
-    updated: NexusGenScalars['Date'] | null; // Date
+    content: string; // String!
+    created: NexusGenScalars['Date']; // Date!
+    id: string; // ID!
+    maxParticipants: number; // Int!
+    slug: string; // String!
+    status: NexusGenEnums['StatusEnum']; // StatusEnum!
+    title: string; // String!
+    totalParticipants: number; // Int!
+    updated: NexusGenScalars['Date']; // Date!
   };
-  Node: {
+  RetreatConnection: {
     // field return type
-    id: string | null; // ID
+    edges: Array<NexusGenRootTypes['RetreatEdge'] | null> | null; // [RetreatEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  };
+  RetreatEdge: {
+    // field return type
+    cursor: string; // String!
+    node: NexusGenRootTypes['Retreat'] | null; // Retreat
   };
 }
 
 export interface NexusGenFieldTypeNames {
+  Mutation: {
+    // field return type name
+    createRetreatDraft: 'Retreat';
+    setRetreatStatus: 'Retreat';
+    updateRetreat: 'Retreat';
+  };
+  PageInfo: {
+    // field return type name
+    endCursor: 'String';
+    hasNextPage: 'Boolean';
+    hasPreviousPage: 'Boolean';
+    startCursor: 'String';
+  };
   Query: {
     // field return type name
-    listRetreats: 'Retreat';
+    retreat: 'Retreat';
+    retreats: 'RetreatConnection';
   };
   Retreat: {
     // field return type name
@@ -114,37 +181,71 @@ export interface NexusGenFieldTypeNames {
     totalParticipants: 'Int';
     updated: 'Date';
   };
-  Node: {
+  RetreatConnection: {
     // field return type name
-    id: 'ID';
+    edges: 'RetreatEdge';
+    pageInfo: 'PageInfo';
+  };
+  RetreatEdge: {
+    // field return type name
+    cursor: 'String';
+    node: 'Retreat';
   };
 }
 
-export interface NexusGenArgTypes {}
-
-export interface NexusGenAbstractTypeMembers {
-  Node: 'Retreat';
+export interface NexusGenArgTypes {
+  Mutation: {
+    createRetreatDraft: {
+      // args
+      title: string; // String!
+    };
+    setRetreatStatus: {
+      // args
+      id: string; // ID!
+      status: NexusGenEnums['StatusEnum']; // StatusEnum!
+    };
+    updateRetreat: {
+      // args
+      id: string; // ID!
+      input: NexusGenInputs['UpdateRetreatInput']; // UpdateRetreatInput!
+    };
+  };
+  Query: {
+    retreat: {
+      // args
+      id?: string | null; // ID
+      slug?: string | null; // String
+    };
+    retreats: {
+      // args
+      after?: string | null; // String
+      before?: string | null; // String
+      first?: number | null; // Int
+      last?: number | null; // Int
+      status?: NexusGenEnums['StatusEnum'] | null; // StatusEnum
+    };
+  };
 }
 
-export interface NexusGenTypeInterfaces {
-  Retreat: 'Node';
-}
+export interface NexusGenAbstractTypeMembers {}
+
+export interface NexusGenTypeInterfaces {}
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = keyof NexusGenEnums;
 
-export type NexusGenInterfaceNames = keyof NexusGenInterfaces;
+export type NexusGenInterfaceNames = never;
 
 export type NexusGenScalarNames = keyof NexusGenScalars;
 
 export type NexusGenUnionNames = never;
 
-export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = 'Retreat';
+export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType = 'Node';
+export type NexusGenAbstractsUsingStrategyResolveType = never;
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {
@@ -195,7 +296,17 @@ declare global {
   interface NexusGenPluginFieldConfig<
     TypeName extends string,
     FieldName extends string,
-  > {}
+  > {
+    /**
+     * Authorization for an individual field. Returning "true"
+     * or "Promise<true>" means the field can be accessed.
+     * Returning "false" or "Promise<false>" will respond
+     * with a "Not Authorized" error for the field.
+     * Returning or throwing an error will also prevent the
+     * resolver from executing.
+     */
+    authorize?: FieldAuthorizeResolver<TypeName, FieldName>;
+  }
   interface NexusGenPluginInputFieldConfig<
     TypeName extends string,
     FieldName extends string,

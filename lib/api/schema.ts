@@ -1,4 +1,4 @@
-import { makeSchema } from 'nexus';
+import { makeSchema, fieldAuthorizePlugin, connectionPlugin } from 'nexus';
 import * as path from 'path';
 
 import * as types from './types';
@@ -9,4 +9,5 @@ export const schema = makeSchema({
     typegen: path.join(process.cwd(), 'generated/nexus-typegen.ts'),
     schema: path.join(process.cwd(), 'generated/schema.graphql'),
   },
+  plugins: [fieldAuthorizePlugin(), connectionPlugin()],
 });
