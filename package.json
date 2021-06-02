@@ -9,12 +9,18 @@
     "lint": "eslint . --ext .ts --ext .tsx --ext .js",
     "test": "jest",
     "prepare": "husky install",
-    "codegen": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' --transpile-only lib/api/schema.ts",
-    "codegen:watch": "npx nodemon --watch './lib/api' -e ts --exec 'yarn codegen'"
+    "codegen": "yarn codegen:nexus",
+    "codegen:nexus": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' --transpile-only lib/api/schema.ts",
+    "codegen:watch": "npx nodemon --watch './lib/api' -e ts --exec 'yarn codegen'",
+    "prisma:generate": "prisma generate",
+    "prisma:seed": "prisma db seed --preview-feature",
+    "prisma:migrate": "prisma migrate dev",
+    "ts-node": "ts-node --compiler-options '{\"module\":\"CommonJS\"}'"
   },
   "dependencies": {
     "@fransvilhelm/feather": "^2.0.0",
     "@fransvilhelm/hooks": "^3.0.0",
+    "@prisma/client": "^2.24.0",
     "apollo-server-micro": "^2.25.0",
     "classnames": "^2.3.1",
     "graphql": "^15.5.0",
@@ -29,6 +35,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^13.1.9",
     "@types/jest": "^26.0.23",
+    "@types/node": "^15.6.2",
     "@types/react": "^17.0.8",
     "@types/react-dom": "^17.0.5",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
@@ -49,6 +56,7 @@
     "lint-staged": "^11.0.0",
     "postcss": "^8.3.0",
     "prettier": "^2.3.0",
+    "prisma": "^2.24.0",
     "tailwindcss": "^2.1.2",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.2"

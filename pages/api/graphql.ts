@@ -1,6 +1,7 @@
 import { ApolloServer } from 'apollo-server-micro';
 
 import { schema } from 'lib/api/schema';
+import { createContext } from 'lib/api/context';
 
 export const config = {
   api: {
@@ -8,6 +9,9 @@ export const config = {
   },
 };
 
-export default new ApolloServer({ schema }).createHandler({
+export default new ApolloServer({
+  schema,
+  context: createContext,
+}).createHandler({
   path: '/api/graphql',
 });

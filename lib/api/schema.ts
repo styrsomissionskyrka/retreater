@@ -9,5 +9,12 @@ export const schema = makeSchema({
     typegen: path.join(process.cwd(), 'generated/nexus-typegen.ts'),
     schema: path.join(process.cwd(), 'generated/schema.graphql'),
   },
-  plugins: [fieldAuthorizePlugin(), connectionPlugin()],
+  contextType: {
+    module: path.join(process.cwd(), 'lib/api/context.ts'),
+    export: 'Context',
+  },
+  plugins: [
+    fieldAuthorizePlugin(),
+    connectionPlugin({ disableBackwardPagination: true }),
+  ],
 });

@@ -7,7 +7,9 @@ import {
   arg,
   inputObjectType,
   idArg,
+  connectionPlugin,
 } from 'nexus';
+import { createPageInfoFromNodes } from '../utils';
 import { User } from './User';
 
 export const StatusEnum = enumType({
@@ -17,12 +19,17 @@ export const StatusEnum = enumType({
 
 export const OrderByEnum = enumType({
   name: 'OrderByEnum',
-  members: ['START_DATE', 'CREATED_DATE', 'STATUS'],
+  // members: ['START_DATE', 'CREATED_AT', 'STATUS'],
+  members: {
+    START_DATE: 'startDate',
+    CREATED_AT: 'createdAt',
+    STATUS: 'status',
+  },
 });
 
 export const OrderEnum = enumType({
   name: 'OrderEnum',
-  members: ['ASC', 'DESC'],
+  members: { ASC: 'asc', DESC: 'desc' },
 });
 
 export const Retreat = objectType({
@@ -33,18 +40,17 @@ export const Retreat = objectType({
     t.nonNull.string('slug');
 
     t.nonNull.field('status', { type: StatusEnum });
-    t.nonNull.date('created');
-    t.nonNull.date('updated');
+    t.nonNull.date('createdAt');
+    t.nonNull.date('updatedAt');
 
-    t.nonNull.field('createdBy', { type: User });
-    t.nonNull.list.nonNull.field('editedBy', { type: User });
+    t.field('createdBy', { type: User });
 
     t.date('startDate');
     t.date('endDate');
     t.string('content');
 
-    t.nonNull.int('maxParticipants');
-    t.nonNull.int('totalParticipants');
+    t.int('maxParticipants');
+    t.int('totalParticipants');
   },
 });
 
@@ -55,11 +61,23 @@ export const RetreatQuery = extendType({
       type: Retreat,
       additionalArgs: {
         status: arg({ type: StatusEnum }),
-        orderBy: arg({ type: OrderByEnum, default: 'START_DATE' }),
-        order: arg({ type: OrderEnum, default: 'ASC' }),
+        orderBy: arg({ type: OrderByEnum, default: 'startDate' }),
+        order: arg({ type: OrderEnum, default: 'asc' }),
       },
-      nodes() {
-        return [];
+      pageInfoFromNodes: createPageInfoFromNodes((ctx) =>
+        ctx.prisma.retreat.count(),
+      ),
+      async nodes(_, args, ctx) {
+        let skip = Number(args.after) + 1;
+        if (Number.isNaN(skip)) skip = 0;
+
+        let retreats = await ctx.prisma.retreat.findMany({
+          take: args.first,
+          skip,
+          orderBy: { [args.orderBy ?? 'startDate']: args.order },
+        });
+
+        return retreats;
       },
     });
 

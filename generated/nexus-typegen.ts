@@ -3,6 +3,7 @@
  * Do not make changes to this file directly
  */
 
+import { Context } from './../lib/api/context';
 import { FieldAuthorizeResolver } from 'nexus/dist/plugins/fieldAuthorizePlugin';
 import { core, connectionPluginCore } from 'nexus';
 declare global {
@@ -53,8 +54,8 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
-  OrderByEnum: 'CREATED_DATE' | 'START_DATE' | 'STATUS';
-  OrderEnum: 'ASC' | 'DESC';
+  OrderByEnum: 'createdAt' | 'startDate' | 'status';
+  OrderEnum: 'asc' | 'desc';
   StatusEnum: 'ARCHIVED' | 'DRAFT' | 'PUBLISHED';
 }
 
@@ -80,18 +81,17 @@ export interface NexusGenObjects {
   Retreat: {
     // root type
     content?: string | null; // String
-    created: NexusGenScalars['Date']; // Date!
-    createdBy: NexusGenRootTypes['User']; // User!
-    editedBy: NexusGenRootTypes['User'][]; // [User!]!
+    createdAt: NexusGenScalars['Date']; // Date!
+    createdBy?: NexusGenRootTypes['User'] | null; // User
     endDate?: NexusGenScalars['Date'] | null; // Date
     id: string; // ID!
-    maxParticipants: number; // Int!
+    maxParticipants?: number | null; // Int
     slug: string; // String!
     startDate?: NexusGenScalars['Date'] | null; // Date
     status: NexusGenEnums['StatusEnum']; // StatusEnum!
     title: string; // String!
-    totalParticipants: number; // Int!
-    updated: NexusGenScalars['Date']; // Date!
+    totalParticipants?: number | null; // Int
+    updatedAt: NexusGenScalars['Date']; // Date!
   };
   RetreatConnection: {
     // root type
@@ -108,6 +108,16 @@ export interface NexusGenObjects {
     email: string; // String!
     id: string; // ID!
     name?: string | null; // String
+  };
+  UserConnection: {
+    // root type
+    edges?: Array<NexusGenRootTypes['UserEdge'] | null> | null; // [UserEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  };
+  UserEdge: {
+    // root type
+    cursor: string; // String!
+    node?: NexusGenRootTypes['User'] | null; // User
   };
 }
 
@@ -139,22 +149,22 @@ export interface NexusGenFieldTypes {
     // field return type
     retreat: NexusGenRootTypes['Retreat'] | null; // Retreat
     retreats: NexusGenRootTypes['RetreatConnection'] | null; // RetreatConnection
+    users: NexusGenRootTypes['UserConnection'] | null; // UserConnection
   };
   Retreat: {
     // field return type
     content: string | null; // String
-    created: NexusGenScalars['Date']; // Date!
-    createdBy: NexusGenRootTypes['User']; // User!
-    editedBy: NexusGenRootTypes['User'][]; // [User!]!
+    createdAt: NexusGenScalars['Date']; // Date!
+    createdBy: NexusGenRootTypes['User'] | null; // User
     endDate: NexusGenScalars['Date'] | null; // Date
     id: string; // ID!
-    maxParticipants: number; // Int!
+    maxParticipants: number | null; // Int
     slug: string; // String!
     startDate: NexusGenScalars['Date'] | null; // Date
     status: NexusGenEnums['StatusEnum']; // StatusEnum!
     title: string; // String!
-    totalParticipants: number; // Int!
-    updated: NexusGenScalars['Date']; // Date!
+    totalParticipants: number | null; // Int
+    updatedAt: NexusGenScalars['Date']; // Date!
   };
   RetreatConnection: {
     // field return type
@@ -171,6 +181,16 @@ export interface NexusGenFieldTypes {
     email: string; // String!
     id: string; // ID!
     name: string | null; // String
+  };
+  UserConnection: {
+    // field return type
+    edges: Array<NexusGenRootTypes['UserEdge'] | null> | null; // [UserEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  };
+  UserEdge: {
+    // field return type
+    cursor: string; // String!
+    node: NexusGenRootTypes['User'] | null; // User
   };
 }
 
@@ -192,13 +212,13 @@ export interface NexusGenFieldTypeNames {
     // field return type name
     retreat: 'Retreat';
     retreats: 'RetreatConnection';
+    users: 'UserConnection';
   };
   Retreat: {
     // field return type name
     content: 'String';
-    created: 'Date';
+    createdAt: 'Date';
     createdBy: 'User';
-    editedBy: 'User';
     endDate: 'Date';
     id: 'ID';
     maxParticipants: 'Int';
@@ -207,7 +227,7 @@ export interface NexusGenFieldTypeNames {
     status: 'StatusEnum';
     title: 'String';
     totalParticipants: 'Int';
-    updated: 'Date';
+    updatedAt: 'Date';
   };
   RetreatConnection: {
     // field return type name
@@ -224,6 +244,16 @@ export interface NexusGenFieldTypeNames {
     email: 'String';
     id: 'ID';
     name: 'String';
+  };
+  UserConnection: {
+    // field return type name
+    edges: 'UserEdge';
+    pageInfo: 'PageInfo';
+  };
+  UserEdge: {
+    // field return type name
+    cursor: 'String';
+    node: 'User';
   };
 }
 
@@ -253,12 +283,15 @@ export interface NexusGenArgTypes {
     retreats: {
       // args
       after?: string | null; // String
-      before?: string | null; // String
-      first?: number | null; // Int
-      last?: number | null; // Int
+      first: number; // Int!
       order: NexusGenEnums['OrderEnum'] | null; // OrderEnum
       orderBy: NexusGenEnums['OrderByEnum'] | null; // OrderByEnum
       status?: NexusGenEnums['StatusEnum'] | null; // StatusEnum
+    };
+    users: {
+      // args
+      after?: string | null; // String
+      first: number; // Int!
     };
   };
 }
@@ -292,7 +325,7 @@ export type NexusGenFeaturesConfig = {
 };
 
 export interface NexusGenTypes {
-  context: any;
+  context: Context;
   inputTypes: NexusGenInputs;
   rootTypes: NexusGenRootTypes;
   inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;

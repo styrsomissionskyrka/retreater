@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  PUBLISHED
+  DRAFT
+  ARCHIVED
+}
+
+model Retreat {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdById String
+
+  status  Status  @default(DRAFT)
+  title   String  @db.VarChar(255)
+  slug    String  @unique
+  content String?
+
+  startDate DateTime?
+  endDate   DateTime?
+
+  maxParticipants   Int @default(0)
+  totalParticipants Int @default(0)
+}
+
+model User {
+  id       String    @id @default(cuid())
+  email    String    @unique
+  name     String?
+  retreats Retreat[]
+}
