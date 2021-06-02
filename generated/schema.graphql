@@ -65,6 +65,7 @@ type Query {
 
     """Returns the first n elements from the list."""
     first: Int!
+    role: UserRoleEnum
   ): UserConnection
 }
 
@@ -120,6 +121,7 @@ type User {
   email: String!
   id: ID!
   name: String
+  role: UserRoleEnum
 }
 
 type UserConnection {
@@ -140,4 +142,10 @@ type UserEdge {
 
   """https://facebook.github.io/relay/graphql/connections.htm#sec-Node"""
   node: User
+}
+
+enum UserRoleEnum {
+  ADMIN
+  EDITOR
+  SUPER_ADMIN
 }

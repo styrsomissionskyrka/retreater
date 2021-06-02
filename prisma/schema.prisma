@@ -34,9 +34,16 @@ model Retreat {
   maxParticipants Int @default(0)
 }
 
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+}
+
 model User {
   id       String    @id @default(cuid())
   email    String    @unique
   name     String?
+  role     UserRole  @default(EDITOR)
   retreats Retreat[]
 }

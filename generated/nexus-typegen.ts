@@ -52,6 +52,7 @@ export interface NexusGenEnums {
   OrderByEnum: 'createdAt' | 'startDate' | 'status';
   OrderEnum: 'asc' | 'desc';
   StatusEnum: 'ARCHIVED' | 'DRAFT' | 'PUBLISHED';
+  UserRoleEnum: 'ADMIN' | 'EDITOR' | 'SUPER_ADMIN';
 }
 
 export interface NexusGenScalars {
@@ -154,6 +155,7 @@ export interface NexusGenFieldTypes {
     email: string; // String!
     id: string; // ID!
     name: string | null; // String
+    role: NexusGenEnums['UserRoleEnum'] | null; // UserRoleEnum
   };
   UserConnection: {
     // field return type
@@ -216,6 +218,7 @@ export interface NexusGenFieldTypeNames {
     email: 'String';
     id: 'ID';
     name: 'String';
+    role: 'UserRoleEnum';
   };
   UserConnection: {
     // field return type name
@@ -264,6 +267,7 @@ export interface NexusGenArgTypes {
       // args
       after?: string | null; // String
       first: number; // Int!
+      role?: NexusGenEnums['UserRoleEnum'] | null; // UserRoleEnum
     };
   };
 }
