@@ -41,9 +41,8 @@ export const Retreat = objectType({
 
     t.field('createdBy', {
       type: User,
-      async resolve(source, _, ctx) {
-        let user = await ctx.prisma.user.findUnique({ where: { id: source.createdById } });
-        return user;
+      async resolve() {
+        return null;
       },
     });
 
@@ -113,11 +112,7 @@ export const RetreatMutation = extendType({
         if (similarSlugs > 0) slug += `-${similarSlugs + 1}`;
 
         let retreat = await ctx.prisma.retreat.create({
-          data: {
-            title: args.title,
-            slug,
-            createdBy: { connect: { id: 'ckpfi64ie001614zwtc995idm' } },
-          },
+          data: { title: args.title, slug },
         });
 
         return retreat;

@@ -20,8 +20,7 @@ model Retreat {
   id          String   @id @default(cuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  createdBy   User     @relation(fields: [createdById], references: [id])
-  createdById String
+  createdById String?
 
   status  Status  @default(DRAFT)
   title   String  @db.VarChar(255)
@@ -32,18 +31,4 @@ model Retreat {
   endDate   DateTime?
 
   maxParticipants Int @default(0)
-}
-
-enum UserRole {
-  SUPER_ADMIN
-  ADMIN
-  EDITOR
-}
-
-model User {
-  id       String    @id @default(cuid())
-  email    String    @unique
-  name     String?
-  role     UserRole  @default(EDITOR)
-  retreats Retreat[]
 }
