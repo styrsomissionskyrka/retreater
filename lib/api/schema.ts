@@ -10,11 +10,8 @@ export const schema = makeSchema({
     schema: path.join(process.cwd(), 'generated/schema.graphql'),
   },
   contextType: {
-    module: path.join(process.cwd(), 'lib/api/context.ts'),
+    module: path.join(process.cwd(), 'lib/api/context/index.ts'),
     export: 'Context',
   },
-  plugins: [
-    fieldAuthorizePlugin(),
-    connectionPlugin({ disableBackwardPagination: true }),
-  ],
+  plugins: [fieldAuthorizePlugin(), connectionPlugin({ disableBackwardPagination: true })],
 });

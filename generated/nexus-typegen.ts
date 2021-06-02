@@ -3,8 +3,8 @@
  * Do not make changes to this file directly
  */
 
-import { Context } from './../lib/api/context';
-import { Retreat, User } from '@prisma/client';
+import { Context } from './../lib/api/context/index';
+import { Retreat } from '@prisma/client';
 import { FieldAuthorizeResolver } from 'nexus/dist/plugins/fieldAuthorizePlugin';
 import { core, connectionPluginCore } from 'nexus';
 declare global {
@@ -52,7 +52,7 @@ export interface NexusGenEnums {
   OrderByEnum: 'createdAt' | 'startDate' | 'status';
   OrderEnum: 'asc' | 'desc';
   StatusEnum: 'ARCHIVED' | 'DRAFT' | 'PUBLISHED';
-  UserRoleEnum: 'ADMIN' | 'EDITOR' | 'SUPER_ADMIN';
+  UserRoleEnum: 'admin' | 'editor' | 'superadmin';
 }
 
 export interface NexusGenScalars {
@@ -85,7 +85,19 @@ export interface NexusGenObjects {
     cursor: string; // String!
     node?: NexusGenRootTypes['Retreat'] | null; // Retreat
   };
-  User: User;
+  User: {
+    // root type
+    createdAt: NexusGenScalars['Date']; // Date!
+    email: string; // String!
+    emailVerified: boolean; // Boolean!
+    id: string; // ID!
+    lastIp?: string | null; // String
+    lastLogin?: NexusGenScalars['Date'] | null; // Date
+    loginsCount: number; // Int!
+    name?: string | null; // String
+    picture?: string | null; // String
+    updateAt: NexusGenScalars['Date']; // Date!
+  };
   UserConnection: {
     // root type
     edges?: Array<NexusGenRootTypes['UserEdge'] | null> | null; // [UserEdge]
@@ -122,8 +134,10 @@ export interface NexusGenFieldTypes {
   };
   Query: {
     // field return type
+    me: NexusGenRootTypes['User'] | null; // User
     retreat: NexusGenRootTypes['Retreat'] | null; // Retreat
     retreats: NexusGenRootTypes['RetreatConnection'] | null; // RetreatConnection
+    user: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['UserConnection'] | null; // UserConnection
   };
   Retreat: {
@@ -152,10 +166,17 @@ export interface NexusGenFieldTypes {
   };
   User: {
     // field return type
+    createdAt: NexusGenScalars['Date']; // Date!
     email: string; // String!
+    emailVerified: boolean; // Boolean!
     id: string; // ID!
+    lastIp: string | null; // String
+    lastLogin: NexusGenScalars['Date'] | null; // Date
+    loginsCount: number; // Int!
     name: string | null; // String
-    role: NexusGenEnums['UserRoleEnum'] | null; // UserRoleEnum
+    picture: string | null; // String
+    roles: NexusGenEnums['UserRoleEnum'][]; // [UserRoleEnum!]!
+    updateAt: NexusGenScalars['Date']; // Date!
   };
   UserConnection: {
     // field return type
@@ -185,8 +206,10 @@ export interface NexusGenFieldTypeNames {
   };
   Query: {
     // field return type name
+    me: 'User';
     retreat: 'Retreat';
     retreats: 'RetreatConnection';
+    user: 'User';
     users: 'UserConnection';
   };
   Retreat: {
@@ -215,10 +238,17 @@ export interface NexusGenFieldTypeNames {
   };
   User: {
     // field return type name
+    createdAt: 'Date';
     email: 'String';
+    emailVerified: 'Boolean';
     id: 'ID';
+    lastIp: 'String';
+    lastLogin: 'Date';
+    loginsCount: 'Int';
     name: 'String';
-    role: 'UserRoleEnum';
+    picture: 'String';
+    roles: 'UserRoleEnum';
+    updateAt: 'Date';
   };
   UserConnection: {
     // field return type name

@@ -48,6 +48,7 @@ type PageInfo {
 }
 
 type Query {
+  me: User
   retreat(id: ID, slug: String): Retreat
   retreats(
     """Returns the elements in the list that come after the specified cursor"""
@@ -59,6 +60,7 @@ type Query {
     orderBy: OrderByEnum = START_DATE
     status: StatusEnum
   ): RetreatConnection
+  user: User
   users(
     """Returns the elements in the list that come after the specified cursor"""
     after: String
@@ -118,10 +120,17 @@ input UpdateRetreatInput {
 }
 
 type User {
+  createdAt: Date!
   email: String!
+  emailVerified: Boolean!
   id: ID!
+  lastIp: String
+  lastLogin: Date
+  loginsCount: Int!
   name: String
-  role: UserRoleEnum
+  picture: String
+  roles: [UserRoleEnum!]!
+  updateAt: Date!
 }
 
 type UserConnection {
