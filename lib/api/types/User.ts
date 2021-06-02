@@ -3,6 +3,10 @@ import { createPageInfoFromNodes } from '../utils';
 
 export const User = objectType({
   name: 'User',
+  sourceType: {
+    module: '@prisma/client',
+    export: 'User',
+  },
   definition(t) {
     t.nonNull.id('id');
     t.nonNull.string('email');
@@ -15,9 +19,7 @@ export const UserQuery = extendType({
   definition(t) {
     t.connectionField('users', {
       type: User,
-      pageInfoFromNodes: createPageInfoFromNodes((ctx) =>
-        ctx.prisma.user.count(),
-      ),
+      pageInfoFromNodes: createPageInfoFromNodes((ctx) => ctx.prisma.user.count()),
       async nodes(_, args, ctx) {
         let skip = Number(args.after) + 1;
         if (Number.isNaN(skip)) skip = 0;

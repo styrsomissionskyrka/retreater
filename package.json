@@ -28,6 +28,7 @@
     "nexus": "^1.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "slug": "^5.0.1",
     "zod": "^3.1.0"
   },
   "devDependencies": {
@@ -39,6 +40,7 @@
     "@types/node": "^15.6.2",
     "@types/react": "^17.0.8",
     "@types/react-dom": "^17.0.5",
+    "@types/slug": "^5.0.0",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
     "autoprefixer": "^10.2.6",
@@ -86,6 +88,7 @@
   "prettier": {
     "singleQuote": true,
     "trailingComma": "all",
-    "proseWrap": "always"
+    "proseWrap": "always",
+    "printWidth": 120
   }
 }

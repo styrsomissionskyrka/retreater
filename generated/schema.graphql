@@ -79,7 +79,6 @@ type Retreat {
   startDate: Date
   status: StatusEnum!
   title: String!
-  totalParticipants: Int
   updatedAt: Date!
 }
 

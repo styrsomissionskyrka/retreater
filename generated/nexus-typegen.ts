@@ -4,6 +4,7 @@
  */
 
 import { Context } from './../lib/api/context';
+import { Retreat, User } from '@prisma/client';
 import { FieldAuthorizeResolver } from 'nexus/dist/plugins/fieldAuthorizePlugin';
 import { core, connectionPluginCore } from 'nexus';
 declare global {
@@ -11,10 +12,7 @@ declare global {
     /**
      * Date custom scalar type
      */
-    date<FieldName extends string>(
-      fieldName: FieldName,
-      opts?: core.CommonInputFieldConfig<TypeName, FieldName>,
-    ): void; // "Date";
+    date<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void; // "Date";
   }
 }
 declare global {
@@ -22,10 +20,7 @@ declare global {
     /**
      * Date custom scalar type
      */
-    date<FieldName extends string>(
-      fieldName: FieldName,
-      ...opts: core.ScalarOutSpread<TypeName, FieldName>
-    ): void; // "Date";
+    date<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void; // "Date";
     /**
      * Adds a Relay-style connection to the type, with numerous options for configuration
      *
@@ -78,21 +73,7 @@ export interface NexusGenObjects {
     startCursor?: string | null; // String
   };
   Query: {};
-  Retreat: {
-    // root type
-    content?: string | null; // String
-    createdAt: NexusGenScalars['Date']; // Date!
-    createdBy?: NexusGenRootTypes['User'] | null; // User
-    endDate?: NexusGenScalars['Date'] | null; // Date
-    id: string; // ID!
-    maxParticipants?: number | null; // Int
-    slug: string; // String!
-    startDate?: NexusGenScalars['Date'] | null; // Date
-    status: NexusGenEnums['StatusEnum']; // StatusEnum!
-    title: string; // String!
-    totalParticipants?: number | null; // Int
-    updatedAt: NexusGenScalars['Date']; // Date!
-  };
+  Retreat: Retreat;
   RetreatConnection: {
     // root type
     edges?: Array<NexusGenRootTypes['RetreatEdge'] | null> | null; // [RetreatEdge]
@@ -103,12 +84,7 @@ export interface NexusGenObjects {
     cursor: string; // String!
     node?: NexusGenRootTypes['Retreat'] | null; // Retreat
   };
-  User: {
-    // root type
-    email: string; // String!
-    id: string; // ID!
-    name?: string | null; // String
-  };
+  User: User;
   UserConnection: {
     // root type
     edges?: Array<NexusGenRootTypes['UserEdge'] | null> | null; // [UserEdge]
@@ -127,9 +103,7 @@ export interface NexusGenUnions {}
 
 export type NexusGenRootTypes = NexusGenObjects;
 
-export type NexusGenAllTypes = NexusGenRootTypes &
-  NexusGenScalars &
-  NexusGenEnums;
+export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums;
 
 export interface NexusGenFieldTypes {
   Mutation: {
@@ -163,7 +137,6 @@ export interface NexusGenFieldTypes {
     startDate: NexusGenScalars['Date'] | null; // Date
     status: NexusGenEnums['StatusEnum']; // StatusEnum!
     title: string; // String!
-    totalParticipants: number | null; // Int
     updatedAt: NexusGenScalars['Date']; // Date!
   };
   RetreatConnection: {
@@ -226,7 +199,6 @@ export interface NexusGenFieldTypeNames {
     startDate: 'Date';
     status: 'StatusEnum';
     title: 'String';
-    totalParticipants: 'Int';
     updatedAt: 'Date';
   };
   RetreatConnection: {
@@ -340,19 +312,14 @@ export interface NexusGenTypes {
   interfaceNames: NexusGenInterfaceNames;
   scalarNames: NexusGenScalarNames;
   unionNames: NexusGenUnionNames;
-  allInputTypes:
-    | NexusGenTypes['inputNames']
-    | NexusGenTypes['enumNames']
-    | NexusGenTypes['scalarNames'];
+  allInputTypes: NexusGenTypes['inputNames'] | NexusGenTypes['enumNames'] | NexusGenTypes['scalarNames'];
   allOutputTypes:
     | NexusGenTypes['objectNames']
     | NexusGenTypes['enumNames']
     | NexusGenTypes['unionNames']
     | NexusGenTypes['interfaceNames']
     | NexusGenTypes['scalarNames'];
-  allNamedTypes:
-    | NexusGenTypes['allInputTypes']
-    | NexusGenTypes['allOutputTypes'];
+  allNamedTypes: NexusGenTypes['allInputTypes'] | NexusGenTypes['allOutputTypes'];
   abstractTypes: NexusGenTypes['interfaceNames'] | NexusGenTypes['unionNames'];
   abstractTypeMembers: NexusGenAbstractTypeMembers;
   objectsUsingAbstractStrategyIsTypeOf: NexusGenObjectsUsingAbstractStrategyIsTypeOf;
@@ -362,10 +329,7 @@ export interface NexusGenTypes {
 
 declare global {
   interface NexusGenPluginTypeConfig<TypeName extends string> {}
-  interface NexusGenPluginFieldConfig<
-    TypeName extends string,
-    FieldName extends string,
-  > {
+  interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
     /**
      * Authorization for an individual field. Returning "true"
      * or "Promise<true>" means the field can be accessed.
@@ -376,10 +340,7 @@ declare global {
      */
     authorize?: FieldAuthorizeResolver<TypeName, FieldName>;
   }
-  interface NexusGenPluginInputFieldConfig<
-    TypeName extends string,
-    FieldName extends string,
-  > {}
+  interface NexusGenPluginInputFieldConfig<TypeName extends string, FieldName extends string> {}
   interface NexusGenPluginSchemaConfig {}
   interface NexusGenPluginArgConfig {}
 }

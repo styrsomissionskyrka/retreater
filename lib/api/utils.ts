@@ -6,7 +6,7 @@ export function extractIndexFromCursor(cursor?: string | null): number {
   let value = Buffer.from(cursor ?? DEFAULT_CURSOR, 'base64').toString();
   let [, indexString] = value.split(':');
   let index = Number(indexString);
-  return Number.isNaN(index) ? -1 : index;
+  return Number.isNaN(index) ? 0 : index;
 }
 
 interface BaseArgs {
@@ -18,7 +18,7 @@ export function createPageInfoFromNodes<Args extends BaseArgs>(
   getTotalItems: (ctx: Context, args: Args) => Promise<number>,
 ) {
   return async (_: unknown[], args: Args, ctx: Context) => {
-    let skip = extractIndexFromCursor(args.after) + 1;
+    let skip = extractIndexFromCursor(args.after);
     let total = args.first + skip;
     let totalItems = await getTotalItems(ctx, args);
 
@@ -28,3 +28,20 @@ export function createPageInfoFromNodes<Args extends BaseArgs>(
     };
   };
 }
+
+export function clearUndefined<O extends Record<string, unknown>>(object: O): RequiredFields<O> {
+  let proxy: Record<string, any> = {};
+
+  for (let key of Object.keys(object)) {
+    let v = object[key];
+    if (typeof v !== 'undefined') {
+      proxy[key] = v;
+    }
+  }
+
+  return proxy as RequiredFields<O>;
+}
+
+type RequiredFields<P> = {
+  [K in keyof P]-?: NonNullable<P[K]>;
+};
