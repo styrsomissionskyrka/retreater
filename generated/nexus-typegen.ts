@@ -45,12 +45,16 @@ export interface NexusGenInputs {
   UpdateRetreatInput: {
     // input type
     content?: string | null; // String
+    endDate?: NexusGenScalars['Date'] | null; // Date
     maxParticipants?: number | null; // Int
+    startDate?: NexusGenScalars['Date'] | null; // Date
     title?: string | null; // String
   };
 }
 
 export interface NexusGenEnums {
+  OrderByEnum: 'CREATED_DATE' | 'START_DATE' | 'STATUS';
+  OrderEnum: 'ASC' | 'DESC';
   StatusEnum: 'ARCHIVED' | 'DRAFT' | 'PUBLISHED';
 }
 
@@ -75,11 +79,15 @@ export interface NexusGenObjects {
   Query: {};
   Retreat: {
     // root type
-    content: string; // String!
+    content?: string | null; // String
     created: NexusGenScalars['Date']; // Date!
+    createdBy: NexusGenRootTypes['User']; // User!
+    editedBy: NexusGenRootTypes['User'][]; // [User!]!
+    endDate?: NexusGenScalars['Date'] | null; // Date
     id: string; // ID!
     maxParticipants: number; // Int!
     slug: string; // String!
+    startDate?: NexusGenScalars['Date'] | null; // Date
     status: NexusGenEnums['StatusEnum']; // StatusEnum!
     title: string; // String!
     totalParticipants: number; // Int!
@@ -94,6 +102,12 @@ export interface NexusGenObjects {
     // root type
     cursor: string; // String!
     node?: NexusGenRootTypes['Retreat'] | null; // Retreat
+  };
+  User: {
+    // root type
+    email: string; // String!
+    id: string; // ID!
+    name?: string | null; // String
   };
 }
 
@@ -128,11 +142,15 @@ export interface NexusGenFieldTypes {
   };
   Retreat: {
     // field return type
-    content: string; // String!
+    content: string | null; // String
     created: NexusGenScalars['Date']; // Date!
+    createdBy: NexusGenRootTypes['User']; // User!
+    editedBy: NexusGenRootTypes['User'][]; // [User!]!
+    endDate: NexusGenScalars['Date'] | null; // Date
     id: string; // ID!
     maxParticipants: number; // Int!
     slug: string; // String!
+    startDate: NexusGenScalars['Date'] | null; // Date
     status: NexusGenEnums['StatusEnum']; // StatusEnum!
     title: string; // String!
     totalParticipants: number; // Int!
@@ -147,6 +165,12 @@ export interface NexusGenFieldTypes {
     // field return type
     cursor: string; // String!
     node: NexusGenRootTypes['Retreat'] | null; // Retreat
+  };
+  User: {
+    // field return type
+    email: string; // String!
+    id: string; // ID!
+    name: string | null; // String
   };
 }
 
@@ -173,9 +197,13 @@ export interface NexusGenFieldTypeNames {
     // field return type name
     content: 'String';
     created: 'Date';
+    createdBy: 'User';
+    editedBy: 'User';
+    endDate: 'Date';
     id: 'ID';
     maxParticipants: 'Int';
     slug: 'String';
+    startDate: 'Date';
     status: 'StatusEnum';
     title: 'String';
     totalParticipants: 'Int';
@@ -190,6 +218,12 @@ export interface NexusGenFieldTypeNames {
     // field return type name
     cursor: 'String';
     node: 'Retreat';
+  };
+  User: {
+    // field return type name
+    email: 'String';
+    id: 'ID';
+    name: 'String';
   };
 }
 
@@ -222,6 +256,8 @@ export interface NexusGenArgTypes {
       before?: string | null; // String
       first?: number | null; // Int
       last?: number | null; // Int
+      order: NexusGenEnums['OrderEnum'] | null; // OrderEnum
+      orderBy: NexusGenEnums['OrderByEnum'] | null; // OrderByEnum
       status?: NexusGenEnums['StatusEnum'] | null; // StatusEnum
     };
   };

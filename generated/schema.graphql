@@ -11,6 +11,17 @@ type Mutation {
   updateRetreat(id: ID!, input: UpdateRetreatInput!): Retreat
 }
 
+enum OrderByEnum {
+  CREATED_DATE
+  START_DATE
+  STATUS
+}
+
+enum OrderEnum {
+  ASC
+  DESC
+}
+
 """
 PageInfo cursor, as defined in https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
 """
@@ -50,16 +61,22 @@ type Query {
 
     """Returns the last n elements from the list."""
     last: Int
+    order: OrderEnum = ASC
+    orderBy: OrderByEnum = START_DATE
     status: StatusEnum
   ): RetreatConnection
 }
 
 type Retreat {
-  content: String!
+  content: String
   created: Date!
+  createdBy: User!
+  editedBy: [User!]!
+  endDate: Date
   id: ID!
   maxParticipants: Int!
   slug: String!
+  startDate: Date
   status: StatusEnum!
   title: String!
   totalParticipants: Int!
@@ -94,6 +111,14 @@ enum StatusEnum {
 
 input UpdateRetreatInput {
   content: String
+  endDate: Date
   maxParticipants: Int
+  startDate: Date
   title: String
+}
+
+type User {
+  email: String!
+  id: ID!
+  name: String
 }

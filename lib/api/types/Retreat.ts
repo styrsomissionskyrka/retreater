@@ -8,10 +8,21 @@ import {
   inputObjectType,
   idArg,
 } from 'nexus';
+import { User } from './User';
 
-const StatusEnum = enumType({
+export const StatusEnum = enumType({
   name: 'StatusEnum',
   members: ['PUBLISHED', 'DRAFT', 'ARCHIVED'],
+});
+
+export const OrderByEnum = enumType({
+  name: 'OrderByEnum',
+  members: ['START_DATE', 'CREATED_DATE', 'STATUS'],
+});
+
+export const OrderEnum = enumType({
+  name: 'OrderEnum',
+  members: ['ASC', 'DESC'],
 });
 
 export const Retreat = objectType({
@@ -25,7 +36,12 @@ export const Retreat = objectType({
     t.nonNull.date('created');
     t.nonNull.date('updated');
 
-    t.nonNull.string('content');
+    t.nonNull.field('createdBy', { type: User });
+    t.nonNull.list.nonNull.field('editedBy', { type: User });
+
+    t.date('startDate');
+    t.date('endDate');
+    t.string('content');
 
     t.nonNull.int('maxParticipants');
     t.nonNull.int('totalParticipants');
@@ -37,7 +53,11 @@ export const RetreatQuery = extendType({
   definition(t) {
     t.connectionField('retreats', {
       type: Retreat,
-      additionalArgs: { status: arg({ type: StatusEnum }) },
+      additionalArgs: {
+        status: arg({ type: StatusEnum }),
+        orderBy: arg({ type: OrderByEnum, default: 'START_DATE' }),
+        order: arg({ type: OrderEnum, default: 'ASC' }),
+      },
       nodes() {
         return [];
       },
@@ -83,6 +103,8 @@ export const UpdateRetreatInput = inputObjectType({
   definition(t) {
     t.string('title');
     t.string('content');
+    t.date('startDate');
+    t.date('endDate');
     t.int('maxParticipants');
   },
 });
