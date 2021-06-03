@@ -1,7 +1,7 @@
 import { getSession, Claims } from '@auth0/nextjs-auth0';
 import { PrismaClient } from '@prisma/client';
 import { ContextFunction } from 'apollo-server-core';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from './prisma';
 import { Auth0Client } from './auth0';
 
@@ -10,10 +10,10 @@ export const createContext: ContextFunction<ContextArgs, Context> = async (args)
   return { prisma, user: session?.user, auth0: new Auth0Client() };
 };
 
-interface ContextArgs {
-  req: NextApiRequest;
-  res: NextApiResponse;
-}
+type ContextArgs = {
+  req: NextApiRequest | GetServerSidePropsContext['req'];
+  res: NextApiResponse | GetServerSidePropsContext['res'];
+};
 
 export type Context = {
   prisma: PrismaClient;

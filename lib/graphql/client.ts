@@ -28,7 +28,7 @@ export function createApolloClient({ initialState }: ApolloClientOptions, cache 
 
   if (client == null) {
     client = new ApolloClient({
-      uri: typeof window === 'undefined' ? 'localhost:3000/api/graphql' : '/api/graphql',
+      uri: '/api/graphql',
       cache: initializeApolloCache(),
       ssrMode: typeof window === 'undefined',
       credentials: 'same-origin',
