@@ -1,4 +1,4 @@
-import { scalarType } from 'nexus';
+import { scalarType, enumType } from 'nexus';
 import { Kind } from 'graphql';
 
 export const DateScalar = scalarType({
@@ -17,4 +17,9 @@ export const DateScalar = scalarType({
     }
     return null;
   },
+});
+
+export const OrderEnum = enumType({
+  name: 'OrderEnum',
+  members: { ASC: 'asc', DESC: 'desc' },
 });

@@ -49,10 +49,11 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
-  OrderByEnum: 'createdAt' | 'startDate' | 'status';
   OrderEnum: 'asc' | 'desc';
-  StatusEnum: 'ARCHIVED' | 'DRAFT' | 'PUBLISHED';
+  RetreatOrderByEnum: 'createdAt' | 'startDate' | 'status';
+  RetreatStatusEnum: 'ARCHIVED' | 'DRAFT' | 'PUBLISHED';
   UserRoleEnum: 'admin' | 'editor' | 'superadmin';
+  UserSortByEnum: 'created_at' | 'email' | 'name';
 }
 
 export interface NexusGenScalars {
@@ -150,7 +151,7 @@ export interface NexusGenFieldTypes {
     maxParticipants: number | null; // Int
     slug: string; // String!
     startDate: NexusGenScalars['Date'] | null; // Date
-    status: NexusGenEnums['StatusEnum']; // StatusEnum!
+    status: NexusGenEnums['RetreatStatusEnum']; // RetreatStatusEnum!
     title: string; // String!
     updatedAt: NexusGenScalars['Date']; // Date!
   };
@@ -222,7 +223,7 @@ export interface NexusGenFieldTypeNames {
     maxParticipants: 'Int';
     slug: 'String';
     startDate: 'Date';
-    status: 'StatusEnum';
+    status: 'RetreatStatusEnum';
     title: 'String';
     updatedAt: 'Date';
   };
@@ -271,7 +272,7 @@ export interface NexusGenArgTypes {
     setRetreatStatus: {
       // args
       id: string; // ID!
-      status: NexusGenEnums['StatusEnum']; // StatusEnum!
+      status: NexusGenEnums['RetreatStatusEnum']; // RetreatStatusEnum!
     };
     updateRetreat: {
       // args
@@ -290,14 +291,20 @@ export interface NexusGenArgTypes {
       after?: string | null; // String
       first: number; // Int!
       order: NexusGenEnums['OrderEnum'] | null; // OrderEnum
-      orderBy: NexusGenEnums['OrderByEnum'] | null; // OrderByEnum
-      status?: NexusGenEnums['StatusEnum'] | null; // StatusEnum
+      orderBy: NexusGenEnums['RetreatOrderByEnum'] | null; // RetreatOrderByEnum
+      status?: NexusGenEnums['RetreatStatusEnum'] | null; // RetreatStatusEnum
+    };
+    user: {
+      // args
+      id: string; // ID!
     };
     users: {
       // args
       after?: string | null; // String
       first: number; // Int!
-      role?: NexusGenEnums['UserRoleEnum'] | null; // UserRoleEnum
+      order: NexusGenEnums['OrderEnum']; // OrderEnum!
+      orderBy: NexusGenEnums['UserSortByEnum']; // UserSortByEnum!
+      search?: string | null; // String
     };
   };
 }

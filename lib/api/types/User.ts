@@ -1,19 +1,19 @@
-import { UserInputError } from 'apollo-server-errors';
-import axios from 'axios';
-import { objectType, extendType, enumType, arg } from 'nexus';
+import { objectType, extendType, enumType, arg, idArg, nonNull, stringArg } from 'nexus';
 import { resolve } from 'path/posix';
-import { NexusGenEnums } from '../../../generated/nexus-typegen';
-import { createAuth0User, Auth0User, Auth0Role } from '../../utils/auth0';
-
-const roles: NexusGenEnums['UserRoleEnum'][] = ['superadmin', 'admin', 'editor'];
-
-function isUserRole(input: unknown): input is NexusGenEnums['UserRoleEnum'] {
-  return roles.includes(input as any);
-}
+import { OrderEnum } from './';
 
 export const UserRoleEnum = enumType({
   name: 'UserRoleEnum',
   members: { SUPER_ADMIN: 'superadmin', ADMIN: 'admin', EDITOR: 'editor' },
+});
+
+export const UserOrderByEnum = enumType({
+  name: 'UserSortByEnum',
+  members: {
+    EMAIL: 'email',
+    CREATED_AT: 'created_at',
+    NAME: 'name',
+  },
 });
 
 export const User = objectType({
@@ -33,14 +33,7 @@ export const User = objectType({
     t.nonNull.list.nonNull.field('roles', {
       type: UserRoleEnum,
       async resolve(user, _, ctx) {
-        try {
-          let { data } = await ctx.auth0.get<Auth0Role[]>(`/users/${user.id}/roles`);
-          let roles = data.map((r) => r.name).filter(isUserRole);
-          return roles;
-        } catch (error) {
-          console.log(error);
-          return [];
-        }
+        return [];
       },
     });
   },
@@ -57,14 +50,9 @@ export const UserQuery = extendType({
 
         try {
           let id = user.sub;
-          let { data } = await ctx.auth0.get<Auth0User>(`/users/${id}`);
-
-          return createAuth0User(data);
+          let data = await ctx.auth0.fetchUser(id);
+          return data;
         } catch (error) {
-          if (axios.isAxiosError(error) && error.response?.status === 404) {
-            throw new UserInputError('Given id does not belong to an existing user');
-          }
-
           return null;
         }
       },
@@ -72,6 +60,9 @@ export const UserQuery = extendType({
 
     t.field('user', {
       type: User,
+      args: {
+        id: nonNull(idArg()),
+      },
       async resolve() {
         return null;
       },
@@ -80,10 +71,42 @@ export const UserQuery = extendType({
     t.connectionField('users', {
       type: User,
       additionalArgs: {
-        role: arg({ type: UserRoleEnum }),
+        order: nonNull(arg({ type: OrderEnum, default: 'asc' })),
+        orderBy: nonNull(arg({ type: UserOrderByEnum, default: 'created_at' })),
+        search: stringArg(),
       },
-      async nodes(_, __, ___) {
-        return [];
+      async resolve(_, args, ctx) {
+        let page = 0;
+        if (args.after != null) {
+          let split = Buffer.from(args.after, 'base64').toString().split(':');
+          page = Number(split[1]);
+        }
+
+        let { users, pagination } = await ctx.auth0.listUsers({ ...args, page });
+
+        let currentPage = pagination.start;
+        let hasNextPage = currentPage < pagination.length - 1;
+        let hasPreviousPage = currentPage > 0;
+
+        let startCursor = Buffer.from(`cursor:${currentPage - 1}`).toString('base64');
+        let endCursor = Buffer.from(`cursor:${currentPage + 1}`).toString('base64');
+
+        let edges = users.map((user) => ({
+          cursor: endCursor,
+          node: user,
+        }));
+
+        let pageInfo = {
+          hasNextPage,
+          hasPreviousPage,
+          startCursor: hasPreviousPage ? startCursor : null,
+          endCursor: hasNextPage ? endCursor : null,
+        };
+
+        return {
+          pageInfo,
+          edges,
+        };
       },
     });
   },

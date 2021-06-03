@@ -1,3 +1,3 @@
 export * from './Retreat';
-export * from './Scalars';
+export * from './Shared';
 export * from './User';

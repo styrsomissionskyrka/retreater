@@ -7,14 +7,8 @@ scalar Date
 
 type Mutation {
   createRetreatDraft(title: String!): Retreat
-  setRetreatStatus(id: ID!, status: StatusEnum!): Retreat
+  setRetreatStatus(id: ID!, status: RetreatStatusEnum!): Retreat
   updateRetreat(id: ID!, input: UpdateRetreatInput!): Retreat
-}
-
-enum OrderByEnum {
-  CREATED_AT
-  START_DATE
-  STATUS
 }
 
 enum OrderEnum {
@@ -57,17 +51,19 @@ type Query {
     """Returns the first n elements from the list."""
     first: Int!
     order: OrderEnum = ASC
-    orderBy: OrderByEnum = START_DATE
-    status: StatusEnum
+    orderBy: RetreatOrderByEnum = START_DATE
+    status: RetreatStatusEnum
   ): RetreatConnection
-  user: User
+  user(id: ID!): User
   users(
     """Returns the elements in the list that come after the specified cursor"""
     after: String
 
     """Returns the first n elements from the list."""
     first: Int!
-    role: UserRoleEnum
+    order: OrderEnum! = ASC
+    orderBy: UserSortByEnum! = CREATED_AT
+    search: String
   ): UserConnection
 }
 
@@ -80,7 +76,7 @@ type Retreat {
   maxParticipants: Int
   slug: String!
   startDate: Date
-  status: StatusEnum!
+  status: RetreatStatusEnum!
   title: String!
   updatedAt: Date!
 }
@@ -105,7 +101,13 @@ type RetreatEdge {
   node: Retreat
 }
 
-enum StatusEnum {
+enum RetreatOrderByEnum {
+  CREATED_AT
+  START_DATE
+  STATUS
+}
+
+enum RetreatStatusEnum {
   ARCHIVED
   DRAFT
   PUBLISHED
@@ -157,4 +159,10 @@ enum UserRoleEnum {
   ADMIN
   EDITOR
   SUPER_ADMIN
+}
+
+enum UserSortByEnum {
+  CREATED_AT
+  EMAIL
+  NAME
 }

@@ -3,25 +3,20 @@ import { enumType, objectType, extendType, nonNull, stringArg, arg, inputObjectT
 import { UserInputError } from 'apollo-server-micro';
 import slugify from 'slug';
 import { clearUndefined, createPageInfoFromNodes } from '../utils';
-import { User } from './User';
+import { User, OrderEnum } from './';
 
-export const StatusEnum = enumType({
-  name: 'StatusEnum',
+export const RetreatStatusEnum = enumType({
+  name: 'RetreatStatusEnum',
   members: ['PUBLISHED', 'DRAFT', 'ARCHIVED'],
 });
 
-export const OrderByEnum = enumType({
-  name: 'OrderByEnum',
+export const RetreatOrderByEnum = enumType({
+  name: 'RetreatOrderByEnum',
   members: {
     START_DATE: 'startDate',
     CREATED_AT: 'createdAt',
     STATUS: 'status',
   },
-});
-
-export const OrderEnum = enumType({
-  name: 'OrderEnum',
-  members: { ASC: 'asc', DESC: 'desc' },
 });
 
 export const Retreat = objectType({
@@ -35,7 +30,7 @@ export const Retreat = objectType({
     t.nonNull.string('title');
     t.nonNull.string('slug');
 
-    t.nonNull.field('status', { type: StatusEnum });
+    t.nonNull.field('status', { type: RetreatStatusEnum });
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
 
@@ -60,8 +55,8 @@ export const RetreatQuery = extendType({
     t.connectionField('retreats', {
       type: Retreat,
       additionalArgs: {
-        status: arg({ type: StatusEnum }),
-        orderBy: arg({ type: OrderByEnum, default: 'startDate' }),
+        status: arg({ type: RetreatStatusEnum }),
+        orderBy: arg({ type: RetreatOrderByEnum, default: 'startDate' }),
         order: arg({ type: OrderEnum, default: 'asc' }),
       },
       pageInfoFromNodes: createPageInfoFromNodes((ctx) => ctx.prisma.retreat.count()),
@@ -136,7 +131,7 @@ export const RetreatMutation = extendType({
       type: Retreat,
       args: {
         id: nonNull(idArg()),
-        status: nonNull(arg({ type: StatusEnum })),
+        status: nonNull(arg({ type: RetreatStatusEnum })),
       },
       async resolve(_, args, ctx) {
         let retreat = await ctx.prisma.retreat.update({ where: { id: args.id }, data: { status: args.status } });
