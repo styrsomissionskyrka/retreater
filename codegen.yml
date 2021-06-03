@@ -26,11 +26,11 @@ generates:
   lib/graphql/generated-cache.ts:
     plugins:
       - 'fragment-matcher'
-      - 'named-operations-object'
-    config:
-      useExplicitTyping: true
-      useConsts: true
 
   lib/graphql/generated-apollo-helpers.ts:
     plugins:
       - 'typescript-apollo-client-helpers'
+      - 'named-operations-object'
+    config:
+      useExplicitTyping: true
+      useConsts: true

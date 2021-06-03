@@ -9,7 +9,7 @@
     "lint": "eslint . --ext .ts --ext .tsx --ext .js",
     "test": "jest",
     "prepare": "husky install",
-    "codegen": "yarn codegen:nexus && codegen:graphql",
+    "codegen": "yarn codegen:nexus && yarn codegen:graphql",
     "codegen:watch": "npx nodemon -e ts,tsx --exec 'yarn codegen'",
     "codegen:nexus": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' --transpile-only api/schema.ts",
     "codegen:graphql": "graphql-codegen --config codegen.yml",
