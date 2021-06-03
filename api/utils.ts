@@ -1,5 +1,5 @@
 import { Claims, UserRole } from '@auth0/nextjs-auth0';
-import { arrayify } from 'lib/utils/array';
+import { arrayify } from '../lib/utils/array';
 import { Context } from './context';
 
 export function clearUndefined<O extends Record<string, unknown>>(object: O): RequiredFields<O> {

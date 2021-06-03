@@ -1,7 +1,7 @@
 import { NexusGenObjects, NexusGenEnums } from 'generated/nexus-typegen';
 import axios from 'axios';
 import Dataloader from 'dataloader';
-import { unique } from 'lib/utils/array';
+import { unique } from '../../lib/utils/array';
 
 export const auth0 = axios.create({
   baseURL: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2`,

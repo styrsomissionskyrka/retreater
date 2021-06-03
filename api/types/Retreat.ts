@@ -36,6 +36,7 @@ export const Retreat = objectType({
 
     t.field('createdBy', {
       type: User,
+      authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
       async resolve(source, _, ctx) {
         if (source.createdById != null) return ctx.auth0.user.load(source.createdById);
         return null;

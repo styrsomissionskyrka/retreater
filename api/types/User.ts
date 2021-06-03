@@ -1,4 +1,5 @@
 import { objectType, extendType, enumType, arg, idArg, nonNull, stringArg, intArg } from 'nexus';
+import { authorizedWithRoles } from '../utils';
 import { OrderEnum, PaginatedQuery } from '.';
 
 export const UserRoleEnum = enumType({
@@ -25,9 +26,10 @@ export const User = objectType({
     t.nonNull.date('updateAt');
     t.string('name');
     t.string('picture');
-    t.string('lastIp');
-    t.date('lastLogin');
-    t.nonNull.int('loginsCount');
+
+    t.string('lastIp', { authorize: authorizedWithRoles(['superadmin']) });
+    t.date('lastLogin', { authorize: authorizedWithRoles(['superadmin']) });
+    t.nonNull.int('loginsCount', { authorize: authorizedWithRoles(['superadmin']) });
 
     t.nonNull.list.nonNull.field('roles', {
       type: UserRoleEnum,
@@ -68,6 +70,7 @@ export const UserQuery = extendType({
     t.field('user', {
       type: User,
       args: { id: nonNull(idArg()) },
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       async resolve(_, args, ctx) {
         return ctx.auth0.user.load(args.id);
       },
@@ -82,6 +85,7 @@ export const UserQuery = extendType({
         orderBy: nonNull(arg({ type: UserOrderByEnum, default: 'created_at' })),
         search: stringArg(),
       },
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       async resolve(_, args, ctx) {
         let { users, pagination } = await ctx.auth0.listUsers(args);
         let totalPages = Math.ceil(pagination.total / (pagination.limit || 1));
