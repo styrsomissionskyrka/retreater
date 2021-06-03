@@ -3,12 +3,11 @@ import { PrismaClient } from '@prisma/client';
 import { ContextFunction } from 'apollo-server-core';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from './prisma';
-import { Auth0 } from './auth0';
+import { Auth0Client } from './auth0';
 
 export const createContext: ContextFunction<ContextArgs, Context> = async (args) => {
   let session = getSession(args.req, args.res);
-
-  return { prisma, user: session?.user, auth0: new Auth0() };
+  return { prisma, user: session?.user, auth0: new Auth0Client() };
 };
 
 interface ContextArgs {
@@ -19,5 +18,5 @@ interface ContextArgs {
 export type Context = {
   prisma: PrismaClient;
   user?: Claims;
-  auth0: Auth0;
+  auth0: Auth0Client;
 };

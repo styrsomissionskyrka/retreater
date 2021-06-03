@@ -1,25 +1,22 @@
-import { NexusGenObjects } from 'generated/nexus-typegen';
+import { NexusGenObjects, NexusGenEnums } from 'generated/nexus-typegen';
 import axios from 'axios';
+import Dataloader from 'dataloader';
+import { unique } from 'lib/utils/array';
 
 export const auth0 = axios.create({
   baseURL: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2`,
   headers: { Authorization: `Bearer ${process.env.AUTH0_ACCESS_TOKEN}` },
 });
 
-export class Auth0 {
+export class Auth0Client {
   private client = auth0;
 
-  async fetchUser(id: string): Promise<NexusGenObjects['User'] | null> {
-    try {
-      let { data } = await this.client.get<Auth0User>(`/users/${id}`);
-      return createAuth0User(data);
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return null;
-      }
+  public user: Dataloader<string, NexusGenObjects['User'] | null>;
+  public roles: Dataloader<string, NexusGenEnums['UserRoleEnum'][]>;
 
-      throw error;
-    }
+  constructor() {
+    this.user = new Dataloader((ids) => this.batchFetchUsers(ids));
+    this.roles = new Dataloader((ids) => this.batchFetchUsersRoles(ids));
   }
 
   async listUsers(
@@ -47,6 +44,38 @@ export class Auth0 {
       users: users.map(createAuth0User),
       pagination,
     };
+  }
+
+  private async batchFetchUsers(ids: readonly string[]): Promise<(NexusGenObjects['User'] | null)[]> {
+    let uniqueIds = unique(ids);
+    let users = await Promise.all(uniqueIds.map((id) => this.fetchUser(id).catch(() => null)));
+    return ids.map((id) => users.find((user) => user?.id === id) ?? null);
+  }
+
+  private async fetchUser(id: string): Promise<NexusGenObjects['User'] | null> {
+    try {
+      let { data } = await this.client.get<Auth0User>(`/users/${id}`);
+      return createAuth0User(data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) return null;
+      throw error;
+    }
+  }
+
+  private async batchFetchUsersRoles(ids: readonly string[]): Promise<NexusGenEnums['UserRoleEnum'][][]> {
+    let uniqueIds = unique(ids);
+    let roles = await Promise.all(uniqueIds.map((id) => this.fetchUserRoles(id).then((roles) => [id, roles] as const)));
+    return ids.map((id) => roles.find((role) => role[0] === id)?.[1] ?? []);
+  }
+
+  private async fetchUserRoles(id: string): Promise<NexusGenEnums['UserRoleEnum'][]> {
+    try {
+      let { data } = await this.client.get<Auth0Role[]>(`/users/${id}/roles`);
+      return data.map((r) => r.name as NexusGenEnums['UserRoleEnum']);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) return [];
+      throw error;
+    }
   }
 }
 

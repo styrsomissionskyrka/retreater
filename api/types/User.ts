@@ -32,7 +32,7 @@ export const User = objectType({
     t.nonNull.list.nonNull.field('roles', {
       type: UserRoleEnum,
       async resolve(user, _, ctx) {
-        return [];
+        return ctx.auth0.roles.load(user.id);
       },
     });
   },
@@ -57,7 +57,7 @@ export const UserQuery = extendType({
 
         try {
           let id = user.sub;
-          let data = await ctx.auth0.fetchUser(id);
+          let data = await ctx.auth0.user.load(id);
           return data;
         } catch (error) {
           return null;
@@ -67,11 +67,9 @@ export const UserQuery = extendType({
 
     t.field('user', {
       type: User,
-      args: {
-        id: nonNull(idArg()),
-      },
-      async resolve() {
-        return null;
+      args: { id: nonNull(idArg()) },
+      async resolve(_, args, ctx) {
+        return ctx.auth0.user.load(args.id);
       },
     });
 

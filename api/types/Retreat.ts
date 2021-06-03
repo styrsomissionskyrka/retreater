@@ -37,7 +37,7 @@ export const Retreat = objectType({
     t.field('createdBy', {
       type: User,
       async resolve(source, _, ctx) {
-        if (source.createdById != null) return ctx.auth0.fetchUser(source.createdById);
+        if (source.createdById != null) return ctx.auth0.user.load(source.createdById);
         return null;
       },
     });
