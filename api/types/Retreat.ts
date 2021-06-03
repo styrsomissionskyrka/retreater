@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { enumType, objectType, extendType, nonNull, stringArg, arg, inputObjectType, idArg, intArg, list } from 'nexus';
 import { UserInputError } from 'apollo-server-micro';
 import slugify from 'slug';
-import { clearUndefined } from '../utils';
+import { clearUndefined, userHasRoles, authorizedWithRoles } from '../utils';
 import { User, OrderEnum, PaginatedQuery } from '.';
 
 export const RetreatStatusEnum = enumType({
@@ -129,9 +129,8 @@ export const RetreatMutation = extendType({
   definition(t) {
     t.field('createRetreatDraft', {
       type: Retreat,
-      args: {
-        title: nonNull(stringArg()),
-      },
+      args: { title: nonNull(stringArg()) },
+      authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
       async resolve(_, args, ctx) {
         let slug = slugify(args.title);
 
@@ -155,6 +154,7 @@ export const RetreatMutation = extendType({
         id: nonNull(idArg()),
         input: nonNull(arg({ type: UpdateRetreatInput })),
       },
+      authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
       async resolve(_, args, ctx) {
         let data = clearUndefined(args.input);
         let retreat = await ctx.prisma.retreat.update({ where: { id: args.id }, data });
@@ -168,6 +168,7 @@ export const RetreatMutation = extendType({
         id: nonNull(idArg()),
         status: nonNull(arg({ type: RetreatStatusEnum })),
       },
+      authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
       async resolve(_, args, ctx) {
         let retreat = await ctx.prisma.retreat.update({ where: { id: args.id }, data: { status: args.status } });
         return retreat;
