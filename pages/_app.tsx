@@ -8,7 +8,7 @@ import { useAppClient } from 'lib/graphql/client';
 import { ApolloProvider } from '@apollo/client';
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
-  const client = useAppClient({});
+  const client = useAppClient({ initialState: pageProps.initialState });
   return (
     <Fragment>
       <Head>
