@@ -1,0 +1,36 @@
+overwrite: true
+schema: './generated/schema.graphql'
+documents:
+  - '{pages,lib}/**/!(*.d).{ts,tsx}'
+  - '!**/__tests__/**'
+  - '!**/*.test.{ts,tsx}'
+
+generates:
+  schema.json:
+    plugins:
+      - introspection
+
+  lib/graphql/generated.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+    config:
+      pureMagicComment: true
+      withComponent: false
+      withHOC: false
+      useConsts: true
+      scalars:
+        DATE: number
+
+  lib/graphql/generated-cache.ts:
+    plugins:
+      - 'fragment-matcher'
+      - 'named-operations-object'
+    config:
+      useExplicitTyping: true
+      useConsts: true
+
+  lib/graphql/generated-apollo-helpers.ts:
+    plugins:
+      - 'typescript-apollo-client-helpers'
