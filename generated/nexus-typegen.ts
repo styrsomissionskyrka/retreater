@@ -3,7 +3,7 @@
  * Do not make changes to this file directly
  */
 
-import { Context } from './../lib/api/context/index';
+import { Context } from './../api/context/index';
 import { Retreat } from '@prisma/client';
 import { FieldAuthorizeResolver } from 'nexus/dist/plugins/fieldAuthorizePlugin';
 import { core, connectionPluginCore } from 'nexus';

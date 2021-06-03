@@ -1,7 +1,7 @@
 import { ApolloServer } from 'apollo-server-micro';
 
-import { schema } from 'lib/api/schema';
-import { createContext } from 'lib/api/context';
+import { schema } from 'api/schema';
+import { createContext } from 'api/context';
 
 export const config = {
   api: {

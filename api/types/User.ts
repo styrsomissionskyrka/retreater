@@ -1,6 +1,5 @@
 import { objectType, extendType, enumType, arg, idArg, nonNull, stringArg } from 'nexus';
-import { resolve } from 'path/posix';
-import { OrderEnum } from './';
+import { OrderEnum } from '.';
 
 export const UserRoleEnum = enumType({
   name: 'UserRoleEnum',

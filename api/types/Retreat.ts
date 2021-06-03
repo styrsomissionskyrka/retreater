@@ -3,7 +3,7 @@ import { enumType, objectType, extendType, nonNull, stringArg, arg, inputObjectT
 import { UserInputError } from 'apollo-server-micro';
 import slugify from 'slug';
 import { clearUndefined, createPageInfoFromNodes } from '../utils';
-import { User, OrderEnum } from './';
+import { User, OrderEnum } from '.';
 
 export const RetreatStatusEnum = enumType({
   name: 'RetreatStatusEnum',
