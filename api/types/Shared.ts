@@ -40,6 +40,7 @@ export const PaginatedQuery = interfaceType({
   name: 'PaginatedQuery',
   resolveType(source) {
     if ('users' in source) return 'PaginatedUser';
+    if ('retreats' in source) return 'PaginatedRetreat';
     return null;
   },
   definition(t) {

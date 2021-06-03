@@ -1,9 +1,9 @@
-import { Prisma } from '.prisma/client';
-import { enumType, objectType, extendType, nonNull, stringArg, arg, inputObjectType, idArg } from 'nexus';
+import { Prisma } from '@prisma/client';
+import { enumType, objectType, extendType, nonNull, stringArg, arg, inputObjectType, idArg, intArg, list } from 'nexus';
 import { UserInputError } from 'apollo-server-micro';
 import slugify from 'slug';
-import { clearUndefined, createPageInfoFromNodes } from '../utils';
-import { User, OrderEnum } from '.';
+import { clearUndefined } from '../utils';
+import { User, OrderEnum, PaginatedQuery } from '.';
 
 export const RetreatStatusEnum = enumType({
   name: 'RetreatStatusEnum',
@@ -50,28 +50,62 @@ export const Retreat = objectType({
   },
 });
 
+export const PaginatedRetreat = objectType({
+  name: 'PaginatedRetreat',
+  definition(t) {
+    t.implements(PaginatedQuery);
+    t.nonNull.list.nonNull.field('retreats', { type: Retreat });
+  },
+});
+
 export const RetreatQuery = extendType({
   type: 'Query',
   definition(t) {
-    t.connectionField('retreats', {
-      type: Retreat,
-      additionalArgs: {
-        status: arg({ type: RetreatStatusEnum }),
-        orderBy: arg({ type: RetreatOrderByEnum, default: 'startDate' }),
-        order: arg({ type: OrderEnum, default: 'asc' }),
+    t.field('retreats', {
+      type: PaginatedRetreat,
+      args: {
+        page: nonNull(intArg({ default: 0 })),
+        perPage: nonNull(intArg({ default: 25 })),
+        order: nonNull(arg({ type: OrderEnum, default: 'asc' })),
+        orderBy: nonNull(arg({ type: RetreatOrderByEnum, default: 'startDate' })),
+        search: stringArg(),
+        status: list(arg({ type: nonNull(RetreatStatusEnum) })),
       },
-      pageInfoFromNodes: createPageInfoFromNodes((ctx) => ctx.prisma.retreat.count()),
-      async nodes(_, args, ctx) {
-        let skip = Number(args.after) + 1;
-        if (Number.isNaN(skip)) skip = 0;
+      async resolve(_, args, ctx) {
+        let skip = args.perPage * args.page;
+        let take = args.perPage;
+
+        let where = {
+          AND: [
+            { status: args.status != null ? { in: args.status } : undefined },
+            {
+              OR: [
+                { title: args.search != null ? { contains: args.search } : undefined },
+                { content: args.search != null ? { contains: args.search } : undefined },
+              ],
+            },
+          ],
+        };
 
         let retreats = await ctx.prisma.retreat.findMany({
-          take: args.first,
+          take,
           skip,
-          orderBy: { [args.orderBy ?? 'startDate']: args.order },
+          orderBy: { [args.orderBy]: args.order },
+          where,
         });
 
-        return retreats;
+        let total = await ctx.prisma.retreat.count({ where });
+
+        let paginationMeta = {
+          hasNextPage: args.perPage * (args.page + 1) < total,
+          hasPreviousPage: args.page > 0,
+          currentPage: args.page,
+          totalPages: Math.ceil(total / (args.perPage || 1)),
+          perPage: args.perPage,
+          totalItems: total,
+        };
+
+        return { retreats, paginationMeta };
       },
     });
 

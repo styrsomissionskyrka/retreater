@@ -6,7 +6,7 @@
 import { Context } from './../api/context/index';
 import { Retreat } from '@prisma/client';
 import { FieldAuthorizeResolver } from 'nexus/dist/plugins/fieldAuthorizePlugin';
-import { core, connectionPluginCore } from 'nexus';
+import { core } from 'nexus';
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
     /**
@@ -21,15 +21,6 @@ declare global {
      * Date custom scalar type
      */
     date<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void; // "Date";
-    /**
-     * Adds a Relay-style connection to the type, with numerous options for configuration
-     *
-     * @see https://nexusjs.org/docs/plugins/connection
-     */
-    connectionField<FieldName extends string>(
-      fieldName: FieldName,
-      config: connectionPluginCore.ConnectionFieldConfig<TypeName, FieldName>,
-    ): void;
   }
 }
 
@@ -67,12 +58,10 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Mutation: {};
-  PageInfo: {
+  PaginatedRetreat: {
     // root type
-    endCursor?: string | null; // String
-    hasNextPage: boolean; // Boolean!
-    hasPreviousPage: boolean; // Boolean!
-    startCursor?: string | null; // String
+    paginationMeta?: NexusGenRootTypes['PaginationMeta'] | null; // PaginationMeta
+    retreats: NexusGenRootTypes['Retreat'][]; // [Retreat!]!
   };
   PaginatedUser: {
     // root type
@@ -90,16 +79,6 @@ export interface NexusGenObjects {
   };
   Query: {};
   Retreat: Retreat;
-  RetreatConnection: {
-    // root type
-    edges?: Array<NexusGenRootTypes['RetreatEdge'] | null> | null; // [RetreatEdge]
-    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
-  };
-  RetreatEdge: {
-    // root type
-    cursor: string; // String!
-    node?: NexusGenRootTypes['Retreat'] | null; // Retreat
-  };
   User: {
     // root type
     createdAt: NexusGenScalars['Date']; // Date!
@@ -116,7 +95,7 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
-  PaginatedQuery: NexusGenRootTypes['PaginatedUser'];
+  PaginatedQuery: NexusGenRootTypes['PaginatedRetreat'] | NexusGenRootTypes['PaginatedUser'];
 }
 
 export interface NexusGenUnions {}
@@ -132,12 +111,10 @@ export interface NexusGenFieldTypes {
     setRetreatStatus: NexusGenRootTypes['Retreat'] | null; // Retreat
     updateRetreat: NexusGenRootTypes['Retreat'] | null; // Retreat
   };
-  PageInfo: {
+  PaginatedRetreat: {
     // field return type
-    endCursor: string | null; // String
-    hasNextPage: boolean; // Boolean!
-    hasPreviousPage: boolean; // Boolean!
-    startCursor: string | null; // String
+    paginationMeta: NexusGenRootTypes['PaginationMeta'] | null; // PaginationMeta
+    retreats: NexusGenRootTypes['Retreat'][]; // [Retreat!]!
   };
   PaginatedUser: {
     // field return type
@@ -157,7 +134,7 @@ export interface NexusGenFieldTypes {
     // field return type
     me: NexusGenRootTypes['User'] | null; // User
     retreat: NexusGenRootTypes['Retreat'] | null; // Retreat
-    retreats: NexusGenRootTypes['RetreatConnection'] | null; // RetreatConnection
+    retreats: NexusGenRootTypes['PaginatedRetreat'] | null; // PaginatedRetreat
     user: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['PaginatedUser'] | null; // PaginatedUser
   };
@@ -174,16 +151,6 @@ export interface NexusGenFieldTypes {
     status: NexusGenEnums['RetreatStatusEnum']; // RetreatStatusEnum!
     title: string; // String!
     updatedAt: NexusGenScalars['Date']; // Date!
-  };
-  RetreatConnection: {
-    // field return type
-    edges: Array<NexusGenRootTypes['RetreatEdge'] | null> | null; // [RetreatEdge]
-    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
-  };
-  RetreatEdge: {
-    // field return type
-    cursor: string; // String!
-    node: NexusGenRootTypes['Retreat'] | null; // Retreat
   };
   User: {
     // field return type
@@ -212,12 +179,10 @@ export interface NexusGenFieldTypeNames {
     setRetreatStatus: 'Retreat';
     updateRetreat: 'Retreat';
   };
-  PageInfo: {
+  PaginatedRetreat: {
     // field return type name
-    endCursor: 'String';
-    hasNextPage: 'Boolean';
-    hasPreviousPage: 'Boolean';
-    startCursor: 'String';
+    paginationMeta: 'PaginationMeta';
+    retreats: 'Retreat';
   };
   PaginatedUser: {
     // field return type name
@@ -237,7 +202,7 @@ export interface NexusGenFieldTypeNames {
     // field return type name
     me: 'User';
     retreat: 'Retreat';
-    retreats: 'RetreatConnection';
+    retreats: 'PaginatedRetreat';
     user: 'User';
     users: 'PaginatedUser';
   };
@@ -254,16 +219,6 @@ export interface NexusGenFieldTypeNames {
     status: 'RetreatStatusEnum';
     title: 'String';
     updatedAt: 'Date';
-  };
-  RetreatConnection: {
-    // field return type name
-    edges: 'RetreatEdge';
-    pageInfo: 'PageInfo';
-  };
-  RetreatEdge: {
-    // field return type name
-    cursor: 'String';
-    node: 'Retreat';
   };
   User: {
     // field return type name
@@ -310,11 +265,12 @@ export interface NexusGenArgTypes {
     };
     retreats: {
       // args
-      after?: string | null; // String
-      first: number; // Int!
-      order: NexusGenEnums['OrderEnum'] | null; // OrderEnum
-      orderBy: NexusGenEnums['RetreatOrderByEnum'] | null; // RetreatOrderByEnum
-      status?: NexusGenEnums['RetreatStatusEnum'] | null; // RetreatStatusEnum
+      order: NexusGenEnums['OrderEnum']; // OrderEnum!
+      orderBy: NexusGenEnums['RetreatOrderByEnum']; // RetreatOrderByEnum!
+      page: number; // Int!
+      perPage: number; // Int!
+      search?: string | null; // String
+      status?: NexusGenEnums['RetreatStatusEnum'][] | null; // [RetreatStatusEnum!]
     };
     user: {
       // args
@@ -332,10 +288,11 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  PaginatedQuery: 'PaginatedUser';
+  PaginatedQuery: 'PaginatedRetreat' | 'PaginatedUser';
 }
 
 export interface NexusGenTypeInterfaces {
+  PaginatedRetreat: 'PaginatedQuery';
   PaginatedUser: 'PaginatedQuery';
 }
 

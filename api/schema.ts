@@ -1,4 +1,4 @@
-import { makeSchema, fieldAuthorizePlugin, connectionPlugin } from 'nexus';
+import { makeSchema, fieldAuthorizePlugin } from 'nexus';
 import * as path from 'path';
 
 import * as types from './types';
@@ -13,5 +13,5 @@ export const schema = makeSchema({
     module: path.join(process.cwd(), 'api/context/index.ts'),
     export: 'Context',
   },
-  plugins: [fieldAuthorizePlugin(), connectionPlugin({ disableBackwardPagination: true })],
+  plugins: [fieldAuthorizePlugin()],
 });
