@@ -41,6 +41,24 @@ type PageInfo {
   startCursor: String
 }
 
+interface PaginatedQuery {
+  paginationMeta: PaginationMeta
+}
+
+type PaginatedUser implements PaginatedQuery {
+  paginationMeta: PaginationMeta
+  users: [User!]!
+}
+
+type PaginationMeta {
+  currentPage: Int!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  perPage: Int!
+  totalItems: Int!
+  totalPages: Int!
+}
+
 type Query {
   me: User
   retreat(id: ID, slug: String): Retreat
@@ -55,16 +73,7 @@ type Query {
     status: RetreatStatusEnum
   ): RetreatConnection
   user(id: ID!): User
-  users(
-    """Returns the elements in the list that come after the specified cursor"""
-    after: String
-
-    """Returns the first n elements from the list."""
-    first: Int!
-    order: OrderEnum! = ASC
-    orderBy: UserSortByEnum! = CREATED_AT
-    search: String
-  ): UserConnection
+  users(order: OrderEnum! = ASC, orderBy: UserSortByEnum! = CREATED_AT, page: Int! = 0, perPage: Int! = 25, search: String): PaginatedUser
 }
 
 type Retreat {
@@ -133,26 +142,6 @@ type User {
   picture: String
   roles: [UserRoleEnum!]!
   updateAt: Date!
-}
-
-type UserConnection {
-  """
-  https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types
-  """
-  edges: [UserEdge]
-
-  """
-  https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
-  """
-  pageInfo: PageInfo!
-}
-
-type UserEdge {
-  """https://facebook.github.io/relay/graphql/connections.htm#sec-Cursor"""
-  cursor: String!
-
-  """https://facebook.github.io/relay/graphql/connections.htm#sec-Node"""
-  node: User
 }
 
 enum UserRoleEnum {

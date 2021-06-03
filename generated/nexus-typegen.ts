@@ -74,6 +74,20 @@ export interface NexusGenObjects {
     hasPreviousPage: boolean; // Boolean!
     startCursor?: string | null; // String
   };
+  PaginatedUser: {
+    // root type
+    paginationMeta?: NexusGenRootTypes['PaginationMeta'] | null; // PaginationMeta
+    users: NexusGenRootTypes['User'][]; // [User!]!
+  };
+  PaginationMeta: {
+    // root type
+    currentPage: number; // Int!
+    hasNextPage: boolean; // Boolean!
+    hasPreviousPage: boolean; // Boolean!
+    perPage: number; // Int!
+    totalItems: number; // Int!
+    totalPages: number; // Int!
+  };
   Query: {};
   Retreat: Retreat;
   RetreatConnection: {
@@ -99,23 +113,15 @@ export interface NexusGenObjects {
     picture?: string | null; // String
     updateAt: NexusGenScalars['Date']; // Date!
   };
-  UserConnection: {
-    // root type
-    edges?: Array<NexusGenRootTypes['UserEdge'] | null> | null; // [UserEdge]
-    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
-  };
-  UserEdge: {
-    // root type
-    cursor: string; // String!
-    node?: NexusGenRootTypes['User'] | null; // User
-  };
 }
 
-export interface NexusGenInterfaces {}
+export interface NexusGenInterfaces {
+  PaginatedQuery: NexusGenRootTypes['PaginatedUser'];
+}
 
 export interface NexusGenUnions {}
 
-export type NexusGenRootTypes = NexusGenObjects;
+export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects;
 
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums;
 
@@ -133,13 +139,27 @@ export interface NexusGenFieldTypes {
     hasPreviousPage: boolean; // Boolean!
     startCursor: string | null; // String
   };
+  PaginatedUser: {
+    // field return type
+    paginationMeta: NexusGenRootTypes['PaginationMeta'] | null; // PaginationMeta
+    users: NexusGenRootTypes['User'][]; // [User!]!
+  };
+  PaginationMeta: {
+    // field return type
+    currentPage: number; // Int!
+    hasNextPage: boolean; // Boolean!
+    hasPreviousPage: boolean; // Boolean!
+    perPage: number; // Int!
+    totalItems: number; // Int!
+    totalPages: number; // Int!
+  };
   Query: {
     // field return type
     me: NexusGenRootTypes['User'] | null; // User
     retreat: NexusGenRootTypes['Retreat'] | null; // Retreat
     retreats: NexusGenRootTypes['RetreatConnection'] | null; // RetreatConnection
     user: NexusGenRootTypes['User'] | null; // User
-    users: NexusGenRootTypes['UserConnection'] | null; // UserConnection
+    users: NexusGenRootTypes['PaginatedUser'] | null; // PaginatedUser
   };
   Retreat: {
     // field return type
@@ -179,15 +199,9 @@ export interface NexusGenFieldTypes {
     roles: NexusGenEnums['UserRoleEnum'][]; // [UserRoleEnum!]!
     updateAt: NexusGenScalars['Date']; // Date!
   };
-  UserConnection: {
+  PaginatedQuery: {
     // field return type
-    edges: Array<NexusGenRootTypes['UserEdge'] | null> | null; // [UserEdge]
-    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
-  };
-  UserEdge: {
-    // field return type
-    cursor: string; // String!
-    node: NexusGenRootTypes['User'] | null; // User
+    paginationMeta: NexusGenRootTypes['PaginationMeta'] | null; // PaginationMeta
   };
 }
 
@@ -205,13 +219,27 @@ export interface NexusGenFieldTypeNames {
     hasPreviousPage: 'Boolean';
     startCursor: 'String';
   };
+  PaginatedUser: {
+    // field return type name
+    paginationMeta: 'PaginationMeta';
+    users: 'User';
+  };
+  PaginationMeta: {
+    // field return type name
+    currentPage: 'Int';
+    hasNextPage: 'Boolean';
+    hasPreviousPage: 'Boolean';
+    perPage: 'Int';
+    totalItems: 'Int';
+    totalPages: 'Int';
+  };
   Query: {
     // field return type name
     me: 'User';
     retreat: 'Retreat';
     retreats: 'RetreatConnection';
     user: 'User';
-    users: 'UserConnection';
+    users: 'PaginatedUser';
   };
   Retreat: {
     // field return type name
@@ -251,15 +279,9 @@ export interface NexusGenFieldTypeNames {
     roles: 'UserRoleEnum';
     updateAt: 'Date';
   };
-  UserConnection: {
+  PaginatedQuery: {
     // field return type name
-    edges: 'UserEdge';
-    pageInfo: 'PageInfo';
-  };
-  UserEdge: {
-    // field return type name
-    cursor: 'String';
-    node: 'User';
+    paginationMeta: 'PaginationMeta';
   };
 }
 
@@ -300,18 +322,22 @@ export interface NexusGenArgTypes {
     };
     users: {
       // args
-      after?: string | null; // String
-      first: number; // Int!
       order: NexusGenEnums['OrderEnum']; // OrderEnum!
       orderBy: NexusGenEnums['UserSortByEnum']; // UserSortByEnum!
+      page: number; // Int!
+      perPage: number; // Int!
       search?: string | null; // String
     };
   };
 }
 
-export interface NexusGenAbstractTypeMembers {}
+export interface NexusGenAbstractTypeMembers {
+  PaginatedQuery: 'PaginatedUser';
+}
 
-export interface NexusGenTypeInterfaces {}
+export interface NexusGenTypeInterfaces {
+  PaginatedUser: 'PaginatedQuery';
+}
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
@@ -319,7 +345,7 @@ export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = keyof NexusGenEnums;
 
-export type NexusGenInterfaceNames = never;
+export type NexusGenInterfaceNames = keyof NexusGenInterfaces;
 
 export type NexusGenScalarNames = keyof NexusGenScalars;
 
@@ -327,7 +353,7 @@ export type NexusGenUnionNames = never;
 
 export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType = never;
+export type NexusGenAbstractsUsingStrategyResolveType = 'PaginatedQuery';
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {

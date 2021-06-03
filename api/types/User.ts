@@ -1,5 +1,5 @@
-import { objectType, extendType, enumType, arg, idArg, nonNull, stringArg } from 'nexus';
-import { OrderEnum } from '.';
+import { objectType, extendType, enumType, arg, idArg, nonNull, stringArg, intArg } from 'nexus';
+import { OrderEnum, PaginatedQuery } from '.';
 
 export const UserRoleEnum = enumType({
   name: 'UserRoleEnum',
@@ -38,6 +38,14 @@ export const User = objectType({
   },
 });
 
+export const PaginatedUser = objectType({
+  name: 'PaginatedUser',
+  definition(t) {
+    t.implements(PaginatedQuery);
+    t.nonNull.list.nonNull.field('users', { type: User });
+  },
+});
+
 export const UserQuery = extendType({
   type: 'Query',
   definition(t) {
@@ -67,44 +75,29 @@ export const UserQuery = extendType({
       },
     });
 
-    t.connectionField('users', {
-      type: User,
-      additionalArgs: {
+    t.field('users', {
+      type: PaginatedUser,
+      args: {
+        page: nonNull(intArg({ default: 0 })),
+        perPage: nonNull(intArg({ default: 25 })),
         order: nonNull(arg({ type: OrderEnum, default: 'asc' })),
         orderBy: nonNull(arg({ type: UserOrderByEnum, default: 'created_at' })),
         search: stringArg(),
       },
       async resolve(_, args, ctx) {
-        let page = 0;
-        if (args.after != null) {
-          let split = Buffer.from(args.after, 'base64').toString().split(':');
-          page = Number(split[1]);
-        }
-
-        let { users, pagination } = await ctx.auth0.listUsers({ ...args, page });
-
-        let currentPage = pagination.start;
-        let hasNextPage = currentPage < pagination.length - 1;
-        let hasPreviousPage = currentPage > 0;
-
-        let startCursor = Buffer.from(`cursor:${currentPage - 1}`).toString('base64');
-        let endCursor = Buffer.from(`cursor:${currentPage + 1}`).toString('base64');
-
-        let edges = users.map((user) => ({
-          cursor: endCursor,
-          node: user,
-        }));
-
-        let pageInfo = {
-          hasNextPage,
-          hasPreviousPage,
-          startCursor: hasPreviousPage ? startCursor : null,
-          endCursor: hasNextPage ? endCursor : null,
-        };
+        let { users, pagination } = await ctx.auth0.listUsers(args);
+        let totalPages = Math.ceil(pagination.total / (pagination.limit || 1));
 
         return {
-          pageInfo,
-          edges,
+          paginationMeta: {
+            hasNextPage: pagination.start < totalPages - 1,
+            hasPreviousPage: pagination.start > 0,
+            currentPage: pagination.start,
+            totalPages,
+            perPage: pagination.limit,
+            totalItems: pagination.total,
+          },
+          users,
         };
       },
     });
