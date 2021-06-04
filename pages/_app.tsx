@@ -1,14 +1,19 @@
 import 'styles/main.css';
 
 import { Fragment } from 'react';
-import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { UserProvider } from '@auth0/nextjs-auth0';
-import { useAppClient } from 'lib/graphql/client';
 import { ApolloProvider } from '@apollo/client';
+import { useAppClient } from 'lib/graphql/client';
 
-const App: React.FC<AppProps> = ({ Component, pageProps }) => {
+import { PageWrapper, AdminWrapper } from 'lib/components/PageWrappers';
+import { ExtendedAppProps, ExtendedNextComponentType } from 'lib/types/next';
+import { useRouter } from 'next/router';
+
+const App: React.FC<ExtendedAppProps> = ({ Component, pageProps }) => {
   const client = useAppClient({ initialState: pageProps.initialState });
+  const Layout = useDefaultLayout(Component);
+
   return (
     <Fragment>
       <Head>
@@ -16,7 +21,9 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       </Head>
       <ApolloProvider client={client}>
         <UserProvider user={pageProps.user}>
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </UserProvider>
       </ApolloProvider>
     </Fragment>
@@ -24,3 +31,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
 };
 
 export default App;
+
+function useDefaultLayout(comp: ExtendedNextComponentType<any>): React.ComponentType {
+  const router = useRouter();
+
+  if (comp.wrapper != null) return comp.wrapper;
+  if (router.pathname.startsWith('/admin')) return AdminWrapper;
+  return PageWrapper;
+}
