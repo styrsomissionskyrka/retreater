@@ -1,13 +1,12 @@
 import { NextPage } from 'next';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
-import { Link } from 'lib/components';
+import { AdminLayout, Link } from 'lib/components';
 
 const Admin: NextPage = () => {
   return (
-    <div>
-      <p>Admin</p>
+    <AdminLayout title="Dashboard" backLink="/">
       <Link href={{ pathname: '/admin/logout' }}>Logga ut</Link>
-    </div>
+    </AdminLayout>
   );
 };
 
