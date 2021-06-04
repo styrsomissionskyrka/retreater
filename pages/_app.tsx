@@ -15,7 +15,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         <title key="title">Retreater | Styrsö Missionskyrka</title>
       </Head>
       <ApolloProvider client={client}>
-        <UserProvider>
+        <UserProvider user={pageProps.user}>
           <Component {...pageProps} />
         </UserProvider>
       </ApolloProvider>
