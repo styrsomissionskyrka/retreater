@@ -1,15 +1,14 @@
 import { NextPage } from 'next';
-import { useUser } from 'lib/hooks';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
+import { Link } from 'lib/components';
 
 const Admin: NextPage = () => {
-  const { user, error, isLoading } = useUser();
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>{error.message}</div>;
-  if (user == null) return <a href="/api/auth/login">Login</a>;
-
-  return <p>Admin</p>;
+  return (
+    <div>
+      <p>Admin</p>
+      <Link href={{ pathname: '/admin/logout' }}>Logga ut</Link>
+    </div>
+  );
 };
 
 export default authenticatedPage(Admin);
