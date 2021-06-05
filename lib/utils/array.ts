@@ -11,3 +11,7 @@ export function arrayify<T>(val: T | T[]): T[] {
 export function hasIntersection<T>(arr1: T[], arr2: T[]) {
   return arr1.some((item) => arr2.includes(item));
 }
+
+export function compact<T>(arr: (T | null | undefined)[]): T[] {
+  return arr.filter((item): item is T => item != null);
+}

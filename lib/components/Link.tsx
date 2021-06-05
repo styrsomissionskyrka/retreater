@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
+import { useRouter } from 'next/router';
 import React, { forwardRef } from 'react';
 
 type LinkProps = Omit<NextLinkProps, 'as' | 'passHref'> &
@@ -18,3 +19,23 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 );
 
 Link.displayName = 'Link';
+
+type NavLinkProps = LinkProps & { activeClassName?: string };
+
+export const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
+  ({ href, className, activeClassName, children, ...props }, ref) => {
+    const router = useRouter();
+
+    let h = typeof href === 'string' ? href : href.pathname ?? '';
+    let isActive = router.asPath.startsWith(h);
+    let c = [className, isActive ? activeClassName : ''].join(' ').trim();
+
+    return (
+      <Link {...props} href={href} className={c}>
+        {children}
+      </Link>
+    );
+  },
+);
+
+NavLink.displayName = 'NavLink';

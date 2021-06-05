@@ -27,3 +27,8 @@ export function useAuthenticatedUser(): UserProfile {
   const { user } = useUser();
   return ensure(user, 'User not authorized. Make sure this hook is used only within an authenticated page.');
 }
+
+export function useUserHasRoles(roles: UserRole[]) {
+  const { hasRoles } = useUser();
+  return hasRoles(roles);
+}

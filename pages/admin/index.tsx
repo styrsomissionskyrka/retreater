@@ -1,11 +1,20 @@
 import { NextPage } from 'next';
+import { IconCalendarEvent, IconUsers } from '@tabler/icons';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
-import { AdminLayout, Link } from 'lib/components';
+import { AdminLayout, NavLinkConfig } from 'lib/components';
+import { useUserHasRoles } from 'lib/hooks';
+import { compact } from 'lib/utils/array';
 
 const Admin: NextPage = () => {
+  const isAdmin = useUserHasRoles(['admin', 'superadmin']);
+  const navLinks: NavLinkConfig[] = compact([
+    { href: '/admin/retreater', label: 'Retreater', icon: <IconCalendarEvent size={16} /> },
+    isAdmin ? { href: '/admin/anvandare', label: 'Användare', icon: <IconUsers size={16} /> } : null,
+  ]);
+
   return (
-    <AdminLayout title="Dashboard" backLink="/">
-      <Link href={{ pathname: '/admin/logout' }}>Logga ut</Link>
+    <AdminLayout title="Dashboard" navLinks={navLinks}>
+      {null}
     </AdminLayout>
   );
 };
