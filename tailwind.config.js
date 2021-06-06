@@ -10,7 +10,7 @@ module.exports = {
       },
       fontFamily: {
         sans: [
-          'Inter',
+          '"Work Sans"',
           'ui-sans-serif',
           'system-ui',
           '-apple-system',
