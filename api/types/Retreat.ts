@@ -55,7 +55,7 @@ export const PaginatedRetreat = objectType({
   name: 'PaginatedRetreat',
   definition(t) {
     t.implements(PaginatedQuery);
-    t.nonNull.list.nonNull.field('retreats', { type: Retreat });
+    t.nonNull.list.nonNull.field('items', { type: Retreat });
   },
 });
 
@@ -63,7 +63,7 @@ export const RetreatQuery = extendType({
   type: 'Query',
   definition(t) {
     t.field('retreats', {
-      type: PaginatedRetreat,
+      type: nonNull(PaginatedRetreat),
       args: {
         page: nonNull(intArg({ default: 0 })),
         perPage: nonNull(intArg({ default: 25 })),
@@ -106,7 +106,7 @@ export const RetreatQuery = extendType({
           totalItems: total,
         };
 
-        return { retreats, paginationMeta };
+        return { items: retreats, paginationMeta };
       },
     });
 

@@ -44,7 +44,7 @@ export const PaginatedUser = objectType({
   name: 'PaginatedUser',
   definition(t) {
     t.implements(PaginatedQuery);
-    t.nonNull.list.nonNull.field('users', { type: User });
+    t.nonNull.list.nonNull.field('items', { type: User });
   },
 });
 

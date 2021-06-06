@@ -1,4 +1,4 @@
-import { scalarType, enumType, objectType, interfaceType } from 'nexus';
+import { scalarType, enumType, objectType, interfaceType, nonNull } from 'nexus';
 import { Kind } from 'graphql';
 
 export const DateScalar = scalarType({
@@ -44,6 +44,6 @@ export const PaginatedQuery = interfaceType({
     return null;
   },
   definition(t) {
-    t.field('paginationMeta', { type: PaginationMeta });
+    t.field('paginationMeta', { type: nonNull(PaginationMeta) });
   },
 });

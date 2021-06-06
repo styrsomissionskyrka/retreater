@@ -17,17 +17,17 @@ enum OrderEnum {
 }
 
 interface PaginatedQuery {
-  paginationMeta: PaginationMeta
+  paginationMeta: PaginationMeta!
 }
 
 type PaginatedRetreat implements PaginatedQuery {
-  paginationMeta: PaginationMeta
-  retreats: [Retreat!]!
+  items: [Retreat!]!
+  paginationMeta: PaginationMeta!
 }
 
 type PaginatedUser implements PaginatedQuery {
-  paginationMeta: PaginationMeta
-  users: [User!]!
+  items: [User!]!
+  paginationMeta: PaginationMeta!
 }
 
 type PaginationMeta {
@@ -42,7 +42,7 @@ type PaginationMeta {
 type Query {
   me: User
   retreat(id: ID, slug: String): Retreat
-  retreats(order: OrderEnum! = ASC, orderBy: RetreatOrderByEnum! = START_DATE, page: Int! = 0, perPage: Int! = 25, search: String, status: [RetreatStatusEnum!]): PaginatedRetreat
+  retreats(order: OrderEnum! = ASC, orderBy: RetreatOrderByEnum! = START_DATE, page: Int! = 0, perPage: Int! = 25, search: String, status: [RetreatStatusEnum!]): PaginatedRetreat!
   user(id: ID!): User
   users(order: OrderEnum! = ASC, orderBy: UserSortByEnum! = CREATED_AT, page: Int! = 0, perPage: Int! = 25, search: String): PaginatedUser
 }
