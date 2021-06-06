@@ -4,9 +4,9 @@ import Image from 'next/image';
 import { UrlObject } from 'url';
 import { IconChevronLeft } from '@tabler/icons';
 import { useRect } from '@reach/rect';
+import { useAuthenticatedUser } from 'lib/hooks';
 import { Link, NavLink } from '../Link';
 import { VisuallyHidden } from '../VisuallyHidden';
-import { useAuthenticatedUser } from 'lib/hooks';
 
 export interface NavLinkConfig {
   href: string | UrlObject;
@@ -68,11 +68,14 @@ export const AdminLayout: React.FC<Props> = ({ title = defaultTitle, navLinks = 
           </nav>
 
           <div className="mt-auto flex items-center space-x-2">
-            <Link href={`/admin/anvandare/${user.sub}`}>
+            <Link href={`/admin/anvandare/${encodeURIComponent(user.sub ?? '')}`}>
               <Image src={user.picture!} width={32} height={32} className="rounded-full" />
             </Link>
             <div className="flex flex-col">
-              <Link href={`/admin/anvandare/${user.sub}`} className="text-sm hover:text-blue-500">
+              <Link
+                href={`/admin/anvandare/${encodeURIComponent(user.sub ?? '')}`}
+                className="text-sm hover:text-blue-500"
+              >
                 {user.name ?? user.email}
               </Link>
               <Link href="/admin/logout" className="text-xs text-red-500 hover:text-red-800" replace>
