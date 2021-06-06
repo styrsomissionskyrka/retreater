@@ -72,7 +72,7 @@ export const AdminLayout: React.FC<Props> = ({ title = defaultTitle, navLinks = 
               <Image src={user.picture!} width={32} height={32} className="rounded-full" />
             </Link>
             <div className="flex flex-col">
-              <Link href={{ pathname: `/admin/anvandare/${user.sub}` }} className="text-sm hover:text-blue-500">
+              <Link href={`/admin/anvandare/${user.sub}`} className="text-sm hover:text-blue-500">
                 {user.name ?? user.email}
               </Link>
               <Link href="/admin/logout" className="text-xs text-red-500 hover:text-red-800" replace>
