@@ -1,4 +1,6 @@
 import { PaginationFragment } from 'lib/graphql';
+import { useRouter } from 'next/router';
+import { UrlObject } from 'url';
 import { Link } from './Link';
 
 interface Props {
@@ -30,11 +32,14 @@ export const Pagination: React.FC<Props> = ({ meta, itemsOnPage }) => {
 };
 
 const PaginationLink: React.FC<{ page: number; disabled: boolean }> = ({ page, disabled, children }) => {
+  const router = useRouter();
+
   if (disabled) {
     return <span>{children}</span>;
   }
 
-  return <Link href={{ query: { page } }}>{children}</Link>;
+  let href: UrlObject = page === 1 ? { pathname: router.pathname } : { query: { page } };
+  return <Link href={href}>{children}</Link>;
 };
 
 function toIndexOne(next: number) {
