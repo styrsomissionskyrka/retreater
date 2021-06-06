@@ -1,4 +1,4 @@
-import { Fragment, useRef } from 'react';
+import { cloneElement, Fragment, useRef } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { UrlObject } from 'url';
@@ -41,7 +41,7 @@ export const AdminLayout: React.FC<Props> = ({ title = defaultTitle, navLinks = 
 
       <div className="relative min-h-screen flex flex-row">
         <div
-          className="sticky w-1/6 flex flex-col py-8 px-10 border-r border-gray-200"
+          className="sticky w-1/4 md:w-1/6 flex flex-col py-8 px-10 border-r border-gray-200"
           style={{ top: rect?.height ?? 0, height: `calc(100vh - ${rect?.height ?? 0}px)` }}
         >
           <p className="text-lg font-semibold mb-12 flex items-center space-x-2">
@@ -58,12 +58,8 @@ export const AdminLayout: React.FC<Props> = ({ title = defaultTitle, navLinks = 
             <ul className="space-y-4">
               {navLinks.map(({ href, label, icon }, index) => (
                 <li key={index}>
-                  <NavLink
-                    href={href}
-                    className="flex space-x-2 items-center hover:text-blue-500"
-                    activeClassName="text-blue-600"
-                  >
-                    {icon}
+                  <NavLink href={href} className="flex space-x-2 items-center" activeClassName="text-blue-600">
+                    {cloneElement(icon, { className: 'flex-none' })}
                     <span>{label}</span>
                   </NavLink>
                 </li>

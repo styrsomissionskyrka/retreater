@@ -35,7 +35,7 @@ const PaginationLink: React.FC<{ page: number; disabled: boolean }> = ({ page, d
   const router = useRouter();
 
   if (disabled) {
-    return <span>{children}</span>;
+    return <span className="cursor-default">{children}</span>;
   }
 
   let href: UrlObject = page === 1 ? { pathname: router.pathname } : { query: { page } };
