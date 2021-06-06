@@ -15,6 +15,7 @@ generates:
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
+      - './scripts/gql-enums.js'
     config:
       pureMagicComment: true
       withComponent: false
