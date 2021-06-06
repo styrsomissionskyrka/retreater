@@ -2,8 +2,14 @@ import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult
 import { SchemaLink } from '@apollo/client/link/schema';
 import { createContext } from 'api/context';
 import { schema } from 'api/schema';
-import { ApolloClient, DocumentNode, NormalizedCacheObject, OperationVariables } from '@apollo/client';
-import { ParsedUrlQuery } from 'querystring';
+import {
+  ApolloClient,
+  DocumentNode,
+  NormalizedCacheObject,
+  OperationVariables,
+  TypedDocumentNode,
+} from '@apollo/client';
+import { ParsedUrlQuery, ParsedUrlQueryInput } from 'querystring';
 import { createApolloClient } from './client';
 
 export function prepareSSRClient<C extends ApolloClient<any>>(
@@ -51,19 +57,19 @@ export function withClient<
   };
 }
 
-type QueryConfig<Variables extends OperationVariables, Query extends ParsedUrlQuery> = [
-  query: DocumentNode,
+type QueryConfig<
+  Variables extends OperationVariables = OperationVariables,
+  Query extends ParsedUrlQuery = ParsedUrlQuery,
+> = [
+  query: TypedDocumentNode<unknown, Variables>,
   getVariables: void | ((ctx: GetServerSidePropsContext<Query>) => Variables),
 ];
 
-export function preloadQueries<Variables, Query extends ParsedUrlQuery>(
-  queries: QueryConfig<Variables, Query>[],
-): GetServerSideProps<{}, Query> {
+export function preloadQueries<Query extends ParsedUrlQuery>(queries: QueryConfig[]): GetServerSideProps<{}, Query> {
   return withClient(async (ctx, client) => {
     await Promise.all(
       queries.map(([query, getVariables]) => {
-        let variables: undefined | Variables;
-        if (getVariables != null) variables = getVariables(ctx);
+        let variables = typeof getVariables === 'function' ? getVariables(ctx) : undefined;
         return client.query({ query, variables });
       }),
     );

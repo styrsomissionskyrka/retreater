@@ -11,7 +11,6 @@ import { ExtendedAppProps, ExtendedNextComponentType } from 'lib/types/next';
 import { useRouter } from 'next/router';
 
 const App: React.FC<ExtendedAppProps> = ({ Component, pageProps }) => {
-  console.log(pageProps.initialState);
   const client = useAppClient({ initialState: pageProps.initialState });
   const Layout = useDefaultLayout(Component);
 

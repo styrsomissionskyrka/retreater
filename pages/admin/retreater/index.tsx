@@ -1,9 +1,9 @@
 import { NextPage } from 'next';
 import { IconCalendarEvent, IconChevronDown, IconChevronUp, IconUsers } from '@tabler/icons';
-import { gql, useQuery } from '@apollo/client';
+import { gql, TypedDocumentNode, useQuery } from '@apollo/client';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
-import { AdminLayout, NavLinkConfig } from 'lib/components';
-import { useUserHasRoles } from 'lib/hooks';
+import { AdminLayout, NavLinkConfig, Pagination } from 'lib/components';
+import { useUserHasRoles, useSearchParams } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
 import {
   ensureOrderEnum,
@@ -13,8 +13,8 @@ import {
   OrderEnum,
   RetreatOrderByEnum,
 } from 'lib/graphql';
-import { useSearchParams } from 'lib/hooks/useSearchParams';
 import { preloadQueries } from 'lib/graphql/ssr';
+import { PAGINATION_FRAGMENT } from 'lib/graphql/fragments';
 
 const initialVariables: ListRetreatsQueryVariables = {
   page: 1,
@@ -32,33 +32,20 @@ const Retreats: NextPage = () => {
 
   const [variables, setVariables] = useSearchParams(initialVariables);
 
-  const { previousData, data = previousData } = useQuery<ListRetreatsQuery, ListRetreatsQueryVariables>(
-    RETREATS_QUERY,
-    {
-      variables: {
-        ...variables,
-        page: variables.page - 1,
-      },
+  const { previousData, data = previousData } = useQuery(LIST_RETREATS_QUERY, {
+    variables: {
+      ...variables,
+      page: variables.page - 1,
     },
-  );
+  });
 
   if (data == null) return <p>Loading...</p>;
 
   const retreats = data.retreats.items;
-  const pagination = data.retreats.paginationMeta;
 
   return (
     <AdminLayout title="Retreater" backLink="/admin" navLinks={navLinks}>
-      <button
-        onClick={() => setVariables({ page: pagination.currentPage - 1 + 1 })}
-        disabled={!pagination.hasPreviousPage}
-      >
-        Previous
-      </button>
-      <p>{pagination.currentPage + 1}</p>
-      <button onClick={() => setVariables({ page: pagination.currentPage + 1 + 1 })} disabled={!pagination.hasNextPage}>
-        Next
-      </button>
+      <Pagination meta={data.retreats.paginationMeta} itemsOnPage={retreats.length} />
 
       <select
         value={variables.orderBy}
@@ -87,16 +74,13 @@ const Retreats: NextPage = () => {
   );
 };
 
-const RETREATS_QUERY = gql`
+const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQueryVariables> = gql`
+  ${PAGINATION_FRAGMENT}
+
   query ListRetreats($page: Int!, $perPage: Int!, $order: OrderEnum!, $orderBy: RetreatOrderByEnum!) {
     retreats(page: $page, perPage: $perPage, order: $order, orderBy: $orderBy) {
       paginationMeta {
-        hasNextPage
-        hasPreviousPage
-        currentPage
-        perPage
-        totalPages
-        totalItems
+        ...Pagination
       }
       items {
         id
@@ -108,11 +92,10 @@ const RETREATS_QUERY = gql`
 
 export default authenticatedPage(Retreats);
 export const getServerSideProps = authenticatedSSP(
-  preloadQueries<ListRetreatsQueryVariables, Record<keyof ListRetreatsQueryVariables, string | undefined>>([
+  preloadQueries<Record<keyof ListRetreatsQueryVariables, string | undefined>>([
     [
-      RETREATS_QUERY,
-      (ctx) => ({
-        ...initialVariables,
+      LIST_RETREATS_QUERY,
+      (ctx): ListRetreatsQueryVariables => ({
         page: Number(ctx.query.page ?? initialVariables.page) - 1,
         perPage: Number(ctx.query.perPage ?? initialVariables.perPage),
         order: ensureOrderEnum(ctx.query.order, OrderEnum.Asc),

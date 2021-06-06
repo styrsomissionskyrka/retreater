@@ -4,7 +4,7 @@ import { useCallback, useMemo, useRef } from 'react';
 
 type TransitionOptions = { shallow?: boolean; replace?: boolean };
 
-type SetParamsCallback<T extends Record<string, string | number>> = (
+export type SetParamsCallback<T extends Record<string, string | number>> = (
   action: React.SetStateAction<Partial<T>>,
   options?: TransitionOptions,
 ) => void;
