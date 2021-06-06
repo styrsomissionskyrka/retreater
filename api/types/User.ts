@@ -99,7 +99,7 @@ export const UserQuery = extendType({
             perPage: pagination.limit,
             totalItems: pagination.total,
           },
-          users,
+          items: users,
         };
       },
     });

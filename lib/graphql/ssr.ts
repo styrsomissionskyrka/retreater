@@ -2,7 +2,7 @@ import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult
 import { SchemaLink } from '@apollo/client/link/schema';
 import { createContext } from 'api/context';
 import { schema } from 'api/schema';
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, DocumentNode, NormalizedCacheObject, OperationVariables } from '@apollo/client';
 import { ParsedUrlQuery } from 'querystring';
 import { createApolloClient } from './client';
 
@@ -49,4 +49,25 @@ export function withClient<
 
     return result;
   };
+}
+
+type QueryConfig<Variables extends OperationVariables, Query extends ParsedUrlQuery> = [
+  query: DocumentNode,
+  getVariables: void | ((ctx: GetServerSidePropsContext<Query>) => Variables),
+];
+
+export function preloadQueries<Variables, Query extends ParsedUrlQuery>(
+  queries: QueryConfig<Variables, Query>[],
+): GetServerSideProps<{}, Query> {
+  return withClient(async (ctx, client) => {
+    await Promise.all(
+      queries.map(([query, getVariables]) => {
+        let variables: undefined | Variables;
+        if (getVariables != null) variables = getVariables(ctx);
+        return client.query({ query, variables });
+      }),
+    );
+
+    return { props: {} };
+  });
 }
