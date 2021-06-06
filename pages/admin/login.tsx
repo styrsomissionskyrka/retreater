@@ -10,7 +10,7 @@ const Login: NextPage = () => {
   useEffect(() => {
     if (isLoading) return;
     if (user == null) {
-      replace({ pathname: '/api/auth/login', query });
+      if (!('Cypress' in window)) replace({ pathname: '/api/auth/login', query });
     } else {
       replace('/admin');
     }
