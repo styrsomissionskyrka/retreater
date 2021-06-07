@@ -10,7 +10,7 @@ import {
   TypedDocumentNode,
 } from '@apollo/client';
 import { ParsedUrlQuery, ParsedUrlQueryInput } from 'querystring';
-import { createApolloClient } from './client';
+import { clearCachedClient, createApolloClient } from './client';
 
 export function prepareSSRClient<C extends ApolloClient<any>>(
   client: C,
@@ -67,13 +67,17 @@ type QueryConfig<
 
 export function preloadQueries<Query extends ParsedUrlQuery>(queries: QueryConfig[]): GetServerSideProps<{}, Query> {
   return withClient(async (ctx, client) => {
-    await Promise.all(
-      queries.map(([query, getVariables]) => {
-        let variables = typeof getVariables === 'function' ? getVariables(ctx) : undefined;
-        return client.query({ query, variables });
-      }),
-    );
+    try {
+      await Promise.all(
+        queries.map(([query, getVariables]) => {
+          let variables = typeof getVariables === 'function' ? getVariables(ctx) : undefined;
+          return client.query({ query, variables });
+        }),
+      );
 
-    return { props: {} };
+      return { props: {} };
+    } finally {
+      clearCachedClient();
+    }
   });
 }

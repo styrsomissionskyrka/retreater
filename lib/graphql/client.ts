@@ -46,6 +46,10 @@ export function createApolloClient({ initialState }: ApolloClientOptions, cache 
   return client;
 }
 
+export function clearCachedClient() {
+  cachedClient = undefined;
+}
+
 export function useAppClient({ initialState }: ApolloClientOptions) {
   return useMemo(() => createApolloClient({ initialState }), [initialState]);
 }
