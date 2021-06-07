@@ -1,20 +1,19 @@
 import { NexusGenObjects, NexusGenEnums } from 'generated/nexus-typegen';
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import Dataloader from 'dataloader';
 import { unique } from '../../lib/utils/array';
 
-export const auth0 = axios.create({
-  baseURL: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2`,
-  headers: { Authorization: `Bearer ${process.env.AUTH0_ACCESS_TOKEN}` },
-});
-
 export class Auth0Client {
-  private client = auth0;
+  private client: AxiosInstance;
 
   public user: Dataloader<string, NexusGenObjects['User'] | null>;
   public roles: Dataloader<string, NexusGenEnums['UserRoleEnum'][]>;
 
-  constructor() {
+  constructor(token?: string) {
+    this.client = axios.create({
+      baseURL: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2`,
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    });
     this.user = new Dataloader((ids) => this.batchFetchUsers(ids));
     this.roles = new Dataloader((ids) => this.batchFetchUsersRoles(ids));
   }

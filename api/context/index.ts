@@ -7,7 +7,7 @@ import { Auth0Client } from './auth0';
 
 export const createContext: ContextFunction<ContextArgs, Context> = async (args) => {
   let session = getSession(args.req, args.res);
-  return { prisma, user: session?.user, auth0: new Auth0Client() };
+  return { prisma, user: session?.user, auth0: new Auth0Client(session?.accessToken) };
 };
 
 type ContextArgs = {
