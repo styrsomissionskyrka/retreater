@@ -34,7 +34,7 @@ function hasOperation(req: CyHttpMessages.IncomingHttpRequest, operationName: st
 Cypress.Commands.add('interceptGraphQL', (operations: string[], prefix = 'gql') => {
   return cy.intercept('POST', '/api/graphql', (req) => {
     for (let operation of operations) {
-      if (hasOperation(req, operation)) req.alias = 'gql' + operation;
+      if (hasOperation(req, operation)) req.alias = prefix + operation;
     }
   });
 });

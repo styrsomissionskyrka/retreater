@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { IconCalendarEvent, IconChevronDown, IconChevronUp, IconUsers } from '@tabler/icons';
 import { gql, TypedDocumentNode, useQuery } from '@apollo/client';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
-import { AdminLayout, NavLinkConfig, Pagination } from 'lib/components';
+import { AdminLayout, EnumFilter, Filters, NavLinkConfig, OrderFilter, Pagination, SearchFilter } from 'lib/components';
 import { useUserHasRoles, useSearchParams } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
 import {
@@ -16,11 +16,12 @@ import {
 import { preloadQueries } from 'lib/graphql/ssr';
 import { PAGINATION_FRAGMENT } from 'lib/graphql/fragments';
 
-const initialVariables: ListRetreatsQueryVariables = {
+const initialVariables: ListRetreatsQueryVariables & { search: string } = {
   page: 1,
-  perPage: 2,
+  perPage: 25,
   order: OrderEnum.Asc,
   orderBy: RetreatOrderByEnum.CreatedAt,
+  search: '',
 };
 
 const Retreats: NextPage = () => {
@@ -36,6 +37,7 @@ const Retreats: NextPage = () => {
     variables: {
       ...variables,
       page: variables.page - 1,
+      search: variables.search === '' ? null : variables.search,
     },
   });
 
@@ -47,25 +49,19 @@ const Retreats: NextPage = () => {
     <AdminLayout title="Retreater" backLink="/admin" navLinks={navLinks}>
       <Pagination meta={data.retreats.paginationMeta} itemsOnPage={retreats.length} />
 
-      <select
-        value={variables.orderBy}
-        onChange={(e) => setVariables({ orderBy: e.currentTarget.value as RetreatOrderByEnum })}
-      >
-        {Object.values(RetreatOrderByEnum).map((val) => (
-          <option key={val} value={val}>
-            {val}
-          </option>
-        ))}
-      </select>
-
-      <button
-        type="button"
-        onClick={() => {
-          setVariables((prev) => ({ order: prev.order === OrderEnum.Asc ? OrderEnum.Desc : OrderEnum.Asc }));
-        }}
-      >
-        {variables.order === OrderEnum.Asc ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
-      </button>
+      <Filters>
+        <EnumFilter
+          value={variables.orderBy}
+          setValue={(next) => setVariables({ orderBy: next })}
+          possibleValues={[
+            { value: RetreatOrderByEnum.CreatedAt, label: 'Skapad' },
+            { value: RetreatOrderByEnum.StartDate, label: 'Startdatum' },
+            { value: RetreatOrderByEnum.Status, label: 'Status' },
+          ]}
+        />
+        <OrderFilter order={variables.order} setOrder={(next) => setVariables({ order: next })} />
+        <SearchFilter value={variables.search} setValue={(next) => setVariables({ search: next })} />
+      </Filters>
 
       {retreats.map((retreat) => (
         <p key={retreat.id}>{retreat.title}</p>
@@ -77,8 +73,8 @@ const Retreats: NextPage = () => {
 const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQueryVariables> = gql`
   ${PAGINATION_FRAGMENT}
 
-  query ListRetreats($page: Int!, $perPage: Int!, $order: OrderEnum!, $orderBy: RetreatOrderByEnum!) {
-    retreats(page: $page, perPage: $perPage, order: $order, orderBy: $orderBy) {
+  query ListRetreats($page: Int!, $perPage: Int!, $order: OrderEnum!, $orderBy: RetreatOrderByEnum!, $search: String) {
+    retreats(page: $page, perPage: $perPage, order: $order, orderBy: $orderBy, search: $search) {
       paginationMeta {
         ...Pagination
       }
@@ -100,6 +96,7 @@ export const getServerSideProps = authenticatedSSP(
         perPage: Number(ctx.query.perPage ?? initialVariables.perPage),
         order: ensureOrderEnum(ctx.query.order, OrderEnum.Asc),
         orderBy: ensureRetreatOrderByEnum(ctx.query.orderBy, RetreatOrderByEnum.CreatedAt),
+        search: ctx.query.search === '' ? null : typeof ctx.query.search === 'string' ? ctx.query.search : null,
       }),
     ],
   ]),
