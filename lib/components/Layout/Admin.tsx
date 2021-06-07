@@ -22,7 +22,7 @@ interface Props {
   backLink?: string | UrlObject;
 }
 
-export const AdminLayout: React.FC<Props> = ({ title = defaultTitle, navLinks = [], backLink, children }) => {
+export const Admin: React.FC<Props> = ({ title = defaultTitle, navLinks = [], backLink, children }) => {
   const user = useAuthenticatedUser();
   const headerRef = useRef<HTMLElement>(null);
   const rect = useRect(headerRef, { observe: false });
@@ -44,7 +44,7 @@ export const AdminLayout: React.FC<Props> = ({ title = defaultTitle, navLinks = 
           className="sticky w-1/4 md:w-1/6 flex flex-col py-8 px-10 border-r border-gray-200"
           style={{ top: rect?.height ?? 0, height: `calc(100vh - ${rect?.height ?? 0}px)` }}
         >
-          <p className="text-lg font-semibold mb-12 flex items-center space-x-2">
+          <p className="text-lg font-medium mb-12 flex items-center space-x-2">
             {backLink ? (
               <Link href={backLink} className="hover:text-blue-500 -ml-6">
                 <IconChevronLeft size={16} />
@@ -90,13 +90,9 @@ export const AdminLayout: React.FC<Props> = ({ title = defaultTitle, navLinks = 
         </div>
 
         <main className="flex-1 px-8">
-          <div className="w-full max-w-xl mx-auto">{children}</div>
+          <div className="w-full max-w-4xl mx-auto">{children}</div>
         </main>
       </div>
     </Fragment>
   );
 };
-
-// briefcase
-// building-church
-// calendar-event

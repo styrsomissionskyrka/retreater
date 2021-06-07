@@ -22,7 +22,7 @@ generates:
       withHOC: false
       useConsts: true
       scalars:
-        DATE: number
+        Date: number
 
   lib/graphql/generated-cache.ts:
     plugins:

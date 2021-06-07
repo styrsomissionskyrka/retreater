@@ -1,18 +1,20 @@
-import { PaginationFragment } from 'lib/graphql';
+/* eslint-disable react/jsx-key */
 import { useRouter } from 'next/router';
 import { UrlObject } from 'url';
-import { Link } from './Link';
+import { PaginationFragment } from 'lib/graphql';
+import { Link } from '../Link';
+import { useDataTable } from './Context';
 
 interface Props {
   meta: PaginationFragment;
-  itemsOnPage: number;
 }
 
-export const Pagination: React.FC<Props> = ({ meta, itemsOnPage }) => {
+export const Pagination: React.FC<Props> = ({ meta }) => {
+  const table = useDataTable();
   let current = toIndexOne(meta.currentPage);
 
   let rangeStart = meta.currentPage * meta.perPage + 1;
-  let rangeEnd = rangeStart + Math.min(meta.perPage, itemsOnPage) - 1;
+  let rangeEnd = rangeStart + Math.min(meta.perPage, table.rows.length) - 1;
 
   return (
     <div>

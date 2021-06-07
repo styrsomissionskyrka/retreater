@@ -1,18 +1,8 @@
 import { NextPage } from 'next';
 import { IconCalendarEvent, IconUsers } from '@tabler/icons';
 import { gql, TypedDocumentNode, useQuery } from '@apollo/client';
-import { format } from 'date-fns';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
-import {
-  AdminLayout,
-  EnumFilter,
-  Filters,
-  Link,
-  NavLinkConfig,
-  OrderFilter,
-  Pagination,
-  SearchFilter,
-} from 'lib/components';
+import { Layout, DataTable } from 'lib/components';
 import { useUserHasRoles, useSearchParams } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
 import {
@@ -25,8 +15,12 @@ import {
 } from 'lib/graphql';
 import { preloadQueries } from 'lib/graphql/ssr';
 import { PAGINATION_FRAGMENT } from 'lib/graphql/fragments';
+import { useMemo } from 'react';
 
-const initialVariables: ListRetreatsQueryVariables & { search: string } = {
+type RetreatType = ListRetreatsQuery['retreats']['items'][number];
+type FiltersType = ListRetreatsQueryVariables & { search: string };
+
+const initialVariables: FiltersType = {
   page: 1,
   perPage: 25,
   order: OrderEnum.Asc,
@@ -36,7 +30,7 @@ const initialVariables: ListRetreatsQueryVariables & { search: string } = {
 
 const Retreats: NextPage = () => {
   const isAdmin = useUserHasRoles(['admin', 'superadmin']);
-  const navLinks: NavLinkConfig[] = compact([
+  const navLinks: Layout.NavLinkConfig[] = compact([
     { href: '/admin/retreater', label: 'Retreater', icon: <IconCalendarEvent size={16} /> },
     isAdmin ? { href: '/admin/anvandare', label: 'Användare', icon: <IconUsers size={16} /> } : null,
   ]);
@@ -51,38 +45,51 @@ const Retreats: NextPage = () => {
     },
   });
 
+  const retreats = data?.retreats.items ?? [];
+  const columns = useMemo<DataTable.Column<RetreatType>[]>(() => {
+    return [
+      DataTable.Columns.createStatusCell(),
+      DataTable.Columns.createLinkCell({
+        accessor: 'title',
+        Header: 'Titel',
+        getLink: (row) => `/admin/retreater/${row.id}`,
+      }),
+      DataTable.Columns.createDateRangeCell({
+        Header: 'Datum',
+        accessor: (row: RetreatType) => ({ start: row.startDate, end: row.endDate }),
+      }),
+      DataTable.Columns.createRelativeDateCell({ Header: 'Skapad', accessor: 'createdAt' }),
+    ];
+  }, []);
+
   if (data == null) return <p>Loading...</p>;
 
-  const retreats = data.retreats.items;
-
   return (
-    <AdminLayout title="Retreater" backLink="/admin" navLinks={navLinks}>
-      <Pagination meta={data.retreats.paginationMeta} itemsOnPage={retreats.length} />
+    <Layout.Admin title="Retreater" backLink="/admin" navLinks={navLinks}>
+      <div className="pt-10">
+        <DataTable.Provider data={retreats} columns={columns}>
+          <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
+            <DataTable.Filters.EnumFilter<FiltersType>
+              queryKey="orderBy"
+              possibleValues={[
+                { value: RetreatOrderByEnum.CreatedAt, label: 'Skapad' },
+                { value: RetreatOrderByEnum.StartDate, label: 'Startdatum' },
+                { value: RetreatOrderByEnum.Status, label: 'Status' },
+              ]}
+            />
 
-      <Filters>
-        <EnumFilter
-          value={variables.orderBy}
-          setValue={(next) => setVariables({ orderBy: next })}
-          possibleValues={[
-            { value: RetreatOrderByEnum.CreatedAt, label: 'Skapad' },
-            { value: RetreatOrderByEnum.StartDate, label: 'Startdatum' },
-            { value: RetreatOrderByEnum.Status, label: 'Status' },
-          ]}
-        />
-        <OrderFilter order={variables.order} setOrder={(next) => setVariables({ order: next })} />
-        <SearchFilter value={variables.search} setValue={(next) => setVariables({ search: next })} />
-      </Filters>
+            <DataTable.Filters.OrderFilter<FiltersType> queryKey="order" />
+          </DataTable.Filters>
 
-      {retreats.map((retreat) => (
-        <div key={retreat.id}>
-          <p>{retreat.status}</p>
-          <Link href={`/admin/retreater/${retreat.id}`}>{retreat.title}</Link>
-          <p>{format(retreat.startDate, 'yyyy-MM-dd')}</p>
-          <p>{format(retreat.endDate, 'yyyy-MM-dd')}</p>
-          <p>Skapad av: {retreat.createdBy?.name ?? retreat.createdBy?.email ?? 'Okänd'}</p>
-        </div>
-      ))}
-    </AdminLayout>
+          <DataTable.Table>
+            <DataTable.Head />
+            <DataTable.Body />
+          </DataTable.Table>
+
+          <DataTable.Pagination meta={data.retreats.paginationMeta} />
+        </DataTable.Provider>
+      </div>
+    </Layout.Admin>
   );
 };
 
@@ -98,6 +105,7 @@ const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQuer
         id
         title
         status
+        createdAt
         startDate
         endDate
         createdBy {
