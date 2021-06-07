@@ -39,7 +39,7 @@ export const AdminLayout: React.FC<Props> = ({ title = defaultTitle, navLinks = 
         <Image src="/icon.svg" width={48} height={48} />
       </header>
 
-      <div className="relative min-h-screen flex flex-row">
+      <div className="relative flex flex-row">
         <div
           className="sticky w-1/4 md:w-1/6 flex flex-col py-8 px-10 border-r border-gray-200"
           style={{ top: rect?.height ?? 0, height: `calc(100vh - ${rect?.height ?? 0}px)` }}
@@ -58,7 +58,11 @@ export const AdminLayout: React.FC<Props> = ({ title = defaultTitle, navLinks = 
             <ul className="space-y-4">
               {navLinks.map(({ href, label, icon }, index) => (
                 <li key={index}>
-                  <NavLink href={href} className="flex space-x-2 items-center" activeClassName="text-blue-600">
+                  <NavLink
+                    href={href}
+                    className="flex space-x-2 items-center hover:bg-gray-700 hover:text-white rounded -ml-2 px-2 py-1"
+                    activeClassName="text-blue-600"
+                  >
                     {cloneElement(icon, { className: 'flex-none' })}
                     <span>{label}</span>
                   </NavLink>
@@ -85,8 +89,8 @@ export const AdminLayout: React.FC<Props> = ({ title = defaultTitle, navLinks = 
           </div>
         </div>
 
-        <main className="flex-1" style={{ height: '200vh' }}>
-          {children}
+        <main className="flex-1 px-8">
+          <div className="w-full max-w-xl mx-auto">{children}</div>
         </main>
       </div>
     </Fragment>

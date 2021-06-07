@@ -1,8 +1,18 @@
 import { NextPage } from 'next';
-import { IconCalendarEvent, IconChevronDown, IconChevronUp, IconUsers } from '@tabler/icons';
+import { IconCalendarEvent, IconUsers } from '@tabler/icons';
 import { gql, TypedDocumentNode, useQuery } from '@apollo/client';
+import { format } from 'date-fns';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
-import { AdminLayout, EnumFilter, Filters, NavLinkConfig, OrderFilter, Pagination, SearchFilter } from 'lib/components';
+import {
+  AdminLayout,
+  EnumFilter,
+  Filters,
+  Link,
+  NavLinkConfig,
+  OrderFilter,
+  Pagination,
+  SearchFilter,
+} from 'lib/components';
 import { useUserHasRoles, useSearchParams } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
 import {
@@ -64,7 +74,13 @@ const Retreats: NextPage = () => {
       </Filters>
 
       {retreats.map((retreat) => (
-        <p key={retreat.id}>{retreat.title}</p>
+        <div key={retreat.id}>
+          <p>{retreat.status}</p>
+          <Link href={`/admin/retreater/${retreat.id}`}>{retreat.title}</Link>
+          <p>{format(retreat.startDate, 'yyyy-MM-dd')}</p>
+          <p>{format(retreat.endDate, 'yyyy-MM-dd')}</p>
+          <p>Skapad av: {retreat.createdBy?.name ?? retreat.createdBy?.email ?? 'Okänd'}</p>
+        </div>
       ))}
     </AdminLayout>
   );
@@ -81,6 +97,14 @@ const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQuer
       items {
         id
         title
+        status
+        startDate
+        endDate
+        createdBy {
+          id
+          name
+          email
+        }
       }
     }
   }
