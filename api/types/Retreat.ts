@@ -4,6 +4,7 @@ import { UserInputError } from 'apollo-server-micro';
 import slugify from 'slug';
 import { clearUndefined, authorizedWithRoles } from '../utils';
 import { User, OrderEnum, PaginatedQuery } from '.';
+import { compact } from 'lib/utils/array';
 
 export const RetreatStatusEnum = enumType({
   name: 'RetreatStatusEnum',
@@ -70,22 +71,21 @@ export const RetreatQuery = extendType({
         order: nonNull(arg({ type: OrderEnum, default: 'asc' })),
         orderBy: nonNull(arg({ type: RetreatOrderByEnum, default: 'startDate' })),
         search: stringArg(),
-        status: list(arg({ type: nonNull(RetreatStatusEnum) })),
+        status: arg({ type: RetreatStatusEnum }),
       },
       async resolve(_, args, ctx) {
         let skip = args.perPage * args.page;
         let take = args.perPage;
 
         let where = {
-          AND: [
-            { status: args.status != null ? { in: args.status } : undefined },
-            {
-              OR: [
-                { title: args.search != null ? { contains: args.search } : undefined },
-                { content: args.search != null ? { contains: args.search } : undefined },
-              ],
-            },
-          ],
+          AND: compact([
+            args.status != null ? { status: { in: args.status } } : { status: { not: 'ARCHIVED' as const } },
+            args.search != null
+              ? {
+                  OR: compact([{ title: { contains: args.search } }, { content: { contains: args.search } }]),
+                }
+              : null,
+          ]).filter(Boolean),
         };
 
         let retreats = await ctx.prisma.retreat.findMany({

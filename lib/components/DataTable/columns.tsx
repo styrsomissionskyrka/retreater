@@ -2,7 +2,7 @@ import { CellProps, Column } from 'react-table';
 import classNames from 'classnames';
 import { RetreatStatusEnum } from 'lib/graphql';
 import { Link } from '../Link';
-import { format, formatRelative } from 'lib/utils/date-fns';
+import { format, formatISO, formatRelative } from 'lib/utils/date-fns';
 import { UrlObject } from 'url';
 import { assert } from 'lib/utils/assert';
 
@@ -32,7 +32,11 @@ export function createLinkCell<T extends object>({
   return {
     ...config,
     Cell({ value, row }: CellProps<T, string>) {
-      return <Link href={getLink(row.original)}>{value}</Link>;
+      return (
+        <Link href={getLink(row.original)} className="flex items-center w-full h-full hover:text-blue-500">
+          {value}
+        </Link>
+      );
     },
   };
 }
@@ -44,7 +48,11 @@ export function createFormattedDateCell<T extends object>({
   return {
     ...config,
     Cell({ value }: CellProps<T, Date | number>) {
-      return <span>{format(value, dateFormat)}</span>;
+      return (
+        <time dateTime={formatISO(value)} title={format(value, 'yyyy-MM-dd HH:mm')}>
+          {format(value, dateFormat)}
+        </time>
+      );
     },
   };
 }
@@ -56,7 +64,11 @@ export function createRelativeDateCell<T extends object>({
   return {
     ...config,
     Cell({ value }: CellProps<T, Date | number>) {
-      return <span>{formatRelative(value, base)}</span>;
+      return (
+        <time dateTime={formatISO(value)} title={format(value, 'yyyy-MM-dd HH:mm')}>
+          {formatRelative(value, base)}
+        </time>
+      );
     },
   };
 }
@@ -70,9 +82,9 @@ export function createDateRangeCell<T extends object>(config: Column<T>): Column
 
       return (
         <p>
-          <span>{format(value.start, 'yyyy-MM-dd')}</span>
+          <time dateTime={formatISO(value.start)}>{format(value.start, 'yyyy-MM-dd')}</time>
           <span>{' - '}</span>
-          <span>{format(value.end, 'yyyy-MM-dd')}</span>
+          <time dateTime={formatISO(value.end)}>{format(value.end, 'yyyy-MM-dd')}</time>
         </p>
       );
     },

@@ -4,12 +4,14 @@ import { useCallback, useMemo, useRef } from 'react';
 
 type TransitionOptions = { shallow?: boolean; replace?: boolean };
 
-export type SetParamsCallback<T extends Record<string, string | number>> = (
+export type QueryObject = Record<string, string | number | null>;
+
+export type SetParamsCallback<T extends QueryObject> = (
   action: React.SetStateAction<Partial<T>>,
   options?: TransitionOptions,
 ) => void;
 
-export function useSearchParams<T extends Record<string, string | number>>(initial: T): [T, SetParamsCallback<T>] {
+export function useSearchParams<T extends QueryObject>(initial: T): [T, SetParamsCallback<T>] {
   const initialRef = useRef(initial);
   const router = useRouter();
 
@@ -23,7 +25,7 @@ export function useSearchParams<T extends Record<string, string | number>>(initi
         'Given query parameter is not string or number. useSearchParams only supports strings and numbers as values.',
       );
 
-      curr[key] = ensureType(initial, next);
+      curr[key] = next == null || initial == null ? next : ensureType(initial, next);
     }
 
     return curr as T;
@@ -66,11 +68,11 @@ function ensureType(initial: string | number, next: string | number): string | n
   }
 }
 
-function omitInitialValues<T extends Record<string, string | number>>(initial: T, next: Partial<T>): Partial<T> {
+function omitInitialValues<T extends QueryObject>(initial: T, next: Partial<T>): Partial<T> {
   let copy: Partial<T> = { ...next };
 
   for (let [key, nextValue] of Object.entries(copy)) {
-    if (nextValue === initial[key]) {
+    if (nextValue === initial[key] || nextValue == null) {
       delete copy[key];
     }
   }

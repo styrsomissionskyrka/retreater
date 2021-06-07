@@ -59,7 +59,7 @@ function wrap<T extends (...args: any[]) => any>(fn: T): T {
     let newArgs = new Array(length);
     for (let i = 0; i < length; i++) {
       if (i === length - 1) {
-        newArgs[i] = { locale: sv, weekStartsOn: 1, ...args[i] };
+        newArgs[i] = { locale: sv, ...args[i] };
       } else {
         newArgs[i] = args[i];
       }

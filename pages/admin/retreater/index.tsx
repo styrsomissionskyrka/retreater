@@ -12,20 +12,22 @@ import {
   ListRetreatsQueryVariables,
   OrderEnum,
   RetreatOrderByEnum,
+  RetreatStatusEnum,
 } from 'lib/graphql';
 import { preloadQueries } from 'lib/graphql/ssr';
 import { PAGINATION_FRAGMENT } from 'lib/graphql/fragments';
 import { useMemo } from 'react';
 
 type RetreatType = ListRetreatsQuery['retreats']['items'][number];
-type FiltersType = ListRetreatsQueryVariables & { search: string };
+type FiltersType = ListRetreatsQueryVariables;
 
 const initialVariables: FiltersType = {
   page: 1,
   perPage: 25,
-  order: OrderEnum.Asc,
+  order: OrderEnum.Desc,
   orderBy: RetreatOrderByEnum.CreatedAt,
   search: '',
+  status: null,
 };
 
 const Retreats: NextPage = () => {
@@ -71,10 +73,22 @@ const Retreats: NextPage = () => {
           <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
             <DataTable.Filters.EnumFilter<FiltersType>
               queryKey="orderBy"
+              label="Sortera efter"
               possibleValues={[
                 { value: RetreatOrderByEnum.CreatedAt, label: 'Skapad' },
                 { value: RetreatOrderByEnum.StartDate, label: 'Startdatum' },
                 { value: RetreatOrderByEnum.Status, label: 'Status' },
+              ]}
+            />
+
+            <DataTable.Filters.EnumFilter<FiltersType>
+              queryKey="status"
+              label="Status"
+              allowEmpty
+              possibleValues={[
+                { value: RetreatStatusEnum.Published, label: 'Publicerad' },
+                { value: RetreatStatusEnum.Draft, label: 'Utkast' },
+                { value: RetreatStatusEnum.Archived, label: 'Arkiverat' },
               ]}
             />
 
@@ -96,8 +110,15 @@ const Retreats: NextPage = () => {
 const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQueryVariables> = gql`
   ${PAGINATION_FRAGMENT}
 
-  query ListRetreats($page: Int!, $perPage: Int!, $order: OrderEnum!, $orderBy: RetreatOrderByEnum!, $search: String) {
-    retreats(page: $page, perPage: $perPage, order: $order, orderBy: $orderBy, search: $search) {
+  query ListRetreats(
+    $page: Int!
+    $perPage: Int!
+    $order: OrderEnum!
+    $orderBy: RetreatOrderByEnum!
+    $search: String
+    $status: RetreatStatusEnum
+  ) {
+    retreats(page: $page, perPage: $perPage, order: $order, orderBy: $orderBy, search: $search, status: $status) {
       paginationMeta {
         ...Pagination
       }

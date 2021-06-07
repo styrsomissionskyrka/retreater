@@ -1,22 +1,20 @@
 import { createContext, useContext, useMemo } from 'react';
 import { IconChevronUp, IconChevronDown } from '@tabler/icons';
-import { SetParamsCallback } from 'lib/hooks';
+import { QueryObject, SetParamsCallback } from 'lib/hooks';
 import { assert, ensure } from 'lib/utils/assert';
 import { OrderEnum } from 'lib/graphql';
 
-interface FiltersContextType<T extends Record<string, string | number>> {
+interface FiltersContextType<T extends QueryObject> {
   values: T;
   setValues: SetParamsCallback<T>;
 }
 
 const FiltersContext = createContext<FiltersContextType<any> | null>(null);
-function useFiltersContext<T extends Record<string, string | number>>(): FiltersContextType<T> {
+function useFiltersContext<T extends QueryObject>(): FiltersContextType<T> {
   return ensure(useContext(FiltersContext));
 }
 
-function useFilter<T extends Record<string, string | number>>(
-  key: keyof T,
-): [value: T[keyof T], setValue: (next: T[keyof T]) => void] {
+function useFilter<T extends QueryObject>(key: keyof T): [value: T[keyof T], setValue: (next: T[keyof T]) => void] {
   const { values, setValues } = useFiltersContext<T>();
   assert(key in values, `The query key ${key} is not available on the values.`);
 
@@ -26,44 +24,72 @@ function useFilter<T extends Record<string, string | number>>(
   return [value, setValue];
 }
 
-interface FiltersProps<T extends Record<string, string | number>> extends FiltersContextType<T> {
+interface FiltersProps<T extends QueryObject> extends FiltersContextType<T> {
   children?: React.ReactNode;
 }
 
-export function Filters<T extends Record<string, string | number>>({ values, setValues, children }: FiltersProps<T>) {
+export function Filters<T extends QueryObject>({ values, setValues, children }: FiltersProps<T>) {
   const ctx = useMemo<FiltersContextType<T>>(() => ({ values, setValues }), [setValues, values]);
   return (
     <FiltersContext.Provider value={ctx}>
-      <div>{children}</div>
+      <form onSubmit={(e) => e.preventDefault()}>{children}</form>
     </FiltersContext.Provider>
   );
 }
 
-interface EnumFilterProps<T extends Record<string, string | number>> {
+interface EnumFilterProps<T extends QueryObject> {
   queryKey: keyof T;
   possibleValues: { value: string; label: React.ReactNode }[];
+  label: React.ReactNode;
+  allowEmpty?: boolean;
+  emptyLabel?: React.ReactNode;
 }
 
-export function EnumFilter<T extends Record<string, string | number>>({
+const EMPTY = '__EMPTY__' as const;
+
+export function EnumFilter<T extends QueryObject>({
   queryKey,
   possibleValues,
+  label,
+  allowEmpty = false,
+  emptyLabel = 'Alla',
 }: EnumFilterProps<T>) {
   const [value, setValue] = useFilter<T>(queryKey);
 
+  let finalValue: NonNullable<T[keyof T]> | typeof EMPTY;
+  if (allowEmpty && value == null) {
+    finalValue = EMPTY;
+  } else {
+    finalValue = ensure(value, 'A value must be provided for EnumFilter to work.') as any;
+  }
+
   return (
-    <select value={value} onChange={(e) => setValue(e.target.value as T[keyof T])}>
-      {possibleValues.map(({ value, label }) => (
-        <option key={value} value={value}>
-          {label}
-        </option>
-      ))}
-    </select>
+    <label>
+      <span>{label}</span>
+      <select
+        value={finalValue}
+        onChange={(e) => {
+          if (e.target.value === EMPTY) {
+            setValue(null as T[keyof T]);
+          } else {
+            setValue(e.target.value as T[keyof T]);
+          }
+        }}
+      >
+        {allowEmpty ? <option value={EMPTY}>{emptyLabel}</option> : null}
+        {possibleValues.map(({ value, label }) => (
+          <option key={value} value={value}>
+            {label}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
 
 Filters.EnumFilter = EnumFilter;
 
-export function OrderFilter<T extends Record<string, string | number>>({ queryKey }: { queryKey: keyof T }) {
+export function OrderFilter<T extends QueryObject>({ queryKey }: { queryKey: keyof T }) {
   const [value, setValue] = useFilter<T>(queryKey);
 
   return (

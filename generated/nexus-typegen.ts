@@ -247,7 +247,7 @@ export interface NexusGenArgTypes {
       page: number; // Int!
       perPage: number; // Int!
       search?: string | null; // String
-      status?: NexusGenEnums['RetreatStatusEnum'][] | null; // [RetreatStatusEnum!]
+      status?: NexusGenEnums['RetreatStatusEnum'] | null; // RetreatStatusEnum
     }
     user: { // args
       id: string; // ID!
