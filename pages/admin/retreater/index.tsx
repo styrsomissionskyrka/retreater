@@ -143,10 +143,10 @@ const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQuer
 
 export default authenticatedPage(Retreats);
 export const getServerSideProps = authenticatedSSP(
-  preloadQueries<Record<keyof ListRetreatsQueryVariables, string | undefined>>([
+  preloadQueries<ListRetreatsQueryVariables>([
     [
       LIST_RETREATS_QUERY,
-      (ctx): ListRetreatsQueryVariables => ({
+      (ctx) => ({
         page: Number(ctx.query.page ?? initialVariables.page) - 1,
         perPage: Number(ctx.query.perPage ?? initialVariables.perPage),
         order: ensureOrderEnum(ctx.query.order, OrderEnum.Asc),
