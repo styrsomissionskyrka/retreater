@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
-import { IconCalendarEvent, IconUsers } from '@tabler/icons';
+import { IconCalendarEvent, IconPlus, IconUsers } from '@tabler/icons';
 import { gql, TypedDocumentNode, useQuery } from '@apollo/client';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
-import { Layout, DataTable } from 'lib/components';
+import { Layout, DataTable, Button } from 'lib/components';
 import { useUserHasRoles, useSearchParams } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
 import {
@@ -69,7 +69,7 @@ const Retreats: NextPage = () => {
       title="Retreater"
       backLink="/admin"
       navLinks={navLinks}
-      actions={<button type="button">Ny retreat</button>}
+      actions={<Button icon={<IconPlus size={16} />}>Ny retreat</Button>}
     >
       <DataTable.Provider data={retreats} columns={columns}>
         <DataTable.Layout>

@@ -3,6 +3,7 @@ import { IconChevronUp, IconChevronDown } from '@tabler/icons';
 import { QueryObject, SetParamsCallback } from 'lib/hooks';
 import { assert, ensure } from 'lib/utils/assert';
 import { OrderEnum } from 'lib/graphql';
+import { Button } from '../Button';
 
 interface FiltersContextType<T extends QueryObject> {
   values: T;
@@ -32,7 +33,7 @@ export function Filters<T extends QueryObject>({ values, setValues, children }: 
   const ctx = useMemo<FiltersContextType<T>>(() => ({ values, setValues }), [setValues, values]);
   return (
     <FiltersContext.Provider value={ctx}>
-      <form onSubmit={(e) => e.preventDefault()} className="flex space-x-8">
+      <form onSubmit={(e) => e.preventDefault()} className="flex items-center space-x-8">
         {children}
       </form>
     </FiltersContext.Provider>
@@ -95,14 +96,13 @@ export function OrderFilter<T extends QueryObject>({ queryKey }: { queryKey: key
   const [value, setValue] = useFilter<T>(queryKey);
 
   return (
-    <button
-      type="button"
+    <Button
       className="flex items-center space-x-2"
       onClick={() => setValue((value === OrderEnum.Asc ? OrderEnum.Desc : OrderEnum.Asc) as T[keyof T])}
+      icon={value === OrderEnum.Desc ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
     >
-      <span>{value === OrderEnum.Desc ? 'Stigande' : 'Fallande'}</span>
-      {value === OrderEnum.Desc ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
-    </button>
+      {value === OrderEnum.Desc ? 'Stigande' : 'Fallande'}
+    </Button>
   );
 }
 

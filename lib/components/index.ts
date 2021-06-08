@@ -3,5 +3,6 @@ export * as Layout from './Layout';
 export * as Table from './Table';
 
 export * from './BrowserOnly';
+export * from './Button';
 export * from './Link';
 export * from './VisuallyHidden';
