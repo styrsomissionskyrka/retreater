@@ -26,7 +26,6 @@ const initialVariables: FiltersType = {
   perPage: 25,
   order: OrderEnum.Desc,
   orderBy: RetreatOrderByEnum.CreatedAt,
-  search: '',
   status: null,
 };
 
@@ -43,7 +42,6 @@ const Retreats: NextPage = () => {
     variables: {
       ...variables,
       page: variables.page - 1,
-      search: variables.search === '' ? null : variables.search,
     },
   });
 
@@ -67,9 +65,14 @@ const Retreats: NextPage = () => {
   if (data == null) return <p>Loading...</p>;
 
   return (
-    <Layout.Admin title="Retreater" backLink="/admin" navLinks={navLinks}>
-      <div className="pt-10">
-        <DataTable.Provider data={retreats} columns={columns}>
+    <Layout.Admin
+      title="Retreater"
+      backLink="/admin"
+      navLinks={navLinks}
+      actions={<button type="button">Ny retreat</button>}
+    >
+      <DataTable.Provider data={retreats} columns={columns}>
+        <DataTable.Layout>
           <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
             <DataTable.Filters.EnumFilter<FiltersType>
               queryKey="orderBy"
@@ -101,8 +104,8 @@ const Retreats: NextPage = () => {
           </DataTable.Table>
 
           <DataTable.Pagination meta={data.retreats.paginationMeta} />
-        </DataTable.Provider>
-      </div>
+        </DataTable.Layout>
+      </DataTable.Provider>
     </Layout.Admin>
   );
 };
@@ -115,10 +118,9 @@ const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQuer
     $perPage: Int!
     $order: OrderEnum!
     $orderBy: RetreatOrderByEnum!
-    $search: String
     $status: RetreatStatusEnum
   ) {
-    retreats(page: $page, perPage: $perPage, order: $order, orderBy: $orderBy, search: $search, status: $status) {
+    retreats(page: $page, perPage: $perPage, order: $order, orderBy: $orderBy, status: $status) {
       paginationMeta {
         ...Pagination
       }
@@ -149,7 +151,6 @@ export const getServerSideProps = authenticatedSSP(
         perPage: Number(ctx.query.perPage ?? initialVariables.perPage),
         order: ensureOrderEnum(ctx.query.order, OrderEnum.Asc),
         orderBy: ensureRetreatOrderByEnum(ctx.query.orderBy, RetreatOrderByEnum.CreatedAt),
-        search: ctx.query.search === '' ? null : typeof ctx.query.search === 'string' ? ctx.query.search : null,
       }),
     ],
   ]),

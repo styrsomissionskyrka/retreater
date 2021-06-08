@@ -1,7 +1,8 @@
-export * from './Table';
 export * from './Context';
-export * from './Pagination';
 export * from './Filters';
+export * from './Layout';
+export * from './Pagination';
+export * from './Table';
 
 export * as Columns from './columns';
 

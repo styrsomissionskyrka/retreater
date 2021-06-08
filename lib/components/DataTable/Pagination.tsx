@@ -17,10 +17,10 @@ export const Pagination: React.FC<Props> = ({ meta }) => {
   let rangeEnd = rangeStart + Math.min(meta.perPage, table.rows.length) - 1;
 
   return (
-    <div>
-      <p>
+    <div className="flex space-x-8">
+      <span>
         Visar {rangeStart} - {rangeEnd} av {meta.totalItems} resultat
-      </p>
+      </span>
 
       <PaginationLink page={current - 1} disabled={!meta.hasPreviousPage}>
         Föregående

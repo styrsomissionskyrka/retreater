@@ -32,7 +32,9 @@ export function Filters<T extends QueryObject>({ values, setValues, children }: 
   const ctx = useMemo<FiltersContextType<T>>(() => ({ values, setValues }), [setValues, values]);
   return (
     <FiltersContext.Provider value={ctx}>
-      <form onSubmit={(e) => e.preventDefault()}>{children}</form>
+      <form onSubmit={(e) => e.preventDefault()} className="flex space-x-8">
+        {children}
+      </form>
     </FiltersContext.Provider>
   );
 }
