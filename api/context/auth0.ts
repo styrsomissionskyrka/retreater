@@ -12,7 +12,7 @@ export class Auth0Client {
   constructor(token?: string) {
     this.client = axios.create({
       baseURL: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2`,
-      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      headers: token ? { Authorization: `Bearer ${process.env.AUTH0_ACCESS_TOKEN}` } : undefined,
     });
     this.user = new Dataloader((ids) => this.batchFetchUsers(ids));
     this.roles = new Dataloader((ids) => this.batchFetchUsersRoles(ids));
@@ -47,7 +47,7 @@ export class Auth0Client {
 
   private async batchFetchUsers(ids: readonly string[]): Promise<(NexusGenObjects['User'] | null)[]> {
     let uniqueIds = unique(ids);
-    let users = await Promise.all(uniqueIds.map((id) => this.fetchUser(id).catch(() => null)));
+    let users = await Promise.all(uniqueIds.map((id) => this.fetchUser(id)));
     return ids.map((id) => users.find((user) => user?.id === id) ?? null);
   }
 
@@ -56,7 +56,9 @@ export class Auth0Client {
       let { data } = await this.client.get<Auth0User>(`/users/${id}`);
       return createAuth0User(data);
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) return null;
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return null;
+      }
       throw error;
     }
   }
