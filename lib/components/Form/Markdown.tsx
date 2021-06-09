@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import MarkdownEditor, { getDefaultToolbarCommands } from 'react-mde';
 import { GetIcon } from 'react-mde/lib/definitions/types';
 import {
@@ -14,35 +14,57 @@ import {
   IconPhoto,
   IconStrikethrough,
 } from '@tabler/icons';
-
-import classes from './Markdown.module.css';
 import { useResizedTextarea } from 'lib/hooks';
+import { Label } from './Ui';
+import classes from './Markdown.module.css';
+import { useControlledInput, useId } from 'lib/hooks';
 
-type MarkdownProps = { initialValue?: string | null };
+type MarkdownProps = {
+  value?: string;
+  defaultValue?: string;
+  onChange?: React.Dispatch<React.SetStateAction<string>>;
+  label: React.ReactNode;
+  name?: string;
+  id?: string;
+};
 
-const Markdown: React.FC<MarkdownProps> = ({ initialValue }) => {
-  const [value, setValue] = useState(initialValue ?? '');
+const Markdown: React.FC<MarkdownProps> = ({ value, defaultValue, onChange, label, name, id }) => {
+  const [controlledValue, setControlledValue] = useControlledInput(value, onChange, defaultValue ?? '');
   const [tab, setTab] = useState<'write' | 'preview'>('write');
 
+  const textareaId = useId('markdown-', id);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   useResizedTextarea(textareaRef, { minRows: 8 });
 
   let commands = getDefaultToolbarCommands();
 
+  useEffect(() => {
+    let el = textareaRef.current;
+    if (el == null) return;
+
+    toggleAttribute(el, 'id', textareaId);
+    toggleAttribute(el, 'name', name);
+  }, [textareaId, name]);
+
   return (
-    <div>
-      <MarkdownEditor
-        refs={{ textarea: textareaRef }}
-        value={value}
-        onChange={setValue}
-        selectedTab={tab}
-        onTabChange={setTab}
-        generateMarkdownPreview={(source) => Promise.resolve(source)}
-        classes={classes}
-        toolbarCommands={commands}
-        getIcon={getIcon}
-      />
-    </div>
+    <Label
+      htmlFor={textareaId}
+      input={
+        <MarkdownEditor
+          refs={{ textarea: textareaRef }}
+          value={controlledValue}
+          onChange={setControlledValue}
+          selectedTab={tab}
+          onTabChange={setTab}
+          generateMarkdownPreview={(source) => Promise.resolve(source)}
+          classes={classes}
+          toolbarCommands={commands}
+          getIcon={getIcon}
+        />
+      }
+    >
+      {label}
+    </Label>
   );
 };
 
@@ -76,3 +98,11 @@ const getIcon: GetIcon = (name) => {
   }
   return null;
 };
+
+function toggleAttribute(el: HTMLElement, attr: string, value: string | undefined | null) {
+  if (value) {
+    el.setAttribute(attr, value);
+  } else {
+    el.removeAttribute(attr);
+  }
+}

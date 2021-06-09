@@ -16,3 +16,16 @@ export function ensure<T>(value: T | null | undefined, message?: string): T {
   assert(value, message);
   return value;
 }
+
+export function warning(value: unknown, message: string) {
+  if (process.env.NODE_ENV !== 'production') {
+    if (value === false || value === null || typeof value === 'undefined') return;
+
+    let text = `Warning: ${message}`;
+    console.warn(text);
+
+    try {
+      throw new Error(text);
+    } catch (error) {}
+  }
+}

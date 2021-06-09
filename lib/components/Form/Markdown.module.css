@@ -2,6 +2,11 @@
 .reactMde {
   @apply border border-black rounded;
   position: relative;
+  width: 100%;
+}
+
+.reactMde:focus-within {
+  @apply outline-black;
 }
 
 /* Toolbar */
@@ -62,6 +67,10 @@
   resize: vertical;
   overflow-y: auto;
   min-height: theme('height.48');
+}
+
+.textArea:focus {
+  outline: none;
 }
 
 /* Preview */

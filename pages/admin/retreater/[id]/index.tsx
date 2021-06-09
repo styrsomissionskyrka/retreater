@@ -27,15 +27,17 @@ const Retreat: NextPage = () => {
         <Form.HiddenInput name="id" defaultValue={retreat.id} />
         <Form.Input label="Titel" name="title" type="text" defaultValue={retreat.title} />
         <Form.Input label="Slug" prefix="/retreater/" name="slug" type="text" readOnly value={retreat.slug} />
-        <Form.Input label="Startdatum" name="startDate" type="date" defaultValue={startDate} />
-        <Form.Input label="Slutdatum" name="endDate" type="date" defaultValue={endDate} />
+        <Form.Row>
+          <Form.Input label="Startdatum" name="startDate" type="date" defaultValue={startDate} />
+          <Form.Input label="Slutdatum" name="endDate" type="date" defaultValue={endDate} />
+        </Form.Row>
         <Form.Input
           label="Max antal deltagare"
           name="maxParticipants"
           type="number"
           defaultValue={retreat.maxParticipants ?? 0}
         />
-        <Form.Markdown initialValue={retreat.content} />
+        <Form.Markdown defaultValue={retreat.content ?? ''} label="Beskrivning" />
       </Form.Form>
       <pre>{JSON.stringify(retreat, null, 2)}</pre>
     </Layout.Admin>
