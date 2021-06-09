@@ -16,34 +16,23 @@ interface EditRetreatProps {
   retreat: NonNullable<EditRetreatFormQuery['retreat']>;
 }
 
-type FormValues = Omit<UpdateRetreatInput, 'startDate' | 'endDate' | 'maxParticipants'> & {
-  maxParticipants: string;
-  startDate: string;
-  endDate: string;
-};
-
 export const EditRetreat: React.FC<EditRetreatProps> = ({ retreat }) => {
   const [mutate] = useMutation(UPDATE_RETREAT_MUTATION);
-  const { register, handleSubmit } = useForm<FormValues>();
+  const { register, handleSubmit } = useForm<UpdateRetreatInput>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit: SubmitHandler<FormValues> = async (values) => {
+  const onSubmit: SubmitHandler<UpdateRetreatInput> = async (values) => {
+    if (isSubmitting) return;
+
     setIsSubmitting(true);
     try {
-      const input = {
-        ...values,
-        maxParticipants: Number(values.maxParticipants),
-        startDate: getTime(parse(values.startDate, 'yyyy-MM-dd', new Date())),
-        endDate: getTime(parse(values.endDate, 'yyyy-MM-dd', new Date())),
-      };
-
       await mutate({
-        variables: { id: retreat.id, input },
+        variables: { id: retreat.id, input: values },
         optimisticResponse: {
           updateRetreat: {
             ...retreat,
-            ...input,
-            title: input.title ?? retreat.title,
+            ...values,
+            title: values.title!,
           },
         },
       });
@@ -58,15 +47,22 @@ export const EditRetreat: React.FC<EditRetreatProps> = ({ retreat }) => {
   let endDate = format(retreat.endDate ?? new Date(), 'yyyy-MM-dd');
   let markdownProps = Form.useWrapMarkdownRegister(register('content'));
 
-  console.log(markdownProps.ref);
+  let setValueAs = (date: string) => {
+    return getTime(parse(date, 'yyyy-MM-dd', new Date()));
+  };
 
   return (
     <Form.Form onSubmit={handleSubmit(onSubmit)}>
       <Form.Input label="Titel" type="text" defaultValue={retreat.title} {...register('title')} />
       <Form.Input label="Slug" prefix="/retreater/" type="text" readOnly value={retreat.slug} />
       <Form.Row>
-        <Form.Input label="Startdatum" type="date" defaultValue={startDate} {...register('startDate')} />
-        <Form.Input label="Slutdatum" type="date" defaultValue={endDate} {...register('endDate')} />
+        <Form.Input
+          label="Startdatum"
+          type="date"
+          defaultValue={startDate}
+          {...register('startDate', { setValueAs })}
+        />
+        <Form.Input label="Slutdatum" type="date" defaultValue={endDate} {...register('endDate', { setValueAs })} />
       </Form.Row>
       <Form.Input
         label="Max antal deltagare"
@@ -74,7 +70,7 @@ export const EditRetreat: React.FC<EditRetreatProps> = ({ retreat }) => {
         min={0}
         max={100}
         defaultValue={retreat.maxParticipants ?? 10}
-        {...register('maxParticipants')}
+        {...register('maxParticipants', { valueAsNumber: true })}
       />
       <Form.Markdown label="Beskrivning" defaultValue={retreat.content ?? ''} {...markdownProps} />
 

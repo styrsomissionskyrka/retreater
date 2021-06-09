@@ -14,12 +14,13 @@ import {
   IconPhoto,
   IconStrikethrough,
 } from '@tabler/icons';
-import { useResizedTextarea } from 'lib/hooks';
+import { ChangeHandler, UseFormRegisterReturn } from 'react-hook-form';
+import { useIsomorphicLayoutEffect, useResizedTextarea } from 'lib/hooks';
+import { useId } from 'lib/hooks';
+import { useProxyRefObject } from 'lib/utils/refs';
+import { setAttribute, toggleAttribute } from 'lib/utils/dom';
 import { Label } from './Ui';
 import classes from './Markdown.module.css';
-import { useControlledInput, useId } from 'lib/hooks';
-import { sharedRef } from 'lib/utils/shared-ref';
-import { ChangeHandler, UseFormRegisterReturn } from 'react-hook-form';
 
 type MarkdownProps = {
   value?: string;
@@ -34,14 +35,19 @@ type MarkdownProps = {
 
 export const Markdown = forwardRef<HTMLTextAreaElement, MarkdownProps>(
   ({ value, defaultValue, onChange, label, name, id, required, onBlur }, ref) => {
-    const [controlledValue, setControlledValue] = useControlledInput(value, defaultValue ?? '');
     const [tab, setTab] = useState<'write' | 'preview'>('write');
 
     const textareaId = useId('markdown-', id);
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const textareaRef = useProxyRefObject<HTMLTextAreaElement>(null, ref);
     useResizedTextarea(textareaRef, { minRows: 8 });
 
-    let commands = getDefaultToolbarCommands();
+    const hasSetDefaultValue = useRef(defaultValue == null);
+    useIsomorphicLayoutEffect(() => {
+      if (textareaRef.current == null) return;
+      if (hasSetDefaultValue.current) return;
+      textareaRef.current.innerText = defaultValue ?? '';
+      hasSetDefaultValue.current = true;
+    }, [defaultValue, textareaRef]);
 
     useEffect(() => {
       if (textareaRef.current == null) return;
@@ -49,30 +55,26 @@ export const Markdown = forwardRef<HTMLTextAreaElement, MarkdownProps>(
 
       if (onBlur) el.addEventListener('blur', onBlur);
 
-      toggleAttribute(el, 'id', textareaId);
-      toggleAttribute(el, 'name', name);
-      toggleAttribute(el, 'required', name);
-      el.toggleAttribute('required', required);
+      setAttribute(el, 'id', textareaId);
+      setAttribute(el, 'name', name);
+      setAttribute(el, 'required', name);
+      toggleAttribute(el, 'required', required);
 
       return () => {
         if (onBlur) el.removeEventListener('blur', onBlur);
       };
-    }, [textareaId, name, required, onBlur, onChange]);
+    }, [textareaId, name, required, onBlur, onChange, textareaRef]);
 
-    const handleChange = (value: string) => {
-      setControlledValue(value);
-      if (onChange != null) onChange(value);
-    };
+    let commands = getDefaultToolbarCommands();
 
-    fakeRefHandler(textareaRef, ref);
     return (
       <Label
         htmlFor={textareaId}
         input={
           <MarkdownEditor
             refs={{ textarea: textareaRef }}
-            value={controlledValue}
-            onChange={handleChange}
+            value={value}
+            onChange={onChange}
             selectedTab={tab}
             onTabChange={setTab}
             generateMarkdownPreview={(source) => Promise.resolve(source)}
@@ -132,20 +134,3 @@ const getIcon: GetIcon = (name) => {
   }
   return null;
 };
-
-function toggleAttribute(el: HTMLElement, attr: string, value: string | undefined | null) {
-  if (value) {
-    el.setAttribute(attr, value);
-  } else {
-    el.removeAttribute(attr);
-  }
-}
-
-function fakeRefHandler<T>(ref: React.RefObject<T>, forwardedRef: React.ForwardedRef<T>) {
-  if (forwardedRef == null) return;
-  if (typeof forwardedRef === 'function') {
-    forwardedRef(ref.current);
-  } else if ('current' in forwardedRef) {
-    forwardedRef.current = ref.current;
-  }
-}

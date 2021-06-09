@@ -27,13 +27,7 @@ interface Props {
 export const Admin: React.FC<Props> = ({ title = defaultTitle, navLinks = [], backLink, actions, children }) => {
   const user = useAuthenticatedUser();
   const headerRef = useRef<HTMLElement>(null);
-  const rect = useRect(headerRef, {
-    observe: false,
-    onChange(rect) {
-      console.log(rect.height);
-      document.documentElement.style.setProperty('--header-height', `${rect.height}px`);
-    },
-  });
+  const rect = useRect(headerRef, { observe: false });
 
   useIsomorphicLayoutEffect(() => {
     if (rect != null) setGlobalVariable('--header-height', `${rect.height}px`);
