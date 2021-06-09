@@ -66,7 +66,7 @@ export const Admin: React.FC<Props> = ({ title = defaultTitle, navLinks = [], ba
                 <li key={index}>
                   <NavLink
                     href={href}
-                    className="flex space-x-2 items-center hover:bg-gray-700 hover:text-white rounded -ml-2 px-2 py-1"
+                    className="flex space-x-2 items-center hover:bg-black hover:text-white rounded -ml-2 px-2 py-1"
                     activeClassName="text-blue-600"
                   >
                     {cloneElement(icon, { className: 'flex-none' })}

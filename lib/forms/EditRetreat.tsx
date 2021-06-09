@@ -1,5 +1,5 @@
 import { gql, TypedDocumentNode, useMutation } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Form } from 'lib/components';
 import {
   EditRetreatFormQuery,
@@ -11,6 +11,7 @@ import {
 import { format, parse } from 'lib/utils/date-fns';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { getTime } from 'date-fns';
+import { toast } from 'lib/components/Toast';
 
 interface EditRetreatProps {
   retreat: NonNullable<EditRetreatFormQuery['retreat']>;
@@ -21,23 +22,16 @@ export const EditRetreat: React.FC<EditRetreatProps> = ({ retreat }) => {
   const { register, handleSubmit } = useForm<UpdateRetreatInput>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit: SubmitHandler<UpdateRetreatInput> = async (values) => {
+  const onSubmit: SubmitHandler<UpdateRetreatInput> = async (input) => {
     if (isSubmitting) return;
 
-    setIsSubmitting(true);
     try {
-      await mutate({
-        variables: { id: retreat.id, input: values },
-        optimisticResponse: {
-          updateRetreat: {
-            ...retreat,
-            ...values,
-            title: values.title!,
-          },
-        },
-      });
+      setIsSubmitting(true);
+      await mutate({ variables: { id: retreat.id, input } });
+      toast.success('Retreaten har uppdaterats.');
     } catch (error) {
-      console.error(error);
+      toast.error('Något gick snett.');
+      if (process.env.NODE_ENV !== 'production') console.error(error);
     } finally {
       setIsSubmitting(false);
     }
