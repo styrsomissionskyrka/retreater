@@ -1,0 +1,73 @@
+/* Wrapper */
+.reactMde {
+  @apply border border-black rounded;
+  position: relative;
+}
+
+/* Toolbar */
+.toolbar {
+  @apply border-b border-black space-x-8 rounded-t;
+  background-color: theme('colors.white');
+  position: sticky;
+  top: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.toolbar :global(.mde-tabs) {
+}
+
+.toolbar :global(.mde-tabs) button {
+  @apply p-3 leading-none;
+}
+
+.toolbar :global(.mde-tabs) button:hover,
+.toolbar :global(.mde-tabs) button:global(.selected) {
+  @apply bg-gray-200;
+}
+
+.toolbar :global(.mde-header-group) {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar :global(.mde-header-group) :global(.mde-header-item) {
+}
+
+.toolbar :global(.mde-header-group) :global(.mde-header-item) button {
+  @apply p-3;
+  display: flex;
+  align-items: center;
+}
+
+.toolbar :global(.mde-header-group) :global(.mde-header-item) button:hover {
+  @apply bg-gray-200;
+}
+
+/* Textarea */
+.reactMde :global(.invisible) {
+  @apply hidden;
+}
+
+.reactMde :global(.mde-textarea-wrapper) {
+}
+
+.textArea {
+  @apply rounded p-3;
+  display: block;
+  width: 100%;
+  margin: 0;
+  border: 0;
+  tab-size: 4;
+  resize: vertical;
+  overflow-y: auto;
+  min-height: theme('height.48');
+}
+
+/* Preview */
+.preview {
+}
+
+/* Suggestion */
+.suggestionsDropdown {
+}

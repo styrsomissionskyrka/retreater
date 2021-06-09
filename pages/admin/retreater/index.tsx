@@ -131,11 +131,6 @@ const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQuer
         createdAt
         startDate
         endDate
-        createdBy {
-          id
-          name
-          email
-        }
       }
     }
   }

@@ -4,9 +4,10 @@ import Image from 'next/image';
 import { UrlObject } from 'url';
 import { IconChevronLeft } from '@tabler/icons';
 import { useRect } from '@reach/rect';
-import { useAuthenticatedUser } from 'lib/hooks';
+import { useAuthenticatedUser, useIsomorphicLayoutEffect } from 'lib/hooks';
 import { Link, NavLink } from '../Link';
 import { VisuallyHidden } from '../VisuallyHidden';
+import { setGlobalVariable } from 'lib/utils/css';
 
 export interface NavLinkConfig {
   href: string | UrlObject;
@@ -26,7 +27,17 @@ interface Props {
 export const Admin: React.FC<Props> = ({ title = defaultTitle, navLinks = [], backLink, actions, children }) => {
   const user = useAuthenticatedUser();
   const headerRef = useRef<HTMLElement>(null);
-  const rect = useRect(headerRef, { observe: false });
+  const rect = useRect(headerRef, {
+    observe: false,
+    onChange(rect) {
+      console.log(rect.height);
+      document.documentElement.style.setProperty('--header-height', `${rect.height}px`);
+    },
+  });
+
+  useIsomorphicLayoutEffect(() => {
+    if (rect != null) setGlobalVariable('--header-height', `${rect.height}px`);
+  }, [rect]);
 
   let headTitle = title === defaultTitle ? title : `${title} | ${defaultTitle}`;
 
@@ -95,7 +106,7 @@ export const Admin: React.FC<Props> = ({ title = defaultTitle, navLinks = [], ba
             <h1 className="text-6xl font-medium">{title}</h1>
             {actions ? <div className="ml-auto">{actions}</div> : null}
           </div>
-          <div className="w-full max-w-4xl mx-auto">{children}</div>
+          <div className="relative w-full max-w-4xl mx-auto">{children}</div>
         </main>
       </div>
     </Fragment>

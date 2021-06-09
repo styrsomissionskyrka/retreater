@@ -35,6 +35,7 @@ const Retreat: NextPage = () => {
           type="number"
           defaultValue={retreat.maxParticipants ?? 0}
         />
+        <Form.Markdown initialValue={retreat.content} />
       </Form.Form>
       <pre>{JSON.stringify(retreat, null, 2)}</pre>
     </Layout.Admin>

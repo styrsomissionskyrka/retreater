@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import { forwardRef } from 'react';
+import classNames from 'classnames';
 
 type ElProps<E extends keyof JSX.IntrinsicElements> = Omit<JSX.IntrinsicElements[E], 'ref' | 'key'>;
 
@@ -8,7 +8,7 @@ type FormProps = ElProps<'form'>;
 export const Form = forwardRef<HTMLFormElement, FormProps>(({ children, ...props }, ref) => {
   return (
     <form {...props} ref={ref}>
-      <div className="flex flex-col space-y-8 max-w-lg">{children}</div>
+      <div className="flex flex-col space-y-8 w-full">{children}</div>
     </form>
   );
 });
@@ -23,7 +23,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, prefix, 
       <span>{label}</span>
       <div className="w-full flex">
         {prefix != null ? <span>{prefix}</span> : null}
-        <input {...props} ref={ref} className="border border-black w-full" />
+        <input {...props} ref={ref} className="border border-black rounded w-full" />
       </div>
     </label>
   );
