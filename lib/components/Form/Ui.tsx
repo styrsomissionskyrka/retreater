@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react';
 import classNames from 'classnames';
 import { Button } from '../Button';
 import { Spinner } from '../Spinner';
+import { useDebouncedValue } from 'lib/hooks';
 
 type ElProps<E extends keyof JSX.IntrinsicElements> = Omit<JSX.IntrinsicElements[E], 'ref' | 'key'>;
 
@@ -84,14 +85,9 @@ Input.displayName = 'Form.Input';
 type SubmitProps = Omit<ElProps<'button'>, 'type'> & { isSubmitting?: boolean };
 
 export const Submit = forwardRef<HTMLButtonElement, SubmitProps>(({ isSubmitting, children, ...props }, ref) => {
+  const debounced = useDebouncedValue(isSubmitting, 300);
   return (
-    <Button
-      {...props}
-      ref={ref}
-      type="submit"
-      disabled={isSubmitting}
-      icon={isSubmitting ? <Spinner size={16} /> : null}
-    >
+    <Button {...props} ref={ref} type="submit" disabled={debounced} icon={debounced ? <Spinner size={16} /> : null}>
       {children}
     </Button>
   );

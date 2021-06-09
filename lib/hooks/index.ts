@@ -1,4 +1,5 @@
 export * from './useControlledInput';
+export * from './useDebouncedValue';
 export * from './useDevelopmentWarning';
 export * from './useId';
 export * from './useIsomorphicLayoutEffect';
