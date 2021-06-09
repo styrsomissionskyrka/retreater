@@ -1,5 +1,7 @@
 import React, { forwardRef } from 'react';
 import classNames from 'classnames';
+import { Button } from '../Button';
+import { Spinner } from '../Spinner';
 
 type ElProps<E extends keyof JSX.IntrinsicElements> = Omit<JSX.IntrinsicElements[E], 'ref' | 'key'>;
 
@@ -15,11 +17,27 @@ export const Form = forwardRef<HTMLFormElement, FormProps>(({ children, ...props
 
 Form.displayName = 'Form';
 
-export const Row = forwardRef<HTMLDivElement, { children?: React.ReactNode }>(({ children }) => {
-  return <div className="flex items-start space-x-8 w-full">{children}</div>;
-});
+export const Row = forwardRef<HTMLDivElement, { className?: string; children?: React.ReactNode }>(
+  ({ className, children }, ref) => {
+    return (
+      <div ref={ref} className={classNames('flex items-start space-x-8 w-full', className)}>
+        {children}
+      </div>
+    );
+  },
+);
 
 Row.displayName = 'Form.Row';
+
+export const ActionRow = forwardRef<HTMLDivElement, { children?: React.ReactNode }>(({ children }, ref) => {
+  return (
+    <Row ref={ref} className="justify-end space-x-4">
+      {children}
+    </Row>
+  );
+});
+
+ActionRow.displayName = 'Form.ActionRow';
 
 type LabelProps = ElProps<'label'> & { input: React.ReactNode };
 
@@ -63,10 +81,32 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, prefix, 
 
 Input.displayName = 'Form.Input';
 
-type HiddenInputProps = ElProps<'input'>;
+type SubmitProps = Omit<ElProps<'button'>, 'type'> & { isSubmitting?: boolean };
 
-export const HiddenInput = forwardRef<HTMLInputElement, HiddenInputProps>(({ ...props }, ref) => {
-  return <input {...props} type="hidden" ref={ref} hidden />;
+export const Submit = forwardRef<HTMLButtonElement, SubmitProps>(({ isSubmitting, children, ...props }, ref) => {
+  return (
+    <Button
+      {...props}
+      ref={ref}
+      type="submit"
+      disabled={isSubmitting}
+      icon={isSubmitting ? <Spinner size={16} /> : null}
+    >
+      {children}
+    </Button>
+  );
 });
 
-HiddenInput.displayName = 'Form.HiddenInput';
+Submit.displayName = 'Form.Submit';
+
+type ResetProps = Omit<ElProps<'button'>, 'type'>;
+
+export const Reset = forwardRef<HTMLButtonElement, ResetProps>(({ children, ...props }, ref) => {
+  return (
+    <Button {...props} ref={ref} type="reset" variant="outline">
+      {children}
+    </Button>
+  );
+});
+
+Reset.displayName = 'Form.Reset';
