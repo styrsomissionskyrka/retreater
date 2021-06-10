@@ -11,7 +11,7 @@ export type FormProps = ElProps<'form'>;
 export const Form = forwardRef<HTMLFormElement, FormProps>(({ children, ...props }, ref) => {
   return (
     <form {...props} ref={ref}>
-      <div className="flex flex-col space-y-8 w-full">{children}</div>
+      <div className="flex flex-col space-y-8 w-full max-w-2xl">{children}</div>
     </form>
   );
 });
@@ -44,12 +44,16 @@ export type LabelProps = ElProps<'label'> & { input: React.ReactNode; error?: Re
 
 export const Label: React.FC<LabelProps> = ({ input, children, error, ...props }) => {
   return (
-    <div className="w-full">
+    <div className="w-full space-y-2">
       <label {...props} className={classNames(props.className, 'flex flex-col space-y-2 w-full')}>
         <span>{children}</span>
         <div className="w-full flex">{input}</div>
       </label>
-      {error != null ? <span role="alert">{error}</span> : null}
+      {error != null ? (
+        <span role="alert" className="block text-sm text-red-500">
+          {error}
+        </span>
+      ) : null}
     </div>
   );
 };
@@ -61,6 +65,7 @@ export type InputProps = ElProps<'input'> & {
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, prefix, error, ...props }, ref) => {
+  let invalid = error != null;
   return (
     <Label
       error={error}
@@ -74,11 +79,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, prefix, 
           <input
             {...props}
             ref={ref}
-            aria-invalid={error != null}
+            aria-invalid={invalid}
             className={classNames(
-              'border border-black rounded leading-none h-10 flex-1 px-2',
+              'rounded leading-none h-10 flex-1 px-2',
               'even:rounded-l-none',
               'outline-none',
+              !invalid && 'border border-black',
+              invalid && 'border-red-500 border-2',
             )}
           />
         </div>

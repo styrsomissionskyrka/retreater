@@ -5,6 +5,10 @@
   width: 100%;
 }
 
+.invalid {
+  @apply border-2 border-red-500;
+}
+
 .reactMde:focus-within {
   @apply outline-black;
 }
@@ -64,7 +68,7 @@
   margin: 0;
   border: 0;
   tab-size: 4;
-  resize: vertical;
+  resize: none;
   overflow-y: auto;
   min-height: theme('height.48');
 }

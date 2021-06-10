@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, forwardRef } from 'react';
+import classNames from 'classnames';
 import MarkdownEditor from 'react-mde';
 import { GetIcon, ToolbarCommands } from 'react-mde/lib/definitions/types';
 import {
@@ -17,7 +18,7 @@ import { useId } from 'lib/hooks';
 import { useProxyRefObject } from 'lib/utils/refs';
 import { setAttribute, toggleAttribute } from 'lib/utils/dom';
 import { Label } from './Ui';
-import classes from './Markdown.module.css';
+import styles from './Markdown.module.css';
 
 export interface MarkdownProps {
   value?: string;
@@ -69,6 +70,11 @@ export const Markdown = forwardRef<HTMLTextAreaElement, MarkdownProps>(
       ['unordered-list', 'ordered-list'],
       ['link', 'quote', 'image'],
     ];
+
+    const classes = {
+      ...styles,
+      reactMde: classNames(styles.reactMde, error != null && styles.invalid),
+    };
 
     return (
       <Label
