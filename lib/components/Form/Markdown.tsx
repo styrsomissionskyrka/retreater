@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, forwardRef } from 'react';
+import { useState, useRef, useEffect, forwardRef } from 'react';
 import MarkdownEditor from 'react-mde';
 import { GetIcon, ToolbarCommands } from 'react-mde/lib/definitions/types';
 import {
@@ -28,10 +28,11 @@ export interface MarkdownProps {
   name?: string;
   id?: string;
   required?: boolean;
+  error?: React.ReactNode;
 }
 
 export const Markdown = forwardRef<HTMLTextAreaElement, MarkdownProps>(
-  ({ value, defaultValue, onChange, label, name, id, required, onBlur }, ref) => {
+  ({ value, defaultValue, onChange, label, name, id, required, onBlur, error }, ref) => {
     const [tab, setTab] = useState<'write' | 'preview'>('write');
 
     const textareaId = useId('markdown-', id);
@@ -55,12 +56,13 @@ export const Markdown = forwardRef<HTMLTextAreaElement, MarkdownProps>(
       setAttribute(el, 'id', textareaId);
       setAttribute(el, 'name', name);
       setAttribute(el, 'required', name);
+      setAttribute(el, 'aria-invalid', error != null ? 'true' : undefined);
       toggleAttribute(el, 'required', required);
 
       return () => {
         if (onBlur) el.removeEventListener('blur', onBlur);
       };
-    }, [textareaId, name, required, onBlur, onChange, textareaRef]);
+    }, [textareaId, name, required, onBlur, onChange, textareaRef, error]);
 
     let commands: ToolbarCommands = [
       ['header', 'bold', 'italic', 'strikethrough'],
@@ -70,6 +72,7 @@ export const Markdown = forwardRef<HTMLTextAreaElement, MarkdownProps>(
 
     return (
       <Label
+        error={error}
         htmlFor={textareaId}
         input={
           <MarkdownEditor

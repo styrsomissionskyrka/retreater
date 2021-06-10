@@ -1,5 +1,5 @@
 import { gql, TypedDocumentNode, useMutation } from '@apollo/client';
-import { ConnectedForm } from 'lib/components';
+import { SubmitHandler } from 'react-hook-form';
 import {
   EditRetreatFormQuery,
   EditRetreatFormQueryVariables,
@@ -7,8 +7,7 @@ import {
   UpdateRetreatMutation,
   UpdateRetreatMutationVariables,
 } from 'lib/graphql';
-import { SubmitHandler } from 'react-hook-form';
-import { toast } from 'lib/components/Toast';
+import { ConnectedForm, toast } from 'lib/components';
 
 interface EditRetreatProps {
   retreat: NonNullable<EditRetreatFormQuery['retreat']>;
@@ -31,19 +30,25 @@ export const EditRetreat: React.FC<EditRetreatProps> = ({ retreat }) => {
 
   return (
     <Form.Form onSubmit={onSubmit}>
-      <Form.Input name="title" type="text" label="Titel" defaultValue={retreat.title} />
+      <Form.Input
+        name="title"
+        type="text"
+        label="Titel"
+        defaultValue={retreat.title}
+        required
+        options={{ minLength: 5 }}
+      />
       {/* <Form.Input label="Slug" prefix="/retreater/" type="text" readOnly defaultValue={retreat.slug} /> */}
       <Form.Row>
-        <Form.Input name="startDate" type="date" label="Startdatum" defaultValue={retreat.startDate ?? ''} />
-        <Form.Input name="endDate" type="date" label="Slutdatum" defaultValue={retreat.endDate ?? ''} />
+        <Form.Input name="startDate" type="date" label="Startdatum" required defaultValue={retreat.startDate ?? ''} />
+        <Form.Input name="endDate" type="date" label="Slutdatum" required defaultValue={retreat.endDate ?? ''} />
       </Form.Row>
       <Form.Input
         name="maxParticipants"
         type="number"
         label="Max antal deltagare"
         defaultValue={retreat.maxParticipants ?? 10}
-        min={0}
-        max={100}
+        required
         options={{ min: 0, max: 100 }}
       />
       <Form.Markdown name="content" label="Beskrivning" defaultValue={retreat.content ?? ''} />

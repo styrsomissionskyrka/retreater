@@ -40,22 +40,30 @@ export const ActionRow = forwardRef<HTMLDivElement, { children?: React.ReactNode
 
 ActionRow.displayName = 'Form.ActionRow';
 
-export type LabelProps = ElProps<'label'> & { input: React.ReactNode };
+export type LabelProps = ElProps<'label'> & { input: React.ReactNode; error?: React.ReactNode };
 
-export const Label: React.FC<LabelProps> = ({ input, children, ...props }) => {
+export const Label: React.FC<LabelProps> = ({ input, children, error, ...props }) => {
   return (
-    <label {...props} className={classNames(props.className, 'flex flex-col space-y-2 w-full')}>
-      <span>{children}</span>
-      <div className="w-full flex">{input}</div>
-    </label>
+    <div className="w-full">
+      <label {...props} className={classNames(props.className, 'flex flex-col space-y-2 w-full')}>
+        <span>{children}</span>
+        <div className="w-full flex">{input}</div>
+      </label>
+      {error != null ? <span role="alert">{error}</span> : null}
+    </div>
   );
 };
 
-export type InputProps = ElProps<'input'> & { label: React.ReactNode; prefix?: React.ReactNode };
+export type InputProps = ElProps<'input'> & {
+  label: React.ReactNode;
+  prefix?: React.ReactNode;
+  error?: React.ReactNode;
+};
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, prefix, ...props }, ref) => {
+export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, prefix, error, ...props }, ref) => {
   return (
     <Label
+      error={error}
       input={
         <div className="flex items-center w-full focus-within:outline-black">
           {prefix != null ? (
@@ -66,6 +74,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, prefix, 
           <input
             {...props}
             ref={ref}
+            aria-invalid={error != null}
             className={classNames(
               'border border-black rounded leading-none h-10 flex-1 px-2',
               'even:rounded-l-none',

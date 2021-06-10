@@ -7,7 +7,10 @@ import {
   useFormContext,
   Path,
   RegisterOptions,
+  useFormState,
+  FieldError,
 } from 'react-hook-form';
+import get from 'lodash.get';
 import { format, parse, getTime } from 'lib/utils/date-fns';
 import * as FormUI from './Form';
 
@@ -68,6 +71,10 @@ export function Input<FormValues extends FieldValues>({
   ...props
 }: InputProps<FormValues>): JSX.Element {
   const { register } = useFormContext<FormValues>();
+  const { errors } = useFormState();
+
+  let fieldError: FieldError | undefined = get(errors, name);
+  let errorMessage = fieldError != null ? fieldError['message'] || DEFAULT_MESSAGES[fieldError.type] : undefined;
 
   let defaultValue = passedDefaultValue;
   let options: RegisterOptions<FormValues> = { required };
@@ -84,7 +91,16 @@ export function Input<FormValues extends FieldValues>({
   }
 
   const formProps = register(name, { ...options, ...passedOptions });
-  return <FormUI.Input {...props} {...formProps} type={type} required={required} defaultValue={defaultValue} />;
+  return (
+    <FormUI.Input
+      {...props}
+      {...formProps}
+      type={type}
+      required={required}
+      defaultValue={defaultValue}
+      error={errorMessage}
+    />
+  );
 }
 
 interface MarkdownProps<FormValues extends FieldValues>
@@ -129,3 +145,18 @@ export function createConnectedFormComponents<FormValues extends FieldValues>():
     Submit,
   };
 }
+
+const DEFAULT_MESSAGES: Record<string, string> = {
+  min: 'Värdet är för litet.',
+  max: 'Värdet är för stort.',
+  minLength: 'Värdet är för kort.',
+  maxLength: 'Värdet är för långt.',
+  pattern: 'Värdet matchar inte.',
+  required: 'Fältet är obligatoriskt.',
+  value: '',
+  validate: '',
+  valueAsDate: '',
+  valueAsNumber: '',
+  setValueAs: '',
+  shouldUnregister: '',
+};

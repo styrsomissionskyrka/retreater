@@ -8,4 +8,5 @@ export * from './BrowserOnly';
 export * from './Button';
 export * from './Link';
 export * from './Spinner';
+export * from './Toast';
 export * from './VisuallyHidden';
