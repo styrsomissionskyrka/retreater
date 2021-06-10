@@ -1,20 +1,17 @@
-import React, { useState, useRef, useEffect, forwardRef, useCallback } from 'react';
-import MarkdownEditor, { getDefaultToolbarCommands } from 'react-mde';
-import { GetIcon } from 'react-mde/lib/definitions/types';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
+import MarkdownEditor from 'react-mde';
+import { GetIcon, ToolbarCommands } from 'react-mde/lib/definitions/types';
 import {
   IconBlockquote,
   IconBold,
-  IconCode,
   IconHeading,
   IconItalic,
   IconLink,
   IconList,
-  IconListCheck,
   IconListNumbers,
   IconPhoto,
   IconStrikethrough,
 } from '@tabler/icons';
-import { ChangeHandler, UseFormRegisterReturn } from 'react-hook-form';
 import { useIsomorphicLayoutEffect, useResizedTextarea } from 'lib/hooks';
 import { useId } from 'lib/hooks';
 import { useProxyRefObject } from 'lib/utils/refs';
@@ -22,7 +19,7 @@ import { setAttribute, toggleAttribute } from 'lib/utils/dom';
 import { Label } from './Ui';
 import classes from './Markdown.module.css';
 
-type MarkdownProps = {
+export interface MarkdownProps {
   value?: string;
   defaultValue?: string;
   onChange?: (next: string) => void;
@@ -31,7 +28,7 @@ type MarkdownProps = {
   name?: string;
   id?: string;
   required?: boolean;
-};
+}
 
 export const Markdown = forwardRef<HTMLTextAreaElement, MarkdownProps>(
   ({ value, defaultValue, onChange, label, name, id, required, onBlur }, ref) => {
@@ -65,7 +62,11 @@ export const Markdown = forwardRef<HTMLTextAreaElement, MarkdownProps>(
       };
     }, [textareaId, name, required, onBlur, onChange, textareaRef]);
 
-    let commands = getDefaultToolbarCommands();
+    let commands: ToolbarCommands = [
+      ['header', 'bold', 'italic', 'strikethrough'],
+      ['unordered-list', 'ordered-list'],
+      ['link', 'quote', 'image'],
+    ];
 
     return (
       <Label
@@ -90,20 +91,6 @@ export const Markdown = forwardRef<HTMLTextAreaElement, MarkdownProps>(
   },
 );
 
-export function useWrapMarkdownRegister({
-  onChange: _onChange,
-  ...props
-}: UseFormRegisterReturn): UseFormRegisterReturn {
-  const onChange: ChangeHandler = useCallback(
-    async (next) => {
-      _onChange({ target: { value: next } });
-    },
-    [_onChange],
-  );
-
-  return { ...props, onChange };
-}
-
 Markdown.displayName = 'Markdown';
 
 const getIcon: GetIcon = (name) => {
@@ -121,16 +108,17 @@ const getIcon: GetIcon = (name) => {
       return <IconLink {...props} />;
     case 'quote':
       return <IconBlockquote {...props} />;
-    case 'code':
-      return <IconCode {...props} />;
+    // case 'code':
+    //   return <IconCode {...props} />;
     case 'image':
       return <IconPhoto {...props} />;
     case 'unordered-list':
       return <IconList {...props} />;
     case 'ordered-list':
       return <IconListNumbers {...props} />;
-    case 'checked-list':
-      return <IconListCheck {...props} />;
+    // case 'checked-list':
+    //   return <IconListCheck {...props} />;
+    default:
+      return null;
   }
-  return null;
 };

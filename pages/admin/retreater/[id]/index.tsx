@@ -18,7 +18,12 @@ const Retreat: NextPage = () => {
   if (retreat == null) return <p>Loading...</p>;
 
   return (
-    <Layout.Admin title={'Redigera ' + retreat.title} backLink="/admin/retreater">
+    <Layout.Admin
+      title={retreat.title}
+      sidebarTitle="Retreat"
+      headerTitle={`Redigera ${retreat.title}`}
+      backLink="/admin/retreater"
+    >
       <EditRetreat retreat={retreat} />
     </Layout.Admin>
   );

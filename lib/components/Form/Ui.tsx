@@ -6,7 +6,7 @@ import { useDebouncedValue } from 'lib/hooks';
 
 type ElProps<E extends keyof JSX.IntrinsicElements> = Omit<JSX.IntrinsicElements[E], 'ref' | 'key'>;
 
-type FormProps = ElProps<'form'>;
+export type FormProps = ElProps<'form'>;
 
 export const Form = forwardRef<HTMLFormElement, FormProps>(({ children, ...props }, ref) => {
   return (
@@ -40,7 +40,7 @@ export const ActionRow = forwardRef<HTMLDivElement, { children?: React.ReactNode
 
 ActionRow.displayName = 'Form.ActionRow';
 
-type LabelProps = ElProps<'label'> & { input: React.ReactNode };
+export type LabelProps = ElProps<'label'> & { input: React.ReactNode };
 
 export const Label: React.FC<LabelProps> = ({ input, children, ...props }) => {
   return (
@@ -51,7 +51,7 @@ export const Label: React.FC<LabelProps> = ({ input, children, ...props }) => {
   );
 };
 
-type InputProps = ElProps<'input'> & { label: React.ReactNode; prefix?: React.ReactNode };
+export type InputProps = ElProps<'input'> & { label: React.ReactNode; prefix?: React.ReactNode };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, prefix, ...props }, ref) => {
   return (
@@ -82,7 +82,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, prefix, 
 
 Input.displayName = 'Form.Input';
 
-type SubmitProps = Omit<ElProps<'button'>, 'type'> & { isSubmitting?: boolean };
+export type SubmitProps = Omit<ElProps<'button'>, 'type'> & { isSubmitting?: boolean };
 
 export const Submit = forwardRef<HTMLButtonElement, SubmitProps>(({ isSubmitting, children, ...props }, ref) => {
   const debounced = useDebouncedValue(isSubmitting, 300);
@@ -95,7 +95,7 @@ export const Submit = forwardRef<HTMLButtonElement, SubmitProps>(({ isSubmitting
 
 Submit.displayName = 'Form.Submit';
 
-type ResetProps = Omit<ElProps<'button'>, 'type'>;
+export type ResetProps = Omit<ElProps<'button'>, 'type'>;
 
 export const Reset = forwardRef<HTMLButtonElement, ResetProps>(({ children, ...props }, ref) => {
   return (

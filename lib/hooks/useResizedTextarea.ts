@@ -18,27 +18,34 @@ export function useResizedTextarea(ref: React.RefObject<HTMLTextAreaElement>, op
   const heightRef = useRef(0);
   const measurementsCacheRef = useRef<SizingData>();
 
-  const resizeTextarea = () => {
-    const node = ref.current!;
-    const nodeSizingData = getSizingData(node);
+  useIsomorphicLayoutEffect(() => {
+    if (ref.current == null) return;
+    const node = ref.current;
 
-    if (!nodeSizingData) return;
-    measurementsCacheRef.current = nodeSizingData;
+    const resizeTextarea = () => {
+      const nodeSizingData = getSizingData(node);
+      if (!nodeSizingData) return;
+      measurementsCacheRef.current = nodeSizingData;
 
-    const [height] = calculateNodeHeight(
-      nodeSizingData,
-      node.value || node.placeholder || 'x',
-      options.minRows,
-      options.maxRows,
-    );
+      const [height] = calculateNodeHeight(
+        nodeSizingData,
+        node.value || node.placeholder || 'x',
+        options.minRows,
+        options.maxRows,
+      );
 
-    if (heightRef.current !== height) {
-      heightRef.current = height;
-      node.style.setProperty('height', `${height}px`, 'important');
-    }
-  };
+      if (heightRef.current !== height) {
+        heightRef.current = height;
+        node.style.setProperty('height', `${height}px`, 'important');
+      }
+    };
 
-  useIsomorphicLayoutEffect(resizeTextarea);
+    resizeTextarea();
+    node.addEventListener('input', resizeTextarea);
+    return () => {
+      node.removeEventListener('input', resizeTextarea);
+    };
+  }, [options.maxRows, options.minRows, ref]);
 }
 
 const SIZING_STYLE = [

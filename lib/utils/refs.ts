@@ -54,8 +54,6 @@ export function useProxyRefObject<T>(initialValue: T, ...refs: React.Ref<T>[]) {
     };
 
     let proxy = new Proxy(ref, handler);
-    proxy.current = ref.current;
-
     return proxy;
   }, []);
 

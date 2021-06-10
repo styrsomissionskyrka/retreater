@@ -1,6 +1,5 @@
 import { gql, TypedDocumentNode, useMutation } from '@apollo/client';
-import React, { useState } from 'react';
-import { Form } from 'lib/components';
+import { ConnectedForm } from 'lib/components';
 import {
   EditRetreatFormQuery,
   EditRetreatFormQueryVariables,
@@ -8,68 +7,49 @@ import {
   UpdateRetreatMutation,
   UpdateRetreatMutationVariables,
 } from 'lib/graphql';
-import { format, parse } from 'lib/utils/date-fns';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { getTime } from 'date-fns';
+import { SubmitHandler } from 'react-hook-form';
 import { toast } from 'lib/components/Toast';
 
 interface EditRetreatProps {
   retreat: NonNullable<EditRetreatFormQuery['retreat']>;
 }
 
+const Form = ConnectedForm.createConnectedFormComponents<UpdateRetreatInput>();
+
 export const EditRetreat: React.FC<EditRetreatProps> = ({ retreat }) => {
   const [mutate] = useMutation(UPDATE_RETREAT_MUTATION);
-  const { register, handleSubmit } = useForm<UpdateRetreatInput>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit: SubmitHandler<UpdateRetreatInput> = async (input) => {
-    if (isSubmitting) return;
-
     try {
-      setIsSubmitting(true);
       await mutate({ variables: { id: retreat.id, input } });
       toast.success('Retreaten har uppdaterats.');
     } catch (error) {
       toast.error('Något gick snett.');
       if (process.env.NODE_ENV !== 'production') console.error(error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
-  let startDate = format(retreat.startDate ?? new Date(), 'yyyy-MM-dd');
-  let endDate = format(retreat.endDate ?? new Date(), 'yyyy-MM-dd');
-  let markdownProps = Form.useWrapMarkdownRegister(register('content'));
-
-  let setValueAs = (date: string) => {
-    return getTime(parse(date, 'yyyy-MM-dd', new Date()));
-  };
-
   return (
-    <Form.Form onSubmit={handleSubmit(onSubmit)}>
-      <Form.Input label="Titel" type="text" defaultValue={retreat.title} {...register('title')} />
-      <Form.Input label="Slug" prefix="/retreater/" type="text" readOnly value={retreat.slug} />
+    <Form.Form onSubmit={onSubmit}>
+      <Form.Input name="title" type="text" label="Titel" defaultValue={retreat.title} />
+      {/* <Form.Input label="Slug" prefix="/retreater/" type="text" readOnly defaultValue={retreat.slug} /> */}
       <Form.Row>
-        <Form.Input
-          label="Startdatum"
-          type="date"
-          defaultValue={startDate}
-          {...register('startDate', { setValueAs })}
-        />
-        <Form.Input label="Slutdatum" type="date" defaultValue={endDate} {...register('endDate', { setValueAs })} />
+        <Form.Input name="startDate" type="date" label="Startdatum" defaultValue={retreat.startDate ?? ''} />
+        <Form.Input name="endDate" type="date" label="Slutdatum" defaultValue={retreat.endDate ?? ''} />
       </Form.Row>
       <Form.Input
-        label="Max antal deltagare"
+        name="maxParticipants"
         type="number"
+        label="Max antal deltagare"
+        defaultValue={retreat.maxParticipants ?? 10}
         min={0}
         max={100}
-        defaultValue={retreat.maxParticipants ?? 10}
-        {...register('maxParticipants', { valueAsNumber: true })}
+        options={{ min: 0, max: 100 }}
       />
-      <Form.Markdown label="Beskrivning" defaultValue={retreat.content ?? ''} {...markdownProps} />
+      <Form.Markdown name="content" label="Beskrivning" defaultValue={retreat.content ?? ''} />
 
       <Form.ActionRow>
-        <Form.Submit isSubmitting={isSubmitting}>Uppdatera retreat</Form.Submit>
+        <Form.Submit>Uppdatera retreat</Form.Submit>
       </Form.ActionRow>
     </Form.Form>
   );
