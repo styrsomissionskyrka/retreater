@@ -13,9 +13,7 @@ import {
   IconPhoto,
   IconStrikethrough,
 } from '@tabler/icons';
-import { useIsomorphicLayoutEffect, useResizedTextarea } from 'lib/hooks';
-import { useId } from 'lib/hooks';
-import { useProxyRefObject } from 'lib/utils/refs';
+import { useIsomorphicLayoutEffect, useResizedTextarea, useId, useProxyRefObject } from 'lib/hooks';
 import { setAttribute, toggleAttribute } from 'lib/utils/dom';
 import { Label } from './Ui';
 import styles from './Markdown.module.css';

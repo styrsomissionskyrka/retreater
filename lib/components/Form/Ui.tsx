@@ -3,10 +3,9 @@ import classNames from 'classnames';
 import { Button } from '../Button';
 import { Spinner } from '../Spinner';
 import { useDebouncedValue } from 'lib/hooks';
+import { ElementProps } from 'lib/utils/types';
 
-type ElProps<E extends keyof JSX.IntrinsicElements> = Omit<JSX.IntrinsicElements[E], 'ref' | 'key'>;
-
-export type FormProps = ElProps<'form'>;
+export type FormProps = ElementProps<'form'>;
 
 export const Form = forwardRef<HTMLFormElement, FormProps>(({ children, ...props }, ref) => {
   return (
@@ -40,7 +39,7 @@ export const ActionRow = forwardRef<HTMLDivElement, { children?: React.ReactNode
 
 ActionRow.displayName = 'Form.ActionRow';
 
-export type LabelProps = ElProps<'label'> & { input: React.ReactNode; error?: React.ReactNode };
+export type LabelProps = ElementProps<'label'> & { input: React.ReactNode; error?: React.ReactNode };
 
 export const Label: React.FC<LabelProps> = ({ input, children, error, ...props }) => {
   return (
@@ -58,7 +57,7 @@ export const Label: React.FC<LabelProps> = ({ input, children, error, ...props }
   );
 };
 
-export type InputProps = ElProps<'input'> & {
+export type InputProps = ElementProps<'input'> & {
   label: React.ReactNode;
   prefix?: React.ReactNode;
   error?: React.ReactNode;
@@ -98,7 +97,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, prefix, 
 
 Input.displayName = 'Form.Input';
 
-export type SubmitProps = Omit<ElProps<'button'>, 'type'> & { isSubmitting?: boolean };
+export type SelectProps = ElementProps<'select'>;
+
+export type SubmitProps = Omit<ElementProps<'button'>, 'type'> & { isSubmitting?: boolean };
 
 export const Submit = forwardRef<HTMLButtonElement, SubmitProps>(({ isSubmitting, children, ...props }, ref) => {
   const debounced = useDebouncedValue(isSubmitting, 300);
@@ -111,7 +112,7 @@ export const Submit = forwardRef<HTMLButtonElement, SubmitProps>(({ isSubmitting
 
 Submit.displayName = 'Form.Submit';
 
-export type ResetProps = Omit<ElProps<'button'>, 'type'>;
+export type ResetProps = Omit<ElementProps<'button'>, 'type'>;
 
 export const Reset = forwardRef<HTMLButtonElement, ResetProps>(({ children, ...props }, ref) => {
   return (

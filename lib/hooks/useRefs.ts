@@ -1,17 +1,26 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
-export function sharedRef<T>(...refs: React.Ref<T>[]): React.RefCallback<T> {
-  return (instance) => {
-    for (let ref of refs) {
-      if (ref == null) continue;
+function assignRef<T>(ref: React.Ref<T>, value: T) {
+  if (ref == null) return;
 
-      if (typeof ref === 'function') {
-        ref(instance);
-      } else if ('current' in ref) {
-        (ref as any).current = instance;
-      }
+  if (typeof ref === 'function') {
+    ref(value);
+  } else {
+    try {
+      (ref as any).current = value;
+    } catch (error) {
+      throw new Error(`Cannot assign value "${value}" to ref "${ref}"`);
     }
-  };
+  }
+}
+
+export function useComposedRefs<T>(...refs: React.Ref<T>[]): React.RefCallback<T> {
+  return useCallback((node) => {
+    for (let ref of refs) {
+      assignRef(ref, node);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, refs);
 }
 
 export function useProxyRefObject<T>(initialValue: T, ...refs: React.Ref<T>[]): React.MutableRefObject<T>;

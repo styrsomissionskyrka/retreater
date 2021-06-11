@@ -1,9 +1,8 @@
 import classNames from 'classnames';
 import { forwardRef } from 'react';
+import { ElementProps } from 'lib/utils/types';
 
-type ElProps<T extends keyof JSX.IntrinsicElements> = Omit<JSX.IntrinsicElements[T], 'key' | 'ref'>;
-
-export const Table = forwardRef<HTMLTableElement, ElProps<'table'>>(({ children, ...props }, ref) => {
+export const Table = forwardRef<HTMLTableElement, ElementProps<'table'>>(({ children, ...props }, ref) => {
   return (
     <table {...props} ref={ref} className="w-full border-collapse table-auto leading-none">
       {children}
@@ -13,7 +12,7 @@ export const Table = forwardRef<HTMLTableElement, ElProps<'table'>>(({ children,
 
 Table.displayName = 'Table.Table';
 
-export const Head = forwardRef<HTMLTableSectionElement, ElProps<'thead'>>(({ children, ...props }, ref) => {
+export const Head = forwardRef<HTMLTableSectionElement, ElementProps<'thead'>>(({ children, ...props }, ref) => {
   return (
     <thead {...props} ref={ref}>
       {children}
@@ -23,7 +22,7 @@ export const Head = forwardRef<HTMLTableSectionElement, ElProps<'thead'>>(({ chi
 
 Head.displayName = 'Table.Head';
 
-export const HeadRow = forwardRef<HTMLTableRowElement, ElProps<'tr'>>(({ children, ...props }, ref) => {
+export const HeadRow = forwardRef<HTMLTableRowElement, ElementProps<'tr'>>(({ children, ...props }, ref) => {
   return (
     <tr {...props} ref={ref} className="border-b">
       {children}
@@ -33,7 +32,7 @@ export const HeadRow = forwardRef<HTMLTableRowElement, ElProps<'tr'>>(({ childre
 
 HeadRow.displayName = 'Table.HeadRow';
 
-export const HeadCell = forwardRef<HTMLTableHeaderCellElement, ElProps<'th'>>(({ children, ...props }, ref) => {
+export const HeadCell = forwardRef<HTMLTableHeaderCellElement, ElementProps<'th'>>(({ children, ...props }, ref) => {
   return (
     <th {...props} ref={ref} className="text-left font-medium px-2 pb-3">
       {children}
@@ -43,7 +42,7 @@ export const HeadCell = forwardRef<HTMLTableHeaderCellElement, ElProps<'th'>>(({
 
 HeadCell.displayName = 'Table.HeadCell';
 
-export const Body = forwardRef<HTMLTableSectionElement, ElProps<'tbody'>>(({ children, ...props }, ref) => {
+export const Body = forwardRef<HTMLTableSectionElement, ElementProps<'tbody'>>(({ children, ...props }, ref) => {
   return (
     <tbody {...props} ref={ref} className="divide-y text-sm">
       {children}
@@ -53,7 +52,7 @@ export const Body = forwardRef<HTMLTableSectionElement, ElProps<'tbody'>>(({ chi
 
 Body.displayName = 'Table.Body';
 
-export const BodyRow = forwardRef<HTMLTableRowElement, ElProps<'tr'>>(({ children, ...props }, ref) => {
+export const BodyRow = forwardRef<HTMLTableRowElement, ElementProps<'tr'>>(({ children, ...props }, ref) => {
   return (
     <tr {...props} ref={ref} className={classNames(' hover:bg-gray-100', props.className)}>
       {children}
@@ -63,7 +62,7 @@ export const BodyRow = forwardRef<HTMLTableRowElement, ElProps<'tr'>>(({ childre
 
 BodyRow.displayName = 'Table.BodyRow';
 
-export const BodyCell = forwardRef<HTMLTableDataCellElement, ElProps<'td'>>(({ children, ...props }, ref) => {
+export const BodyCell = forwardRef<HTMLTableDataCellElement, ElementProps<'td'>>(({ children, ...props }, ref) => {
   return (
     <td {...props} ref={ref} className="p-2 h-16 font-normal text-left">
       {children}
