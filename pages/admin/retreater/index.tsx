@@ -1,8 +1,9 @@
+import { useMemo } from 'react';
 import { NextPage } from 'next';
-import { IconCalendarEvent, IconPlus, IconUsers } from '@tabler/icons';
+import { IconCalendarEvent, IconUsers } from '@tabler/icons';
 import { gql, TypedDocumentNode, useQuery } from '@apollo/client';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
-import { Layout, DataTable, Button } from 'lib/components';
+import { Layout, DataTable } from 'lib/components';
 import { useUserHasRoles, useSearchParams } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
 import {
@@ -16,7 +17,7 @@ import {
 } from 'lib/graphql';
 import { preloadQueries } from 'lib/graphql/ssr';
 import { PAGINATION_FRAGMENT } from 'lib/graphql/fragments';
-import { useMemo } from 'react';
+import { CreateReatreat } from 'lib/forms';
 
 type RetreatType = ListRetreatsQuery['retreats']['items'][number];
 type FiltersType = ListRetreatsQueryVariables;
@@ -65,12 +66,7 @@ const Retreats: NextPage = () => {
   if (data == null) return <p>Loading...</p>;
 
   return (
-    <Layout.Admin
-      title="Retreater"
-      backLink="/admin"
-      navLinks={navLinks}
-      actions={<Button icon={<IconPlus size={16} />}>Ny retreat</Button>}
-    >
+    <Layout.Admin title="Retreater" backLink="/admin" navLinks={navLinks} actions={<CreateReatreat />}>
       <DataTable.Provider data={retreats} columns={columns}>
         <DataTable.Layout>
           <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
@@ -110,7 +106,7 @@ const Retreats: NextPage = () => {
   );
 };
 
-const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQueryVariables> = gql`
+export const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQueryVariables> = gql`
   ${PAGINATION_FRAGMENT}
 
   query ListRetreats(

@@ -82,7 +82,7 @@ export function Input<FormValues extends FieldValues>({
   switch (type) {
     case 'date':
       options.setValueAs = (date: string) => getTime(parse(date, 'yyyy-MM-dd', new Date()));
-      defaultValue = format(typeof defaultValue === 'number' ? defaultValue : new Date(), 'yyyy-MM-dd');
+      defaultValue = typeof defaultValue === 'number' ? format(defaultValue, 'yyyy-MM-dd') : '';
       break;
 
     case 'number':
@@ -91,16 +91,7 @@ export function Input<FormValues extends FieldValues>({
   }
 
   const formProps = register(name, { ...options, ...passedOptions });
-  return (
-    <FormUI.Input
-      {...props}
-      {...formProps}
-      type={type}
-      required={required}
-      defaultValue={defaultValue}
-      error={errorMessage}
-    />
-  );
+  return <FormUI.Input {...props} {...formProps} type={type} defaultValue={defaultValue} error={errorMessage} />;
 }
 
 interface MarkdownProps<FormValues extends FieldValues>

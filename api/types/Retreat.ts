@@ -142,7 +142,7 @@ export const RetreatMutation = extendType({
         if (similarSlugs > 0) slug += `-${similarSlugs + 1}`;
 
         let retreat = await ctx.prisma.retreat.create({
-          data: { title: args.title, slug },
+          data: { title: args.title, slug, maxParticipants: 10 },
         });
 
         return retreat;

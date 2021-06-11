@@ -77,14 +77,17 @@ export function createDateRangeCell<T extends object>(config: Column<T>): Column
   return {
     ...config,
     Cell({ value }: CellProps<T, { start: Date | number; end: Date | number }>) {
-      assert(value.start != null);
-      assert(value.end != null);
+      if (value.start == null) return null;
+      let start = <time dateTime={formatISO(value.start)}>{format(value.start, 'yyyy-MM-dd')}</time>;
+
+      if (value.end == null) return <p>{start}</p>;
+      let end = <time dateTime={formatISO(value.end)}>{format(value.end, 'yyyy-MM-dd')}</time>;
 
       return (
         <p>
-          <time dateTime={formatISO(value.start)}>{format(value.start, 'yyyy-MM-dd')}</time>
+          {start}
           <span>{' - '}</span>
-          <time dateTime={formatISO(value.end)}>{format(value.end, 'yyyy-MM-dd')}</time>
+          {end}
         </p>
       );
     },

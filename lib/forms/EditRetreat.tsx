@@ -8,6 +8,7 @@ import {
   UpdateRetreatMutationVariables,
 } from 'lib/graphql';
 import { ConnectedForm, toast } from 'lib/components';
+import * as log from 'lib/utils/log';
 
 interface EditRetreatProps {
   retreat: NonNullable<EditRetreatFormQuery['retreat']>;
@@ -24,7 +25,7 @@ export const EditRetreat: React.FC<EditRetreatProps> = ({ retreat }) => {
       toast.success('Retreaten har uppdaterats.');
     } catch (error) {
       toast.error('Något gick snett.');
-      if (process.env.NODE_ENV !== 'production') console.error(error);
+      log.error(error);
     }
   };
 
@@ -36,7 +37,7 @@ export const EditRetreat: React.FC<EditRetreatProps> = ({ retreat }) => {
         label="Titel"
         defaultValue={retreat.title}
         required
-        options={{ minLength: 5 }}
+        options={{ minLength: 1 }}
       />
       {/* <Form.Input label="Slug" prefix="/retreater/" type="text" readOnly defaultValue={retreat.slug} /> */}
       <Form.Row>
