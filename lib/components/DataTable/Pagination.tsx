@@ -3,13 +3,13 @@ import { UrlObject } from 'url';
 
 import { useRouter } from 'next/router';
 
-import { PaginationFragment } from 'lib/graphql';
+import { PaginationFieldsFragment } from 'lib/graphql';
 
 import { Link } from '../Link';
 import { useDataTable } from './Context';
 
 interface Props {
-  meta: PaginationFragment;
+  meta: PaginationFieldsFragment;
 }
 
 export const Pagination: React.FC<Props> = ({ meta }) => {

@@ -13,7 +13,7 @@ import { EDIT_RETREAT_FRAGMENT } from './EditRetreat';
 export const CREATE_RETREAT_MUTATION: TypedDocumentNode<CreateRetreatMutation, CreateRetreatMutationVariables> = gql`
   mutation CreateRetreat($title: String!) {
     createRetreatDraft(title: $title) {
-      ...retreat
+      ...EditRetreatFields
     }
   }
 

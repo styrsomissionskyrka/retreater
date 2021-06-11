@@ -11,8 +11,10 @@ import {
 import { ConnectedForm, toast } from 'lib/components';
 import * as log from 'lib/utils/log';
 
+export type EditRetreatType = NonNullable<EditRetreatFormQuery['retreat']>;
+
 interface EditRetreatProps {
-  retreat: NonNullable<EditRetreatFormQuery['retreat']>;
+  retreat: EditRetreatType;
 }
 
 const Form = ConnectedForm.createConnectedFormComponents<UpdateRetreatInput>();
@@ -63,7 +65,7 @@ export const EditRetreat: React.FC<EditRetreatProps> = ({ retreat }) => {
 };
 
 export const EDIT_RETREAT_FRAGMENT = gql`
-  fragment retreat on Retreat {
+  fragment EditRetreatFields on Retreat {
     id
     slug
     title
@@ -77,7 +79,7 @@ export const EDIT_RETREAT_FRAGMENT = gql`
 export const EDIT_RETREAT_FORM_QUERY: TypedDocumentNode<EditRetreatFormQuery, EditRetreatFormQueryVariables> = gql`
   query EditRetreatForm($id: ID!) {
     retreat(id: $id) {
-      ...retreat
+      ...EditRetreatFields
     }
   }
 
@@ -87,7 +89,7 @@ export const EDIT_RETREAT_FORM_QUERY: TypedDocumentNode<EditRetreatFormQuery, Ed
 export const UPDATE_RETREAT_MUTATION: TypedDocumentNode<UpdateRetreatMutation, UpdateRetreatMutationVariables> = gql`
   mutation UpdateRetreat($id: ID!, $input: UpdateRetreatInput!) {
     updateRetreat(id: $id, input: $input) {
-      ...retreat
+      ...EditRetreatFields
     }
   }
 

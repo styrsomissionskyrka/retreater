@@ -119,7 +119,7 @@ export const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetre
   ) {
     retreats(page: $page, perPage: $perPage, order: $order, orderBy: $orderBy, status: $status) {
       paginationMeta {
-        ...Pagination
+        ...PaginationFields
       }
       items {
         id
