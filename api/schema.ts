@@ -1,6 +1,7 @@
+import * as path from 'path';
+
 import { AuthenticationError } from 'apollo-server-errors';
 import { makeSchema, fieldAuthorizePlugin } from 'nexus';
-import * as path from 'path';
 
 import * as types from './types';
 

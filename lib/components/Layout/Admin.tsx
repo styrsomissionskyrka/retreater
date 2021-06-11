@@ -1,13 +1,16 @@
+import { UrlObject } from 'url';
+
 import { cloneElement, Fragment, useRef } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { UrlObject } from 'url';
 import { IconChevronLeft } from '@tabler/icons';
 import { useRect } from '@reach/rect';
+
 import { useAuthenticatedUser, useIsomorphicLayoutEffect } from 'lib/hooks';
+import { setGlobalVariable } from 'lib/utils/css';
+
 import { Link, NavLink } from '../Link';
 import { VisuallyHidden } from '../VisuallyHidden';
-import { setGlobalVariable } from 'lib/utils/css';
 
 export interface NavLinkConfig {
   href: string | UrlObject;

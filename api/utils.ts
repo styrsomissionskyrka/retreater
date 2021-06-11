@@ -1,4 +1,5 @@
 import { Claims, UserRole } from '@auth0/nextjs-auth0';
+
 import { arrayify } from '../lib/utils/array';
 import { Context } from './context';
 

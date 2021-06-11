@@ -1,9 +1,13 @@
+/* eslint-disable no-restricted-imports */
+import { ParsedUrlQuery } from 'querystring';
+
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import { SchemaLink } from '@apollo/client/link/schema';
+import { ApolloClient, NormalizedCacheObject, OperationVariables, TypedDocumentNode } from '@apollo/client';
+
 import { createContext } from 'api/context';
 import { schema } from 'api/schema';
-import { ApolloClient, NormalizedCacheObject, OperationVariables, TypedDocumentNode } from '@apollo/client';
-import { ParsedUrlQuery } from 'querystring';
+
 import { clearCachedClient, createApolloClient } from './client';
 
 export function prepareSSRClient<C extends ApolloClient<any>>(

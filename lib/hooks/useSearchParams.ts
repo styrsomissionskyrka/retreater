@@ -1,6 +1,7 @@
-import { assert } from 'lib/utils/assert';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useRef } from 'react';
+
+import { assert } from 'lib/utils/assert';
 
 type TransitionOptions = { shallow?: boolean; replace?: boolean };
 

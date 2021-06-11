@@ -1,7 +1,8 @@
 import { NextPage } from 'next';
-import { useUser } from 'lib/hooks';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+
+import { useUser } from 'lib/hooks';
 
 const Logout: NextPage = () => {
   const { replace } = useRouter();

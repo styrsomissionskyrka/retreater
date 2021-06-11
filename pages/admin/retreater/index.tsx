@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { NextPage } from 'next';
 import { IconCalendarEvent, IconUsers } from '@tabler/icons';
-import { gql, TypedDocumentNode, useQuery } from '@apollo/client';
+
+import { gql, TypedDocumentNode, useQuery } from 'lib/graphql';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
 import { Layout, DataTable } from 'lib/components';
 import { useUserHasRoles, useSearchParams } from 'lib/hooks';

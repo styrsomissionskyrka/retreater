@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { createPortal } from 'react-dom';
+
 import { useForceUpdate, useIsomorphicLayoutEffect } from 'lib/hooks';
 
 export const Portal: React.FC = ({ children }) => {

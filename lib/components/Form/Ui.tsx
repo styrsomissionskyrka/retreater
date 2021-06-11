@@ -1,9 +1,11 @@
 import React, { forwardRef } from 'react';
 import classNames from 'classnames';
-import { Button } from '../Button';
-import { Spinner } from '../Spinner';
+
 import { useDebouncedValue } from 'lib/hooks';
 import { ElementProps } from 'lib/utils/types';
+
+import { Button } from '../Button';
+import { Spinner } from '../Spinner';
 
 export type FormProps = ElementProps<'form'>;
 

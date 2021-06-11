@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react';
 import { useTable, TableInstance, Column } from 'react-table';
+
 import { ensure } from 'lib/utils/assert';
 
 const DataTableContext = createContext<TableInstance<any> | null>(null);

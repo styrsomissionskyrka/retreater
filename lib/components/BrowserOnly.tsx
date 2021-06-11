@@ -1,4 +1,5 @@
 import { Fragment, useState } from 'react';
+
 import { useIsomorphicLayoutEffect } from 'lib/hooks';
 
 export const BrowserOnly: React.FC<{ children: React.ReactNode }> = ({ children }) => {

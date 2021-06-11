@@ -2,6 +2,7 @@ import { getSession, Claims } from '@auth0/nextjs-auth0';
 import { PrismaClient } from '@prisma/client';
 import { ContextFunction } from 'apollo-server-core';
 import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
+
 import { prisma } from './prisma';
 import { Auth0Client } from './auth0';
 

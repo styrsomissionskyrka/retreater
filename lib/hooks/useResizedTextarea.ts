@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 
 interface ResizedTextareaOptions {

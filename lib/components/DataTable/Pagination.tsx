@@ -1,7 +1,10 @@
 /* eslint-disable react/jsx-key */
-import { useRouter } from 'next/router';
 import { UrlObject } from 'url';
+
+import { useRouter } from 'next/router';
+
 import { PaginationFragment } from 'lib/graphql';
+
 import { Link } from '../Link';
 import { useDataTable } from './Context';
 

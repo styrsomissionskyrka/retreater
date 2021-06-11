@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { Factory } from 'fishery';
 import * as faker from 'faker';
+
 import { RetreatStatusEnum } from '../graphql';
 
 export const RetreatFactory = Factory.define<Prisma.RetreatCreateInput>(() => {

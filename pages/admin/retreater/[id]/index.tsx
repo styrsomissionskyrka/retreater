@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useQuery } from '@apollo/client';
+
+import { useQuery } from 'lib/graphql';
 import { Layout } from 'lib/components';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
 import { preloadQueries } from 'lib/graphql/ssr';

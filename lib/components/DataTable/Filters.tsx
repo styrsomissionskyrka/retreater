@@ -1,8 +1,10 @@
 import { createContext, useContext, useMemo } from 'react';
 import { IconChevronUp, IconChevronDown } from '@tabler/icons';
+
 import { QueryObject, SetParamsCallback } from 'lib/hooks';
 import { assert, ensure } from 'lib/utils/assert';
 import { OrderEnum } from 'lib/graphql';
+
 import { Button } from '../Button';
 
 interface FiltersContextType<T extends QueryObject> {

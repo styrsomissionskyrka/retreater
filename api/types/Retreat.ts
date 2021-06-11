@@ -1,10 +1,12 @@
 import { Prisma } from '@prisma/client';
-import { enumType, objectType, extendType, nonNull, stringArg, arg, inputObjectType, idArg, intArg, list } from 'nexus';
+import { enumType, objectType, extendType, nonNull, stringArg, arg, inputObjectType, idArg, intArg } from 'nexus';
 import { UserInputError } from 'apollo-server-micro';
 import slugify from 'slug';
+
+import { compact } from 'lib/utils/array';
+
 import { clearUndefined, authorizedWithRoles } from '../utils';
 import { User, OrderEnum, PaginatedQuery } from '.';
-import { compact } from 'lib/utils/array';
 
 export const RetreatStatusEnum = enumType({
   name: 'RetreatStatusEnum',

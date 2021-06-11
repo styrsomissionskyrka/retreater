@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+
 import { RetreatFactory } from '../lib/factories/prisma';
 
 const prisma = new PrismaClient();

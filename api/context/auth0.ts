@@ -1,6 +1,8 @@
-import { NexusGenObjects, NexusGenEnums } from 'generated/nexus-typegen';
 import axios, { AxiosInstance } from 'axios';
 import Dataloader from 'dataloader';
+
+import { NexusGenObjects, NexusGenEnums } from 'generated/nexus-typegen';
+
 import { unique } from '../../lib/utils/array';
 
 export class Auth0Client {

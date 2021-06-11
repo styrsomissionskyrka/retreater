@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
 import { ParsedUrlQuery } from 'querystring';
+
+import { useEffect } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { UserRole, getSession, Session } from '@auth0/nextjs-auth0';
+
 import { useUser } from 'lib/hooks';
 import { hasIntersection } from 'lib/utils/array';
 

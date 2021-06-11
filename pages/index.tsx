@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+
 import { Link } from 'lib/components';
 
 const Home: NextPage = () => {

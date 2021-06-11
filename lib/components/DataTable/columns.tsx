@@ -1,10 +1,12 @@
+import { UrlObject } from 'url';
+
 import { CellProps, Column } from 'react-table';
 import classNames from 'classnames';
+
 import { RetreatStatusEnum } from 'lib/graphql';
-import { Link } from '../Link';
 import { format, formatISO, formatRelative } from 'lib/utils/date-fns';
-import { UrlObject } from 'url';
-import { assert } from 'lib/utils/assert';
+
+import { Link } from '../Link';
 
 export function createStatusCell<T extends { status: RetreatStatusEnum }>(): Column<T> {
   const colorMap: Record<RetreatStatusEnum, string> = {

@@ -1,11 +1,13 @@
 import { Fragment, useState } from 'react';
-import { gql, TypedDocumentNode, useMutation } from '@apollo/client';
 import { IconPlus } from '@tabler/icons';
 import { SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/router';
+
+import { gql, TypedDocumentNode, useMutation } from 'lib/graphql';
 import { Button, ConnectedForm, Dialog, toast } from 'lib/components';
-import { CreateRetreatMutation, CreateRetreatMutationVariables, PaginatedRetreat } from 'lib/graphql';
+import { CreateRetreatMutation, CreateRetreatMutationVariables } from 'lib/graphql';
 import * as log from 'lib/utils/log';
+
 import { EDIT_RETREAT_FRAGMENT } from './EditRetreat';
 
 export const CREATE_RETREAT_MUTATION: TypedDocumentNode<CreateRetreatMutation, CreateRetreatMutationVariables> = gql`
@@ -36,8 +38,8 @@ export const CreateReatreat: React.FC = () => {
       }
 
       toast.success('Nytt utkast skapat.');
-      // let { id } = result.data.createRetreatDraft;
-      // router.push(`/admin/retreater/${id}`);
+      let { id } = result.data.createRetreatDraft;
+      router.push(`/admin/retreater/${id}`);
     } catch (error) {
       toast.error('Det gick inte att skapa retreaten just nu.');
       log.error(error);

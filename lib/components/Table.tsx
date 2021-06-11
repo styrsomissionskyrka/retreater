@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { forwardRef } from 'react';
+
 import { ElementProps } from 'lib/utils/types';
 
 export const Table = forwardRef<HTMLTableElement, ElementProps<'table'>>(({ children, ...props }, ref) => {

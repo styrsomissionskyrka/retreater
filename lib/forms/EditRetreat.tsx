@@ -1,5 +1,6 @@
-import { gql, TypedDocumentNode, useMutation } from '@apollo/client';
 import { SubmitHandler } from 'react-hook-form';
+
+import { gql, TypedDocumentNode, useMutation } from 'lib/graphql';
 import {
   EditRetreatFormQuery,
   EditRetreatFormQueryVariables,

@@ -3,9 +3,9 @@ import 'styles/main.css';
 import { Fragment } from 'react';
 import Head from 'next/head';
 import { UserProvider } from '@auth0/nextjs-auth0';
-import { ApolloProvider } from '@apollo/client';
 import { useRouter } from 'next/router';
 
+import { ApolloProvider } from 'lib/graphql';
 import { useAppClient } from 'lib/graphql/client';
 import { PageWrapper, AdminWrapper } from 'lib/components/PageWrappers';
 import { ExtendedAppProps, ExtendedNextComponentType } from 'lib/types/next';
