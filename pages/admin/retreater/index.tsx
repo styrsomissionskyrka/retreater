@@ -42,6 +42,7 @@ const Retreats: NextPage = () => {
       DataTable.Columns.createStatusCell({
         accessor: 'active',
         isIndeterminate: (ret) => {
+          if (!ret.active) return false;
           let startDate = ret.metadata.startDate;
           if (startDate == null) return false;
           return isBefore(startDate, new Date());

@@ -7,14 +7,7 @@ import { Layout } from 'lib/components';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
 import { preloadQueries } from 'lib/graphql/ssr';
 import { assert } from 'lib/utils/assert';
-import {
-  EditRetreat,
-  EditRetreatMetadata,
-  EditRetreatStatus,
-  EDIT_RETREAT_FRAGMENT,
-  EDIT_RETREAT_METADATA_FRAGMENT,
-  EDIT_RETREAT_STATUS_FRAGMENT,
-} from 'lib/forms';
+import { EditRetreat, EditRetreatStatus, EDIT_RETREAT_FRAGMENT, EDIT_RETREAT_STATUS_FRAGMENT } from 'lib/forms';
 
 const Retreat: NextPage = () => {
   const router = useRouter();
@@ -32,10 +25,6 @@ const Retreat: NextPage = () => {
   switch (page) {
     case 'index':
       form = <EditRetreat retreat={retreat} />;
-      break;
-
-    case 'information':
-      form = <EditRetreatMetadata metadata={retreat.metadata} />;
       break;
 
     default:
@@ -61,7 +50,6 @@ export const EDIT_RETREAT_FORM_QUERY: TypedDocumentNode<EditRetreatFormQuery, Ed
   }
 
   ${EDIT_RETREAT_FRAGMENT}
-  ${EDIT_RETREAT_METADATA_FRAGMENT}
   ${EDIT_RETREAT_STATUS_FRAGMENT}
 `;
 
@@ -102,8 +90,5 @@ export const RetreatLayout: React.FC<{ id: string; title: React.ReactNode }> = (
 
 export function useRetreatNavLinks(id: string): Layout.NavLinkConfig[] {
   let base = `/admin/retreater/${id}`;
-  return [
-    { label: 'Retreat', href: base, icon: <IconInfoCircle size={16} /> },
-    { label: 'Information', href: `${base}/information`, icon: <IconInfoCircle size={16} /> },
-  ];
+  return [{ label: 'Information', href: base, icon: <IconInfoCircle size={16} /> }];
 }

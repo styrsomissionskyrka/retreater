@@ -50,7 +50,7 @@ export const EditRetreatStatus: React.FC<EditRetreatStatusProps> = ({ retreat })
   return (
     <Menu.Wrapper>
       <Menu.Button loading={loading} disabled={loading}>
-        {retreat.active ? 'Publicerad' : 'Utkast'}
+        {retreat.active ? 'Publicerad' : 'Arkiverad'}
       </Menu.Button>
       <Menu.Actions>
         <Menu.Action onClick={activateRetreat}>Publicera retreat</Menu.Action>

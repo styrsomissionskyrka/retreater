@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react';
 import classNames from 'classnames';
 
-import { useDebouncedValue } from 'lib/hooks';
 import { ElementProps } from 'lib/utils/types';
 
 import { Button } from '../Button';
@@ -104,14 +103,13 @@ export type SelectProps = ElementProps<'select'>;
 export type SubmitProps = Omit<ElementProps<'button'>, 'type'> & { isSubmitting?: boolean };
 
 export const Submit = forwardRef<HTMLButtonElement, SubmitProps>(({ isSubmitting, children, ...props }, ref) => {
-  const debounced = useDebouncedValue(isSubmitting, 300);
   return (
     <Button
       {...props}
       ref={ref}
       type="submit"
-      disabled={debounced}
-      iconStart={debounced ? <Spinner size={16} /> : null}
+      disabled={isSubmitting}
+      iconStart={isSubmitting ? <Spinner size={16} /> : null}
     >
       {children}
     </Button>
