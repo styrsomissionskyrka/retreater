@@ -1,43 +1,41 @@
-/* eslint-disable react/jsx-key */
 import { UrlObject } from 'url';
 
 import { useRouter } from 'next/router';
 
-import { PaginationFieldsFragment, PageInfoFieldsFragment } from 'lib/graphql';
+import { PaginationFieldsFragment } from 'lib/graphql';
 
 import { Link } from '../Link';
 import { useDataTable } from './Context';
 
 interface Props {
-  // meta: PaginationFieldsFragment;
-  pageInfo: PageInfoFieldsFragment;
+  meta: PaginationFieldsFragment;
 }
 
-export const Pagination: React.FC<Props> = ({ pageInfo }) => {
+export const Pagination: React.FC<Props> = ({ meta }) => {
   const table = useDataTable();
-  // let current = toIndexOne(meta.currentPage);
+  let current = meta.currentPage;
 
-  // let rangeStart = meta.currentPage * meta.perPage + 1;
-  // let rangeEnd = rangeStart + Math.min(meta.perPage, table.rows.length) - 1;
+  let rangeStart = (meta.currentPage - 1) * meta.perPage + 1;
+  let rangeEnd = rangeStart + Math.min(meta.perPage, table.rows.length) - 1;
 
   return (
     <div className="flex space-x-8">
-      {/* <span>
+      <span>
         Visar {rangeStart} - {rangeEnd} av {meta.totalItems} resultat
-      </span> */}
+      </span>
 
-      <PaginationLink cursor={pageInfo.startCursor} disabled={!pageInfo.hasPreviousPage}>
+      <PaginationLink page={current - 1} disabled={!meta.hasPreviousPage}>
         Föregående
       </PaginationLink>
 
-      <PaginationLink cursor={pageInfo.endCursor} disabled={!pageInfo.hasNextPage}>
+      <PaginationLink page={current + 1} disabled={!meta.hasNextPage}>
         Nästa
       </PaginationLink>
     </div>
   );
 };
 
-const PaginationLink: React.FC<{ cursor?: string; disabled?: boolean }> = ({ cursor, disabled, children }) => {
+const PaginationLink: React.FC<{ page: number; disabled: boolean }> = ({ page, disabled, children }) => {
   const router = useRouter();
 
   if (disabled) {
@@ -47,7 +45,3 @@ const PaginationLink: React.FC<{ cursor?: string; disabled?: boolean }> = ({ cur
   let href: UrlObject = page === 1 ? { pathname: router.pathname } : { query: { page } };
   return <Link href={href}>{children}</Link>;
 };
-
-function toIndexOne(next: number) {
-  return next + 1;
-}

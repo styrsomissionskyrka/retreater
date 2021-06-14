@@ -9,10 +9,10 @@ import { CreateRetreatMutation, CreateRetreatMutationVariables } from 'lib/graph
 import * as log from 'lib/utils/log';
 
 export const CREATE_RETREAT_MUTATION: TypedDocumentNode<CreateRetreatMutation, CreateRetreatMutationVariables> = gql`
-  mutation CreateRetreat($name: String!) {
-    createRetreat(name: $name) {
+  mutation CreateRetreat($title: String!) {
+    createRetreatDraft(title: $title) {
       id
-      name
+      title
     }
   }
 `;
@@ -33,12 +33,12 @@ export const CreateReatreat: React.FC = () => {
       error: 'Det gick inte att skapa retreaten just nu.',
     });
 
-    if (result.data?.createRetreat == null) {
+    if (result.data?.createRetreatDraft == null) {
       log.info('Failed result', result);
       throw new Error('Could not create retreat draft.');
     }
 
-    let { id } = result.data.createRetreat;
+    let { id } = result.data.createRetreatDraft;
     router.push(`/admin/retreater/${id}`);
   };
 
@@ -50,7 +50,7 @@ export const CreateReatreat: React.FC = () => {
       <Dialog isOpen={showDialog} onDismiss={() => setShowDialog(false)}>
         <h2 className="text-xl font-medium mb-8 text-center">Skapa retreat</h2>
         <Form.Form onSubmit={handleSubmit}>
-          <Form.Input name="name" defaultValue="" label="Titel" required />
+          <Form.Input name="title" defaultValue="" label="Titel" required />
           <Form.ActionRow>
             <Button variant="outline" onClick={() => setShowDialog(false)}>
               Avbryt

@@ -1,90 +1,155 @@
-import * as path from 'path';
-
-import * as n from 'nexus';
+import { Prisma } from '@prisma/client';
+import { enumType, objectType, extendType, nonNull, stringArg, arg, inputObjectType, idArg, intArg } from 'nexus';
+import { UserInputError } from 'apollo-server-micro';
 import slugify from 'slug';
 
-import { ignoreNull, stripeTimestampToMs } from '../utils';
+import { compact } from '../../lib/utils/array';
+import { clearUndefined, authorizedWithRoles } from '../utils';
+import { OrderEnum, PaginatedQuery } from '.';
+import { Product } from './Product';
 
-export const Retreat = n.objectType({
-  name: 'Retreat',
-  sourceType: {
-    module: path.join(process.cwd(), 'api/source-types.ts'),
-    export: 'StripeProduct',
-  },
-  definition(t) {
-    t.nonNull.id('id');
-    t.nonNull.boolean('active');
-    t.nonNull.date('created', {
-      resolve: (source) => stripeTimestampToMs(source.created),
-    });
-    t.nonNull.date('updated', {
-      resolve: (source) => stripeTimestampToMs(source.updated),
-    });
+export const RetreatStatusEnum = enumType({
+  name: 'RetreatStatusEnum',
+  members: ['PUBLISHED', 'DRAFT', 'ARCHIVED'],
+});
 
-    t.string('name');
-    t.string('description');
-    t.string('url');
-
-    t.nonNull.list.nonNull.string('images');
+export const RetreatOrderByEnum = enumType({
+  name: 'RetreatOrderByEnum',
+  members: {
+    START_DATE: 'startDate',
+    CREATED_AT: 'createdAt',
+    STATUS: 'status',
   },
 });
 
-export const RetreatQuery = n.extendType({
+export const Retreat = objectType({
+  name: 'Retreat',
+  sourceType: {
+    module: '@prisma/client',
+    export: 'Retreat',
+  },
+  definition(t) {
+    t.nonNull.id('id');
+    t.nonNull.string('title');
+    t.nonNull.string('slug');
+
+    t.nonNull.field('status', { type: RetreatStatusEnum });
+    t.nonNull.date('createdAt');
+    t.nonNull.date('updatedAt');
+
+    t.date('startDate');
+    t.date('endDate');
+    t.string('content');
+
+    t.int('maxParticipants');
+
+    t.nonNull.list.nonNull.field('products', {
+      type: Product,
+      async resolve(source, _, ctx) {
+        let ids: string[] = Array.isArray(source.products)
+          ? source.products.filter((i): i is string => typeof i === 'string')
+          : [];
+
+        if (ids.length < 1) return [];
+
+        let result = await ctx.stripe.products.list({ ids, limit: ids.length });
+        return result.data;
+      },
+    });
+  },
+});
+
+export const PaginatedRetreat = objectType({
+  name: 'PaginatedRetreat',
+  definition(t) {
+    t.implements(PaginatedQuery);
+    t.nonNull.list.nonNull.field('items', { type: Retreat });
+  },
+});
+
+export const RetreatQuery = extendType({
   type: 'Query',
   definition(t) {
-    t.connectionField('retreats', {
-      type: Retreat,
-      additionalArgs: {
-        active: n.booleanArg({ description: 'https://stripe.com/docs/api/products/list#list_products-active' }),
+    t.field('retreats', {
+      type: nonNull(PaginatedRetreat),
+      args: {
+        page: nonNull(intArg({ default: 1 })),
+        perPage: nonNull(intArg({ default: 25 })),
+        order: nonNull(arg({ type: OrderEnum, default: 'asc' })),
+        orderBy: nonNull(arg({ type: RetreatOrderByEnum, default: 'createdAt' })),
+        search: stringArg(),
+        status: arg({ type: RetreatStatusEnum }),
       },
-      cursorFromNode: (node) => node?.id!,
-      async nodes(_, args, ctx) {
-        const result = await ctx.stripe.products.list({
-          active: ignoreNull(args.active),
-          limit: args.first ? args.first + 1 : args.last ? args.last + 1 : undefined,
-          starting_after: ignoreNull(args.after),
-          ending_before: ignoreNull(args.before),
+      async resolve(_, args, ctx) {
+        let skip = args.perPage * (args.page - 1);
+        let take = args.perPage;
+
+        let where = {
+          AND: compact([
+            args.status != null ? { status: { in: args.status } } : { status: { not: 'ARCHIVED' as const } },
+            args.search != null
+              ? {
+                  OR: compact([{ title: { contains: args.search } }, { content: { contains: args.search } }]),
+                }
+              : null,
+          ]).filter(Boolean),
+        };
+
+        let retreats = await ctx.prisma.retreat.findMany({
+          take,
+          skip,
+          orderBy: { [args.orderBy]: args.order },
+          where,
         });
 
-        return result.data;
+        let total = await ctx.prisma.retreat.count({ where });
+
+        let paginationMeta = {
+          hasNextPage: args.perPage * (args.page + 1) < total,
+          hasPreviousPage: args.page > 1,
+          currentPage: args.page,
+          totalPages: Math.ceil(total / (args.perPage || 1)),
+          perPage: args.perPage,
+          totalItems: total,
+        };
+
+        return { items: retreats, paginationMeta };
       },
     });
 
     t.field('retreat', {
       type: Retreat,
-      args: { id: n.nonNull(n.idArg()) },
-      resolve(_, args, ctx) {
-        try {
-          return ctx.stripe.products.retrieve(args.id);
-        } catch (error) {
-          return null;
-        }
+      args: { id: idArg(), slug: stringArg() },
+      async resolve(_, args, ctx) {
+        if (isValidArgs(args)) return ctx.prisma.retreat.findUnique({ where: args });
+        throw new UserInputError('Query requires either an id or a slug input');
       },
     });
   },
 });
 
-export const RetreatMutation = n.extendType({
+function isValidArgs(args: any): args is Prisma.RetreatWhereUniqueInput {
+  return args.id != null || args.slug != null;
+}
+
+export const RetreatMutation = extendType({
   type: 'Mutation',
   definition(t) {
-    t.field('createRetreat', {
+    t.field('createRetreatDraft', {
       type: Retreat,
-      args: {
-        name: n.nonNull(n.stringArg()),
-        description: n.stringArg(),
-      },
+      args: { title: nonNull(stringArg()) },
+      authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
       async resolve(_, args, ctx) {
-        let retreat = await ctx.stripe.products.create({
-          active: false,
-          name: args.name,
-          description: ignoreNull(args.description),
-          shippable: false,
-          metadata: { type: 'Retreat' },
+        let slug = slugify(args.title);
+
+        let similarSlugs = await ctx.prisma.retreat.count({
+          where: { slug: { contains: slug } },
         });
 
-        let slug = slugify(retreat.name);
-        await ctx.prisma.retreatMetadata.create({
-          data: { retreatId: retreat.id, slug },
+        if (similarSlugs > 0) slug += `-${similarSlugs + 1}`;
+
+        let retreat = await ctx.prisma.retreat.create({
+          data: { title: args.title, slug, maxParticipants: 10, products: [] },
         });
 
         return retreat;
@@ -94,37 +159,39 @@ export const RetreatMutation = n.extendType({
     t.field('updateRetreat', {
       type: Retreat,
       args: {
-        id: n.nonNull(n.idArg()),
-        input: n.nonNull(n.arg({ type: UpdateRetreatInput })),
+        id: nonNull(idArg()),
+        input: nonNull(arg({ type: UpdateRetreatInput })),
       },
+      authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
       async resolve(_, args, ctx) {
-        return ctx.stripe.products.update(args.id, {
-          name: ignoreNull(args.input.name),
-          description: ignoreNull(args.input.description),
-          images: ignoreNull(args.input.images),
-          metadata: { type: 'Retreat' },
-        });
+        let data = clearUndefined(args.input);
+        let retreat = await ctx.prisma.retreat.update({ where: { id: args.id }, data });
+        return retreat;
       },
     });
 
     t.field('setRetreatStatus', {
       type: Retreat,
       args: {
-        id: n.nonNull(n.idArg()),
-        active: n.nonNull(n.booleanArg()),
+        id: nonNull(idArg()),
+        status: nonNull(arg({ type: RetreatStatusEnum })),
       },
-      resolve(_, args, ctx) {
-        return ctx.stripe.products.update(args.id, { active: args.active, metadata: { type: 'Retreat' } });
+      authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
+      async resolve(_, args, ctx) {
+        let retreat = await ctx.prisma.retreat.update({ where: { id: args.id }, data: { status: args.status } });
+        return retreat;
       },
     });
   },
 });
 
-export const UpdateRetreatInput = n.inputObjectType({
+export const UpdateRetreatInput = inputObjectType({
   name: 'UpdateRetreatInput',
   definition(t) {
-    t.nonNull.string('name');
-    t.string('description');
-    t.list.nonNull.string('images');
+    t.string('title');
+    t.string('content');
+    t.date('startDate');
+    t.date('endDate');
+    t.int('maxParticipants');
   },
 });

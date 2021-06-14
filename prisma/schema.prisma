@@ -10,6 +10,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum RetreatStatus {
+  PUBLISHED
+  DRAFT
+  ARCHIVED
+}
+
+model Retreat {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Json
+
+  status  RetreatStatus @default(DRAFT)
+  title   String        @db.VarChar(255)
+  slug    String        @unique
+  content String?
+
+  startDate DateTime?
+  endDate   DateTime?
+
+  maxParticipants Int @default(0)
+}
+
 model RetreatMetadata {
   id        String @id @default(cuid())
   retreatId String @unique

@@ -10,12 +10,3 @@ export const PAGINATION_FRAGMENT = gql`
     totalItems
   }
 `;
-
-export const PAGE_INFO_FRAGMENT = gql`
-  fragment PageInfoFields on PageInfo {
-    startCursor
-    endCursor
-    hasNextPage
-    hasPreviousPage
-  }
-`;

@@ -43,9 +43,6 @@ export const EDIT_RETREAT_FORM_QUERY: TypedDocumentNode<EditRetreatFormQuery, Ed
     retreat(id: $id) {
       ...EditRetreatFields
       ...EditRetreatStatusFields
-      metadata {
-        ...EditRetreatMetadataFields
-      }
     }
   }
 
@@ -75,8 +72,8 @@ export const RetreatLayout: React.FC<{ id: string; title: React.ReactNode }> = (
 
   return (
     <Layout.Admin
-      title={retreat?.name ?? ''}
-      sidebarTitle={retreat?.name ?? ''}
+      title={retreat?.title ?? ''}
+      sidebarTitle={retreat?.title ?? ''}
       headerTitle={title}
       backLink="/admin/retreater"
       navLinks={navLinks}

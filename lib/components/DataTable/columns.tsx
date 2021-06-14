@@ -4,36 +4,26 @@ import { CellProps, Column } from 'react-table';
 import classNames from 'classnames';
 
 import { format, formatISO, formatRelative } from 'lib/utils/date-fns';
+import { RetreatStatusEnum } from 'lib/graphql';
 
 import { Link, Menu } from '../';
-
-type Status = 'active' | 'inactive' | 'indeterminate';
 
 export function createStatusCell<T extends object>({
   isIndeterminate,
   ...config
 }: Column<T> & { isIndeterminate?: (o: T) => boolean }): Column<T> {
-  const colorMap: Record<Status, string> = {
-    inactive: 'bg-gray-300',
-    indeterminate: 'bg-yellow-500',
-    active: 'bg-green-500',
+  const colorMap: Record<RetreatStatusEnum, string> = {
+    [RetreatStatusEnum.Archived]: 'bg-gray-300',
+    [RetreatStatusEnum.Draft]: 'bg-yellow-500',
+    [RetreatStatusEnum.Published]: 'bg-green-500',
   };
 
   return {
     ...config,
-    Cell(props: CellProps<T, boolean>) {
-      let status: Status;
-      if (typeof isIndeterminate === 'function' && isIndeterminate(props.row.original)) {
-        status = 'indeterminate';
-      } else if (props.value) {
-        status = 'active';
-      } else {
-        status = 'inactive';
-      }
-
+    Cell(props: CellProps<T, RetreatStatusEnum>) {
       return (
         <div className="flex items-center justify-center text-center">
-          <span className={classNames(colorMap[status], 'block w-2 h-2 rounded-full')} />
+          <span className={classNames(colorMap[props.value], 'block w-2 h-2 rounded-full')} />
         </div>
       );
     },

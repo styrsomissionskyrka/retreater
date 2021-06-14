@@ -8,10 +8,9 @@ The javascript `Date` as integer. Type represents date and time as number of mil
 scalar Date
 
 type Mutation {
-  createRetreat(description: String, name: String!): Retreat
-  setRetreatStatus(active: Boolean!, id: ID!): Retreat
+  createRetreatDraft(title: String!): Retreat
+  setRetreatStatus(id: ID!, status: RetreatStatusEnum!): Retreat
   updateRetreat(id: ID!, input: UpdateRetreatInput!): Retreat
-  updateRetreatMetadata(id: ID!, input: UpdateRetreatMetadataInput!): RetreatMetadata
 }
 
 enum OrderEnum {
@@ -19,32 +18,12 @@ enum OrderEnum {
   DESC
 }
 
-"""
-PageInfo cursor, as defined in https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
-"""
-type PageInfo {
-  """
-  The cursor corresponding to the last nodes in edges. Null if the connection is empty.
-  """
-  endCursor: String
-
-  """
-  Used to indicate whether more edges exist following the set defined by the clients arguments.
-  """
-  hasNextPage: Boolean!
-
-  """
-  Used to indicate whether more edges exist prior to the set defined by the clients arguments.
-  """
-  hasPreviousPage: Boolean!
-
-  """
-  The cursor corresponding to the first nodes in edges. Null if the connection is empty.
-  """
-  startCursor: String
+interface PaginatedQuery {
+  paginationMeta: PaginationMeta!
 }
 
-interface PaginatedQuery {
+type PaginatedRetreat implements PaginatedQuery {
+  items: [Retreat!]!
   paginationMeta: PaginationMeta!
 }
 
@@ -68,102 +47,60 @@ type Price {
   created: Date!
   currency: String!
   id: ID!
-  metadata: PriceMetadata!
-  parent: PriceParent!
 }
 
-type PriceMetadata {
-  createdAt: Date!
-  description: String
-  id: ID!
-  priceId: ID!
-  updatedAt: Date!
-}
-
-union PriceParent = Retreat
-
-type Query {
-  me: User
-  retreat(id: ID!): Retreat
-  retreatBySlug(slug: String!): Retreat
-  retreatMetadata(id: ID, retreatId: ID): RetreatMetadata
-  retreats(
-    """https://stripe.com/docs/api/products/list#list_products-active"""
-    active: Boolean
-
-    """Returns the elements in the list that come after the specified cursor"""
-    after: String
-
-    """Returns the elements in the list that come before the specified cursor"""
-    before: String
-
-    """Returns the first n elements from the list."""
-    first: Int
-
-    """Returns the last n elements from the list."""
-    last: Int
-  ): RetreatConnection
-  user(id: ID!): User
-  users(order: OrderEnum! = ASC, orderBy: UserSortByEnum! = CREATED_AT, page: Int! = 0, perPage: Int! = 25, search: String): PaginatedUser
-}
-
-type Retreat {
+type Product {
   active: Boolean!
   created: Date!
   description: String
   id: ID!
   images: [String!]!
-  metadata: RetreatMetadata!
   name: String
   prices(active: Boolean): [Price!]!
   updated: Date!
   url: String
 }
 
-type RetreatConnection {
-  """
-  https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types
-  """
-  edges: [RetreatEdge]
-
-  """
-  https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
-  """
-  pageInfo: PageInfo!
+type Query {
+  me: User
+  retreat(id: ID, slug: String): Retreat
+  retreats(order: OrderEnum! = ASC, orderBy: RetreatOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, search: String, status: RetreatStatusEnum): PaginatedRetreat!
+  user(id: ID!): User
+  users(order: OrderEnum! = ASC, orderBy: UserSortByEnum! = CREATED_AT, page: Int! = 0, perPage: Int! = 25, search: String): PaginatedUser
 }
 
-type RetreatEdge {
-  """https://facebook.github.io/relay/graphql/connections.htm#sec-Cursor"""
-  cursor: String!
-
-  """https://facebook.github.io/relay/graphql/connections.htm#sec-Node"""
-  node: Retreat
-}
-
-type RetreatMetadata {
+type Retreat {
   content: String
   createdAt: Date!
   endDate: Date
   id: ID!
-  maxParticipants: Int!
-  retreatId: ID!
+  maxParticipants: Int
+  products: [Product!]!
   slug: String!
   startDate: Date
+  status: RetreatStatusEnum!
+  title: String!
   updatedAt: Date!
 }
 
-input UpdateRetreatInput {
-  description: String
-  images: [String!]
-  name: String!
+enum RetreatOrderByEnum {
+  CREATED_AT
+  START_DATE
+  STATUS
 }
 
-input UpdateRetreatMetadataInput {
+enum RetreatStatusEnum {
+  ARCHIVED
+  DRAFT
+  PUBLISHED
+}
+
+input UpdateRetreatInput {
   content: String
   endDate: Date
   maxParticipants: Int
-  slug: String
   startDate: Date
+  title: String
 }
 
 type User {
