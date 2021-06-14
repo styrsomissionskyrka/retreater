@@ -4,13 +4,13 @@ import { IconCalendarEvent, IconUsers } from '@tabler/icons';
 
 import { gql, TypedDocumentNode, useQuery } from 'lib/graphql';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
-import { Layout, DataTable } from 'lib/components';
+import { Layout, DataTable, toast } from 'lib/components';
 import { useUserHasRoles, useSearchParams, extractCurrentParams } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
 import { ListRetreatsQuery, ListRetreatsQueryVariables } from 'lib/graphql';
 import { preloadQueries } from 'lib/graphql/ssr';
 import { PAGE_INFO_FRAGMENT } from 'lib/graphql/fragments';
-import { CreateReatreat } from 'lib/forms';
+import { CreateReatreat, useSetRetreatStatus } from 'lib/forms';
 import { isBefore } from 'lib/utils/date-fns';
 
 type RetreatType = NonNullable<
@@ -34,6 +34,7 @@ const Retreats: NextPage = () => {
   const [variables, _] = useSearchParams(initialVariables);
 
   const { previousData, data = previousData } = useQuery(LIST_RETREATS_QUERY, { variables });
+  const [setRetreatStatus] = useSetRetreatStatus();
 
   const retreats = compact(data?.retreats?.edges?.map((edge) => edge?.node) ?? []);
   const columns = useMemo<DataTable.Column<RetreatType>[]>(() => {
@@ -56,8 +57,31 @@ const Retreats: NextPage = () => {
         accessor: (row: RetreatType) => ({ start: row.metadata?.startDate, end: row.metadata?.endDate }),
       }),
       DataTable.Columns.createRelativeDateCell({ Header: 'Skapad', accessor: 'created' }),
+      DataTable.Columns.createContextMenuCell({
+        accessor: 'id',
+        actions: [
+          {
+            label: 'Publicera retreat',
+            onClick: (retreat) =>
+              toast.promise(setRetreatStatus(retreat.id, true), {
+                loading: '...',
+                success: 'Retreaten har publicerats.',
+                error: 'Kunde inte publicera retreaten.',
+              }),
+          },
+          {
+            label: 'Arkivera retreat',
+            onClick: (retreat) =>
+              toast.promise(setRetreatStatus(retreat.id, false), {
+                loading: '...',
+                success: 'Retreaten har avpublicerats.',
+                error: 'Kunde inte avpublicera retreaten.',
+              }),
+          },
+        ],
+      }),
     ];
-  }, []);
+  }, [setRetreatStatus]);
 
   if (data == null) return <p>Loading...</p>;
 

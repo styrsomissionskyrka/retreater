@@ -117,7 +117,7 @@ export const Actions: React.FC = ({ children }) => {
             role="menu"
             tabIndex={-1}
             aria-labelledby={buttonId}
-            className="flex flex-col border-2 border-black divide-y-2 divide-black"
+            className="flex flex-col border-2 border-black divide-y-2 divide-black bg-white"
           >
             {children}
           </div>

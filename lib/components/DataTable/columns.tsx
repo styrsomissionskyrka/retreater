@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 import { format, formatISO, formatRelative } from 'lib/utils/date-fns';
 
-import { Link } from '../Link';
+import { Link, Menu } from '../';
 
 type Status = 'active' | 'inactive' | 'indeterminate';
 
@@ -104,6 +104,28 @@ export function createDateRangeCell<T extends object>(config: Column<T>): Column
           <span>{' - '}</span>
           {end}
         </p>
+      );
+    },
+  };
+}
+
+type MenuCellProps<T extends object> = Column<T> & { actions: { label: React.ReactNode; onClick: (row: T) => void }[] };
+
+export function createContextMenuCell<T extends object>({ actions, ...config }: MenuCellProps<T>): Column<T> {
+  return {
+    ...config,
+    Cell({ row }: CellProps<T, unknown>) {
+      return (
+        <Menu.Wrapper>
+          <Menu.ContextButton />
+          <Menu.Actions>
+            {actions.map((action, i) => (
+              <Menu.Action key={i} onClick={() => action.onClick(row.original)}>
+                {action.label}
+              </Menu.Action>
+            ))}
+          </Menu.Actions>
+        </Menu.Wrapper>
       );
     },
   };

@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import {
   gql,
   EditRetreatStatusFieldsFragment,
@@ -5,19 +7,32 @@ import {
   UpdateRetreatStatusMutationVariables,
   TypedDocumentNode,
   useMutation,
+  MutationTuple,
+  FetchResult,
 } from 'lib/graphql';
-import { toast } from 'lib/components';
-import { Menu } from 'lib/components';
+import { Menu, toast } from 'lib/components';
 
 interface EditRetreatStatusProps {
   retreat: EditRetreatStatusFieldsFragment;
 }
 
+export function useSetRetreatStatus(): [
+  (id: string, active: boolean) => Promise<FetchResult<UpdateRetreatStatusMutation>>,
+  MutationTuple<UpdateRetreatStatusMutation, UpdateRetreatStatusMutationVariables>[1],
+] {
+  const [mutate, data] = useMutation(UPDATE_RETREAT_STATUS_MUTATION);
+  const setRetreatStatus = useCallback(
+    (id: string, active: boolean) => mutate({ variables: { id, active } }),
+    [mutate],
+  );
+  return [setRetreatStatus, data];
+}
+
 export const EditRetreatStatus: React.FC<EditRetreatStatusProps> = ({ retreat }) => {
-  const [mutate, { loading }] = useMutation(UPDATE_RETREAT_STATUS_MUTATION);
+  const [mutate, { loading }] = useSetRetreatStatus();
 
   const activateRetreat = () => {
-    return toast.promise(mutate({ variables: { id: retreat.id, active: true } }), {
+    return toast.promise(mutate(retreat.id, true), {
       loading: '...',
       success: 'Retreaten har publicerats.',
       error: 'Kunde inte ändra status.',
@@ -25,7 +40,7 @@ export const EditRetreatStatus: React.FC<EditRetreatStatusProps> = ({ retreat })
   };
 
   const deactivateRetreat = () => {
-    return toast.promise(mutate({ variables: { id: retreat.id, active: false } }), {
+    return toast.promise(mutate(retreat.id, false), {
       loading: '...',
       success: 'Retreaten har avpublicerats.',
       error: 'Kunde inte ändra status.',
