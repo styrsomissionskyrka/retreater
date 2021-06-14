@@ -33,29 +33,3 @@ model Retreat {
 
   maxParticipants Int @default(0)
 }
-
-model RetreatMetadata {
-  id        String @id @default(cuid())
-  retreatId String @unique
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  slug    String  @unique
-  content String?
-
-  startDate DateTime?
-  endDate   DateTime?
-
-  maxParticipants Int @default(0)
-}
-
-model PriceMetadata {
-  id      String @id @default(cuid())
-  priceId String @unique
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  description String?
-}

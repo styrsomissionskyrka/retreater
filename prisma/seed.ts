@@ -4,7 +4,7 @@ import { RetreatFactory } from '../lib/factories/prisma';
 
 const prisma = new PrismaClient();
 
-const retreats = RetreatFactory.buildList(80, { createdById: 'auth0|60b7f99d6b1af90068dde33b' });
+const retreats = RetreatFactory.buildList(30);
 
 (async () => {
   try {
