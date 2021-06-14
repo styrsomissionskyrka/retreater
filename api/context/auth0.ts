@@ -135,12 +135,12 @@ export function createAuth0User(raw: Auth0User): NexusGenObjects['User'] {
     id: raw.user_id,
     email: raw.email,
     emailVerified: raw.email_verified ?? false,
-    createdAt: new Date(raw.created_at).getTime(),
-    updateAt: new Date(raw.updated_at).getTime(),
+    createdAt: new Date(raw.created_at),
+    updateAt: new Date(raw.updated_at),
     name: raw.name,
     picture: raw.picture,
     lastIp: raw.last_ip,
-    lastLogin: raw.last_login == null ? undefined : new Date(raw.last_login).getTime(),
+    lastLogin: raw.last_login == null ? undefined : new Date(raw.last_login),
     loginsCount: raw.logins_count ?? 0,
   };
 }

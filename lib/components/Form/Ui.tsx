@@ -106,7 +106,13 @@ export type SubmitProps = Omit<ElementProps<'button'>, 'type'> & { isSubmitting?
 export const Submit = forwardRef<HTMLButtonElement, SubmitProps>(({ isSubmitting, children, ...props }, ref) => {
   const debounced = useDebouncedValue(isSubmitting, 300);
   return (
-    <Button {...props} ref={ref} type="submit" disabled={debounced} icon={debounced ? <Spinner size={16} /> : null}>
+    <Button
+      {...props}
+      ref={ref}
+      type="submit"
+      disabled={debounced}
+      iconStart={debounced ? <Spinner size={16} /> : null}
+    >
       {children}
     </Button>
   );

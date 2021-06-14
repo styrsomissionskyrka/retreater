@@ -2,23 +2,27 @@ import classNames from 'classnames';
 import { forwardRef } from 'react';
 
 type ButtonVariant = 'default' | 'outline' | 'danger';
-type ButtonSize = 'small' | 'normal' | 'large';
+type ButtonSize = 'small' | 'normal' | 'large' | 'square';
 
-type ButtonProps = Omit<JSX.IntrinsicElements['button'], 'key' | 'ref'> & {
-  icon?: React.ReactNode;
+export type ButtonProps = Omit<JSX.IntrinsicElements['button'], 'key' | 'ref'> & {
+  iconStart?: React.ReactNode;
+  iconEnd?: React.ReactNode;
   variant?: ButtonVariant;
   size?: ButtonSize;
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ icon, className, type = 'button', variant = 'default', size = 'normal', children, ...props }, ref) => {
+  (
+    { iconStart, iconEnd, className, type = 'button', variant = 'default', size = 'normal', children, ...props },
+    ref,
+  ) => {
     return (
       <button
         {...props}
         ref={ref}
         type={type}
         className={classNames(
-          'flex items-center space-x-2',
+          'flex items-center justify-center space-x-2',
           'leading-none rounded',
           'disabled:cursor-not-allowed',
 
@@ -37,12 +41,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           size === 'small' && 'h-8 px-2',
           size === 'normal' && 'h-10 px-5',
           size === 'large' && 'h-12 px-6',
+          size === 'square' && 'h-10 w-10',
 
           className,
         )}
       >
-        {icon}
+        {iconStart}
         {children ? <span>{children}</span> : null}
+        {iconEnd}
       </button>
     );
   },

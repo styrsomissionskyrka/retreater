@@ -3,6 +3,11 @@ import { Claims, UserRole } from '@auth0/nextjs-auth0';
 import { arrayify } from '../lib/utils/array';
 import { Context } from './context';
 
+export function ignoreNull<T>(value: T | null | undefined): T | undefined {
+  if (value == null) return undefined;
+  return value;
+}
+
 export function clearUndefined<O extends Record<string, unknown>>(object: O): RequiredFields<O> {
   let proxy: Record<string, any> = {};
 

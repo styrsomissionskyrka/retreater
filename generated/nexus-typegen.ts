@@ -5,13 +5,14 @@
 
 
 import { Context } from "./../api/context/index"
-import { Retreat } from "@prisma/client"
+import { StripeProduct } from "./../api/source-types"
+import { RetreatMetadata } from "@prisma/client"
+import { core, connectionPluginCore } from "nexus"
 import { FieldAuthorizeResolver } from "nexus/dist/plugins/fieldAuthorizePlugin"
-import { core } from "nexus"
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
     /**
-     * Date custom scalar type
+     * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
      */
     date<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "Date";
   }
@@ -19,9 +20,18 @@ declare global {
 declare global {
   interface NexusGenCustomOutputMethods<TypeName extends string> {
     /**
-     * Date custom scalar type
+     * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
      */
     date<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "Date";
+    /**
+     * Adds a Relay-style connection to the type, with numerous options for configuration
+     *
+     * @see https://nexusjs.org/docs/plugins/connection
+     */
+    connectionField<FieldName extends string>(
+      fieldName: FieldName,
+      config: connectionPluginCore.ConnectionFieldConfig<TypeName, FieldName>
+    ): void
   }
 }
 
@@ -32,18 +42,21 @@ declare global {
 
 export interface NexusGenInputs {
   UpdateRetreatInput: { // input type
+    description?: string | null; // String
+    images?: string[] | null; // [String!]
+    name: string; // String!
+  }
+  UpdateRetreatMetadataInput: { // input type
     content?: string | null; // String
     endDate?: NexusGenScalars['Date'] | null; // Date
     maxParticipants?: number | null; // Int
+    slug?: string | null; // String
     startDate?: NexusGenScalars['Date'] | null; // Date
-    title?: string | null; // String
   }
 }
 
 export interface NexusGenEnums {
   OrderEnum: "asc" | "desc"
-  RetreatOrderByEnum: "createdAt" | "startDate" | "status"
-  RetreatStatusEnum: "ARCHIVED" | "DRAFT" | "PUBLISHED"
   UserRoleEnum: "admin" | "editor" | "superadmin"
   UserSortByEnum: "created_at" | "email" | "name"
 }
@@ -54,14 +67,16 @@ export interface NexusGenScalars {
   Float: number
   Boolean: boolean
   ID: string
-  Date: any
+  Date: Date
 }
 
 export interface NexusGenObjects {
   Mutation: {};
-  PaginatedRetreat: { // root type
-    items: NexusGenRootTypes['Retreat'][]; // [Retreat!]!
-    paginationMeta: NexusGenRootTypes['PaginationMeta']; // PaginationMeta!
+  PageInfo: { // root type
+    endCursor?: string | null; // String
+    hasNextPage: boolean; // Boolean!
+    hasPreviousPage: boolean; // Boolean!
+    startCursor?: string | null; // String
   }
   PaginatedUser: { // root type
     items: NexusGenRootTypes['User'][]; // [User!]!
@@ -76,7 +91,16 @@ export interface NexusGenObjects {
     totalPages: number; // Int!
   }
   Query: {};
-  Retreat: Retreat;
+  Retreat: StripeProduct;
+  RetreatConnection: { // root type
+    edges?: Array<NexusGenRootTypes['RetreatEdge'] | null> | null; // [RetreatEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  }
+  RetreatEdge: { // root type
+    cursor: string; // String!
+    node?: NexusGenRootTypes['Retreat'] | null; // Retreat
+  }
+  RetreatMetadata: RetreatMetadata;
   User: { // root type
     createdAt: NexusGenScalars['Date']; // Date!
     email: string; // String!
@@ -92,7 +116,7 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
-  PaginatedQuery: NexusGenRootTypes['PaginatedRetreat'] | NexusGenRootTypes['PaginatedUser'];
+  PaginatedQuery: NexusGenRootTypes['PaginatedUser'];
 }
 
 export interface NexusGenUnions {
@@ -104,13 +128,16 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
-    createRetreatDraft: NexusGenRootTypes['Retreat'] | null; // Retreat
+    createRetreat: NexusGenRootTypes['Retreat'] | null; // Retreat
     setRetreatStatus: NexusGenRootTypes['Retreat'] | null; // Retreat
     updateRetreat: NexusGenRootTypes['Retreat'] | null; // Retreat
+    updateRetreatMetadata: NexusGenRootTypes['RetreatMetadata'] | null; // RetreatMetadata
   }
-  PaginatedRetreat: { // field return type
-    items: NexusGenRootTypes['Retreat'][]; // [Retreat!]!
-    paginationMeta: NexusGenRootTypes['PaginationMeta']; // PaginationMeta!
+  PageInfo: { // field return type
+    endCursor: string | null; // String
+    hasNextPage: boolean; // Boolean!
+    hasPreviousPage: boolean; // Boolean!
+    startCursor: string | null; // String
   }
   PaginatedUser: { // field return type
     items: NexusGenRootTypes['User'][]; // [User!]!
@@ -127,21 +154,40 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     me: NexusGenRootTypes['User'] | null; // User
     retreat: NexusGenRootTypes['Retreat'] | null; // Retreat
-    retreats: NexusGenRootTypes['PaginatedRetreat']; // PaginatedRetreat!
+    retreatBySlug: NexusGenRootTypes['Retreat'] | null; // Retreat
+    retreatMetadata: NexusGenRootTypes['RetreatMetadata'] | null; // RetreatMetadata
+    retreats: NexusGenRootTypes['RetreatConnection'] | null; // RetreatConnection
     user: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['PaginatedUser'] | null; // PaginatedUser
   }
   Retreat: { // field return type
+    active: boolean; // Boolean!
+    created: NexusGenScalars['Date']; // Date!
+    description: string | null; // String
+    id: string; // ID!
+    images: string[]; // [String!]!
+    metadata: NexusGenRootTypes['RetreatMetadata']; // RetreatMetadata!
+    name: string | null; // String
+    updated: NexusGenScalars['Date']; // Date!
+    url: string | null; // String
+  }
+  RetreatConnection: { // field return type
+    edges: Array<NexusGenRootTypes['RetreatEdge'] | null> | null; // [RetreatEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  }
+  RetreatEdge: { // field return type
+    cursor: string; // String!
+    node: NexusGenRootTypes['Retreat'] | null; // Retreat
+  }
+  RetreatMetadata: { // field return type
     content: string | null; // String
     createdAt: NexusGenScalars['Date']; // Date!
-    createdBy: NexusGenRootTypes['User'] | null; // User
     endDate: NexusGenScalars['Date'] | null; // Date
     id: string; // ID!
-    maxParticipants: number | null; // Int
+    maxParticipants: number; // Int!
+    retreatId: string; // ID!
     slug: string; // String!
     startDate: NexusGenScalars['Date'] | null; // Date
-    status: NexusGenEnums['RetreatStatusEnum']; // RetreatStatusEnum!
-    title: string; // String!
     updatedAt: NexusGenScalars['Date']; // Date!
   }
   User: { // field return type
@@ -164,13 +210,16 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
-    createRetreatDraft: 'Retreat'
+    createRetreat: 'Retreat'
     setRetreatStatus: 'Retreat'
     updateRetreat: 'Retreat'
+    updateRetreatMetadata: 'RetreatMetadata'
   }
-  PaginatedRetreat: { // field return type name
-    items: 'Retreat'
-    paginationMeta: 'PaginationMeta'
+  PageInfo: { // field return type name
+    endCursor: 'String'
+    hasNextPage: 'Boolean'
+    hasPreviousPage: 'Boolean'
+    startCursor: 'String'
   }
   PaginatedUser: { // field return type name
     items: 'User'
@@ -187,21 +236,40 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     me: 'User'
     retreat: 'Retreat'
-    retreats: 'PaginatedRetreat'
+    retreatBySlug: 'Retreat'
+    retreatMetadata: 'RetreatMetadata'
+    retreats: 'RetreatConnection'
     user: 'User'
     users: 'PaginatedUser'
   }
   Retreat: { // field return type name
+    active: 'Boolean'
+    created: 'Date'
+    description: 'String'
+    id: 'ID'
+    images: 'String'
+    metadata: 'RetreatMetadata'
+    name: 'String'
+    updated: 'Date'
+    url: 'String'
+  }
+  RetreatConnection: { // field return type name
+    edges: 'RetreatEdge'
+    pageInfo: 'PageInfo'
+  }
+  RetreatEdge: { // field return type name
+    cursor: 'String'
+    node: 'Retreat'
+  }
+  RetreatMetadata: { // field return type name
     content: 'String'
     createdAt: 'Date'
-    createdBy: 'User'
     endDate: 'Date'
     id: 'ID'
     maxParticipants: 'Int'
+    retreatId: 'ID'
     slug: 'String'
     startDate: 'Date'
-    status: 'RetreatStatusEnum'
-    title: 'String'
     updatedAt: 'Date'
   }
   User: { // field return type name
@@ -224,30 +292,40 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
-    createRetreatDraft: { // args
-      title: string; // String!
+    createRetreat: { // args
+      description?: string | null; // String
+      name: string; // String!
     }
     setRetreatStatus: { // args
+      active: boolean; // Boolean!
       id: string; // ID!
-      status: NexusGenEnums['RetreatStatusEnum']; // RetreatStatusEnum!
     }
     updateRetreat: { // args
       id: string; // ID!
       input: NexusGenInputs['UpdateRetreatInput']; // UpdateRetreatInput!
     }
+    updateRetreatMetadata: { // args
+      id: string; // ID!
+      input: NexusGenInputs['UpdateRetreatMetadataInput']; // UpdateRetreatMetadataInput!
+    }
   }
   Query: {
     retreat: { // args
+      id: string; // ID!
+    }
+    retreatBySlug: { // args
+      slug: string; // String!
+    }
+    retreatMetadata: { // args
       id?: string | null; // ID
-      slug?: string | null; // String
+      retreatId?: string | null; // ID
     }
     retreats: { // args
-      order: NexusGenEnums['OrderEnum']; // OrderEnum!
-      orderBy: NexusGenEnums['RetreatOrderByEnum']; // RetreatOrderByEnum!
-      page: number; // Int!
-      perPage: number; // Int!
-      search?: string | null; // String
-      status?: NexusGenEnums['RetreatStatusEnum'] | null; // RetreatStatusEnum
+      active?: boolean | null; // Boolean
+      after?: string | null; // String
+      before?: string | null; // String
+      first?: number | null; // Int
+      last?: number | null; // Int
     }
     user: { // args
       id: string; // ID!
@@ -263,11 +341,10 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  PaginatedQuery: "PaginatedRetreat" | "PaginatedUser"
+  PaginatedQuery: "PaginatedUser"
 }
 
 export interface NexusGenTypeInterfaces {
-  PaginatedRetreat: "PaginatedQuery"
   PaginatedUser: "PaginatedQuery"
 }
 
@@ -326,6 +403,7 @@ declare global {
   interface NexusGenPluginTypeConfig<TypeName extends string> {
   }
   interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
+    
     /**
      * Authorization for an individual field. Returning "true"
      * or "Promise<true>" means the field can be accessed.

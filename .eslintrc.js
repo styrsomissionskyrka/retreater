@@ -10,7 +10,7 @@ module.exports = {
 
     'graphql/template-strings': ['error', { env: 'apollo', schemaJson: require('./schema.json') }],
     'graphql/named-operations': ['error', { env: 'apollo', schemaJson: require('./schema.json') }],
-    'graphql/no-deprecated-fields': ['error', { env: 'apollo', schemaJson: require('./schema.json') }],
+    'graphql/no-deprecated-fields': ['warn', { env: 'apollo', schemaJson: require('./schema.json') }],
 
     'import/order': [
       'error',

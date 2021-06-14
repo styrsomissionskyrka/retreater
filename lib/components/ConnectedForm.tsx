@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   useForm,
   FormProvider,
@@ -13,6 +13,7 @@ import {
 import get from 'lodash.get';
 
 import { format, parse, getTime } from 'lib/utils/date-fns';
+import { createStrictContext } from 'lib/utils/context';
 
 import * as FormUI from './Form';
 
@@ -22,8 +23,7 @@ interface ExtendedFormContextType {
   isSubmitting: boolean;
 }
 
-const ExtendedFormContext = createContext<ExtendedFormContextType>({ isSubmitting: false });
-const useExtendedForm = () => useContext(ExtendedFormContext);
+const [ExtendedFormProvider, useExtendedForm] = createStrictContext<ExtendedFormContextType>('ExtendedForm');
 
 interface FormProps<FormValues extends FieldValues> {
   onSubmit: SubmitHandler<FormValues>;
@@ -52,7 +52,9 @@ export function Form<FormValues extends FieldValues>({ onSubmit, children }: For
 
   return (
     <FormProvider<FormValues> {...methods}>
-      <FormUI.Form onSubmit={methods.handleSubmit(handleSubmit)}>{children}</FormUI.Form>
+      <ExtendedFormProvider value={{ isSubmitting }}>
+        <FormUI.Form onSubmit={methods.handleSubmit(handleSubmit)}>{children}</FormUI.Form>
+      </ExtendedFormProvider>
     </FormProvider>
   );
 }

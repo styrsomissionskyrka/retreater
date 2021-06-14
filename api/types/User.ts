@@ -1,14 +1,14 @@
-import { objectType, extendType, enumType, arg, idArg, nonNull, stringArg, intArg } from 'nexus';
+import * as n from 'nexus';
 
 import { authorizedWithRoles } from '../utils';
 import { OrderEnum, PaginatedQuery } from '.';
 
-export const UserRoleEnum = enumType({
+export const UserRoleEnum = n.enumType({
   name: 'UserRoleEnum',
   members: { SUPER_ADMIN: 'superadmin', ADMIN: 'admin', EDITOR: 'editor' },
 });
 
-export const UserOrderByEnum = enumType({
+export const UserOrderByEnum = n.enumType({
   name: 'UserSortByEnum',
   members: {
     EMAIL: 'email',
@@ -17,7 +17,7 @@ export const UserOrderByEnum = enumType({
   },
 });
 
-export const User = objectType({
+export const User = n.objectType({
   name: 'User',
   definition(t) {
     t.nonNull.id('id');
@@ -41,7 +41,7 @@ export const User = objectType({
   },
 });
 
-export const PaginatedUser = objectType({
+export const PaginatedUser = n.objectType({
   name: 'PaginatedUser',
   definition(t) {
     t.implements(PaginatedQuery);
@@ -49,7 +49,7 @@ export const PaginatedUser = objectType({
   },
 });
 
-export const UserQuery = extendType({
+export const UserQuery = n.extendType({
   type: 'Query',
   definition(t) {
     t.field('me', {
@@ -70,7 +70,7 @@ export const UserQuery = extendType({
 
     t.field('user', {
       type: User,
-      args: { id: nonNull(idArg()) },
+      args: { id: n.nonNull(n.idArg()) },
       authorize: authorizedWithRoles(['admin', 'superadmin']),
       async resolve(_, args, ctx) {
         return ctx.auth0.user.load(args.id);
@@ -80,11 +80,11 @@ export const UserQuery = extendType({
     t.field('users', {
       type: PaginatedUser,
       args: {
-        page: nonNull(intArg({ default: 0 })),
-        perPage: nonNull(intArg({ default: 25 })),
-        order: nonNull(arg({ type: OrderEnum, default: 'asc' })),
-        orderBy: nonNull(arg({ type: UserOrderByEnum, default: 'created_at' })),
-        search: stringArg(),
+        page: n.nonNull(n.intArg({ default: 0 })),
+        perPage: n.nonNull(n.intArg({ default: 25 })),
+        order: n.nonNull(n.arg({ type: OrderEnum, default: 'asc' })),
+        orderBy: n.nonNull(n.arg({ type: UserOrderByEnum, default: 'created_at' })),
+        search: n.stringArg(),
       },
       authorize: authorizedWithRoles(['admin', 'superadmin']),
       async resolve(_, args, ctx) {

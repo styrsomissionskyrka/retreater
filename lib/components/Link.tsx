@@ -28,11 +28,11 @@ export const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
     const router = useRouter();
 
     let h = typeof href === 'string' ? href : href.pathname ?? '';
-    let isActive = router.asPath.startsWith(h);
+    let isActive = router.asPath === h;
     let c = [className, isActive ? activeClassName : ''].join(' ').trim();
 
     return (
-      <Link {...props} href={href} className={c}>
+      <Link {...props} ref={ref} href={href} className={c}>
         {children}
       </Link>
     );

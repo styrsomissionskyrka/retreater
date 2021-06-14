@@ -1,7 +1,7 @@
 import * as path from 'path';
 
 import { AuthenticationError } from 'apollo-server-errors';
-import { makeSchema, fieldAuthorizePlugin } from 'nexus';
+import { makeSchema, fieldAuthorizePlugin, connectionPlugin } from 'nexus';
 
 import * as types from './types';
 
@@ -16,6 +16,7 @@ export const schema = makeSchema({
     export: 'Context',
   },
   plugins: [
+    connectionPlugin(),
     fieldAuthorizePlugin({
       formatError(authConfig) {
         return new AuthenticationError(authConfig.error.message);

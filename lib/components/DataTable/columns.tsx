@@ -3,24 +3,37 @@ import { UrlObject } from 'url';
 import { CellProps, Column } from 'react-table';
 import classNames from 'classnames';
 
-import { RetreatStatusEnum } from 'lib/graphql';
 import { format, formatISO, formatRelative } from 'lib/utils/date-fns';
 
 import { Link } from '../Link';
 
-export function createStatusCell<T extends { status: RetreatStatusEnum }>(): Column<T> {
-  const colorMap: Record<RetreatStatusEnum, string> = {
-    [RetreatStatusEnum.Archived]: 'bg-gray-300',
-    [RetreatStatusEnum.Draft]: 'bg-yellow-500',
-    [RetreatStatusEnum.Published]: 'bg-green-500',
+type Status = 'active' | 'inactive' | 'indeterminate';
+
+export function createStatusCell<T extends object>({
+  isIndeterminate,
+  ...config
+}: Column<T> & { isIndeterminate?: (o: T) => boolean }): Column<T> {
+  const colorMap: Record<Status, string> = {
+    inactive: 'bg-gray-300',
+    indeterminate: 'bg-yellow-500',
+    active: 'bg-green-500',
   };
+
   return {
-    accessor: 'status',
-    Header: '',
-    Cell(props: CellProps<T, RetreatStatusEnum>) {
+    ...config,
+    Cell(props: CellProps<T, boolean>) {
+      let status: Status;
+      if (typeof isIndeterminate === 'function' && isIndeterminate(props.row.original)) {
+        status = 'indeterminate';
+      } else if (props.value) {
+        status = 'active';
+      } else {
+        status = 'inactive';
+      }
+
       return (
         <div className="flex items-center justify-center text-center">
-          <span className={classNames(colorMap[props.value], 'block w-2 h-2 rounded-full')} />
+          <span className={classNames(colorMap[status], 'block w-2 h-2 rounded-full')} />
         </div>
       );
     },
@@ -78,7 +91,7 @@ export function createRelativeDateCell<T extends object>({
 export function createDateRangeCell<T extends object>(config: Column<T>): Column<T> {
   return {
     ...config,
-    Cell({ value }: CellProps<T, { start: Date | number; end: Date | number }>) {
+    Cell({ value }: CellProps<T, { start?: Date | number | null; end?: Date | number | null }>) {
       if (value.start == null) return null;
       let start = <time dateTime={formatISO(value.start)}>{format(value.start, 'yyyy-MM-dd')}</time>;
 

@@ -27,6 +27,7 @@ interface Props {
   navLinks?: NavLinkConfig[];
   backLink?: string | UrlObject;
   actions?: React.ReactNode;
+  shallowLinks?: boolean;
 }
 
 export const Admin: React.FC<Props> = ({
@@ -36,6 +37,7 @@ export const Admin: React.FC<Props> = ({
   navLinks = [],
   backLink,
   actions,
+  shallowLinks,
   children,
 }) => {
   const user = useAuthenticatedUser();
@@ -81,6 +83,7 @@ export const Admin: React.FC<Props> = ({
                     href={href}
                     className="flex space-x-2 items-center hover:bg-black hover:text-white rounded -ml-2 px-2 py-1"
                     activeClassName="text-blue-600"
+                    shallow={shallowLinks}
                   >
                     {cloneElement(icon, { className: 'flex-none' })}
                     <span>{label}</span>
@@ -109,7 +112,7 @@ export const Admin: React.FC<Props> = ({
         </div>
 
         <main className="flex-1 px-8 pt-10 pb-20">
-          <div className="w-full max-w-4xl mx-auto mb-20 flex items-baseline">
+          <div className="w-full max-w-4xl mx-auto mb-20 flex items-start">
             <h1 className="text-4xl font-medium">{headerTitle}</h1>
             {actions ? <div className="ml-auto">{actions}</div> : null}
           </div>

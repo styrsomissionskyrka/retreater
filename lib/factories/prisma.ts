@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { Factory } from 'fishery';
 import * as faker from 'faker';
 
-import { RetreatStatusEnum } from '../graphql';
+import { LegacyRetreatStatusEnum } from '../graphql';
 
 export const RetreatFactory = Factory.define<Prisma.RetreatCreateInput>(() => {
   let title = faker.lorem.words(4);
@@ -12,7 +12,7 @@ export const RetreatFactory = Factory.define<Prisma.RetreatCreateInput>(() => {
   let startDate = faker.date.soon(faker.datatype.number(180), createdAt);
   let endDate = faker.date.soon(4, startDate);
 
-  let status = faker.random.arrayElement(Object.values(RetreatStatusEnum));
+  let status = faker.random.arrayElement(Object.values(LegacyRetreatStatusEnum));
 
   return { title, slug, startDate, endDate, createdAt, status };
 });

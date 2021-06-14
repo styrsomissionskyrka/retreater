@@ -1,8 +1,11 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["es5", "dom"],
+    "baseUrl": ".",
+    "jsx": "react-jsxdev",
+    "isolatedModules": false,
     "types": ["cypress", "@testing-library/cypress", "cypress-nextjs-auth0"]
   },
-  "include": ["**/*.ts*"]
+  "include": ["**/*.ts*"],
+  "exclude": ["node_modules"]
 }

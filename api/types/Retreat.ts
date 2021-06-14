@@ -1,150 +1,89 @@
-import { Prisma } from '@prisma/client';
-import { enumType, objectType, extendType, nonNull, stringArg, arg, inputObjectType, idArg, intArg } from 'nexus';
-import { UserInputError } from 'apollo-server-micro';
+import * as path from 'path';
+
+import * as n from 'nexus';
 import slugify from 'slug';
 
-import { compact } from 'lib/utils/array';
+import { ignoreNull } from '../utils';
 
-import { clearUndefined, authorizedWithRoles } from '../utils';
-import { User, OrderEnum, PaginatedQuery } from '.';
-
-export const RetreatStatusEnum = enumType({
-  name: 'RetreatStatusEnum',
-  members: ['PUBLISHED', 'DRAFT', 'ARCHIVED'],
-});
-
-export const RetreatOrderByEnum = enumType({
-  name: 'RetreatOrderByEnum',
-  members: {
-    START_DATE: 'startDate',
-    CREATED_AT: 'createdAt',
-    STATUS: 'status',
-  },
-});
-
-export const Retreat = objectType({
+export const Retreat = n.objectType({
   name: 'Retreat',
   sourceType: {
-    module: '@prisma/client',
-    export: 'Retreat',
+    module: path.join(process.cwd(), 'api/source-types.ts'),
+    export: 'StripeProduct',
   },
   definition(t) {
     t.nonNull.id('id');
-    t.nonNull.string('title');
-    t.nonNull.string('slug');
-
-    t.nonNull.field('status', { type: RetreatStatusEnum });
-    t.nonNull.date('createdAt');
-    t.nonNull.date('updatedAt');
-
-    t.field('createdBy', {
-      type: User,
-      authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
-      async resolve(source, _, ctx) {
-        if (source.createdById != null) return ctx.auth0.user.load(source.createdById);
-        return null;
-      },
+    t.nonNull.boolean('active');
+    t.nonNull.date('created', {
+      resolve: (source) => new Date(source.created * 1000),
+    });
+    t.nonNull.date('updated', {
+      resolve: (source) => new Date(source.updated * 1000),
     });
 
-    t.date('startDate');
-    t.date('endDate');
-    t.string('content');
+    t.string('name');
+    t.string('description');
+    t.string('url');
 
-    t.int('maxParticipants');
+    t.nonNull.list.nonNull.string('images');
   },
 });
 
-export const PaginatedRetreat = objectType({
-  name: 'PaginatedRetreat',
-  definition(t) {
-    t.implements(PaginatedQuery);
-    t.nonNull.list.nonNull.field('items', { type: Retreat });
-  },
-});
-
-export const RetreatQuery = extendType({
+export const RetreatQuery = n.extendType({
   type: 'Query',
   definition(t) {
-    t.field('retreats', {
-      type: nonNull(PaginatedRetreat),
-      args: {
-        page: nonNull(intArg({ default: 0 })),
-        perPage: nonNull(intArg({ default: 25 })),
-        order: nonNull(arg({ type: OrderEnum, default: 'asc' })),
-        orderBy: nonNull(arg({ type: RetreatOrderByEnum, default: 'startDate' })),
-        search: stringArg(),
-        status: arg({ type: RetreatStatusEnum }),
+    t.connectionField('retreats', {
+      type: Retreat,
+      additionalArgs: {
+        active: n.booleanArg({ description: 'https://stripe.com/docs/api/products/list#list_products-active' }),
       },
-      async resolve(_, args, ctx) {
-        let skip = args.perPage * args.page;
-        let take = args.perPage;
-
-        let where = {
-          AND: compact([
-            args.status != null ? { status: { in: args.status } } : { status: { not: 'ARCHIVED' as const } },
-            args.search != null
-              ? {
-                  OR: compact([{ title: { contains: args.search } }, { content: { contains: args.search } }]),
-                }
-              : null,
-          ]).filter(Boolean),
-        };
-
-        let retreats = await ctx.prisma.retreat.findMany({
-          take,
-          skip,
-          orderBy: { [args.orderBy]: args.order },
-          where,
+      cursorFromNode: (node) => node?.id!,
+      async nodes(_, args, ctx) {
+        const result = await ctx.stripe.products.list({
+          active: ignoreNull(args.active),
+          limit: args.first ? args.first + 1 : args.last ? args.last + 1 : undefined,
+          starting_after: ignoreNull(args.after),
+          ending_before: ignoreNull(args.before),
         });
 
-        let total = await ctx.prisma.retreat.count({ where });
-
-        let paginationMeta = {
-          hasNextPage: args.perPage * (args.page + 1) < total,
-          hasPreviousPage: args.page > 0,
-          currentPage: args.page,
-          totalPages: Math.ceil(total / (args.perPage || 1)),
-          perPage: args.perPage,
-          totalItems: total,
-        };
-
-        return { items: retreats, paginationMeta };
+        return result.data;
       },
     });
 
     t.field('retreat', {
       type: Retreat,
-      args: { id: idArg(), slug: stringArg() },
-      async resolve(_, args, ctx) {
-        if (isValidArgs(args)) return ctx.prisma.retreat.findUnique({ where: args });
-        throw new UserInputError('Query requires either an id or a slug input');
+      args: { id: n.nonNull(n.idArg()) },
+      resolve(_, args, ctx) {
+        try {
+          return ctx.stripe.products.retrieve(args.id);
+        } catch (error) {
+          return null;
+        }
       },
     });
   },
 });
 
-function isValidArgs(args: any): args is Prisma.RetreatWhereUniqueInput {
-  return args.id != null || args.slug != null;
-}
-
-export const RetreatMutation = extendType({
+export const RetreatMutation = n.extendType({
   type: 'Mutation',
   definition(t) {
-    t.field('createRetreatDraft', {
+    t.field('createRetreat', {
       type: Retreat,
-      args: { title: nonNull(stringArg()) },
-      authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
+      args: {
+        name: n.nonNull(n.stringArg()),
+        description: n.stringArg(),
+      },
       async resolve(_, args, ctx) {
-        let slug = slugify(args.title);
-
-        let similarSlugs = await ctx.prisma.retreat.count({
-          where: { slug: { contains: slug } },
+        let retreat = await ctx.stripe.products.create({
+          active: false,
+          name: args.name,
+          description: ignoreNull(args.description),
+          shippable: false,
         });
 
-        if (similarSlugs > 0) slug += `-${similarSlugs + 1}`;
-
-        let retreat = await ctx.prisma.retreat.create({
-          data: { title: args.title, slug, maxParticipants: 10 },
+        let slug = slugify(retreat.name);
+        await ctx.prisma.retreatMetadata.create({
+          data: { retreatId: retreat.id, slug },
         });
 
         return retreat;
@@ -154,39 +93,36 @@ export const RetreatMutation = extendType({
     t.field('updateRetreat', {
       type: Retreat,
       args: {
-        id: nonNull(idArg()),
-        input: nonNull(arg({ type: UpdateRetreatInput })),
+        id: n.nonNull(n.idArg()),
+        input: n.nonNull(n.arg({ type: UpdateRetreatInput })),
       },
-      authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
       async resolve(_, args, ctx) {
-        let data = clearUndefined(args.input);
-        let retreat = await ctx.prisma.retreat.update({ where: { id: args.id }, data });
-        return retreat;
+        return ctx.stripe.products.update(args.id, {
+          name: ignoreNull(args.input.name),
+          description: ignoreNull(args.input.description),
+          images: ignoreNull(args.input.images),
+        });
       },
     });
 
     t.field('setRetreatStatus', {
       type: Retreat,
       args: {
-        id: nonNull(idArg()),
-        status: nonNull(arg({ type: RetreatStatusEnum })),
+        id: n.nonNull(n.idArg()),
+        active: n.nonNull(n.booleanArg()),
       },
-      authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
-      async resolve(_, args, ctx) {
-        let retreat = await ctx.prisma.retreat.update({ where: { id: args.id }, data: { status: args.status } });
-        return retreat;
+      resolve(_, args, ctx) {
+        return ctx.stripe.products.update(args.id, { active: args.active });
       },
     });
   },
 });
 
-export const UpdateRetreatInput = inputObjectType({
+export const UpdateRetreatInput = n.inputObjectType({
   name: 'UpdateRetreatInput',
   definition(t) {
-    t.string('title');
-    t.string('content');
-    t.date('startDate');
-    t.date('endDate');
-    t.int('maxParticipants');
+    t.nonNull.string('name');
+    t.string('description');
+    t.list.nonNull.string('images');
   },
 });

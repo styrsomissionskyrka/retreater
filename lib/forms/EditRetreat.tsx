@@ -1,20 +1,18 @@
 import { SubmitHandler } from 'react-hook-form';
 
-import { gql, TypedDocumentNode, useMutation } from 'lib/graphql';
+import { ConnectedForm, toast } from 'lib/components';
 import {
-  EditRetreatFormQuery,
-  EditRetreatFormQueryVariables,
-  UpdateRetreatInput,
+  gql,
+  TypedDocumentNode,
   UpdateRetreatMutation,
   UpdateRetreatMutationVariables,
+  EditRetreatFieldsFragment,
+  useMutation,
+  UpdateRetreatInput,
 } from 'lib/graphql';
-import { ConnectedForm, toast } from 'lib/components';
-import * as log from 'lib/utils/log';
-
-export type EditRetreatType = NonNullable<EditRetreatFormQuery['retreat']>;
 
 interface EditRetreatProps {
-  retreat: EditRetreatType;
+  retreat: EditRetreatFieldsFragment;
 }
 
 const Form = ConnectedForm.createConnectedFormComponents<UpdateRetreatInput>();
@@ -22,40 +20,18 @@ const Form = ConnectedForm.createConnectedFormComponents<UpdateRetreatInput>();
 export const EditRetreat: React.FC<EditRetreatProps> = ({ retreat }) => {
   const [mutate] = useMutation(UPDATE_RETREAT_MUTATION);
 
-  const onSubmit: SubmitHandler<UpdateRetreatInput> = async (input) => {
-    try {
-      await mutate({ variables: { id: retreat.id, input } });
-      toast.success('Retreaten har uppdaterats.');
-    } catch (error) {
-      toast.error('Något gick snett.');
-      log.error(error);
-    }
+  const handleSubmit: SubmitHandler<UpdateRetreatInput> = async (input) => {
+    await toast.promise(mutate({ variables: { id: retreat.id, input } }), {
+      loading: '...',
+      success: 'Retreaten har uppdaterats.',
+      error: 'Något gick snett.',
+    });
   };
 
   return (
-    <Form.Form onSubmit={onSubmit}>
-      <Form.Input
-        name="title"
-        type="text"
-        label="Titel"
-        defaultValue={retreat.title}
-        required
-        options={{ minLength: 1 }}
-      />
-      {/* <Form.Input label="Slug" prefix="/retreater/" type="text" readOnly defaultValue={retreat.slug} /> */}
-      <Form.Row>
-        <Form.Input name="startDate" type="date" label="Startdatum" required defaultValue={retreat.startDate ?? ''} />
-        <Form.Input name="endDate" type="date" label="Slutdatum" required defaultValue={retreat.endDate ?? ''} />
-      </Form.Row>
-      <Form.Input
-        name="maxParticipants"
-        type="number"
-        label="Max antal deltagare"
-        defaultValue={retreat.maxParticipants ?? 10}
-        required
-        options={{ min: 0, max: 100 }}
-      />
-      <Form.Markdown name="content" label="Beskrivning" defaultValue={retreat.content ?? ''} />
+    <Form.Form onSubmit={handleSubmit}>
+      <Form.Input name="name" label="Titel" defaultValue={retreat.name ?? ''} />
+      <Form.Input name="description" label="Kort beskrivning" defaultValue={retreat.description ?? ''} />
 
       <Form.ActionRow>
         <Form.Submit>Uppdatera retreat</Form.Submit>
@@ -67,23 +43,9 @@ export const EditRetreat: React.FC<EditRetreatProps> = ({ retreat }) => {
 export const EDIT_RETREAT_FRAGMENT = gql`
   fragment EditRetreatFields on Retreat {
     id
-    slug
-    title
-    content
-    startDate
-    endDate
-    maxParticipants
+    name
+    description
   }
-`;
-
-export const EDIT_RETREAT_FORM_QUERY: TypedDocumentNode<EditRetreatFormQuery, EditRetreatFormQueryVariables> = gql`
-  query EditRetreatForm($id: ID!) {
-    retreat(id: $id) {
-      ...EditRetreatFields
-    }
-  }
-
-  ${EDIT_RETREAT_FRAGMENT}
 `;
 
 export const UPDATE_RETREAT_MUTATION: TypedDocumentNode<UpdateRetreatMutation, UpdateRetreatMutationVariables> = gql`

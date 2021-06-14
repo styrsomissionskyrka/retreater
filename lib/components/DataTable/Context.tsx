@@ -1,9 +1,8 @@
-import { createContext, useContext } from 'react';
 import { useTable, TableInstance, Column } from 'react-table';
 
-import { ensure } from 'lib/utils/assert';
+import { createStrictContext } from 'lib/utils/context';
 
-const DataTableContext = createContext<TableInstance<any> | null>(null);
+const [DataTableProvider, useDataTable] = createStrictContext<TableInstance<any>>('DataTableContext');
 
 interface DataTableProps<T extends object> {
   data: T[];
@@ -13,9 +12,7 @@ interface DataTableProps<T extends object> {
 
 export function Provider<T extends object>({ data, columns, children }: DataTableProps<T>) {
   const table = useTable<T>({ data, columns });
-  return <DataTableContext.Provider value={table}>{children}</DataTableContext.Provider>;
+  return <DataTableProvider value={table}>{children}</DataTableProvider>;
 }
 
-export function useDataTable<T extends object>() {
-  return ensure(useContext(DataTableContext)) as TableInstance<T>;
-}
+export { useDataTable };

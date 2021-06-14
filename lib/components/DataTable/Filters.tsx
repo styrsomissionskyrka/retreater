@@ -72,7 +72,7 @@ export function EnumFilter<T extends QueryObject>({
     <label>
       <span>{label}</span>
       <select
-        value={finalValue}
+        value={finalValue as string}
         onChange={(e) => {
           if (e.target.value === EMPTY) {
             setValue(null as T[keyof T]);
@@ -101,7 +101,7 @@ export function OrderFilter<T extends QueryObject>({ queryKey }: { queryKey: key
     <Button
       className="flex items-center space-x-2"
       onClick={() => setValue((value === OrderEnum.Asc ? OrderEnum.Desc : OrderEnum.Asc) as T[keyof T])}
-      icon={value === OrderEnum.Desc ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
+      iconStart={value === OrderEnum.Desc ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
     >
       {value === OrderEnum.Desc ? 'Stigande' : 'Fallande'}
     </Button>

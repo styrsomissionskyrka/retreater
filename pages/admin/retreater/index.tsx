@@ -5,30 +5,23 @@ import { IconCalendarEvent, IconUsers } from '@tabler/icons';
 import { gql, TypedDocumentNode, useQuery } from 'lib/graphql';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
 import { Layout, DataTable } from 'lib/components';
-import { useUserHasRoles, useSearchParams } from 'lib/hooks';
+import { useUserHasRoles, useSearchParams, extractCurrentParams } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
-import {
-  ensureOrderEnum,
-  ensureRetreatOrderByEnum,
-  ListRetreatsQuery,
-  ListRetreatsQueryVariables,
-  OrderEnum,
-  RetreatOrderByEnum,
-  RetreatStatusEnum,
-} from 'lib/graphql';
+import { ListRetreatsQuery, ListRetreatsQueryVariables } from 'lib/graphql';
 import { preloadQueries } from 'lib/graphql/ssr';
-import { PAGINATION_FRAGMENT } from 'lib/graphql/fragments';
+import { PAGE_INFO_FRAGMENT } from 'lib/graphql/fragments';
 import { CreateReatreat } from 'lib/forms';
+import { isBefore } from 'lib/utils/date-fns';
 
-type RetreatType = ListRetreatsQuery['retreats']['items'][number];
+type RetreatType = NonNullable<
+  NonNullable<NonNullable<NonNullable<ListRetreatsQuery['retreats']>['edges']>[number]>['node']
+>;
 type FiltersType = ListRetreatsQueryVariables;
 
 const initialVariables: FiltersType = {
-  page: 1,
-  perPage: 25,
-  order: OrderEnum.Desc,
-  orderBy: RetreatOrderByEnum.CreatedAt,
-  status: null,
+  first: 25,
+  after: null,
+  active: null,
 };
 
 const Retreats: NextPage = () => {
@@ -38,29 +31,31 @@ const Retreats: NextPage = () => {
     isAdmin ? { href: '/admin/anvandare', label: 'Användare', icon: <IconUsers size={16} /> } : null,
   ]);
 
-  const [variables, setVariables] = useSearchParams(initialVariables);
+  const [variables, _] = useSearchParams(initialVariables);
 
-  const { previousData, data = previousData } = useQuery(LIST_RETREATS_QUERY, {
-    variables: {
-      ...variables,
-      page: variables.page - 1,
-    },
-  });
+  const { previousData, data = previousData } = useQuery(LIST_RETREATS_QUERY, { variables });
 
-  const retreats = data?.retreats.items ?? [];
+  const retreats = compact(data?.retreats?.edges?.map((edge) => edge?.node) ?? []);
   const columns = useMemo<DataTable.Column<RetreatType>[]>(() => {
     return [
-      DataTable.Columns.createStatusCell(),
+      DataTable.Columns.createStatusCell({
+        accessor: 'active',
+        isIndeterminate: (ret) => {
+          let startDate = ret.metadata.startDate;
+          if (startDate == null) return false;
+          return isBefore(startDate, new Date());
+        },
+      }),
       DataTable.Columns.createLinkCell({
-        accessor: 'title',
-        Header: 'Titel',
+        accessor: 'name',
+        Header: 'Namn',
         getLink: (row) => `/admin/retreater/${row.id}`,
       }),
       DataTable.Columns.createDateRangeCell({
         Header: 'Datum',
-        accessor: (row: RetreatType) => ({ start: row.startDate, end: row.endDate }),
+        accessor: (row: RetreatType) => ({ start: row.metadata?.startDate, end: row.metadata?.endDate }),
       }),
-      DataTable.Columns.createRelativeDateCell({ Header: 'Skapad', accessor: 'createdAt' }),
+      DataTable.Columns.createRelativeDateCell({ Header: 'Skapad', accessor: 'created' }),
     ];
   }, []);
 
@@ -70,37 +65,10 @@ const Retreats: NextPage = () => {
     <Layout.Admin title="Retreater" backLink="/admin" navLinks={navLinks} actions={<CreateReatreat />}>
       <DataTable.Provider data={retreats} columns={columns}>
         <DataTable.Layout>
-          <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
-            <DataTable.Filters.EnumFilter<FiltersType>
-              queryKey="orderBy"
-              label="Sortera efter"
-              possibleValues={[
-                { value: RetreatOrderByEnum.CreatedAt, label: 'Skapad' },
-                { value: RetreatOrderByEnum.StartDate, label: 'Startdatum' },
-                { value: RetreatOrderByEnum.Status, label: 'Status' },
-              ]}
-            />
-
-            <DataTable.Filters.EnumFilter<FiltersType>
-              queryKey="status"
-              label="Status"
-              allowEmpty
-              possibleValues={[
-                { value: RetreatStatusEnum.Published, label: 'Publicerad' },
-                { value: RetreatStatusEnum.Draft, label: 'Utkast' },
-                { value: RetreatStatusEnum.Archived, label: 'Arkiverat' },
-              ]}
-            />
-
-            <DataTable.Filters.OrderFilter<FiltersType> queryKey="order" />
-          </DataTable.Filters>
-
           <DataTable.Table>
             <DataTable.Head />
             <DataTable.Body />
           </DataTable.Table>
-
-          <DataTable.Pagination meta={data.retreats.paginationMeta} />
         </DataTable.Layout>
       </DataTable.Provider>
     </Layout.Admin>
@@ -108,26 +76,25 @@ const Retreats: NextPage = () => {
 };
 
 export const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQueryVariables> = gql`
-  ${PAGINATION_FRAGMENT}
+  ${PAGE_INFO_FRAGMENT}
 
-  query ListRetreats(
-    $page: Int!
-    $perPage: Int!
-    $order: OrderEnum!
-    $orderBy: RetreatOrderByEnum!
-    $status: RetreatStatusEnum
-  ) {
-    retreats(page: $page, perPage: $perPage, order: $order, orderBy: $orderBy, status: $status) {
-      paginationMeta {
-        ...PaginationFields
+  query ListRetreats($first: Int!, $after: String, $active: Boolean) {
+    retreats(first: $first, after: $after, active: $active) {
+      pageInfo {
+        ...PageInfoFields
       }
-      items {
-        id
-        title
-        status
-        createdAt
-        startDate
-        endDate
+      edges {
+        node {
+          id
+          name
+          active
+          created
+          metadata {
+            id
+            startDate
+            endDate
+          }
+        }
       }
     }
   }
@@ -136,14 +103,6 @@ export const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetre
 export default authenticatedPage(Retreats);
 export const getServerSideProps = authenticatedSSP(
   preloadQueries<ListRetreatsQueryVariables>([
-    [
-      LIST_RETREATS_QUERY,
-      (ctx) => ({
-        page: Number(ctx.query.page ?? initialVariables.page) - 1,
-        perPage: Number(ctx.query.perPage ?? initialVariables.perPage),
-        order: ensureOrderEnum(ctx.query.order, OrderEnum.Asc),
-        orderBy: ensureRetreatOrderByEnum(ctx.query.orderBy, RetreatOrderByEnum.CreatedAt),
-      }),
-    ],
+    [LIST_RETREATS_QUERY, (ctx) => extractCurrentParams(ctx.query, initialVariables)],
   ]),
 );
