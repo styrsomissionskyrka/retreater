@@ -21,7 +21,8 @@ model Retreat {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  products Json
+  registrationFee String?
+  products        Json
 
   status  RetreatStatus @default(DRAFT)
   title   String        @db.VarChar(255)

@@ -6,7 +6,6 @@ import slugify from 'slug';
 import { compact } from '../../lib/utils/array';
 import { clearUndefined, authorizedWithRoles } from '../utils';
 import { OrderEnum, PaginatedQuery } from '.';
-import { Product } from './Product';
 
 export const RetreatStatusEnum = enumType({
   name: 'RetreatStatusEnum',
@@ -42,20 +41,6 @@ export const Retreat = objectType({
     t.string('content');
 
     t.int('maxParticipants');
-
-    t.nonNull.list.nonNull.field('products', {
-      type: Product,
-      async resolve(source, _, ctx) {
-        let ids: string[] = Array.isArray(source.products)
-          ? source.products.filter((i): i is string => typeof i === 'string')
-          : [];
-
-        if (ids.length < 1) return [];
-
-        let result = await ctx.stripe.products.list({ ids, limit: ids.length });
-        return result.data;
-      },
-    });
   },
 });
 

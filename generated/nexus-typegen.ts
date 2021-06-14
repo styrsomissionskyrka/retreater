@@ -168,6 +168,7 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     maxParticipants: number | null; // Int
     products: NexusGenRootTypes['Product'][]; // [Product!]!
+    registrationFee: NexusGenRootTypes['Product'] | null; // Product
     slug: string; // String!
     startDate: NexusGenScalars['Date'] | null; // Date
     status: NexusGenEnums['RetreatStatusEnum']; // RetreatStatusEnum!
@@ -246,6 +247,7 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
     maxParticipants: 'Int'
     products: 'Product'
+    registrationFee: 'Product'
     slug: 'String'
     startDate: 'Date'
     status: 'RetreatStatusEnum'

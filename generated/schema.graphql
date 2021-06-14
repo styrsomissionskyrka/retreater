@@ -76,6 +76,7 @@ type Retreat {
   id: ID!
   maxParticipants: Int
   products: [Product!]!
+  registrationFee: Product
   slug: String!
   startDate: Date
   status: RetreatStatusEnum!
