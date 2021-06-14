@@ -62,6 +62,26 @@ type PaginationMeta {
   totalPages: Int!
 }
 
+type Price {
+  active: Boolean!
+  amount: Int!
+  created: Date!
+  currency: String!
+  id: ID!
+  metadata: PriceMetadata!
+  parent: PriceParent!
+}
+
+type PriceMetadata {
+  createdAt: Date!
+  description: String
+  id: ID!
+  priceId: ID!
+  updatedAt: Date!
+}
+
+union PriceParent = Retreat
+
 type Query {
   me: User
   retreat(id: ID!): Retreat
@@ -95,6 +115,7 @@ type Retreat {
   images: [String!]!
   metadata: RetreatMetadata!
   name: String
+  prices(active: Boolean): [Price!]!
   updated: Date!
   url: String
 }

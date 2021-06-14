@@ -27,7 +27,7 @@ export const RetreatMetadata = n.objectType({
   },
 });
 
-export const ExtendedRetreat = n.extendType({
+export const RetreatWithMetadata = n.extendType({
   type: 'Retreat',
   definition(t) {
     t.nonNull.field('metadata', {

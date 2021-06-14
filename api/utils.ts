@@ -36,3 +36,7 @@ export function authorizedWithRoles(roles: UserRole[]) {
     return ctx.user != null && userHasRoles(ctx.user, roles);
   };
 }
+
+export function stripeTimestampToMs(seconds: number) {
+  return new Date(seconds * 1000);
+}

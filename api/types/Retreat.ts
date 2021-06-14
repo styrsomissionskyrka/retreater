@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as n from 'nexus';
 import slugify from 'slug';
 
-import { ignoreNull } from '../utils';
+import { ignoreNull, stripeTimestampToMs } from '../utils';
 
 export const Retreat = n.objectType({
   name: 'Retreat',
@@ -15,10 +15,10 @@ export const Retreat = n.objectType({
     t.nonNull.id('id');
     t.nonNull.boolean('active');
     t.nonNull.date('created', {
-      resolve: (source) => new Date(source.created * 1000),
+      resolve: (source) => stripeTimestampToMs(source.created),
     });
     t.nonNull.date('updated', {
-      resolve: (source) => new Date(source.updated * 1000),
+      resolve: (source) => stripeTimestampToMs(source.updated),
     });
 
     t.string('name');
@@ -79,6 +79,7 @@ export const RetreatMutation = n.extendType({
           name: args.name,
           description: ignoreNull(args.description),
           shippable: false,
+          metadata: { type: 'Retreat' },
         });
 
         let slug = slugify(retreat.name);
@@ -101,6 +102,7 @@ export const RetreatMutation = n.extendType({
           name: ignoreNull(args.input.name),
           description: ignoreNull(args.input.description),
           images: ignoreNull(args.input.images),
+          metadata: { type: 'Retreat' },
         });
       },
     });
@@ -112,7 +114,7 @@ export const RetreatMutation = n.extendType({
         active: n.nonNull(n.booleanArg()),
       },
       resolve(_, args, ctx) {
-        return ctx.stripe.products.update(args.id, { active: args.active });
+        return ctx.stripe.products.update(args.id, { active: args.active, metadata: { type: 'Retreat' } });
       },
     });
   },

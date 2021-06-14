@@ -5,8 +5,8 @@
 
 
 import { Context } from "./../api/context/index"
-import { StripeProduct } from "./../api/source-types"
-import { RetreatMetadata } from "@prisma/client"
+import { StripeProduct, StripePrice } from "./../api/source-types"
+import { RetreatMetadata, PriceMetadata } from "@prisma/client"
 import { core, connectionPluginCore } from "nexus"
 import { FieldAuthorizeResolver } from "nexus/dist/plugins/fieldAuthorizePlugin"
 declare global {
@@ -90,6 +90,8 @@ export interface NexusGenObjects {
     totalItems: number; // Int!
     totalPages: number; // Int!
   }
+  Price: StripePrice;
+  PriceMetadata: PriceMetadata;
   Query: {};
   Retreat: StripeProduct;
   RetreatConnection: { // root type
@@ -120,9 +122,10 @@ export interface NexusGenInterfaces {
 }
 
 export interface NexusGenUnions {
+  PriceParent: NexusGenRootTypes['Retreat'];
 }
 
-export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects
+export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects & NexusGenUnions
 
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
@@ -151,6 +154,22 @@ export interface NexusGenFieldTypes {
     totalItems: number; // Int!
     totalPages: number; // Int!
   }
+  Price: { // field return type
+    active: boolean; // Boolean!
+    amount: number; // Int!
+    created: NexusGenScalars['Date']; // Date!
+    currency: string; // String!
+    id: string; // ID!
+    metadata: NexusGenRootTypes['PriceMetadata']; // PriceMetadata!
+    parent: NexusGenRootTypes['PriceParent']; // PriceParent!
+  }
+  PriceMetadata: { // field return type
+    createdAt: NexusGenScalars['Date']; // Date!
+    description: string | null; // String
+    id: string; // ID!
+    priceId: string; // ID!
+    updatedAt: NexusGenScalars['Date']; // Date!
+  }
   Query: { // field return type
     me: NexusGenRootTypes['User'] | null; // User
     retreat: NexusGenRootTypes['Retreat'] | null; // Retreat
@@ -168,6 +187,7 @@ export interface NexusGenFieldTypes {
     images: string[]; // [String!]!
     metadata: NexusGenRootTypes['RetreatMetadata']; // RetreatMetadata!
     name: string | null; // String
+    prices: NexusGenRootTypes['Price'][]; // [Price!]!
     updated: NexusGenScalars['Date']; // Date!
     url: string | null; // String
   }
@@ -233,6 +253,22 @@ export interface NexusGenFieldTypeNames {
     totalItems: 'Int'
     totalPages: 'Int'
   }
+  Price: { // field return type name
+    active: 'Boolean'
+    amount: 'Int'
+    created: 'Date'
+    currency: 'String'
+    id: 'ID'
+    metadata: 'PriceMetadata'
+    parent: 'PriceParent'
+  }
+  PriceMetadata: { // field return type name
+    createdAt: 'Date'
+    description: 'String'
+    id: 'ID'
+    priceId: 'ID'
+    updatedAt: 'Date'
+  }
   Query: { // field return type name
     me: 'User'
     retreat: 'Retreat'
@@ -250,6 +286,7 @@ export interface NexusGenFieldTypeNames {
     images: 'String'
     metadata: 'RetreatMetadata'
     name: 'String'
+    prices: 'Price'
     updated: 'Date'
     url: 'String'
   }
@@ -338,9 +375,15 @@ export interface NexusGenArgTypes {
       search?: string | null; // String
     }
   }
+  Retreat: {
+    prices: { // args
+      active?: boolean | null; // Boolean
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {
+  PriceParent: "Retreat"
   PaginatedQuery: "PaginatedUser"
 }
 
@@ -358,11 +401,11 @@ export type NexusGenInterfaceNames = keyof NexusGenInterfaces;
 
 export type NexusGenScalarNames = keyof NexusGenScalars;
 
-export type NexusGenUnionNames = never;
+export type NexusGenUnionNames = keyof NexusGenUnions;
 
 export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType = "PaginatedQuery";
+export type NexusGenAbstractsUsingStrategyResolveType = "PaginatedQuery" | "PriceParent";
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {
