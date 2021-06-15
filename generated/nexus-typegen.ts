@@ -168,6 +168,7 @@ export interface NexusGenFieldTypes {
     created: NexusGenScalars['Date']; // Date!
     currency: string; // String!
     id: string; // ID!
+    nickname: string | null; // String
   }
   Product: { // field return type
     active: boolean; // Boolean!
@@ -251,6 +252,7 @@ export interface NexusGenFieldTypeNames {
     created: 'Date'
     currency: 'String'
     id: 'ID'
+    nickname: 'String'
   }
   Product: { // field return type name
     active: 'Boolean'
@@ -359,6 +361,11 @@ export interface NexusGenArgTypes {
       page: number; // Int!
       perPage: number; // Int!
       search?: string | null; // String
+    }
+  }
+  Retreat: {
+    products: { // args
+      active?: boolean | null; // Boolean
     }
   }
 }

@@ -28,7 +28,7 @@ export function useSetRetreatStatus(): [
   (id: string, status: RetreatStatusEnum) => Promise<FetchResult<UpdateRetreatStatusMutation>>,
   MutationTuple<UpdateRetreatStatusMutation, UpdateRetreatStatusMutationVariables>[1],
 ] {
-  const [mutate, data] = useMutation(UPDATE_RETREAT_STATUS_MUTATION);
+  const [mutate, data] = useMutation(UPDATE_RETREAT_STATUS_MUTATION, { refetchQueries: ['ListRetreats'] });
   const setRetreatStatus = useCallback(
     (id: string, status: RetreatStatusEnum) => mutate({ variables: { id, status } }),
     [mutate],

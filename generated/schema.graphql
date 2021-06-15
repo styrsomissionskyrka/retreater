@@ -65,6 +65,7 @@ type Price {
   created: Date!
   currency: String!
   id: ID!
+  nickname: String
 }
 
 type Product {
@@ -93,7 +94,7 @@ type Retreat {
   endDate: Date
   id: ID!
   maxParticipants: Int
-  products: [Product!]!
+  products(active: Boolean): [Product!]!
   registrationFee: Product
   slug: String!
   startDate: Date

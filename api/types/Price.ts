@@ -14,6 +14,7 @@ export const Price = n.objectType({
     t.nonNull.id('id');
     t.nonNull.boolean('active');
     t.nonNull.string('currency');
+    t.string('nickname');
     t.nonNull.date('created', { resolve: (source) => stripeTimestampToMs(source.created) });
     t.nonNull.int('amount', { resolve: (source) => source.unit_amount ?? 0 });
   },

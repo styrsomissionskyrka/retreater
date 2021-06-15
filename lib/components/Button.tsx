@@ -2,7 +2,8 @@ import classNames from 'classnames';
 import { forwardRef } from 'react';
 
 type ButtonVariant = 'default' | 'outline' | 'danger';
-type ButtonSize = 'small' | 'normal' | 'large' | 'square';
+type ButtonSizeBase = 'small' | 'normal' | 'large';
+type ButtonSize = ButtonSizeBase | `square-${ButtonSizeBase}`;
 
 export type ButtonProps = Omit<JSX.IntrinsicElements['button'], 'key' | 'ref'> & {
   iconStart?: React.ReactNode;
@@ -41,7 +42,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           size === 'small' && 'h-8 px-2',
           size === 'normal' && 'h-10 px-5',
           size === 'large' && 'h-12 px-6',
-          size === 'square' && 'h-10 w-10',
+          size === 'square-small' && 'h-8 w-8',
+          size === 'square-normal' && 'h-10 w-10',
+          size === 'square-large' && 'h-12 w-12',
 
           className,
         )}

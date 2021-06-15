@@ -42,11 +42,12 @@ export const RetreatWithProducts = n.extendType({
 
     t.nonNull.list.nonNull.field('products', {
       type: Product,
-      async resolve(source, _, ctx) {
+      args: { active: n.booleanArg() },
+      async resolve(source, args, ctx) {
         let ids = ensureProductArray(source.products);
         if (ids.length < 1) return [];
 
-        let result = await ctx.stripe.products.list({ ids, limit: ids.length });
+        let result = await ctx.stripe.products.list({ ids, limit: ids.length, active: ignoreNull(args.active) });
         return result.data;
       },
     });

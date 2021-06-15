@@ -7,7 +7,15 @@ import { Layout } from 'lib/components';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
 import { preloadQueries } from 'lib/graphql/ssr';
 import { assert } from 'lib/utils/assert';
-import { EditRetreat, EditRetreatStatus, EDIT_RETREAT_FRAGMENT, EDIT_RETREAT_STATUS_FRAGMENT } from 'lib/forms';
+import {
+  CreateReatreatProduct,
+  EditRetreat,
+  EditRetreatStatus,
+  EditRetreatPricing,
+  EDIT_RETREAT_FRAGMENT,
+  EDIT_RETREAT_STATUS_FRAGMENT,
+  EDIT_RETREAT_PRICING_FIELDS,
+} from 'lib/forms';
 
 const Retreat: NextPage = () => {
   const router = useRouter();
@@ -20,23 +28,32 @@ const Retreat: NextPage = () => {
   if (retreat == null) return <p>Loading...</p>;
 
   const page = Array.isArray(slug) ? slug[0] : null ?? 'index';
+
   let form: React.ReactNode;
+  let actions: React.ReactNode;
+  let title: string;
 
   switch (page) {
     case 'index':
       form = <EditRetreat retreat={retreat} />;
+      actions = <EditRetreatStatus retreat={retreat} />;
+      title = 'Redigera information';
       break;
 
     case 'priser':
-      form = null;
+      form = <EditRetreatPricing retreat={retreat} />;
+      actions = <CreateReatreatProduct retreatId={retreat.id} />;
+      title = 'Redigera priser';
       break;
 
     default:
       form = null;
+      actions = <EditRetreatStatus retreat={retreat} />;
+      title = 'Redigera retreat';
   }
 
   return (
-    <RetreatLayout title="Redigera information" id={id}>
+    <RetreatLayout title={title} id={id} actions={actions}>
       {form}
     </RetreatLayout>
   );
@@ -47,11 +64,13 @@ export const EDIT_RETREAT_FORM_QUERY: TypedDocumentNode<EditRetreatFormQuery, Ed
     retreat(id: $id) {
       ...EditRetreatFields
       ...EditRetreatStatusFields
+      ...EditRetreatPricingFields
     }
   }
 
   ${EDIT_RETREAT_FRAGMENT}
   ${EDIT_RETREAT_STATUS_FRAGMENT}
+  ${EDIT_RETREAT_PRICING_FIELDS}
 `;
 
 export default authenticatedPage(Retreat);
@@ -68,7 +87,12 @@ export const getServerSideProps = authenticatedSSP(
   ]),
 );
 
-export const RetreatLayout: React.FC<{ id: string; title: React.ReactNode }> = ({ id, title, children }) => {
+export const RetreatLayout: React.FC<{ id: string; title: React.ReactNode; actions?: React.ReactNode }> = ({
+  id,
+  title,
+  actions,
+  children,
+}) => {
   const { data } = useQuery(EDIT_RETREAT_FORM_QUERY, { variables: { id } });
   const navLinks = useRetreatNavLinks(id);
 
@@ -81,7 +105,7 @@ export const RetreatLayout: React.FC<{ id: string; title: React.ReactNode }> = (
       headerTitle={title}
       backLink="/admin/retreater"
       navLinks={navLinks}
-      actions={retreat ? <EditRetreatStatus retreat={retreat} /> : null}
+      actions={actions}
       shallowLinks
     >
       {children}

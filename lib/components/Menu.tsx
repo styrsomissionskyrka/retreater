@@ -66,7 +66,9 @@ export const Wrapper: React.FC = ({ children }) => {
 
 export const ContextButton: React.FC<{ label?: string }> = ({ label = 'Meny' }) => {
   const props = useMenuButton();
-  return <UIButton {...props} size="square" variant="outline" iconStart={<IconDots size={16} />} aria-label={label} />;
+  return (
+    <UIButton {...props} size="square-small" variant="outline" iconStart={<IconDots size={16} />} aria-label={label} />
+  );
 };
 
 export const Button: React.FC<Omit<ButtonProps, keyof MenuButtonProps> & { loading?: boolean }> = ({
