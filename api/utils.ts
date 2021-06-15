@@ -1,4 +1,5 @@
 import { Claims, UserRole } from '@auth0/nextjs-auth0';
+import { Prisma } from '@prisma/client';
 
 import { arrayify } from '../lib/utils/array';
 import { Context } from './context';
@@ -39,4 +40,9 @@ export function authorizedWithRoles(roles: UserRole[]) {
 
 export function stripeTimestampToMs(seconds: number) {
   return new Date(seconds * 1000);
+}
+
+export function ensureProductArray(value: Prisma.JsonValue | null): string[] {
+  if (Array.isArray(value)) return value.filter((i): i is string => typeof i === 'string');
+  return [];
 }

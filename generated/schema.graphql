@@ -2,14 +2,32 @@
 ### Do not make changes to this file directly
 
 
+input CreatePriceInput {
+  active: Boolean
+  amount: Int!
+  currency: String!
+  nickname: String
+}
+
+input CreateProductInput {
+  active: Boolean
+  description: String
+  images: [String!]
+  name: String!
+}
+
 """
 The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
 """
 scalar Date
 
 type Mutation {
+  createPrice(input: CreatePriceInput!, productId: ID!): Price
+  createProduct(input: CreateProductInput!, retreatId: ID!): Product
   createRetreatDraft(title: String!): Retreat
   setRetreatStatus(id: ID!, status: RetreatStatusEnum!): Retreat
+  updatePrice(id: ID!, input: UpdatePriceInput!): Price
+  updateProduct(id: ID!, input: UpdateProductInput!): Product
   updateRetreat(id: ID!, input: UpdateRetreatInput!): Retreat
 }
 
@@ -94,6 +112,18 @@ enum RetreatStatusEnum {
   ARCHIVED
   DRAFT
   PUBLISHED
+}
+
+input UpdatePriceInput {
+  active: Boolean
+  nickname: String
+}
+
+input UpdateProductInput {
+  active: Boolean
+  description: String
+  images: [String!]
+  name: String
 }
 
 input UpdateRetreatInput {

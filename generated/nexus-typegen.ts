@@ -41,6 +41,28 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  CreatePriceInput: { // input type
+    active?: boolean | null; // Boolean
+    amount: number; // Int!
+    currency: string; // String!
+    nickname?: string | null; // String
+  }
+  CreateProductInput: { // input type
+    active?: boolean | null; // Boolean
+    description?: string | null; // String
+    images?: string[] | null; // [String!]
+    name: string; // String!
+  }
+  UpdatePriceInput: { // input type
+    active?: boolean | null; // Boolean
+    nickname?: string | null; // String
+  }
+  UpdateProductInput: { // input type
+    active?: boolean | null; // Boolean
+    description?: string | null; // String
+    images?: string[] | null; // [String!]
+    name?: string | null; // String
+  }
   UpdateRetreatInput: { // input type
     content?: string | null; // String
     endDate?: NexusGenScalars['Date'] | null; // Date
@@ -116,8 +138,12 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
+    createPrice: NexusGenRootTypes['Price'] | null; // Price
+    createProduct: NexusGenRootTypes['Product'] | null; // Product
     createRetreatDraft: NexusGenRootTypes['Retreat'] | null; // Retreat
     setRetreatStatus: NexusGenRootTypes['Retreat'] | null; // Retreat
+    updatePrice: NexusGenRootTypes['Price'] | null; // Price
+    updateProduct: NexusGenRootTypes['Product'] | null; // Product
     updateRetreat: NexusGenRootTypes['Retreat'] | null; // Retreat
   }
   PaginatedRetreat: { // field return type
@@ -195,8 +221,12 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
+    createPrice: 'Price'
+    createProduct: 'Product'
     createRetreatDraft: 'Retreat'
     setRetreatStatus: 'Retreat'
+    updatePrice: 'Price'
+    updateProduct: 'Product'
     updateRetreat: 'Retreat'
   }
   PaginatedRetreat: { // field return type name
@@ -274,12 +304,28 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    createPrice: { // args
+      input: NexusGenInputs['CreatePriceInput']; // CreatePriceInput!
+      productId: string; // ID!
+    }
+    createProduct: { // args
+      input: NexusGenInputs['CreateProductInput']; // CreateProductInput!
+      retreatId: string; // ID!
+    }
     createRetreatDraft: { // args
       title: string; // String!
     }
     setRetreatStatus: { // args
       id: string; // ID!
       status: NexusGenEnums['RetreatStatusEnum']; // RetreatStatusEnum!
+    }
+    updatePrice: { // args
+      id: string; // ID!
+      input: NexusGenInputs['UpdatePriceInput']; // UpdatePriceInput!
+    }
+    updateProduct: { // args
+      id: string; // ID!
+      input: NexusGenInputs['UpdateProductInput']; // UpdateProductInput!
     }
     updateRetreat: { // args
       id: string; // ID!

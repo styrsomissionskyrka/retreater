@@ -32,3 +32,57 @@ export const ProductWithPrice = n.extendType({
     });
   },
 });
+
+export const PriceMutation = n.extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('createPrice', {
+      type: Price,
+      args: {
+        productId: n.nonNull(n.idArg()),
+        input: n.nonNull(n.arg({ type: CreatePriceInput })),
+      },
+      resolve(_, args, ctx) {
+        return ctx.stripe.prices.create({
+          product: args.productId,
+          currency: args.input.currency,
+          unit_amount: args.input.amount,
+          active: ignoreNull(args.input.active),
+          nickname: ignoreNull(args.input.nickname),
+        });
+      },
+    });
+
+    t.field('updatePrice', {
+      type: Price,
+      args: {
+        id: n.nonNull(n.idArg()),
+        input: n.nonNull(n.arg({ type: UpdatePriceInput })),
+      },
+      resolve(_, args, ctx) {
+        return ctx.stripe.prices.update(args.id, {
+          active: ignoreNull(args.input.active),
+          nickname: ignoreNull(args.input.nickname),
+        });
+      },
+    });
+  },
+});
+
+export const CreatePriceInput = n.inputObjectType({
+  name: 'CreatePriceInput',
+  definition(t) {
+    t.nonNull.string('currency');
+    t.nonNull.int('amount');
+    t.boolean('active');
+    t.string('nickname');
+  },
+});
+
+export const UpdatePriceInput = n.inputObjectType({
+  name: 'UpdatePriceInput',
+  definition(t) {
+    t.boolean('active');
+    t.string('nickname');
+  },
+});
