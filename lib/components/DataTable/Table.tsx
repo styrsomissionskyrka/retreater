@@ -1,4 +1,6 @@
 /* eslint-disable react/jsx-key */
+import { Fragment } from 'react';
+
 import * as UI from '../Table';
 import { useDataTable } from './Context';
 
@@ -23,18 +25,26 @@ export const Head: React.FC = () => {
 };
 
 export const Body: React.FC = () => {
-  const { getTableBodyProps, rows, prepareRow } = useDataTable();
-
+  const { getTableBodyProps, rows, prepareRow, visibleColumns, renderExpandedRow } = useDataTable();
   return (
     <UI.Body {...getTableBodyProps()}>
       {rows.map((row) => {
         prepareRow(row);
+        let { key, ...rowProps } = row.getRowProps();
         return (
-          <UI.BodyRow {...row.getRowProps()}>
-            {row.cells.map((cell) => {
-              return <UI.BodyCell {...cell.getCellProps()}>{cell.render('Cell')}</UI.BodyCell>;
-            })}
-          </UI.BodyRow>
+          <Fragment key={key}>
+            <UI.BodyRow {...rowProps}>
+              {row.cells.map((cell) => {
+                return <UI.BodyCell {...cell.getCellProps()}>{cell.render('Cell')}</UI.BodyCell>;
+              })}
+            </UI.BodyRow>
+            {row.isExpanded && typeof renderExpandedRow === 'function' ? (
+              <UI.BodyRow {...rowProps}>
+                <UI.BodyCell />
+                <UI.BodyCell colSpan={visibleColumns.length - 1}>{renderExpandedRow(row)}</UI.BodyCell>
+              </UI.BodyRow>
+            ) : null}
+          </Fragment>
         );
       })}
     </UI.Body>

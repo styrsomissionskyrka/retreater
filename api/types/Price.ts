@@ -37,6 +37,27 @@ export const ProductWithPrice = n.extendType({
 export const PriceMutation = n.extendType({
   type: 'Mutation',
   definition(t) {
+    t.field('updateProductPrice', {
+      type: Price,
+      args: {
+        productId: n.nonNull(n.idArg()),
+        input: n.nonNull(n.arg({ type: CreatePriceInput })),
+      },
+      async resolve(_, args, ctx) {
+        let existingPrices = await ctx.stripe.prices.list({ product: args.productId, limit: 100, active: true });
+        await Promise.all(existingPrices.data.map(({ id }) => ctx.stripe.prices.update(id, { active: false })));
+        let newPrice = await ctx.stripe.prices.create({
+          product: args.productId,
+          currency: args.input.currency,
+          unit_amount: args.input.amount,
+          active: ignoreNull(args.input.active),
+          nickname: ignoreNull(args.input.nickname),
+        });
+
+        return newPrice;
+      },
+    });
+
     t.field('createPrice', {
       type: Price,
       args: {

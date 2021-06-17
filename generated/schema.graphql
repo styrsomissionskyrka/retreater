@@ -28,6 +28,7 @@ type Mutation {
   setRetreatStatus(id: ID!, status: RetreatStatusEnum!): Retreat
   updatePrice(id: ID!, input: UpdatePriceInput!): Price
   updateProduct(id: ID!, input: UpdateProductInput!): Product
+  updateProductPrice(input: CreatePriceInput!, productId: ID!): Price
   updateRetreat(id: ID!, input: UpdateRetreatInput!): Retreat
 }
 

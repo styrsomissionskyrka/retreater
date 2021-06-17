@@ -144,6 +144,7 @@ export interface NexusGenFieldTypes {
     setRetreatStatus: NexusGenRootTypes['Retreat'] | null; // Retreat
     updatePrice: NexusGenRootTypes['Price'] | null; // Price
     updateProduct: NexusGenRootTypes['Product'] | null; // Product
+    updateProductPrice: NexusGenRootTypes['Price'] | null; // Price
     updateRetreat: NexusGenRootTypes['Retreat'] | null; // Retreat
   }
   PaginatedRetreat: { // field return type
@@ -228,6 +229,7 @@ export interface NexusGenFieldTypeNames {
     setRetreatStatus: 'Retreat'
     updatePrice: 'Price'
     updateProduct: 'Product'
+    updateProductPrice: 'Price'
     updateRetreat: 'Retreat'
   }
   PaginatedRetreat: { // field return type name
@@ -328,6 +330,10 @@ export interface NexusGenArgTypes {
     updateProduct: { // args
       id: string; // ID!
       input: NexusGenInputs['UpdateProductInput']; // UpdateProductInput!
+    }
+    updateProductPrice: { // args
+      input: NexusGenInputs['CreatePriceInput']; // CreatePriceInput!
+      productId: string; // ID!
     }
     updateRetreat: { // args
       id: string; // ID!

@@ -5,8 +5,10 @@ import classNames from 'classnames';
 
 import { format, formatISO, formatRelative } from 'lib/utils/date-fns';
 import { RetreatStatusEnum } from 'lib/graphql';
+import { formatMoney } from 'lib/utils/money';
 
 import { Link, Menu } from '../';
+import { BrowserOnly } from '../BrowserOnly';
 
 export function createStatusCell<T extends object>({
   isIndeterminate,
@@ -117,6 +119,15 @@ export function createContextMenuCell<T extends object>({ actions, ...config }: 
           </Menu.Actions>
         </Menu.Wrapper>
       );
+    },
+  };
+}
+
+export function createCurrencyCell<T extends { amount: number; currency: string }>(config: Column<T>): Column<T> {
+  return {
+    ...config,
+    Cell(props: CellProps<T, unknown>) {
+      return <BrowserOnly>{formatMoney(props.row.original.amount, props.row.original.currency)}</BrowserOnly>;
     },
   };
 }

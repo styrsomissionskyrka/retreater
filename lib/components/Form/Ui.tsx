@@ -1,7 +1,8 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useRef } from 'react';
 import classNames from 'classnames';
 
 import { ElementProps } from 'lib/utils/types';
+import { useComposedRefs, useResizedTextarea } from 'lib/hooks';
 
 import { Button } from '../Button';
 import { Spinner } from '../Spinner';
@@ -46,7 +47,7 @@ export const Label: React.FC<LabelProps> = ({ input, children, error, ...props }
   return (
     <div className="w-full space-y-2">
       <label {...props} className={classNames(props.className, 'flex flex-col space-y-2 w-full')}>
-        <span>{children}</span>
+        {children ? <span>{children}</span> : null}
         <div className="w-full flex">{input}</div>
       </label>
       {error != null ? (
@@ -59,46 +60,106 @@ export const Label: React.FC<LabelProps> = ({ input, children, error, ...props }
 };
 
 export type InputProps = ElementProps<'input'> & {
-  label: React.ReactNode;
+  label?: React.ReactNode;
   prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
   error?: React.ReactNode;
+  align?: 'left' | 'right';
 };
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, prefix, error, ...props }, ref) => {
-  let invalid = error != null;
-  return (
-    <Label
-      error={error}
-      input={
-        <div className="flex items-center w-full focus-within:outline-black">
-          {prefix != null ? (
-            <span className="h-10 flex items-center px-2 border border-black border-r-0 rounded-l bg-black text-white">
-              {prefix}
-            </span>
-          ) : null}
-          <input
-            {...props}
-            ref={ref}
-            aria-invalid={invalid}
-            className={classNames(
-              'rounded leading-none h-10 flex-1 px-2',
-              'even:rounded-l-none',
-              'outline-none',
-              !invalid && 'border border-black',
-              invalid && 'border-red-500 border-2',
-            )}
-          />
-        </div>
-      }
-    >
-      {label}
-    </Label>
-  );
-});
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, prefix, suffix, error, align = 'left', disabled, ...props }, ref) => {
+    let invalid = error != null;
+    return (
+      <Label
+        error={error}
+        input={
+          <div className="flex items-center w-full focus-within:outline-black">
+            {prefix != null ? (
+              <span className="h-10 flex items-center px-2 border border-black border-r-0 rounded-l bg-black text-white">
+                {prefix}
+              </span>
+            ) : null}
+            <input
+              {...props}
+              ref={ref}
+              disabled={disabled}
+              aria-invalid={invalid}
+              className={classNames(
+                'leading-none h-10 flex-1 px-2',
+                'first:rounded-l last:rounded-r',
+                'outline-none',
+                'disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-500',
+                !invalid && 'border border-black',
+                invalid && 'border-red-500 border-2',
+                align === 'left' && 'text-left',
+                align === 'right' && 'text-right',
+              )}
+            />
+            {suffix != null ? (
+              <span
+                className={classNames(
+                  'h-10 flex items-center px-2 border border-l-0 rounded-r text-white',
+                  !disabled && 'bg-black border-black',
+                  disabled && 'bg-gray-500 border-gray-500',
+                )}
+              >
+                {suffix}
+              </span>
+            ) : null}
+          </div>
+        }
+      >
+        {label}
+      </Label>
+    );
+  },
+);
 
 Input.displayName = 'Form.Input';
 
-export type SelectProps = ElementProps<'select'>;
+export type TextareaProps = ElementProps<'textarea'> & {
+  label?: React.ReactNode;
+  error?: React.ReactNode;
+};
+
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ label, error, disabled, ...props }, forwardedRef) => {
+    let invalid = error != null;
+    let ref = useRef<HTMLTextAreaElement>(null);
+    let compoundRef = useComposedRefs(ref, forwardedRef);
+
+    useResizedTextarea(ref, { minRows: 3 });
+
+    return (
+      <Label
+        error={error}
+        input={
+          <div className="flex items-center w-full focus-within:outline-black">
+            <textarea
+              {...props}
+              ref={compoundRef}
+              disabled={disabled}
+              aria-invalid={invalid}
+              className={classNames(
+                'leading-none flex-1 px-2 pt-3 pb-2',
+                'first:rounded-l last:rounded-r',
+                'outline-none resize-none',
+                'disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-500',
+                !invalid && 'border border-black',
+                invalid && 'border-red-500 border-2',
+              )}
+            />
+          </div>
+        }
+      >
+        {label}
+      </Label>
+    );
+  },
+);
+
+Textarea.displayName = 'Form.Textarea';
 
 export type SubmitProps = Omit<ElementProps<'button'>, 'type'> & { isSubmitting?: boolean };
 
