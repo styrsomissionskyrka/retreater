@@ -48,7 +48,12 @@ const ExpandedToggle: React.FC<{ isExpanded: boolean } & TableExpandedToggleProp
       type="button"
       aria-label="Visa mer"
       aria-pressed={isExpanded ? 'true' : 'false'}
-      className={classNames('flex items-center', 'cursor-pointer text-black')}
+      className={classNames(
+        'flex items-center justify-center',
+        'cursor-pointer text-black',
+        'w-full h-full',
+        'focus:outline-black',
+      )}
     >
       {isExpanded ? <IconChevronDown size={16} /> : <IconChevronRight size={16} />}
     </button>

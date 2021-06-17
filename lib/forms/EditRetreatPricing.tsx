@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { RenderExpandedRow } from 'react-table';
+import { useMemo, useState, useCallback } from 'react';
+import { RenderExpandedRow, Row } from 'react-table';
 
 import {
   gql,
@@ -14,7 +14,7 @@ import {
   useMutation,
   TypedDocumentNode,
 } from 'lib/graphql';
-import { Form, BrowserOnly, DataTable, Spinner, ToggleButton } from 'lib/components';
+import { Form, BrowserOnly, DataTable, Spinner, ToggleButton, Link } from 'lib/components';
 import { formatCents, toCents } from 'lib/utils/money';
 
 interface EditPricingProps {
@@ -48,11 +48,13 @@ export const EditRetreatPricing: React.FC<EditPricingProps> = ({ retreat }) => {
     [],
   );
 
+  const renderExpandedRow: RenderExpandedRow<ColumnData> = useCallback((row) => <DescriptionCell {...row} />, []);
+
   return (
     <DataTable.Provider
       data={data}
       columns={columns}
-      renderExpandedRow={DescriptionCell}
+      renderExpandedRow={renderExpandedRow}
       hooks={[DataTable.Plugins.useExpanded]}
     >
       <DataTable.Layout>
@@ -139,6 +141,7 @@ const NameCell: DataTable.Renderer<DataTable.CellProps<ColumnData, string | null
       disabled={loading || !row.original.active}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
+      aria-label={`Namn för ${row.original.name ?? row.original.id}`}
     />
   );
 };
@@ -241,7 +244,7 @@ const ActiveCell: DataTable.Renderer<DataTable.CellProps<ColumnData, boolean>> =
   );
 };
 
-const DescriptionCell: RenderExpandedRow<ColumnData> = ({ original }) => {
+const DescriptionCell: React.FC<Row<ColumnData>> = ({ original }) => {
   const initialValue = original.description ?? '';
   const [updateDescription, { loading }] = useMutation(UPDATE_PRODUCT);
 
@@ -257,8 +260,26 @@ const DescriptionCell: RenderExpandedRow<ColumnData> = ({ original }) => {
   };
 
   return (
-    <div className="w-1/3">
-      <Form.Textarea defaultValue={initialValue} placeholder="Beskrivning" onBlur={handleBlur} disabled={loading} />
+    <div className="flex w-full">
+      <div className="w-1/3">
+        <Form.Textarea
+          defaultValue={initialValue}
+          placeholder="Beskrivning"
+          aria-label={`Beskrivning av ${original.name ?? original.id}`}
+          onBlur={handleBlur}
+          disabled={loading || !original.active}
+        />
+      </div>
+
+      <div className="ml-auto flex flex-col space-y-2 justify-end">
+        <Link
+          href={`https://dashboard.stripe.com/test/products/${original.id}`}
+          target="_blank"
+          className="text-blue-500 hover:text-blue-700"
+        >
+          Visa produkten i Stripe
+        </Link>
+      </div>
     </div>
   );
 };

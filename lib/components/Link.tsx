@@ -1,5 +1,5 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-// eslint-disable-next-line no-restricted-imports
+/* eslint-disable jsx-a11y/anchor-is-valid, no-restricted-imports */
+import classNames from 'classnames';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import { useRouter } from 'next/router';
 import React, { forwardRef } from 'react';
@@ -8,11 +8,17 @@ type LinkProps = Omit<NextLinkProps, 'as' | 'passHref'> &
   Omit<React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>, 'href' | 'ref'>;
 
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ href, replace, scroll, shallow, prefetch, locale, children, ...anchor }, ref) => {
+  ({ href, replace, scroll, shallow, prefetch, locale, children, target, rel: passedRel, ...anchor }, ref) => {
+    let rel = passedRel;
+    if (target === '_blank' && ref != null) {
+      rel = 'noopener noreferrer';
+    }
+
     return (
       <NextLink href={href} replace={replace} scroll={scroll} shallow={shallow} prefetch={prefetch} locale={locale}>
-        <a {...anchor} ref={ref}>
+        <a {...anchor} ref={ref} target={target} rel={rel}>
           {children}
+          {target === '_blank' ? ' ↗' : ''}
         </a>
       </NextLink>
     );
@@ -24,15 +30,15 @@ Link.displayName = 'Link';
 type NavLinkProps = LinkProps & { activeClassName?: string };
 
 export const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
-  ({ href, className, activeClassName, children, ...props }, ref) => {
+  ({ href, className: passedClassName, activeClassName, children, ...props }, ref) => {
     const router = useRouter();
 
     let h = typeof href === 'string' ? href : href.pathname ?? '';
     let isActive = router.asPath === h;
-    let c = [className, isActive ? activeClassName : ''].join(' ').trim();
+    let passedClass = classNames(passedClassName, isActive && activeClassName);
 
     return (
-      <Link {...props} ref={ref} href={href} className={c}>
+      <Link {...props} ref={ref} href={href} className={passedClass}>
         {children}
       </Link>
     );

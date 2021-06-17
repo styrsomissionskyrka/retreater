@@ -1,5 +1,5 @@
-/* eslint-disable react/jsx-key */
 import { Fragment } from 'react';
+import classNames from 'classnames';
 
 import * as UI from '../Table';
 import { useDataTable } from './Context';
@@ -13,13 +13,21 @@ export const Head: React.FC = () => {
   const { headerGroups } = useDataTable();
   return (
     <UI.Head>
-      {headerGroups.map((headerGroup) => (
-        <UI.HeadRow {...headerGroup.getHeaderGroupProps()}>
-          {headerGroup.headers.map((column) => (
-            <UI.HeadCell {...column.getHeaderProps()}>{column.render('Header')}</UI.HeadCell>
-          ))}
-        </UI.HeadRow>
-      ))}
+      {headerGroups.map((headerGroup) => {
+        let { key, ...headerGroupProps } = headerGroup.getHeaderGroupProps();
+        return (
+          <UI.HeadRow {...headerGroupProps} key={key}>
+            {headerGroup.headers.map((column) => {
+              let { key, ...headerProps } = column.getHeaderProps();
+              return (
+                <UI.HeadCell {...headerProps} key={key}>
+                  {column.render('Header')}
+                </UI.HeadCell>
+              );
+            })}
+          </UI.HeadRow>
+        );
+      })}
     </UI.Head>
   );
 };
@@ -33,13 +41,18 @@ export const Body: React.FC = () => {
         let { key, ...rowProps } = row.getRowProps();
         return (
           <Fragment key={key}>
-            <UI.BodyRow {...rowProps}>
+            <UI.BodyRow {...rowProps} className={classNames(row.isExpanded && 'bg-gray-100')}>
               {row.cells.map((cell) => {
-                return <UI.BodyCell {...cell.getCellProps()}>{cell.render('Cell')}</UI.BodyCell>;
+                let { key, ...cellProps } = cell.getCellProps();
+                return (
+                  <UI.BodyCell {...cellProps} key={key}>
+                    {cell.render('Cell')}
+                  </UI.BodyCell>
+                );
               })}
             </UI.BodyRow>
             {row.isExpanded && typeof renderExpandedRow === 'function' ? (
-              <UI.BodyRow {...rowProps}>
+              <UI.BodyRow {...rowProps} className="!border-t-0 bg-gray-100">
                 <UI.BodyCell />
                 <UI.BodyCell colSpan={visibleColumns.length - 1}>{renderExpandedRow(row)}</UI.BodyCell>
               </UI.BodyRow>

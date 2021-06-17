@@ -48,6 +48,12 @@ export const RetreatWithProducts = n.extendType({
         if (ids.length < 1) return [];
 
         let result = await ctx.stripe.products.list({ ids, limit: ids.length, active: ignoreNull(args.active) });
+
+        let resultIds = result.data.map(({ id }) => id);
+        if (resultIds.length !== ids.length) {
+          await ctx.prisma.retreat.update({ where: { id: source.id }, data: { products: resultIds } });
+        }
+
         return result.data;
       },
     });

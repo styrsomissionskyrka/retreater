@@ -28,7 +28,8 @@ export const ProductWithPrice = n.extendType({
       args: { active: n.booleanArg() },
       async resolve(source, args, ctx) {
         let result = await ctx.stripe.prices.list({ product: source.id, active: ignoreNull(args.active) });
-        return result.data;
+        let prices = result.data.filter((price) => !price.deleted);
+        return prices;
       },
     });
   },
