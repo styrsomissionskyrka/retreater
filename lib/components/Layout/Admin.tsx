@@ -57,7 +57,7 @@ export const Admin: React.FC<Props> = ({
       </Head>
 
       <header className="sticky top-0 w-screen h-14 z-10 flex items-center px-4 bg-black" ref={headerRef}>
-        <Image src="/icon.svg" width={48} height={48} />
+        <Image src="/icon.svg" width={48} height={48} alt="" />
       </header>
 
       <div className="relative flex flex-row">
@@ -95,7 +95,7 @@ export const Admin: React.FC<Props> = ({
 
           <div className="mt-auto flex items-center space-x-2">
             <Link href={`/admin/anvandare/${encodeURIComponent(user.sub ?? '')}`}>
-              <Image src={user.picture!} width={32} height={32} className="rounded-full" />
+              <Image src={user.picture!} width={32} height={32} className="rounded-full" alt="" />
             </Link>
             <div className="flex flex-col">
               <Link

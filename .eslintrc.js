@@ -5,7 +5,7 @@ module.exports = {
     'import/resolver': { typescript: {} },
   },
   rules: {
-    'react/prop-types': 'off',
+    // 'react/prop-types': 'off',
     'react-hooks/exhaustive-deps': ['warn', { additionalHooks: '(useIsomorphicLayoutEffect)' }],
 
     'graphql/template-strings': ['error', { env: 'apollo', schemaJson: require('./schema.json') }],
