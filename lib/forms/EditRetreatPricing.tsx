@@ -271,7 +271,7 @@ const DescriptionCell: React.FC<Row<ColumnData>> = ({ original }) => {
         />
       </div>
 
-      <div className="ml-auto flex flex-col space-y-2 justify-end">
+      <div className="ml-auto flex flex-col space-y-2 pr-10 justify-end">
         <Link
           href={`https://dashboard.stripe.com/test/products/${original.id}`}
           target="_blank"

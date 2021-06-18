@@ -6,6 +6,7 @@ import { assert, ensure } from 'lib/utils/assert';
 import { OrderEnum } from 'lib/graphql';
 
 import { Button } from '../Button';
+import { Form } from '..';
 
 interface FiltersContextType<T extends QueryObject> {
   values: T;
@@ -55,7 +56,7 @@ const EMPTY = '__EMPTY__' as const;
 export function EnumFilter<T extends QueryObject>({
   queryKey,
   possibleValues,
-  label,
+  label: sharedLabel,
   allowEmpty = false,
   emptyLabel = 'Alla',
 }: EnumFilterProps<T>) {
@@ -69,26 +70,27 @@ export function EnumFilter<T extends QueryObject>({
   }
 
   return (
-    <label>
-      <span>{label}</span>
-      <select
-        value={finalValue as string}
-        onChange={(e) => {
-          if (e.target.value === EMPTY) {
-            setValue(null as T[keyof T]);
-          } else {
-            setValue(e.target.value as T[keyof T]);
-          }
-        }}
-      >
-        {allowEmpty ? <option value={EMPTY}>{emptyLabel}</option> : null}
-        {possibleValues.map(({ value, label }) => (
-          <option key={value} value={value}>
-            {label}
-          </option>
-        ))}
-      </select>
-    </label>
+    <Form.Select
+      value={finalValue as string}
+      onChange={(e) => {
+        if (e.target.value === EMPTY) {
+          setValue(null as T[keyof T]);
+        } else {
+          setValue(e.target.value as T[keyof T]);
+        }
+      }}
+    >
+      {allowEmpty ? (
+        <option value={EMPTY}>
+          {sharedLabel} {emptyLabel}
+        </option>
+      ) : null}
+      {possibleValues.map(({ value, label }) => (
+        <option key={value} value={value}>
+          {sharedLabel} {label}
+        </option>
+      ))}
+    </Form.Select>
   );
 }
 

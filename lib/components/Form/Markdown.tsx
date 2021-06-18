@@ -17,7 +17,7 @@ import {
 import { useIsomorphicLayoutEffect, useResizedTextarea, useId, useProxyRefObject } from 'lib/hooks';
 import { setAttribute, toggleAttribute } from 'lib/utils/dom';
 
-import { Label } from './Ui';
+import { Label } from './Controls';
 import styles from './Markdown.module.css';
 
 export interface MarkdownProps {
