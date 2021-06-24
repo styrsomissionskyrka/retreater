@@ -21,8 +21,7 @@ model Retreat {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  registrationFee String?
-  products        Json
+  products Json // Array of ids related to Stripe.Product
 
   status  RetreatStatus @default(DRAFT)
   title   String        @db.VarChar(255)
@@ -32,5 +31,47 @@ model Retreat {
   startDate DateTime?
   endDate   DateTime?
 
-  maxParticipants Int @default(0)
+  maxParticipants Int     @default(0)
+  orders          Order[]
+}
+
+enum OrderState {
+  CREATED // Initial state awaiting checkout
+  PENDING // Checkout is pending
+  PARTIALLY_CONFIRMED // Partially paid
+  CONFIRMED // Fully paid
+  DECLINED // Checkout cancelled or payment declined
+  CANCELLED // Cancelled and refunded (partially or fully)
+  ERRORED // Something whet wrong while processing the order
+}
+
+model Order {
+  id String @id @default(cuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  retreat   Retreat @relation(fields: [retreatId], references: [id])
+  retreatId String
+
+  state OrderState @default(CREATED)
+
+  price            String // Id of Stripe.Price
+  checkoutSessions Json // Array Id of Stripe.Checkout.Session
+
+  name  String
+  email String
+
+  metadata    OrderMetadata?
+  errorReason String?
+}
+
+model OrderMetadata {
+  id String @id @default(cuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String
 }

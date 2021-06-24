@@ -5,8 +5,8 @@
 
 
 import { Context } from "./../api/context/index"
-import { StripePrice, StripeProduct } from "./../api/source-types"
-import { Retreat } from "@prisma/client"
+import { StripePaymentIntent, StripeLineItem, StripeCheckoutSession, StripePrice, StripeProduct, StripeRefund } from "./../api/source-types"
+import { Order, Retreat } from "@prisma/client"
 import { core, connectionPluginCore } from "nexus"
 import { FieldAuthorizeResolver } from "nexus/dist/plugins/fieldAuthorizePlugin"
 declare global {
@@ -41,6 +41,12 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  CreateOrderInput: { // input type
+    email: string; // String!
+    name: string; // String!
+    price: string; // ID!
+    retreatId: string; // ID!
+  }
   CreatePriceInput: { // input type
     active?: boolean | null; // Boolean
     amount: number; // Int!
@@ -74,6 +80,7 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   OrderEnum: "asc" | "desc"
+  OrderStateEnum: "CANCELLED" | "CONFIRMED" | "CREATED" | "DECLINED" | "ERRORED" | "PARTIALLY_CONFIRMED" | "PENDING"
   RetreatOrderByEnum: "createdAt" | "startDate" | "status"
   RetreatStatusEnum: "ARCHIVED" | "DRAFT" | "PUBLISHED"
   UserRoleEnum: "admin" | "editor" | "superadmin"
@@ -90,7 +97,14 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  CheckoutSession: StripeCheckoutSession;
+  LineItem: StripeLineItem;
   Mutation: {};
+  Order: Order;
+  OrderCheckoutSession: { // root type
+    checkoutSession: NexusGenRootTypes['CheckoutSession']; // CheckoutSession!
+    order: NexusGenRootTypes['Order']; // Order!
+  }
   PaginatedRetreat: { // root type
     items: NexusGenRootTypes['Retreat'][]; // [Retreat!]!
     paginationMeta: NexusGenRootTypes['PaginationMeta']; // PaginationMeta!
@@ -107,9 +121,11 @@ export interface NexusGenObjects {
     totalItems: number; // Int!
     totalPages: number; // Int!
   }
+  PaymentIntent: StripePaymentIntent;
   Price: StripePrice;
   Product: StripeProduct;
   Query: {};
+  Refund: StripeRefund;
   Retreat: Retreat;
   User: { // root type
     createdAt: NexusGenScalars['Date']; // Date!
@@ -137,7 +153,25 @@ export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
+  CheckoutSession: { // field return type
+    amount: number | null; // Int
+    currency: string | null; // String
+    customerEmail: string | null; // String
+    id: string; // ID!
+    lineItems: NexusGenRootTypes['LineItem'][]; // [LineItem!]!
+    paymentIntent: NexusGenRootTypes['PaymentIntent'] | null; // PaymentIntent
+  }
+  LineItem: { // field return type
+    amountSubtotal: number; // Int!
+    amountTotal: number; // Int!
+    currency: string; // String!
+    description: NexusGenRootTypes['Price'] | null; // Price
+    id: string; // ID!
+    quantity: number | null; // Int
+  }
   Mutation: { // field return type
+    checkoutOrder: NexusGenRootTypes['OrderCheckoutSession']; // OrderCheckoutSession!
+    createOrder: NexusGenRootTypes['Order']; // Order!
     createPrice: NexusGenRootTypes['Price'] | null; // Price
     createProduct: NexusGenRootTypes['Product'] | null; // Product
     createRetreatDraft: NexusGenRootTypes['Retreat'] | null; // Retreat
@@ -146,6 +180,22 @@ export interface NexusGenFieldTypes {
     updateProduct: NexusGenRootTypes['Product'] | null; // Product
     updateProductPrice: NexusGenRootTypes['Price'] | null; // Price
     updateRetreat: NexusGenRootTypes['Retreat'] | null; // Retreat
+  }
+  Order: { // field return type
+    checkoutSessions: NexusGenRootTypes['CheckoutSession'][]; // [CheckoutSession!]!
+    createdAt: NexusGenScalars['Date']; // Date!
+    email: string; // String!
+    id: string; // ID!
+    name: string; // String!
+    price: NexusGenRootTypes['Price']; // Price!
+    refunds: NexusGenRootTypes['Refund'][]; // [Refund!]!
+    retreat: NexusGenRootTypes['Retreat']; // Retreat!
+    state: NexusGenEnums['OrderStateEnum']; // OrderStateEnum!
+    updatedAt: NexusGenScalars['Date']; // Date!
+  }
+  OrderCheckoutSession: { // field return type
+    checkoutSession: NexusGenRootTypes['CheckoutSession']; // CheckoutSession!
+    order: NexusGenRootTypes['Order']; // Order!
   }
   PaginatedRetreat: { // field return type
     items: NexusGenRootTypes['Retreat'][]; // [Retreat!]!
@@ -163,6 +213,11 @@ export interface NexusGenFieldTypes {
     totalItems: number; // Int!
     totalPages: number; // Int!
   }
+  PaymentIntent: { // field return type
+    amount: number; // Int!
+    currency: string; // String!
+    id: string; // ID!
+  }
   Price: { // field return type
     active: boolean; // Boolean!
     amount: number; // Int!
@@ -170,6 +225,7 @@ export interface NexusGenFieldTypes {
     currency: string; // String!
     id: string; // ID!
     nickname: string | null; // String
+    product: NexusGenRootTypes['Product']; // Product!
   }
   Product: { // field return type
     active: boolean; // Boolean!
@@ -184,10 +240,16 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     me: NexusGenRootTypes['User'] | null; // User
+    order: NexusGenRootTypes['Order'] | null; // Order
     retreat: NexusGenRootTypes['Retreat'] | null; // Retreat
     retreats: NexusGenRootTypes['PaginatedRetreat']; // PaginatedRetreat!
     user: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['PaginatedUser'] | null; // PaginatedUser
+  }
+  Refund: { // field return type
+    amount: number; // Int!
+    currency: string; // String!
+    id: string; // ID!
   }
   Retreat: { // field return type
     content: string | null; // String
@@ -222,7 +284,25 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  CheckoutSession: { // field return type name
+    amount: 'Int'
+    currency: 'String'
+    customerEmail: 'String'
+    id: 'ID'
+    lineItems: 'LineItem'
+    paymentIntent: 'PaymentIntent'
+  }
+  LineItem: { // field return type name
+    amountSubtotal: 'Int'
+    amountTotal: 'Int'
+    currency: 'String'
+    description: 'Price'
+    id: 'ID'
+    quantity: 'Int'
+  }
   Mutation: { // field return type name
+    checkoutOrder: 'OrderCheckoutSession'
+    createOrder: 'Order'
     createPrice: 'Price'
     createProduct: 'Product'
     createRetreatDraft: 'Retreat'
@@ -231,6 +311,22 @@ export interface NexusGenFieldTypeNames {
     updateProduct: 'Product'
     updateProductPrice: 'Price'
     updateRetreat: 'Retreat'
+  }
+  Order: { // field return type name
+    checkoutSessions: 'CheckoutSession'
+    createdAt: 'Date'
+    email: 'String'
+    id: 'ID'
+    name: 'String'
+    price: 'Price'
+    refunds: 'Refund'
+    retreat: 'Retreat'
+    state: 'OrderStateEnum'
+    updatedAt: 'Date'
+  }
+  OrderCheckoutSession: { // field return type name
+    checkoutSession: 'CheckoutSession'
+    order: 'Order'
   }
   PaginatedRetreat: { // field return type name
     items: 'Retreat'
@@ -248,6 +344,11 @@ export interface NexusGenFieldTypeNames {
     totalItems: 'Int'
     totalPages: 'Int'
   }
+  PaymentIntent: { // field return type name
+    amount: 'Int'
+    currency: 'String'
+    id: 'ID'
+  }
   Price: { // field return type name
     active: 'Boolean'
     amount: 'Int'
@@ -255,6 +356,7 @@ export interface NexusGenFieldTypeNames {
     currency: 'String'
     id: 'ID'
     nickname: 'String'
+    product: 'Product'
   }
   Product: { // field return type name
     active: 'Boolean'
@@ -269,10 +371,16 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     me: 'User'
+    order: 'Order'
     retreat: 'Retreat'
     retreats: 'PaginatedRetreat'
     user: 'User'
     users: 'PaginatedUser'
+  }
+  Refund: { // field return type name
+    amount: 'Int'
+    currency: 'String'
+    id: 'ID'
   }
   Retreat: { // field return type name
     content: 'String'
@@ -308,6 +416,12 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    checkoutOrder: { // args
+      id: string; // ID!
+    }
+    createOrder: { // args
+      input: NexusGenInputs['CreateOrderInput']; // CreateOrderInput!
+    }
     createPrice: { // args
       input: NexusGenInputs['CreatePriceInput']; // CreatePriceInput!
       productId: string; // ID!
@@ -346,6 +460,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    order: { // args
+      id: string; // ID!
+    }
     retreat: { // args
       id?: string | null; // ID
       slug?: string | null; // String

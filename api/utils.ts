@@ -42,7 +42,7 @@ export function stripeTimestampToMs(seconds: number) {
   return new Date(seconds * 1000);
 }
 
-export function ensureProductArray(value: Prisma.JsonValue | null): string[] {
+export function ensureArrayOfIds(value: Prisma.JsonValue | null): string[] {
   if (Array.isArray(value)) return value.filter((i): i is string => typeof i === 'string');
   return [];
 }

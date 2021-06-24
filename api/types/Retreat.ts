@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, RetreatStatus } from '@prisma/client';
 import { enumType, objectType, extendType, nonNull, stringArg, arg, inputObjectType, idArg, intArg } from 'nexus';
 import { UserInputError } from 'apollo-server-micro';
 import slugify from 'slug';
@@ -9,7 +9,7 @@ import { OrderEnum, PaginatedQuery } from '.';
 
 export const RetreatStatusEnum = enumType({
   name: 'RetreatStatusEnum',
-  members: ['PUBLISHED', 'DRAFT', 'ARCHIVED'],
+  members: RetreatStatus,
 });
 
 export const RetreatOrderByEnum = enumType({
@@ -71,7 +71,7 @@ export const RetreatQuery = extendType({
 
         let where = {
           AND: compact([
-            args.status != null ? { status: { in: args.status } } : { status: { not: 'ARCHIVED' as const } },
+            args.status != null ? { status: { in: args.status } } : { status: { not: RetreatStatus.ARCHIVED } },
             args.search != null
               ? {
                   OR: compact([{ title: { contains: args.search } }, { content: { contains: args.search } }]),

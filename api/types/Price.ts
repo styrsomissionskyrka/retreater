@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as n from 'nexus';
 
 import { ignoreNull, stripeTimestampToMs } from '../utils';
+import { Product } from './Product';
 
 export const Price = n.objectType({
   name: 'Price',
@@ -17,6 +18,13 @@ export const Price = n.objectType({
     t.string('nickname');
     t.nonNull.date('created', { resolve: (source) => stripeTimestampToMs(source.created) });
     t.nonNull.int('amount', { resolve: (source) => source.unit_amount ?? 0 });
+    t.nonNull.field('product', {
+      type: Product,
+      resolve(source, _, ctx) {
+        if (typeof source.product === 'string') return ctx.stripe.products.retrieve(source.product);
+        return source.product as any;
+      },
+    });
   },
 });
 

@@ -2,6 +2,22 @@
 ### Do not make changes to this file directly
 
 
+type CheckoutSession {
+  amount: Int
+  currency: String
+  customerEmail: String
+  id: ID!
+  lineItems: [LineItem!]!
+  paymentIntent: PaymentIntent
+}
+
+input CreateOrderInput {
+  email: String!
+  name: String!
+  price: ID!
+  retreatId: ID!
+}
+
 input CreatePriceInput {
   active: Boolean
   amount: Int!
@@ -21,7 +37,18 @@ The javascript `Date` as integer. Type represents date and time as number of mil
 """
 scalar Date
 
+type LineItem {
+  amountSubtotal: Int!
+  amountTotal: Int!
+  currency: String!
+  description: Price
+  id: ID!
+  quantity: Int
+}
+
 type Mutation {
+  checkoutOrder(id: ID!): OrderCheckoutSession!
+  createOrder(input: CreateOrderInput!): Order!
   createPrice(input: CreatePriceInput!, productId: ID!): Price
   createProduct(input: CreateProductInput!, retreatId: ID!): Product
   createRetreatDraft(title: String!): Retreat
@@ -32,9 +59,37 @@ type Mutation {
   updateRetreat(id: ID!, input: UpdateRetreatInput!): Retreat
 }
 
+type Order {
+  checkoutSessions: [CheckoutSession!]!
+  createdAt: Date!
+  email: String!
+  id: ID!
+  name: String!
+  price: Price!
+  refunds: [Refund!]!
+  retreat: Retreat!
+  state: OrderStateEnum!
+  updatedAt: Date!
+}
+
+type OrderCheckoutSession {
+  checkoutSession: CheckoutSession!
+  order: Order!
+}
+
 enum OrderEnum {
   ASC
   DESC
+}
+
+enum OrderStateEnum {
+  CANCELLED
+  CONFIRMED
+  CREATED
+  DECLINED
+  ERRORED
+  PARTIALLY_CONFIRMED
+  PENDING
 }
 
 interface PaginatedQuery {
@@ -60,6 +115,12 @@ type PaginationMeta {
   totalPages: Int!
 }
 
+type PaymentIntent {
+  amount: Int!
+  currency: String!
+  id: ID!
+}
+
 type Price {
   active: Boolean!
   amount: Int!
@@ -67,6 +128,7 @@ type Price {
   currency: String!
   id: ID!
   nickname: String
+  product: Product!
 }
 
 type Product {
@@ -83,10 +145,17 @@ type Product {
 
 type Query {
   me: User
+  order(id: ID!): Order
   retreat(id: ID, slug: String): Retreat
   retreats(order: OrderEnum! = ASC, orderBy: RetreatOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, search: String, status: RetreatStatusEnum): PaginatedRetreat!
   user(id: ID!): User
   users(order: OrderEnum! = ASC, orderBy: UserSortByEnum! = CREATED_AT, page: Int! = 0, perPage: Int! = 25, search: String): PaginatedUser
+}
+
+type Refund {
+  amount: Int!
+  currency: String!
+  id: ID!
 }
 
 type Retreat {
