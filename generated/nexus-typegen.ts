@@ -170,6 +170,7 @@ export interface NexusGenFieldTypes {
     quantity: number | null; // Int
   }
   Mutation: { // field return type
+    cancelOrder: NexusGenRootTypes['Order'] | null; // Order
     checkoutOrder: NexusGenRootTypes['OrderCheckoutSession']; // OrderCheckoutSession!
     createOrder: NexusGenRootTypes['Order']; // Order!
     createPrice: NexusGenRootTypes['Price'] | null; // Price
@@ -301,6 +302,7 @@ export interface NexusGenFieldTypeNames {
     quantity: 'Int'
   }
   Mutation: { // field return type name
+    cancelOrder: 'Order'
     checkoutOrder: 'OrderCheckoutSession'
     createOrder: 'Order'
     createPrice: 'Price'
@@ -416,6 +418,10 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    cancelOrder: { // args
+      id?: string | null; // ID
+      sessionId?: string | null; // ID
+    }
     checkoutOrder: { // args
       id: string; // ID!
     }

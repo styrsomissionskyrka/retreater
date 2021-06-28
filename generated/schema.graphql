@@ -47,6 +47,7 @@ type LineItem {
 }
 
 type Mutation {
+  cancelOrder(id: ID, sessionId: ID): Order
   checkoutOrder(id: ID!): OrderCheckoutSession!
   createOrder(input: CreateOrderInput!): Order!
   createPrice(input: CreatePriceInput!, productId: ID!): Price

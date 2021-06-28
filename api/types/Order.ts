@@ -1,7 +1,8 @@
 import * as n from 'nexus';
-import { OrderState } from '@prisma/client';
+import { Order as PrismaOrder, OrderState } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
 
+import { assert } from '../../lib/utils/assert';
 import { ensureArrayOfIds } from '../utils';
 import { Price, Retreat, CheckoutSession, Refund } from '.';
 
@@ -142,6 +143,24 @@ export const OrderMutation = n.extendType({
         });
 
         return { order, checkoutSession };
+      },
+    });
+
+    t.field('cancelOrder', {
+      type: Order,
+      args: { sessionId: n.idArg(), id: n.idArg() },
+      async resolve(_, args, ctx) {
+        let orderId: string | null = args.id ?? null;
+        if (args.sessionId != null) {
+          let session = await ctx.stripe.checkout.sessions.retrieve(args.sessionId);
+          assert(session.client_reference_id != null, 'Encountered session without order reference.');
+          orderId = session.client_reference_id;
+        }
+
+        if (orderId == null) return null;
+
+        let order = await ctx.prisma.order.update({ where: { id: orderId }, data: { state: OrderState.CANCELLED } });
+        return order;
       },
     });
   },
