@@ -5,5 +5,14 @@ export function omit<T extends object, K extends keyof T>(obj: T, ...keys: K[]):
     clone[key] = obj[key];
   }
 
-  return clone as Omit<T, K>;
+  return clone;
+}
+
+export function pick<T extends object, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K> {
+  let clone: any = {};
+  for (let key of keys) {
+    clone[key] = obj[key];
+  }
+
+  return clone;
 }

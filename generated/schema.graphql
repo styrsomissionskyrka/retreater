@@ -9,6 +9,13 @@ type CheckoutSession {
   id: ID!
   lineItems: [LineItem!]!
   paymentIntent: PaymentIntent
+  status: CheckoutSessionStatusEnum!
+}
+
+enum CheckoutSessionStatusEnum {
+  NO_PAYMENT_REQUIRED
+  PAID
+  UNPAID
 }
 
 input CreateOrderInput {

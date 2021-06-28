@@ -4,6 +4,11 @@ import * as n from 'nexus';
 
 import { Price } from './Price';
 
+export const CheckoutSessionStatusEnum = n.enumType({
+  name: 'CheckoutSessionStatusEnum',
+  members: { NO_PAYMENT_REQUIRED: 'no_payment_required', PAID: 'paid', UNPAID: 'unpaid' },
+});
+
 export const PaymentIntent = n.objectType({
   name: 'PaymentIntent',
   sourceType: {
@@ -45,9 +50,10 @@ export const CheckoutSession = n.objectType({
   definition(t) {
     t.nonNull.id('id');
 
-    t.int('amount');
+    t.int('amount', { resolve: (source) => source.amount_total });
     t.string('currency');
     t.string('customerEmail', { resolve: (source) => source.customer_email });
+    t.nonNull.field('status', { type: CheckoutSessionStatusEnum, resolve: (source) => source.payment_status });
 
     t.field('paymentIntent', {
       type: PaymentIntent,

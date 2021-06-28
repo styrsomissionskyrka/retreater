@@ -79,6 +79,7 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
+  CheckoutSessionStatusEnum: "no_payment_required" | "paid" | "unpaid"
   OrderEnum: "asc" | "desc"
   OrderOrderByEnum: "createdAt" | "status"
   OrderStatusEnum: "CANCELLED" | "CONFIRMED" | "CREATED" | "DECLINED" | "ERRORED" | "PARTIALLY_CONFIRMED" | "PENDING"
@@ -161,6 +162,7 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     lineItems: NexusGenRootTypes['LineItem'][]; // [LineItem!]!
     paymentIntent: NexusGenRootTypes['PaymentIntent'] | null; // PaymentIntent
+    status: NexusGenEnums['CheckoutSessionStatusEnum']; // CheckoutSessionStatusEnum!
   }
   LineItem: { // field return type
     amountSubtotal: number; // Int!
@@ -295,6 +297,7 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
     lineItems: 'LineItem'
     paymentIntent: 'PaymentIntent'
+    status: 'CheckoutSessionStatusEnum'
   }
   LineItem: { // field return type name
     amountSubtotal: 'Int'
