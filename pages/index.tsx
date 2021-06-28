@@ -113,7 +113,7 @@ const INDEX_LIST_RETREATS: TypedDocumentNode<IndexListRetreatsQuery> = gql`
 const ORDER_FRAGMENT = gql`
   fragment OrderFragment on Order {
     id
-    state
+    status
   }
 `;
 

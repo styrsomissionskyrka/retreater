@@ -1,5 +1,5 @@
 import * as n from 'nexus';
-import { OrderState, Prisma } from '@prisma/client';
+import { OrderStatus, Prisma } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
 
 import { assert } from '../../lib/utils/assert';
@@ -7,16 +7,16 @@ import { ensureArrayOfIds, ignoreNull } from '../utils';
 import { Price, Retreat, CheckoutSession, Refund } from '.';
 import { OrderEnum, PaginatedQuery } from './Shared';
 
-export const OrderStateEnum = n.enumType({
-  name: 'OrderStateEnum',
-  members: OrderState,
+export const OrderStatusEnum = n.enumType({
+  name: 'OrderStatusEnum',
+  members: OrderStatus,
 });
 
 export const OrderOrderByEnum = n.enumType({
   name: 'OrderOrderByEnum',
   members: {
     CREATED_AT: 'createdAt',
-    STATE: 'state',
+    STATUS: 'status',
   },
 });
 
@@ -31,7 +31,7 @@ export const Order = n.objectType({
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
 
-    t.nonNull.field('state', { type: OrderStateEnum });
+    t.nonNull.field('status', { type: OrderStatusEnum });
 
     t.nonNull.field('price', {
       type: Price,
@@ -117,14 +117,14 @@ export const OrderQuery = n.extendType({
         perPage: n.nonNull(n.intArg({ default: 25 })),
         order: n.nonNull(n.arg({ type: OrderEnum, default: 'asc' })),
         orderBy: n.nonNull(n.arg({ type: OrderOrderByEnum, default: 'createdAt' })),
-        state: n.arg({ type: OrderStateEnum, default: OrderState.CONFIRMED }),
+        status: n.arg({ type: OrderStatusEnum, default: OrderStatus.CONFIRMED }),
       },
       async resolve(_, args, ctx) {
         let skip = args.perPage * (args.page - 1);
         let take = args.perPage;
 
         let where: Prisma.OrderWhereInput = {
-          state: ignoreNull(args.state),
+          status: ignoreNull(args.status),
         };
 
         let orders = await ctx.prisma.order.findMany({
@@ -156,10 +156,10 @@ export const RetreatWithOrders = n.extendType({
   definition(t) {
     t.field('orders', {
       type: n.list(n.nonNull(Order)),
-      args: { status: n.arg({ type: OrderStateEnum }) },
+      args: { status: n.arg({ type: OrderStatusEnum }) },
       resolve(source, args, ctx) {
         return ctx.prisma.order.findMany({
-          where: { retreatId: source.id, state: ignoreNull(args.status) },
+          where: { retreatId: source.id, status: ignoreNull(args.status) },
         });
       },
     });
@@ -176,7 +176,7 @@ export const OrderMutation = n.extendType({
         return ctx.prisma.order.create({
           data: {
             ...args.input,
-            state: OrderState.CREATED,
+            status: OrderStatus.CREATED,
             checkoutSessions: [],
           },
         });
@@ -190,9 +190,9 @@ export const OrderMutation = n.extendType({
         let order = await ctx.prisma.order.findUnique({ where: { id: args.id } });
         if (order == null) throw new UserInputError(`Order with id ${args.id} doesn't exists.`);
 
-        const acceptedStates: OrderState[] = ['CREATED'];
-        if (!acceptedStates.includes(order.state)) {
-          throw new UserInputError(`An order in "${order.state}" state can not proceed to checkout.`);
+        const acceptedStatus: OrderStatus[] = ['CREATED'];
+        if (!acceptedStatus.includes(order.status)) {
+          throw new UserInputError(`An order in "${order.status}" state can not proceed to checkout.`);
         }
 
         const checkoutSession = await ctx.stripe.checkout.sessions.create({
@@ -210,7 +210,7 @@ export const OrderMutation = n.extendType({
         let nextCheckoutSessions = [...ensureArrayOfIds(order.checkoutSessions), checkoutSession.id];
         order = await ctx.prisma.order.update({
           where: { id: order.id },
-          data: { state: OrderState.PENDING, checkoutSessions: nextCheckoutSessions },
+          data: { status: OrderStatus.PENDING, checkoutSessions: nextCheckoutSessions },
         });
 
         return { order, checkoutSession };
@@ -230,7 +230,7 @@ export const OrderMutation = n.extendType({
 
         if (orderId == null) return null;
 
-        let order = await ctx.prisma.order.update({ where: { id: orderId }, data: { state: OrderState.CANCELLED } });
+        let order = await ctx.prisma.order.update({ where: { id: orderId }, data: { status: OrderStatus.CANCELLED } });
         return order;
       },
     });

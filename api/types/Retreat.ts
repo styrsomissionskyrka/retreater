@@ -1,4 +1,4 @@
-import { OrderState, Prisma, RetreatStatus } from '@prisma/client';
+import { OrderStatus, Prisma, RetreatStatus } from '@prisma/client';
 import * as n from 'nexus';
 import { UserInputError } from 'apollo-server-micro';
 import slugify from 'slug';
@@ -43,7 +43,7 @@ export const Retreat = n.objectType({
     t.nonNull.int('maxParticipants');
     t.nonNull.int('bookedParticipants', {
       async resolve(source, _, ctx) {
-        return ctx.prisma.order.count({ where: { retreatId: source.id, state: OrderState.CONFIRMED } });
+        return ctx.prisma.order.count({ where: { retreatId: source.id, status: OrderStatus.CONFIRMED } });
       },
     });
   },

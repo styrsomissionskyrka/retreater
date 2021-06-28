@@ -35,7 +35,7 @@ model Retreat {
   orders          Order[]
 }
 
-enum OrderState {
+enum OrderStatus {
   CREATED // Initial state awaiting checkout
   PENDING // Checkout is pending
   PARTIALLY_CONFIRMED // Partially paid
@@ -54,7 +54,7 @@ model Order {
   retreat   Retreat @relation(fields: [retreatId], references: [id])
   retreatId String
 
-  state OrderState @default(CREATED)
+  status OrderStatus @default(CREATED)
 
   price            String // Id of Stripe.Price
   checkoutSessions Json // Array Id of Stripe.Checkout.Session

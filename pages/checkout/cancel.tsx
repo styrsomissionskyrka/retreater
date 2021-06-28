@@ -23,7 +23,7 @@ const CANCEL_ORDER_MUTATION: TypedDocumentNode<CancelOrderMutation, CancelOrderM
   mutation CancelOrder($sessionId: ID) {
     cancelOrder(sessionId: $sessionId) {
       id
-      state
+      status
     }
   }
 `;

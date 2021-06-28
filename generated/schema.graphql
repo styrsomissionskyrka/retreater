@@ -69,7 +69,7 @@ type Order {
   price: Price!
   refunds: [Refund!]!
   retreat: Retreat!
-  state: OrderStateEnum!
+  status: OrderStatusEnum!
   updatedAt: Date!
 }
 
@@ -85,10 +85,10 @@ enum OrderEnum {
 
 enum OrderOrderByEnum {
   CREATED_AT
-  STATE
+  STATUS
 }
 
-enum OrderStateEnum {
+enum OrderStatusEnum {
   CANCELLED
   CONFIRMED
   CREATED
@@ -152,7 +152,7 @@ type Product {
 type Query {
   me: User
   order(id: ID!): Order
-  orders(order: OrderEnum! = ASC, orderBy: OrderOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, state: OrderStateEnum = CONFIRMED): PaginatedOrder!
+  orders(order: OrderEnum! = ASC, orderBy: OrderOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, status: OrderStatusEnum = CONFIRMED): PaginatedOrder!
   retreat(id: ID, slug: String): Retreat
   retreats(order: OrderEnum! = ASC, orderBy: RetreatOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, search: String, status: RetreatStatusEnum): PaginatedRetreat!
   user(id: ID!): User
@@ -171,7 +171,7 @@ type Retreat {
   endDate: Date
   id: ID!
   maxParticipants: Int!
-  orders(status: OrderStateEnum): [Order!]
+  orders(status: OrderStatusEnum): [Order!]
   products(active: Boolean): [Product!]!
   slug: String!
   startDate: Date

@@ -80,8 +80,8 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   OrderEnum: "asc" | "desc"
-  OrderOrderByEnum: "createdAt" | "state"
-  OrderStateEnum: "CANCELLED" | "CONFIRMED" | "CREATED" | "DECLINED" | "ERRORED" | "PARTIALLY_CONFIRMED" | "PENDING"
+  OrderOrderByEnum: "createdAt" | "status"
+  OrderStatusEnum: "CANCELLED" | "CONFIRMED" | "CREATED" | "DECLINED" | "ERRORED" | "PARTIALLY_CONFIRMED" | "PENDING"
   RetreatOrderByEnum: "createdAt" | "startDate" | "status"
   RetreatStatusEnum: "ARCHIVED" | "DRAFT" | "PUBLISHED"
   UserRoleEnum: "admin" | "editor" | "superadmin"
@@ -192,7 +192,7 @@ export interface NexusGenFieldTypes {
     price: NexusGenRootTypes['Price']; // Price!
     refunds: NexusGenRootTypes['Refund'][]; // [Refund!]!
     retreat: NexusGenRootTypes['Retreat']; // Retreat!
-    state: NexusGenEnums['OrderStateEnum']; // OrderStateEnum!
+    status: NexusGenEnums['OrderStatusEnum']; // OrderStatusEnum!
     updatedAt: NexusGenScalars['Date']; // Date!
   }
   OrderCheckoutSession: { // field return type
@@ -325,7 +325,7 @@ export interface NexusGenFieldTypeNames {
     price: 'Price'
     refunds: 'Refund'
     retreat: 'Retreat'
-    state: 'OrderStateEnum'
+    status: 'OrderStatusEnum'
     updatedAt: 'Date'
   }
   OrderCheckoutSession: { // field return type name
@@ -477,7 +477,7 @@ export interface NexusGenArgTypes {
       orderBy: NexusGenEnums['OrderOrderByEnum']; // OrderOrderByEnum!
       page: number; // Int!
       perPage: number; // Int!
-      state: NexusGenEnums['OrderStateEnum'] | null; // OrderStateEnum
+      status: NexusGenEnums['OrderStatusEnum'] | null; // OrderStatusEnum
     }
     retreat: { // args
       id?: string | null; // ID
@@ -497,7 +497,7 @@ export interface NexusGenArgTypes {
   }
   Retreat: {
     orders: { // args
-      status?: NexusGenEnums['OrderStateEnum'] | null; // OrderStateEnum
+      status?: NexusGenEnums['OrderStatusEnum'] | null; // OrderStatusEnum
     }
     products: { // args
       active?: boolean | null; // Boolean
