@@ -253,11 +253,12 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
   }
   Retreat: { // field return type
+    bookedParticipants: number; // Int!
     content: string | null; // String
     createdAt: NexusGenScalars['Date']; // Date!
     endDate: NexusGenScalars['Date'] | null; // Date
     id: string; // ID!
-    maxParticipants: number | null; // Int
+    maxParticipants: number; // Int!
     products: NexusGenRootTypes['Product'][]; // [Product!]!
     registrationFee: NexusGenRootTypes['Product'] | null; // Product
     slug: string; // String!
@@ -385,6 +386,7 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
   }
   Retreat: { // field return type name
+    bookedParticipants: 'Int'
     content: 'String'
     createdAt: 'Date'
     endDate: 'Date'

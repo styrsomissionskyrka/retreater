@@ -44,6 +44,11 @@ const Retreats: NextPage = () => {
         Header: 'Titel',
         getLink: (row) => `/admin/retreater/${row.id}`,
       }),
+      DataTable.Columns.createProgressCell({
+        id: 'bookedParticipants',
+        getProgress: (retreat) => ({ progress: retreat.bookedParticipants, total: retreat.maxParticipants }),
+        Header: 'Bokningar',
+      }),
       DataTable.Columns.createDateRangeCell({
         Header: 'Datum',
         accessor: (row: RetreatType) => ({ start: row.startDate, end: row.endDate }),
@@ -148,6 +153,8 @@ export const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetre
         createdAt
         startDate
         endDate
+        maxParticipants
+        bookedParticipants
       }
     }
   }

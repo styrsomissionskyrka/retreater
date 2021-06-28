@@ -160,11 +160,12 @@ type Refund {
 }
 
 type Retreat {
+  bookedParticipants: Int!
   content: String
   createdAt: Date!
   endDate: Date
   id: ID!
-  maxParticipants: Int
+  maxParticipants: Int!
   products(active: Boolean): [Product!]!
   registrationFee: Product
   slug: String!

@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { IconInfoCircle, IconWallet } from '@tabler/icons';
+import { IconCoin, IconInfoCircle } from '@tabler/icons';
 
 import { EditRetreatFormQuery, EditRetreatFormQueryVariables, gql, TypedDocumentNode, useQuery } from 'lib/graphql';
 import { Layout } from 'lib/components';
@@ -117,6 +117,6 @@ export function useRetreatNavLinks(id: string): Layout.NavLinkConfig[] {
   let base = `/admin/retreater/${id}`;
   return [
     { label: 'Information', href: base, icon: <IconInfoCircle size={16} /> },
-    { label: 'Priser', href: base + '/priser', icon: <IconWallet size={16} /> },
+    { label: 'Priser', href: base + '/priser', icon: <IconCoin size={16} /> },
   ];
 }

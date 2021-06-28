@@ -2,6 +2,7 @@ import { UrlObject } from 'url';
 
 import { CellProps, Column } from 'react-table';
 import classNames from 'classnames';
+import { useState } from 'react';
 
 import { format, formatISO, formatRelative } from 'lib/utils/date-fns';
 import { RetreatStatusEnum } from 'lib/graphql';
@@ -128,6 +129,39 @@ export function createCurrencyCell<T extends { amount: number; currency: string 
     ...config,
     Cell(props: CellProps<T, unknown>) {
       return <BrowserOnly>{formatMoney(props.row.original.amount, props.row.original.currency)}</BrowserOnly>;
+    },
+  };
+}
+
+export function createProgressCell<T extends object>({
+  getProgress,
+  ...config
+}: Column<T> & { getProgress: (item: T) => { progress: number; total: number } }): Column<T> {
+  return {
+    ...config,
+    Cell(props: CellProps<T, unknown>) {
+      let { progress, total } = getProgress(props.row.original);
+      let [isHovering, setIsHovering] = useState(false);
+
+      return (
+        <div
+          className="w-full h-full relative"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          {!isHovering ? (
+            <div className="w-full h-full absolute inset-0 flex items-center justify-center">
+              <div className="relative w-full h-2 rounded border border-black overflow-hidden">
+                <div className="h-full bg-black" style={{ width: `calc(100% * (${progress} / ${total}))` }} />
+              </div>
+            </div>
+          ) : (
+            <div className="w-full h-full absolute inset-0 flex items-center justify-center">
+              {progress} / {total}
+            </div>
+          )}
+        </div>
+      );
     },
   };
 }
