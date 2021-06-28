@@ -10,7 +10,7 @@ import { compact } from 'lib/utils/array';
 import { ListRetreatsQuery, ListRetreatsQueryVariables, OrderEnum, RetreatOrderByEnum } from 'lib/graphql';
 import { preloadQueries } from 'lib/graphql/ssr';
 import { PAGINATION_FRAGMENT } from 'lib/graphql/fragments';
-import { CreateReatreat, useSetRetreatStatus } from 'lib/forms';
+import { CreateReatreat, useSetRetreatStatus } from 'components/forms';
 import { PaginatedType } from 'lib/utils/types';
 
 type RetreatType = PaginatedType<'retreats', ListRetreatsQuery>;

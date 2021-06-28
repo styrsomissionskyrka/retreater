@@ -16,8 +16,8 @@ import {
   EDIT_RETREAT_STATUS_FRAGMENT,
   EDIT_RETREAT_PRICING_FIELDS,
   ExportRetreatOrders,
-} from 'lib/forms';
-import { OrdersTable } from 'lib/tables/OrdersTable';
+} from 'components/forms';
+import { OrdersTable } from 'components/tables/OrdersTable';
 
 const Retreat: NextPage = () => {
   const router = useRouter();
