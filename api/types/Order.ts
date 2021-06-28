@@ -124,6 +124,7 @@ export const OrderQuery = n.extendType({
         search: n.stringArg(),
       },
       async resolve(_, args, ctx) {
+        await new Promise((r) => setTimeout(r, 5000));
         let skip = args.perPage * (args.page - 1);
         let take = args.perPage;
 

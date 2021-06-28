@@ -84,8 +84,6 @@ const Retreats: NextPage = () => {
     ];
   }, [setRetreatStatus]);
 
-  if (data == null) return <p>Loading...</p>;
-
   const actions = (
     <Fragment>
       <LoadingButton
@@ -101,7 +99,7 @@ const Retreats: NextPage = () => {
 
   return (
     <Layout.Admin title="Retreater" backLink="/admin" actions={actions}>
-      <DataTable.Provider data={retreats} columns={columns}>
+      <DataTable.Provider data={retreats} columns={columns} loading>
         <DataTable.Layout>
           <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
             <DataTable.Filters.EnumFilter<FiltersType>
@@ -133,7 +131,7 @@ const Retreats: NextPage = () => {
             <DataTable.Body />
           </DataTable.Table>
 
-          <DataTable.Pagination meta={data.retreats.paginationMeta} />
+          <DataTable.Pagination meta={data?.retreats.paginationMeta} />
         </DataTable.Layout>
       </DataTable.Provider>
     </Layout.Admin>

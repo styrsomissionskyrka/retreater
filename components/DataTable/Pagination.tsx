@@ -9,14 +9,23 @@ import { Link } from '../Link';
 import { useDataTable } from './Context';
 
 interface Props {
-  meta: PaginationFieldsFragment;
+  meta?: PaginationFieldsFragment;
 }
 
-export const Pagination: React.FC<Props> = ({ meta }) => {
+const defaultMeta: PaginationFieldsFragment = {
+  hasNextPage: false,
+  hasPreviousPage: false,
+  currentPage: 1,
+  perPage: 1,
+  totalPages: 1,
+  totalItems: 1,
+};
+
+export const Pagination: React.FC<Props> = ({ meta = defaultMeta }) => {
   const table = useDataTable();
   let current = meta.currentPage;
 
-  let rangeStart = (meta.currentPage - 1) * meta.perPage + 1;
+  let rangeStart = (current - 1) * meta.perPage + 1;
   let rangeEnd = rangeStart + Math.min(meta.perPage, table.rows.length) - 1;
 
   return (

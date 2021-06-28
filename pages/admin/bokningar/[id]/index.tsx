@@ -7,7 +7,7 @@ import { authenticatedPage } from 'lib/auth/hocs';
 import { assert } from 'lib/utils/assert';
 import { format } from 'lib/utils/date-fns';
 import { formatMoney } from 'lib/utils/money';
-import { CopyInline, Layout, Link, OrderUI } from 'components';
+import { CopyInline, Layout, OrderUI } from 'components';
 
 const Order: NextPage = () => {
   const { query } = useRouter();

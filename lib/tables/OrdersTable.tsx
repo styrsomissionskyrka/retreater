@@ -34,7 +34,11 @@ interface OrdersTableProps {
 
 export const OrdersTable: React.FC<OrdersTableProps> = ({ retreatId }) => {
   const [variables, setVariables] = useSearchParams(initialVariables);
-  const { previousData, data = previousData } = useQuery(RETREAT_ORDER_QUERY, {
+  const {
+    previousData,
+    data = previousData,
+    loading,
+  } = useQuery(RETREAT_ORDER_QUERY, {
     variables: { ...variables, retreatId },
   });
 
@@ -62,12 +66,10 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({ retreatId }) => {
     ]);
   }, [retreatId]);
 
-  if (data == null) return <p>Laddar...</p>;
-
   let paginationMeta = data?.orders?.paginationMeta;
 
   return (
-    <DataTable.Provider data={orders} columns={columns}>
+    <DataTable.Provider data={orders} columns={columns} loading={loading}>
       <DataTable.Layout>
         <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
           <DataTable.Filters.SearchFilter<FiltersType> queryKey="search" placeholder="Sök e-post" />
@@ -102,7 +104,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({ retreatId }) => {
           <DataTable.Body />
         </DataTable.Table>
 
-        {paginationMeta ? <DataTable.Pagination meta={paginationMeta} /> : null}
+        <DataTable.Pagination meta={paginationMeta} />
       </DataTable.Layout>
     </DataTable.Provider>
   );
