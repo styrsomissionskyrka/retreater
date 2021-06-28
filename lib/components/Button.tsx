@@ -49,9 +49,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           size === 'small' && 'h-8 px-2',
           size === 'normal' && 'h-10 px-5',
           size === 'large' && 'h-12 px-6',
-          size === 'square-small' && 'h-8 w-8',
-          size === 'square-normal' && 'h-10 w-10',
-          size === 'square-large' && 'h-12 w-12',
+          size === 'square-small' && 'h-8 w-8 flex-none',
+          size === 'square-normal' && 'h-10 w-10 flex-none',
+          size === 'square-large' && 'h-12 w-12 flex-none',
 
           className,
         )}

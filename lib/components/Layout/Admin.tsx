@@ -3,11 +3,12 @@ import { UrlObject } from 'url';
 import { cloneElement, Fragment, useRef } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { IconChevronLeft } from '@tabler/icons';
+import { IconCalendarEvent, IconChevronLeft, IconClipboardList, IconUsers } from '@tabler/icons';
 import { useRect } from '@reach/rect';
 
-import { useAuthenticatedUser, useIsomorphicLayoutEffect } from 'lib/hooks';
+import { useAuthenticatedUser, useIsomorphicLayoutEffect, useUserHasRoles } from 'lib/hooks';
 import { setGlobalVariable } from 'lib/utils/css';
+import { compact } from 'lib/utils/array';
 
 import { Link, NavLink } from '../Link';
 import { VisuallyHidden } from '../VisuallyHidden';
@@ -34,12 +35,24 @@ export const Admin: React.FC<Props> = ({
   title = defaultTitle,
   headerTitle = title,
   sidebarTitle = headerTitle,
-  navLinks = [],
+  navLinks: passedNavLinks,
   backLink,
   actions,
   shallowLinks,
   children,
 }) => {
+  const isAdmin = useUserHasRoles(['admin', 'superadmin']);
+  let navLinks: NavLinkConfig[];
+  if (passedNavLinks) {
+    navLinks = passedNavLinks;
+  } else {
+    navLinks = compact([
+      { href: '/admin/retreater', label: 'Retreater', icon: <IconCalendarEvent size={16} /> },
+      { href: '/admin/bokningar', label: 'Bokningar', icon: <IconClipboardList size={16} /> },
+      isAdmin ? { href: '/admin/anvandare', label: 'Användare', icon: <IconUsers size={16} /> } : null,
+    ]);
+  }
+
   const user = useAuthenticatedUser();
   const headerRef = useRef<HTMLElement>(null);
   const rect = useRect(headerRef, { observe: false });

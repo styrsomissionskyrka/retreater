@@ -4,8 +4,8 @@ import {
   gql,
   useQuery,
   TypedDocumentNode,
-  RetreatOrdersQuery,
-  RetreatOrdersQueryVariables,
+  ListAdminOrdersQuery,
+  ListAdminOrdersQueryVariables,
   OrderEnum,
   OrderOrderByEnum,
   OrderStatusEnum,
@@ -16,8 +16,8 @@ import { compact } from 'lib/utils/array';
 import { PaginatedType } from 'lib/utils/types';
 import { DataTable } from 'lib/components';
 
-type OrderType = PaginatedType<'orders', RetreatOrdersQuery>;
-type FiltersType = Omit<RetreatOrdersQueryVariables, 'retreatId'>;
+type OrderType = PaginatedType<'orders', ListAdminOrdersQuery>;
+type FiltersType = Omit<ListAdminOrdersQueryVariables, 'retreatId'>;
 
 const initialVariables: FiltersType = {
   page: 1,
@@ -28,26 +28,39 @@ const initialVariables: FiltersType = {
   search: null,
 };
 
-interface RetreatOrdersTableProps {
-  retreatId: string;
+interface OrdersTableProps {
+  retreatId?: string;
 }
 
-export const RetreatOrdersTable: React.FC<RetreatOrdersTableProps> = ({ retreatId }) => {
+export const OrdersTable: React.FC<OrdersTableProps> = ({ retreatId }) => {
   const [variables, setVariables] = useSearchParams(initialVariables);
   const { previousData, data = previousData } = useQuery(RETREAT_ORDER_QUERY, {
     variables: { ...variables, retreatId },
   });
 
   const orders = compact(data?.orders?.items ?? []);
-  const columns = useMemo<DataTable.Column<OrderType>[]>(
-    () => [
+  const columns = useMemo<DataTable.Column<OrderType>[]>(() => {
+    const getLink = (row: OrderType) => {
+      let suffix = retreatId == null ? '' : '?from=retreat';
+      return `/admin/bokningar/${row.id}${suffix}`;
+    };
+
+    return compact([
       DataTable.Columns.createStatusCell({ accessor: 'status' }),
-      { accessor: 'name', Header: 'Namn' },
-      { accessor: 'email', Header: 'E-post' },
+      DataTable.Columns.createLinkCell({ accessor: 'name', Header: 'Namn', getLink }),
+      DataTable.Columns.createLinkCell({ accessor: 'email', Header: 'E-post', getLink }),
+
+      retreatId != null
+        ? null
+        : DataTable.Columns.createLinkCell({
+            accessor: (row: OrderType) => row.retreat.title,
+            Header: 'Retreat',
+            getLink: (row) => `/admin/retreater/${row.retreat.id}/bokningar`,
+          }),
+
       DataTable.Columns.createRelativeDateCell({ accessor: 'createdAt', Header: 'Skapad' }),
-    ],
-    [],
-  );
+    ]);
+  }, [retreatId]);
 
   if (data == null) return <p>Laddar...</p>;
 
@@ -57,7 +70,7 @@ export const RetreatOrdersTable: React.FC<RetreatOrdersTableProps> = ({ retreatI
     <DataTable.Provider data={orders} columns={columns}>
       <DataTable.Layout>
         <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
-          <DataTable.Filters.SearchFilter<FiltersType> queryKey="search" />
+          <DataTable.Filters.SearchFilter<FiltersType> queryKey="search" placeholder="Sök e-post" />
           <DataTable.Filters.EnumFilter<FiltersType>
             queryKey="orderBy"
             label="Sortera efter"
@@ -102,17 +115,21 @@ const ORDER_FRAGMENT = gql`
     status
     email
     name
+    retreat {
+      id
+      title
+    }
   }
 `;
 
-const RETREAT_ORDER_QUERY: TypedDocumentNode<RetreatOrdersQuery, RetreatOrdersQueryVariables> = gql`
-  query RetreatOrders(
+export const RETREAT_ORDER_QUERY: TypedDocumentNode<ListAdminOrdersQuery, ListAdminOrdersQueryVariables> = gql`
+  query ListAdminOrders(
     $page: Int!
     $perPage: Int!
     $order: OrderEnum!
     $orderBy: OrderOrderByEnum!
     $status: OrderStatusEnum
-    $retreatId: ID!
+    $retreatId: ID
     $search: String
   ) {
     orders(

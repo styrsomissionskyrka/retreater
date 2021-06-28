@@ -37,7 +37,7 @@ export function Filters<T extends QueryObject>({ values, setValues, children }: 
   const ctx = useMemo<FiltersContextType<T>>(() => ({ values, setValues }), [setValues, values]);
   return (
     <FiltersContext.Provider value={ctx}>
-      <form onSubmit={(e) => e.preventDefault()} className="flex items-center space-x-8">
+      <form onSubmit={(e) => e.preventDefault()} className="flex items-center space-x-4">
         {children}
       </form>
     </FiltersContext.Provider>
@@ -105,18 +105,19 @@ export function OrderFilter<T extends QueryObject>({ queryKey }: FilterBaseProps
 
   return (
     <Button
-      className="flex items-center space-x-2"
+      size="square-normal"
       onClick={() => setValue((value === OrderEnum.Asc ? OrderEnum.Desc : OrderEnum.Asc) as T[keyof T])}
       iconStart={value === OrderEnum.Desc ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
-    >
-      {value === OrderEnum.Desc ? 'Stigande' : 'Fallande'}
-    </Button>
+    />
   );
 }
 
 Filters.OrderFilter = OrderFilter;
 
-export function SearchFilter<T extends QueryObject>({ queryKey }: FilterBaseProps<T>) {
+export function SearchFilter<T extends QueryObject>({
+  queryKey,
+  placeholder,
+}: FilterBaseProps<T> & { placeholder: string }) {
   const [value, setValue] = useFilter<T>(queryKey);
   const [proxyValue, setProxyValue] = useState(value?.toString() ?? '');
   const debouncedSetValue = useMemo(() => debounce(setValue, 500), [setValue]);
@@ -125,6 +126,7 @@ export function SearchFilter<T extends QueryObject>({ queryKey }: FilterBaseProp
     <Form.Input
       name={queryKey as string}
       value={proxyValue}
+      placeholder={placeholder}
       onChange={(e) => {
         setProxyValue(e.currentTarget.value);
         debouncedSetValue((e.currentTarget.value === '' ? null : e.currentTarget.value) as any);

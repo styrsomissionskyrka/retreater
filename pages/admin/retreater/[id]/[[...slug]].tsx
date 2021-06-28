@@ -17,7 +17,7 @@ import {
   EDIT_RETREAT_PRICING_FIELDS,
   ExportRetreatOrders,
 } from 'lib/forms';
-import { RetreatOrdersTable } from 'lib/tables/RetreatOrders';
+import { OrdersTable } from 'lib/tables/OrdersTable';
 
 const Retreat: NextPage = () => {
   const router = useRouter();
@@ -49,7 +49,7 @@ const Retreat: NextPage = () => {
       break;
 
     case 'bokningar':
-      form = <RetreatOrdersTable retreatId={retreat.id} />;
+      form = <OrdersTable retreatId={retreat.id} />;
       actions = <ExportRetreatOrders retreatId={retreat.id} />;
       title = 'Bokningar';
       break;

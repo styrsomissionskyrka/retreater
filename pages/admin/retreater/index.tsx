@@ -1,11 +1,11 @@
 import { useMemo, Fragment } from 'react';
 import { NextPage } from 'next';
-import { IconCalendarEvent, IconRefresh, IconUsers } from '@tabler/icons';
+import { IconRefresh } from '@tabler/icons';
 
 import { gql, RetreatStatusEnum, TypedDocumentNode, useQuery } from 'lib/graphql';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
 import { Layout, DataTable, toast, LoadingButton, Spinner } from 'lib/components';
-import { useUserHasRoles, useSearchParams, extractCurrentParams } from 'lib/hooks';
+import { useSearchParams, extractCurrentParams } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
 import { ListRetreatsQuery, ListRetreatsQueryVariables, OrderEnum, RetreatOrderByEnum } from 'lib/graphql';
 import { preloadQueries } from 'lib/graphql/ssr';
@@ -25,12 +25,6 @@ const initialVariables: FiltersType = {
 };
 
 const Retreats: NextPage = () => {
-  const isAdmin = useUserHasRoles(['admin', 'superadmin']);
-  const navLinks: Layout.NavLinkConfig[] = compact([
-    { href: '/admin/retreater', label: 'Retreater', icon: <IconCalendarEvent size={16} /> },
-    isAdmin ? { href: '/admin/anvandare', label: 'Användare', icon: <IconUsers size={16} /> } : null,
-  ]);
-
   const [variables, setVariables] = useSearchParams(initialVariables);
 
   const { previousData, data = previousData, refetch } = useQuery(LIST_RETREATS_QUERY, { variables });
@@ -106,7 +100,7 @@ const Retreats: NextPage = () => {
   );
 
   return (
-    <Layout.Admin title="Retreater" backLink="/admin" navLinks={navLinks} actions={actions}>
+    <Layout.Admin title="Retreater" backLink="/admin" actions={actions}>
       <DataTable.Provider data={retreats} columns={columns}>
         <DataTable.Layout>
           <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
