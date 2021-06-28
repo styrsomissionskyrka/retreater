@@ -16,6 +16,7 @@ import {
   EDIT_RETREAT_STATUS_FRAGMENT,
   EDIT_RETREAT_PRICING_FIELDS,
 } from 'lib/forms';
+import { RetreatOrdersTable } from 'lib/tables/RetreatOrders';
 
 const Retreat: NextPage = () => {
   const router = useRouter();
@@ -47,7 +48,7 @@ const Retreat: NextPage = () => {
       break;
 
     case 'bokningar':
-      form = null;
+      form = <RetreatOrdersTable retreatId={retreat.id} />;
       actions = null;
       title = 'Bokningar';
       break;

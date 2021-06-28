@@ -34,7 +34,7 @@ export const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
     const router = useRouter();
 
     let h = typeof href === 'string' ? href : href.pathname ?? '';
-    let isActive = router.asPath === h;
+    let isActive = router.asPath.split('?')[0] === h;
     let passedClass = classNames(passedClassName, isActive && activeClassName);
 
     return (

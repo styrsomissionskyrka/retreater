@@ -3,6 +3,7 @@ import { UrlObject } from 'url';
 import { useRouter } from 'next/router';
 
 import { PaginationFieldsFragment } from 'lib/graphql';
+import { omit } from 'lib/utils/object';
 
 import { Link } from '../Link';
 import { useDataTable } from './Context';
@@ -42,6 +43,9 @@ const PaginationLink: React.FC<{ page: number; disabled: boolean }> = ({ page, d
     return <span className="cursor-default">{children}</span>;
   }
 
-  let href: UrlObject = page === 1 ? { pathname: router.pathname } : { query: { page } };
+  let href: UrlObject =
+    page === 1
+      ? { pathname: router.pathname, query: omit(router.query, 'page') }
+      : { pathname: router.pathname, query: { ...router.query, page } };
   return <Link href={href}>{children}</Link>;
 };

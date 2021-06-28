@@ -1,9 +1,9 @@
 import * as n from 'nexus';
-import { OrderStatus, Prisma, RetreatStatus } from '@prisma/client';
+import { OrderStatus, Prisma } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
 
 import { assert } from '../../lib/utils/assert';
-import { countBlockingOrders, ensureArrayOfIds, ignoreNull, isRetreatOrderable } from '../utils';
+import { ensureArrayOfIds, ignoreNull, isRetreatOrderable, createPaginationMeta } from '../utils';
 import { Price, Retreat, CheckoutSession, Refund } from '.';
 import { OrderEnum, PaginatedQuery } from './Shared';
 
@@ -118,6 +118,7 @@ export const OrderQuery = n.extendType({
         order: n.nonNull(n.arg({ type: OrderEnum, default: 'asc' })),
         orderBy: n.nonNull(n.arg({ type: OrderOrderByEnum, default: 'createdAt' })),
         status: n.arg({ type: OrderStatusEnum, default: OrderStatus.CONFIRMED }),
+        retreatId: n.idArg(),
       },
       async resolve(_, args, ctx) {
         let skip = args.perPage * (args.page - 1);
@@ -125,6 +126,7 @@ export const OrderQuery = n.extendType({
 
         let where: Prisma.OrderWhereInput = {
           status: ignoreNull(args.status),
+          retreatId: ignoreNull(args.retreatId),
         };
 
         let orders = await ctx.prisma.order.findMany({
@@ -135,15 +137,7 @@ export const OrderQuery = n.extendType({
         });
 
         let total = await ctx.prisma.order.count({ where });
-
-        let paginationMeta = {
-          hasNextPage: args.perPage * (args.page + 1) < total,
-          hasPreviousPage: args.page > 1,
-          currentPage: args.page,
-          totalPages: Math.ceil(total / (args.perPage || 1)),
-          perPage: args.perPage,
-          totalItems: total,
-        };
+        let paginationMeta = createPaginationMeta(args.page, args.perPage, total);
 
         return { items: orders, paginationMeta };
       },

@@ -152,7 +152,7 @@ type Product {
 type Query {
   me: User
   order(id: ID!): Order
-  orders(order: OrderEnum! = ASC, orderBy: OrderOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, status: OrderStatusEnum = CONFIRMED): PaginatedOrder!
+  orders(order: OrderEnum! = ASC, orderBy: OrderOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, retreatId: ID, status: OrderStatusEnum = CONFIRMED): PaginatedOrder!
   retreat(id: ID, slug: String): Retreat
   retreats(order: OrderEnum! = ASC, orderBy: RetreatOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, search: String, status: RetreatStatusEnum): PaginatedRetreat!
   user(id: ID!): User

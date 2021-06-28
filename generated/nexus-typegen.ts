@@ -479,6 +479,7 @@ export interface NexusGenArgTypes {
       orderBy: NexusGenEnums['OrderOrderByEnum']; // OrderOrderByEnum!
       page: number; // Int!
       perPage: number; // Int!
+      retreatId?: string | null; // ID
       status: NexusGenEnums['OrderStatusEnum'] | null; // OrderStatusEnum
     }
     retreat: { // args

@@ -11,8 +11,9 @@ import { ListRetreatsQuery, ListRetreatsQueryVariables, OrderEnum, RetreatOrderB
 import { preloadQueries } from 'lib/graphql/ssr';
 import { PAGINATION_FRAGMENT } from 'lib/graphql/fragments';
 import { CreateReatreat, useSetRetreatStatus } from 'lib/forms';
+import { PaginatedType } from 'lib/utils/types';
 
-type RetreatType = NonNullable<NonNullable<NonNullable<NonNullable<ListRetreatsQuery['retreats']>['items']>[number]>>;
+type RetreatType = PaginatedType<'retreats', ListRetreatsQuery>;
 type FiltersType = ListRetreatsQueryVariables;
 
 const initialVariables: FiltersType = {

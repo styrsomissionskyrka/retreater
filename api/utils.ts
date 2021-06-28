@@ -1,6 +1,8 @@
 import { Claims, UserRole } from '@auth0/nextjs-auth0';
 import { OrderStatus, Prisma, Retreat, RetreatStatus } from '@prisma/client';
 
+import { PaginationMeta } from 'lib/graphql';
+
 import { arrayify } from '../lib/utils/array';
 import { Context } from './context';
 
@@ -59,4 +61,15 @@ export async function isRetreatOrderable(retreat: Retreat | null | undefined, ct
   if (totalOrders >= retreat.maxParticipants) return false;
 
   return true;
+}
+
+export function createPaginationMeta(page: number, perPage: number, totalItems: number): PaginationMeta {
+  return {
+    hasNextPage: perPage * page < totalItems,
+    hasPreviousPage: page > 1,
+    currentPage: page,
+    totalPages: Math.ceil(totalItems / (perPage || 1)),
+    perPage: perPage,
+    totalItems: totalItems,
+  };
 }

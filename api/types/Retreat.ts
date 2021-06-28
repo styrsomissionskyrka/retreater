@@ -4,7 +4,13 @@ import { UserInputError } from 'apollo-server-micro';
 import slugify from 'slug';
 
 import { compact } from '../../lib/utils/array';
-import { clearUndefined, authorizedWithRoles, countBlockingOrders, isRetreatOrderable } from '../utils';
+import {
+  clearUndefined,
+  authorizedWithRoles,
+  countBlockingOrders,
+  isRetreatOrderable,
+  createPaginationMeta,
+} from '../utils';
 import { OrderEnum, PaginatedQuery } from '.';
 
 export const RetreatStatusEnum = n.enumType({
@@ -90,15 +96,7 @@ export const RetreatQuery = n.extendType({
         });
 
         let total = await ctx.prisma.retreat.count({ where });
-
-        let paginationMeta = {
-          hasNextPage: args.perPage * (args.page + 1) < total,
-          hasPreviousPage: args.page > 1,
-          currentPage: args.page,
-          totalPages: Math.ceil(total / (args.perPage || 1)),
-          perPage: args.perPage,
-          totalItems: total,
-        };
+        let paginationMeta = createPaginationMeta(args.page, args.perPage, total);
 
         return { items: retreats, paginationMeta };
       },
