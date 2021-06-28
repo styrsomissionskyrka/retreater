@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
+import { useMemo, Fragment } from 'react';
 import { NextPage } from 'next';
-import { IconCalendarEvent, IconUsers } from '@tabler/icons';
+import { IconCalendarEvent, IconRefresh, IconUsers } from '@tabler/icons';
 
 import { gql, RetreatStatusEnum, TypedDocumentNode, useQuery } from 'lib/graphql';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
-import { Layout, DataTable, toast } from 'lib/components';
+import { Layout, DataTable, toast, LoadingButton, Spinner } from 'lib/components';
 import { useUserHasRoles, useSearchParams, extractCurrentParams } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
 import { ListRetreatsQuery, ListRetreatsQueryVariables, OrderEnum, RetreatOrderByEnum } from 'lib/graphql';
@@ -32,7 +32,7 @@ const Retreats: NextPage = () => {
 
   const [variables, setVariables] = useSearchParams(initialVariables);
 
-  const { previousData, data = previousData } = useQuery(LIST_RETREATS_QUERY, { variables });
+  const { previousData, data = previousData, refetch } = useQuery(LIST_RETREATS_QUERY, { variables });
   const [setRetreatStatus] = useSetRetreatStatus();
 
   const retreats = compact(data?.retreats?.items ?? []);
@@ -91,8 +91,21 @@ const Retreats: NextPage = () => {
 
   if (data == null) return <p>Loading...</p>;
 
+  const actions = (
+    <Fragment>
+      <LoadingButton
+        size="square-normal"
+        onClick={refetch}
+        iconStart={<IconRefresh size={16} />}
+        spinner={<Spinner icon={IconRefresh} size={16} />}
+        aria-label="Uppdatera listan"
+      />
+      <CreateReatreat />
+    </Fragment>
+  );
+
   return (
-    <Layout.Admin title="Retreater" backLink="/admin" navLinks={navLinks} actions={<CreateReatreat />}>
+    <Layout.Admin title="Retreater" backLink="/admin" navLinks={navLinks} actions={actions}>
       <DataTable.Provider data={retreats} columns={columns}>
         <DataTable.Layout>
           <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>

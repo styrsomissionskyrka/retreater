@@ -114,7 +114,7 @@ export const Admin: React.FC<Props> = ({
         <main className="flex-1 px-8 pt-10 pb-20">
           <div className="w-full max-w-4xl mx-auto mb-20 flex items-start">
             <h1 className="text-4xl font-medium">{headerTitle}</h1>
-            {actions ? <div className="ml-auto">{actions}</div> : null}
+            {actions ? <div className="ml-auto flex items-center space-x-2">{actions}</div> : null}
           </div>
           <div className="relative w-full max-w-4xl mx-auto">{children}</div>
         </main>

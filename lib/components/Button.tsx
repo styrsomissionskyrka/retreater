@@ -66,11 +66,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = 'Button';
 
-export const LoadingButton: React.FC<Omit<ButtonProps, 'onClick'> & { onClick: () => Promise<any> }> = ({
+type LoadingButtonProps = Omit<ButtonProps, 'onClick'> & {
+  onClick: () => Promise<any>;
+  spinner?: React.ReactNode;
+};
+
+export const LoadingButton: React.FC<LoadingButtonProps> = ({
   iconStart,
   onClick,
   disabled,
   children,
+  spinner = <Spinner size={16} />,
   ...props
 }) => {
   const [loading, setLoading] = useSafeState(false);
@@ -84,7 +90,7 @@ export const LoadingButton: React.FC<Omit<ButtonProps, 'onClick'> & { onClick: (
     }
   };
 
-  let icon = loading ? <Spinner size={16} /> : iconStart;
+  let icon = loading ? spinner : iconStart;
 
   return (
     <Button {...props} iconStart={icon} onClick={handleClick} disabled={loading || disabled}>

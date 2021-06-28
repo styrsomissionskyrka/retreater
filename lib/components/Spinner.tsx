@@ -1,6 +1,10 @@
-import { IconLoader, TablerIconProps } from '@tabler/icons';
+import { IconLoader, TablerIcon, TablerIconProps } from '@tabler/icons';
 import classNames from 'classnames';
 
-export const Spinner: React.FC<TablerIconProps> = ({ className, ...props }) => {
-  return <IconLoader {...props} className={classNames(className, 'animate-spin')} />;
+type SpinnerProps = TablerIconProps & {
+  icon?: TablerIcon;
+};
+
+export const Spinner: React.FC<SpinnerProps> = ({ icon: Icon = IconLoader, className, ...props }) => {
+  return <Icon {...props} className={classNames(className, 'animate-spin')} />;
 };
