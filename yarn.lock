@@ -2277,6 +2277,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/wicg-native-file-system@^2020.6.0":
+  version "2020.6.0"
+  resolved "https://registry.yarnpkg.com/@types/wicg-native-file-system/-/wicg-native-file-system-2020.6.0.tgz#63cbb7bac47bdb9eae4b0d66e63134b33e47e05d"
+  integrity sha512-M7n6jvHfUzUXDtf6UGpL6rVIddV7UzEYrvwZPORApeHvDGQnZJ79fXorLlDj8xJKyUemnEBohRd8yx09k9NBUw==
+
 "@types/ws@^7.0.0":
   version "7.4.4"
   resolved "https://registry.yarnpkg.com/@types/ws/-/ws-7.4.4.tgz#93e1e00824c1de2608c30e6de4303ab3b4c0c9bc"
@@ -4071,6 +4076,31 @@ csstype@^3.0.2:
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.7.tgz#2a5fb75e1015e84dd15692f71e89a1450290950b"
   integrity sha512-KxnUB0ZMlnUWCsx2Z8MUsr6qV6ja1w9ArPErJaJaF8a5SOWoHLIszeCTKGRGRgtLgYrs1E8CHkNSP1VZTTPc9g==
+
+csv-generate@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/csv-generate/-/csv-generate-3.4.0.tgz#360ed73ef8ec7119515a47c3bd5970ac4b988f00"
+  integrity sha512-D6yi7c6lL70cpTx3TQIVWKrfxuLiKa0pBizu0zi7fSRXlhmE7u674gk9k1IjCEnxKq2t6xzbXnxcOmSdBbE8vQ==
+
+csv-parse@^4.15.3:
+  version "4.16.0"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-4.16.0.tgz#b4c875e288a41f7ff917cb0d7d45880d563034f6"
+  integrity sha512-Zb4tGPANH4SW0LgC9+s9Mnequs9aqn7N3/pCqNbVjs2XhEF6yWNU2Vm4OGl1v2Go9nw8rXt87Cm2QN/o6Vpqgg==
+
+csv-stringify@^5.6.2:
+  version "5.6.2"
+  resolved "https://registry.yarnpkg.com/csv-stringify/-/csv-stringify-5.6.2.tgz#e653783e2189c4c797fbb12abf7f4943c787caa9"
+  integrity sha512-n3rIVbX6ylm1YsX2NEug9IaPV8xRnT+9/NNZbrA/bcHgOSSeqtWla6XnI/xmyu57wIw+ASCAoX1oM6EZtqJV0A==
+
+csv@^5.5.0:
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/csv/-/csv-5.5.0.tgz#8ef89e9ac22559064aedf3cbbb912ed4c2aaf9ac"
+  integrity sha512-32tcuxdb4HW3zbk8NBcVQb8/7xuJB5sv+q4BuQ6++E/K6JvHvWoCHcGzB5Au95vVikNH4ztE0XNC/Bws950cfA==
+  dependencies:
+    csv-generate "^3.4.0"
+    csv-parse "^4.15.3"
+    csv-stringify "^5.6.2"
+    stream-transform "^2.1.0"
 
 cypress-nextjs-auth0@^2.0.1:
   version "2.0.1"
@@ -7508,6 +7538,11 @@ minimist@^1.1.1, minimist@^1.2.0, minimist@^1.2.5:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
 
+mixme@^0.5.0:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/mixme/-/mixme-0.5.1.tgz#b3da79a563b2da46efba9519830059e4c2a9e40f"
+  integrity sha512-NaeZIckeBFT7i0XBEpGyFcAE0/bLcQ9MHErTpnU3bLWVE5WZbxG5Y3fDsMxYGifTo5khDA42OquXCC2ngKJB+g==
+
 mkdirp@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
@@ -9341,6 +9376,13 @@ stream-parser@^0.3.1:
   integrity sha1-FhhUhpRCACGhGC/wrxkRwSl2F3M=
   dependencies:
     debug "2"
+
+stream-transform@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/stream-transform/-/stream-transform-2.1.0.tgz#e68cc062cced5b8ee669ae97f4be473eee5d9227"
+  integrity sha512-bwQO+75rzQbug7e5OOHnOR3FgbJ0fCjHmDIdynkwUaFzleBXugGmv2dx3sX3aIHUQRLjrcisRPgN9BWl63uGgw==
+  dependencies:
+    mixme "^0.5.0"
 
 streamsearch@0.1.2:
   version "0.1.2"

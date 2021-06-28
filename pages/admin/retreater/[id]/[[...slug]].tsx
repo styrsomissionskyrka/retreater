@@ -15,6 +15,7 @@ import {
   EDIT_RETREAT_FRAGMENT,
   EDIT_RETREAT_STATUS_FRAGMENT,
   EDIT_RETREAT_PRICING_FIELDS,
+  ExportRetreatOrders,
 } from 'lib/forms';
 import { RetreatOrdersTable } from 'lib/tables/RetreatOrders';
 
@@ -49,7 +50,7 @@ const Retreat: NextPage = () => {
 
     case 'bokningar':
       form = <RetreatOrdersTable retreatId={retreat.id} />;
-      actions = null;
+      actions = <ExportRetreatOrders retreatId={retreat.id} />;
       title = 'Bokningar';
       break;
 

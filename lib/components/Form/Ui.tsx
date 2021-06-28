@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { ElementProps } from 'lib/utils/types';
 import { useComposedRefs, useResizedTextarea } from 'lib/hooks';
 
-import { Button } from '../Button';
+import { Button, ButtonProps } from '../Button';
 import { Spinner } from '../Spinner';
 
 export type FormProps = ElementProps<'form'>;
@@ -41,7 +41,7 @@ export const ActionRow = forwardRef<HTMLDivElement, { children?: React.ReactNode
 
 ActionRow.displayName = 'Form.ActionRow';
 
-export type SubmitProps = Omit<ElementProps<'button'>, 'type'> & { isSubmitting?: boolean };
+export type SubmitProps = Omit<ElementProps<'button'>, 'type'> & ButtonProps & { isSubmitting?: boolean };
 
 export const Submit = forwardRef<HTMLButtonElement, SubmitProps>(({ isSubmitting, children, ...props }, ref) => {
   return (

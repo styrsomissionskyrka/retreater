@@ -167,3 +167,20 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 );
 
 Select.displayName = 'Form.Select';
+
+export type CheckboxProps = Omit<ElementProps<'input'>, 'type'> & ControlProps;
+
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
+  ({ label, error, disabled, prefix, suffix, ...props }, ref) => {
+    let invalid = error != null;
+
+    return (
+      <label className="flex flex-row space-x-2 items-center">
+        <input {...props} type="checkbox" ref={ref} disabled={disabled} aria-invalid={invalid} />
+        <span>{label}</span>
+      </label>
+    );
+  },
+);
+
+Checkbox.displayName = 'Form.Checkbox';
