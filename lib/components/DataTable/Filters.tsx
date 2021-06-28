@@ -1,5 +1,6 @@
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useContext, useState, useMemo, useCallback } from 'react';
 import { IconChevronUp, IconChevronDown } from '@tabler/icons';
+import debounce from 'lodash.debounce';
 
 import { QueryObject, SetParamsCallback } from 'lib/hooks';
 import { assert, ensure } from 'lib/utils/assert';
@@ -23,7 +24,7 @@ function useFilter<T extends QueryObject>(key: keyof T): [value: T[keyof T], set
   assert(key in values, `The query key ${key} is not available on the values.`);
 
   let value = values[key];
-  let setValue = (next: T[keyof T]) => setValues({ [key]: next } as Partial<T>);
+  let setValue = useCallback((next: T[keyof T]) => setValues({ [key]: next } as Partial<T>), [key, setValues]);
 
   return [value, setValue];
 }
@@ -43,8 +44,11 @@ export function Filters<T extends QueryObject>({ values, setValues, children }: 
   );
 }
 
-interface EnumFilterProps<T extends QueryObject> {
+interface FilterBaseProps<T extends QueryObject> {
   queryKey: keyof T;
+}
+
+interface EnumFilterProps<T extends QueryObject> extends FilterBaseProps<T> {
   possibleValues: { value: string; label: React.ReactNode }[];
   label: React.ReactNode;
   allowEmpty?: boolean;
@@ -96,7 +100,7 @@ export function EnumFilter<T extends QueryObject>({
 
 Filters.EnumFilter = EnumFilter;
 
-export function OrderFilter<T extends QueryObject>({ queryKey }: { queryKey: keyof T }) {
+export function OrderFilter<T extends QueryObject>({ queryKey }: FilterBaseProps<T>) {
   const [value, setValue] = useFilter<T>(queryKey);
 
   return (
@@ -111,3 +115,22 @@ export function OrderFilter<T extends QueryObject>({ queryKey }: { queryKey: key
 }
 
 Filters.OrderFilter = OrderFilter;
+
+export function SearchFilter<T extends QueryObject>({ queryKey }: FilterBaseProps<T>) {
+  const [value, setValue] = useFilter<T>(queryKey);
+  const [proxyValue, setProxyValue] = useState(value?.toString() ?? '');
+  const debouncedSetValue = useMemo(() => debounce(setValue, 500), [setValue]);
+
+  return (
+    <Form.Input
+      name={queryKey as string}
+      value={proxyValue}
+      onChange={(e) => {
+        setProxyValue(e.currentTarget.value);
+        debouncedSetValue((e.currentTarget.value === '' ? null : e.currentTarget.value) as any);
+      }}
+    />
+  );
+}
+
+Filters.SearchFilter = SearchFilter;

@@ -480,6 +480,7 @@ export interface NexusGenArgTypes {
       page: number; // Int!
       perPage: number; // Int!
       retreatId?: string | null; // ID
+      search?: string | null; // String
       status: NexusGenEnums['OrderStatusEnum'] | null; // OrderStatusEnum
     }
     retreat: { // args

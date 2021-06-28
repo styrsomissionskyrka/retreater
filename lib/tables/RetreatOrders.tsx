@@ -25,6 +25,7 @@ const initialVariables: FiltersType = {
   order: OrderEnum.Desc,
   orderBy: OrderOrderByEnum.CreatedAt,
   status: null,
+  search: null,
 };
 
 interface RetreatOrdersTableProps {
@@ -56,6 +57,7 @@ export const RetreatOrdersTable: React.FC<RetreatOrdersTableProps> = ({ retreatI
     <DataTable.Provider data={orders} columns={columns}>
       <DataTable.Layout>
         <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
+          <DataTable.Filters.SearchFilter<FiltersType> queryKey="search" />
           <DataTable.Filters.EnumFilter<FiltersType>
             queryKey="orderBy"
             label="Sortera efter"
@@ -111,8 +113,17 @@ const RETREAT_ORDER_QUERY: TypedDocumentNode<RetreatOrdersQuery, RetreatOrdersQu
     $orderBy: OrderOrderByEnum!
     $status: OrderStatusEnum
     $retreatId: ID!
+    $search: String
   ) {
-    orders(page: $page, perPage: $perPage, order: $order, orderBy: $orderBy, status: $status, retreatId: $retreatId) {
+    orders(
+      page: $page
+      perPage: $perPage
+      order: $order
+      orderBy: $orderBy
+      status: $status
+      retreatId: $retreatId
+      search: $search
+    ) {
       paginationMeta {
         ...PaginationFields
       }

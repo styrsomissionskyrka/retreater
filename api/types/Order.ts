@@ -119,6 +119,7 @@ export const OrderQuery = n.extendType({
         orderBy: n.nonNull(n.arg({ type: OrderOrderByEnum, default: 'createdAt' })),
         status: n.arg({ type: OrderStatusEnum, default: OrderStatus.CONFIRMED }),
         retreatId: n.idArg(),
+        search: n.stringArg(),
       },
       async resolve(_, args, ctx) {
         let skip = args.perPage * (args.page - 1);
@@ -127,6 +128,7 @@ export const OrderQuery = n.extendType({
         let where: Prisma.OrderWhereInput = {
           status: ignoreNull(args.status),
           retreatId: ignoreNull(args.retreatId),
+          email: args.search ? { contains: args.search } : undefined,
         };
 
         let orders = await ctx.prisma.order.findMany({
