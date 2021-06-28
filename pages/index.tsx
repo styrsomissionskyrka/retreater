@@ -62,26 +62,31 @@ const Home: NextPage = () => {
         <ul className="space-y-8">
           {retreats.map((retreat) => (
             <li key={retreat.id}>
-              <h2>{retreat.title}</h2>
-              <ul>
-                {retreat.products.map((product) => {
-                  let price = product.prices[0];
-                  if (price == null) return null;
+              <h2>
+                {retreat.title} {retreat.canPlaceOrder ? '' : 'fullbokad'}
+              </h2>
+              {retreat.canPlaceOrder ? (
+                <ul>
+                  {retreat.products.map((product) => {
+                    let price = product.prices[0];
+                    if (price == null) return null;
 
-                  return (
-                    <li key={product.id}>
-                      <p>{product.name}</p>
-                      <button
-                        type="button"
-                        disabled={creatingOrder || checkingOutOrder}
-                        onClick={() => handleCheckout(retreat.id, price.id)}
-                      >
-                        Boka
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
+                    return (
+                      <li key={product.id}>
+                        <p>{product.name}</p>
+                        <button
+                          type="button"
+                          disabled={creatingOrder || checkingOutOrder}
+                          onClick={() => handleCheckout(retreat.id, price.id)}
+                        >
+                          Boka
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : null}
+              <hr />
             </li>
           ))}
         </ul>
@@ -94,10 +99,11 @@ export default Home;
 
 const INDEX_LIST_RETREATS: TypedDocumentNode<IndexListRetreatsQuery> = gql`
   query IndexListRetreats {
-    retreats(page: 1, perPage: 10) {
+    retreats(page: 1, perPage: 10, status: PUBLISHED) {
       items {
         id
         title
+        canPlaceOrder
         products {
           id
           name
