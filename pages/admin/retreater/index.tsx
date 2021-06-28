@@ -140,7 +140,7 @@ const Retreats: NextPage = () => {
   );
 };
 
-export const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQueryVariables> = gql`
+const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQueryVariables> = gql`
   ${PAGINATION_FRAGMENT}
 
   query ListRetreats(

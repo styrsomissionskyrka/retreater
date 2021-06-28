@@ -35,7 +35,7 @@ const handler: NextApiHandler = async (req, res) => {
           { key: 'createdAt', header: 'Skapad' },
           { key: 'updatedAt', header: 'Uppdaterad' },
         ],
-        cast: { date: (date) => format(date, 'yyyy-MM-dd hh:mm') },
+        cast: { date: (date) => format(date, 'yyyy-MM-dd HH:mm') },
       },
       (err, data) => {
         if (err) {

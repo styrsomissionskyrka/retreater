@@ -186,7 +186,9 @@ export interface NexusGenFieldTypes {
     updateRetreat: NexusGenRootTypes['Retreat'] | null; // Retreat
   }
   Order: { // field return type
+    cancelledAt: NexusGenScalars['Date'] | null; // Date
     checkoutSessions: NexusGenRootTypes['CheckoutSession'][]; // [CheckoutSession!]!
+    confirmedAt: NexusGenScalars['Date'] | null; // Date
     createdAt: NexusGenScalars['Date']; // Date!
     email: string; // String!
     id: string; // ID!
@@ -321,7 +323,9 @@ export interface NexusGenFieldTypeNames {
     updateRetreat: 'Retreat'
   }
   Order: { // field return type name
+    cancelledAt: 'Date'
     checkoutSessions: 'CheckoutSession'
+    confirmedAt: 'Date'
     createdAt: 'Date'
     email: 'String'
     id: 'ID'

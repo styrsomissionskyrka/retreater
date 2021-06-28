@@ -68,7 +68,9 @@ type Mutation {
 }
 
 type Order {
+  cancelledAt: Date
   checkoutSessions: [CheckoutSession!]!
+  confirmedAt: Date
   createdAt: Date!
   email: String!
   id: ID!

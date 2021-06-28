@@ -30,6 +30,8 @@ export const Order = n.objectType({
     t.nonNull.id('id');
     t.nonNull.date('createdAt');
     t.nonNull.date('updatedAt');
+    t.date('confirmedAt');
+    t.date('cancelledAt');
 
     t.nonNull.field('status', { type: OrderStatusEnum });
 

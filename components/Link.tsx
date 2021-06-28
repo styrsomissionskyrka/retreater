@@ -8,7 +8,22 @@ type LinkProps = Omit<NextLinkProps, 'as' | 'passHref'> &
   Omit<React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>, 'href' | 'ref'>;
 
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ href, replace, scroll, shallow, prefetch, locale, children, target, rel: passedRel, ...anchor }, ref) => {
+  (
+    {
+      href,
+      replace,
+      scroll,
+      shallow,
+      prefetch,
+      locale,
+      children,
+      target,
+      rel: passedRel,
+      className = 'hover:text-blue-500',
+      ...anchor
+    },
+    ref,
+  ) => {
     let rel = passedRel;
     if (target === '_blank' && ref != null) {
       rel = 'noopener noreferrer';
@@ -16,7 +31,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 
     return (
       <NextLink href={href} replace={replace} scroll={scroll} shallow={shallow} prefetch={prefetch} locale={locale}>
-        <a {...anchor} ref={ref} target={target} rel={rel}>
+        <a {...anchor} ref={ref} target={target} rel={rel} className={className}>
           {children}
           {target === '_blank' ? ' ↗' : ''}
         </a>

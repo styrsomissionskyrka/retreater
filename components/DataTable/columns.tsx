@@ -7,31 +7,18 @@ import { useState } from 'react';
 import { format, formatISO, formatRelative } from 'lib/utils/date-fns';
 import { OrderStatusEnum, RetreatStatusEnum } from 'lib/graphql';
 import { formatMoney } from 'lib/utils/money';
+import { statusColorMap } from 'lib/utils/colors';
 
 import { Link, Menu } from '..';
 import { BrowserOnly } from '../BrowserOnly';
 
 export function createStatusCell<T extends object>(config: Column<T>): Column<T> {
-  const colorMap: Record<RetreatStatusEnum | OrderStatusEnum, string> = {
-    [RetreatStatusEnum.Archived]: 'bg-gray-300',
-    [RetreatStatusEnum.Draft]: 'bg-yellow-500',
-    [RetreatStatusEnum.Published]: 'bg-green-500',
-
-    [OrderStatusEnum.Cancelled]: 'bg-gray-300',
-    [OrderStatusEnum.Confirmed]: 'bg-green-500',
-    [OrderStatusEnum.Created]: 'bg-yellow-500',
-    [OrderStatusEnum.Declined]: 'bg-orange-500',
-    [OrderStatusEnum.Errored]: 'bg-red-500',
-    [OrderStatusEnum.PartiallyConfirmed]: 'bg-green-500',
-    [OrderStatusEnum.Pending]: 'bg-yellow-500',
-  };
-
   return {
     ...config,
     Cell(props: CellProps<T, RetreatStatusEnum | OrderStatusEnum>) {
       return (
         <div className="flex items-center justify-center text-center">
-          <span className={classNames(colorMap[props.value], 'block w-2 h-2 rounded-full')} />
+          <span className={classNames(statusColorMap[props.value], 'block w-2 h-2 rounded-full')} />
         </div>
       );
     },

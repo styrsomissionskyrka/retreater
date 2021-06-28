@@ -67,7 +67,7 @@ const Retreat: NextPage = () => {
   );
 };
 
-export const EDIT_RETREAT_FORM_QUERY: TypedDocumentNode<EditRetreatFormQuery, EditRetreatFormQueryVariables> = gql`
+const EDIT_RETREAT_FORM_QUERY: TypedDocumentNode<EditRetreatFormQuery, EditRetreatFormQueryVariables> = gql`
   query EditRetreatForm($id: ID!) {
     retreat(id: $id) {
       ...EditRetreatFields
