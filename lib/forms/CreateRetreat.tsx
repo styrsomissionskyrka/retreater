@@ -4,7 +4,7 @@ import { SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
 import { gql, TypedDocumentNode, useMutation } from 'lib/graphql';
-import { Button, ConnectedForm, Dialog, toast } from 'lib/components';
+import { Button, ConnectedForm, Dialog, toast } from 'components';
 import { CreateRetreatMutation, CreateRetreatMutationVariables } from 'lib/graphql';
 import * as log from 'lib/utils/log';
 

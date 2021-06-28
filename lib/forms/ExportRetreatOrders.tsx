@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 
-import { Button, Dialog, Form, toast } from 'lib/components';
+import { Button, Dialog, Form, toast } from 'components';
 import { getNewFileHandle, verifyPermission, writeFile, supportsFileSystemAPI } from 'lib/utils/files';
 
 interface ExportRetreatOrdersProps {

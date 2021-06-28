@@ -1,6 +1,6 @@
 import { SubmitHandler } from 'react-hook-form';
 
-import { ConnectedForm, toast } from 'lib/components';
+import { ConnectedForm, toast } from 'components';
 import {
   gql,
   TypedDocumentNode,

@@ -8,7 +8,7 @@ import { format, formatISO, formatRelative } from 'lib/utils/date-fns';
 import { OrderStatusEnum, RetreatStatusEnum } from 'lib/graphql';
 import { formatMoney } from 'lib/utils/money';
 
-import { Link, Menu } from '../';
+import { Link, Menu } from '..';
 import { BrowserOnly } from '../BrowserOnly';
 
 export function createStatusCell<T extends object>(config: Column<T>): Column<T> {

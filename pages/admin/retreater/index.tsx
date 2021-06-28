@@ -4,7 +4,7 @@ import { IconRefresh } from '@tabler/icons';
 
 import { gql, RetreatStatusEnum, TypedDocumentNode, useQuery } from 'lib/graphql';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
-import { Layout, DataTable, toast, LoadingButton, Spinner } from 'lib/components';
+import { Layout, DataTable, toast, LoadingButton, Spinner } from 'components';
 import { useSearchParams, extractCurrentParams } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
 import { ListRetreatsQuery, ListRetreatsQueryVariables, OrderEnum, RetreatOrderByEnum } from 'lib/graphql';

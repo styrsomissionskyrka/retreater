@@ -14,7 +14,7 @@ import {
   useMutation,
   TypedDocumentNode,
 } from 'lib/graphql';
-import { Form, BrowserOnly, DataTable, Spinner, ToggleButton, Link } from 'lib/components';
+import { Form, BrowserOnly, DataTable, Spinner, ToggleButton, Link } from 'components';
 import { formatCents, toCents } from 'lib/utils/money';
 
 interface EditPricingProps {

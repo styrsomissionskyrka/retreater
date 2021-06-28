@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 
 import { authenticatedPage } from 'lib/auth/hocs';
-import { Layout } from 'lib/components';
+import { Layout } from 'components';
 import { OrdersTable } from 'lib/tables/OrdersTable';
 
 const Bokningar: NextPage = () => {

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { IconClipboardList, IconCoin, IconInfoCircle } from '@tabler/icons';
 
 import { EditRetreatFormQuery, EditRetreatFormQueryVariables, gql, TypedDocumentNode, useQuery } from 'lib/graphql';
-import { Layout } from 'lib/components';
+import { Layout } from 'components';
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
 import { preloadQueries } from 'lib/graphql/ssr';
 import { assert } from 'lib/utils/assert';

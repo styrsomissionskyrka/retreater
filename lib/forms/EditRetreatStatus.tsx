@@ -12,7 +12,7 @@ import {
   FetchResult,
   RetreatStatusEnum,
 } from 'lib/graphql';
-import { Menu, toast } from 'lib/components';
+import { Menu, toast } from 'components';
 
 interface EditRetreatStatusProps {
   retreat: EditRetreatStatusFieldsFragment;

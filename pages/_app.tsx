@@ -7,9 +7,9 @@ import { useRouter } from 'next/router';
 
 import { ApolloProvider } from 'lib/graphql';
 import { useAppClient } from 'lib/graphql/client';
-import { PageWrapper, AdminWrapper } from 'lib/components/PageWrappers';
+import { PageWrapper, AdminWrapper } from 'components/PageWrappers';
 import { ExtendedAppProps, ExtendedNextComponentType } from 'lib/types/next';
-import { Toaster } from 'lib/components';
+import { Toaster } from 'components';
 
 const App: React.FC<ExtendedAppProps> = ({ Component, pageProps }) => {
   const client = useAppClient({ initialState: pageProps.initialState });

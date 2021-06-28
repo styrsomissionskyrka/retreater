@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react';
 import { IconPlus } from '@tabler/icons';
 import { SubmitHandler } from 'react-hook-form';
 
-import { Button, ConnectedForm, Dialog, toast } from 'lib/components';
+import { Button, ConnectedForm, Dialog, toast } from 'components';
 import {
   gql,
   TypedDocumentNode,

@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
-import { Layout } from 'lib/components';
+import { Layout } from 'components';
 
 const Users: NextPage = () => {
   return (

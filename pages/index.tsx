@@ -11,7 +11,7 @@ import {
   CheckoutOrderMutationVariables,
   useMutation,
 } from 'lib/graphql';
-import { Link } from 'lib/components';
+import { Link } from 'components';
 import { usePreloadStripe, getStripe } from 'lib/stripe';
 import { assert } from 'lib/utils/assert';
 

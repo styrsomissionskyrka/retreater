@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { IconCalendarEvent, IconUsers } from '@tabler/icons';
 
 import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
-import { Layout } from 'lib/components';
+import { Layout } from 'components';
 import { useUserHasRoles } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
 

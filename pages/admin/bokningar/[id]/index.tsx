@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 
 import { gql, TypedDocumentNode, AdminOrderQuery, AdminOrderQueryVariables, useQuery } from 'lib/graphql';
 import { authenticatedPage } from 'lib/auth/hocs';
-import { Layout } from 'lib/components';
+import { Layout } from 'components';
 import { assert } from 'lib/utils/assert';
 import { format } from 'lib/utils/date-fns';
 import { formatMoney } from 'lib/utils/money';
