@@ -4,11 +4,11 @@
  */
 
 
-import { Context } from "./../api/context/index"
-import { StripePaymentIntent, StripeLineItem, StripeCheckoutSession, StripePrice, StripeProduct, StripeRefund } from "./../api/source-types"
-import { Order, Retreat } from "@prisma/client"
-import { core, connectionPluginCore } from "nexus"
-import { FieldAuthorizeResolver } from "nexus/dist/plugins/fieldAuthorizePlugin"
+import type { Context } from "./../api/context/index"
+import type { StripePaymentIntent, StripeLineItem, StripeCheckoutSession, StripePrice, StripeProduct, StripeRefund } from "./../api/source-types"
+import type { Order, Retreat } from "@prisma/client"
+import type { core, connectionPluginCore } from "nexus"
+import type { FieldAuthorizeResolver } from "nexus/dist/plugins/fieldAuthorizePlugin"
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
     /**
@@ -574,6 +574,8 @@ export interface NexusGenTypes {
 
 declare global {
   interface NexusGenPluginTypeConfig<TypeName extends string> {
+  }
+  interface NexusGenPluginInputTypeConfig<TypeName extends string> {
   }
   interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
     

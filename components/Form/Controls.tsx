@@ -1,4 +1,4 @@
-import { Fragment, forwardRef, useRef } from 'react';
+import { forwardRef, useRef } from 'react';
 import classNames, { Argument } from 'classnames';
 
 import { ElementProps } from 'lib/utils/types';

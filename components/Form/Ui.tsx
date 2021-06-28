@@ -1,8 +1,7 @@
-import React, { forwardRef, useRef } from 'react';
+import React, { forwardRef } from 'react';
 import classNames from 'classnames';
 
 import { ElementProps } from 'lib/utils/types';
-import { useComposedRefs, useResizedTextarea } from 'lib/hooks';
 
 import { Button, ButtonProps } from '../Button';
 import { Spinner } from '../Spinner';
