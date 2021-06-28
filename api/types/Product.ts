@@ -32,14 +32,6 @@ export const Product = n.objectType({
 export const RetreatWithProducts = n.extendType({
   type: 'Retreat',
   definition(t) {
-    t.field('registrationFee', {
-      type: Product,
-      async resolve(source, _, ctx) {
-        if (source.registrationFee == null) return null;
-        return ctx.stripe.products.retrieve(source.registrationFee);
-      },
-    });
-
     t.nonNull.list.nonNull.field('products', {
       type: Product,
       args: { active: n.booleanArg() },

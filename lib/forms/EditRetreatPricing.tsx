@@ -92,9 +92,6 @@ export const EDIT_RETREAT_PRODUCT_FIELDS = gql`
 export const EDIT_RETREAT_PRICING_FIELDS = gql`
   fragment EditRetreatPricingFields on Retreat {
     id
-    registrationFee {
-      ...EditRetreatProductFields
-    }
     products {
       ...EditRetreatProductFields
     }

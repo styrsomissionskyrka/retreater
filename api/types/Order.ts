@@ -3,7 +3,7 @@ import { Order as PrismaOrder, OrderState } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
 
 import { assert } from '../../lib/utils/assert';
-import { ensureArrayOfIds } from '../utils';
+import { ensureArrayOfIds, ignoreNull } from '../utils';
 import { Price, Retreat, CheckoutSession, Refund } from '.';
 
 export const OrderStateEnum = n.enumType({
@@ -90,6 +90,21 @@ export const OrderQuery = n.extendType({
       args: { id: n.nonNull(n.idArg()) },
       resolve(_, args, ctx) {
         return ctx.prisma.order.findUnique({ where: { id: args.id } });
+      },
+    });
+  },
+});
+
+export const RetreatWithOrders = n.extendType({
+  type: 'Retreat',
+  definition(t) {
+    t.field('orders', {
+      type: n.list(n.nonNull(Order)),
+      args: { status: n.arg({ type: OrderStateEnum }) },
+      resolve(source, args, ctx) {
+        return ctx.prisma.order.findMany({
+          where: { retreatId: source.id, state: ignoreNull(args.status) },
+        });
       },
     });
   },

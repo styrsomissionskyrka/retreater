@@ -259,8 +259,8 @@ export interface NexusGenFieldTypes {
     endDate: NexusGenScalars['Date'] | null; // Date
     id: string; // ID!
     maxParticipants: number; // Int!
+    orders: NexusGenRootTypes['Order'][] | null; // [Order!]
     products: NexusGenRootTypes['Product'][]; // [Product!]!
-    registrationFee: NexusGenRootTypes['Product'] | null; // Product
     slug: string; // String!
     startDate: NexusGenScalars['Date'] | null; // Date
     status: NexusGenEnums['RetreatStatusEnum']; // RetreatStatusEnum!
@@ -392,8 +392,8 @@ export interface NexusGenFieldTypeNames {
     endDate: 'Date'
     id: 'ID'
     maxParticipants: 'Int'
+    orders: 'Order'
     products: 'Product'
-    registrationFee: 'Product'
     slug: 'String'
     startDate: 'Date'
     status: 'RetreatStatusEnum'
@@ -495,6 +495,9 @@ export interface NexusGenArgTypes {
     }
   }
   Retreat: {
+    orders: { // args
+      status?: NexusGenEnums['OrderStateEnum'] | null; // OrderStateEnum
+    }
     products: { // args
       active?: boolean | null; // Boolean
     }

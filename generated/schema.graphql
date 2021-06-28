@@ -166,8 +166,8 @@ type Retreat {
   endDate: Date
   id: ID!
   maxParticipants: Int!
+  orders(status: OrderStateEnum): [Order!]
   products(active: Boolean): [Product!]!
-  registrationFee: Product
   slug: String!
   startDate: Date
   status: RetreatStatusEnum!
