@@ -43,8 +43,13 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  await handleStripeEvents(event);
-  res.json({ received: true });
+  try {
+    await handleStripeEvents(event);
+    res.json({ received: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
 };
 
 const cors = Cors({ allowMethods: ['POST', 'HEAD'] });

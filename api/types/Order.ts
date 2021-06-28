@@ -1,9 +1,9 @@
 import * as n from 'nexus';
-import { OrderStatus, Prisma } from '@prisma/client';
+import { OrderStatus, Prisma, RetreatStatus } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
 
 import { assert } from '../../lib/utils/assert';
-import { ensureArrayOfIds, ignoreNull } from '../utils';
+import { countBlockingOrders, ensureArrayOfIds, ignoreNull, isRetreatOrderable } from '../utils';
 import { Price, Retreat, CheckoutSession, Refund } from '.';
 import { OrderEnum, PaginatedQuery } from './Shared';
 
@@ -172,7 +172,13 @@ export const OrderMutation = n.extendType({
     t.field('createOrder', {
       type: n.nonNull(Order),
       args: { input: n.nonNull(n.arg({ type: CreateOrderInput })) },
-      resolve(_, args, ctx) {
+      async resolve(_, args, ctx) {
+        let retreat = await ctx.prisma.retreat.findUnique({ where: { id: args.input.retreatId } });
+        let canPlaceOrder = await isRetreatOrderable(retreat, ctx);
+        if (!canPlaceOrder) {
+          throw new UserInputError(`Can't place order on retreat with id ${args.input.retreatId}.`);
+        }
+
         return ctx.prisma.order.create({
           data: {
             ...args.input,

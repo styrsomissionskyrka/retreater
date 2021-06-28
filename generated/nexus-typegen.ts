@@ -255,6 +255,7 @@ export interface NexusGenFieldTypes {
   }
   Retreat: { // field return type
     bookedParticipants: number; // Int!
+    canPlaceOrder: boolean; // Boolean!
     content: string | null; // String
     createdAt: NexusGenScalars['Date']; // Date!
     endDate: NexusGenScalars['Date'] | null; // Date
@@ -388,6 +389,7 @@ export interface NexusGenFieldTypeNames {
   }
   Retreat: { // field return type name
     bookedParticipants: 'Int'
+    canPlaceOrder: 'Boolean'
     content: 'String'
     createdAt: 'Date'
     endDate: 'Date'

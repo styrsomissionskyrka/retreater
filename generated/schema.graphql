@@ -166,6 +166,7 @@ type Refund {
 
 type Retreat {
   bookedParticipants: Int!
+  canPlaceOrder: Boolean!
   content: String
   createdAt: Date!
   endDate: Date

@@ -1,10 +1,10 @@
-import { OrderStatus, Prisma, RetreatStatus } from '@prisma/client';
+import { Prisma, RetreatStatus } from '@prisma/client';
 import * as n from 'nexus';
 import { UserInputError } from 'apollo-server-micro';
 import slugify from 'slug';
 
 import { compact } from '../../lib/utils/array';
-import { clearUndefined, authorizedWithRoles } from '../utils';
+import { clearUndefined, authorizedWithRoles, countBlockingOrders, isRetreatOrderable } from '../utils';
 import { OrderEnum, PaginatedQuery } from '.';
 
 export const RetreatStatusEnum = n.enumType({
@@ -41,11 +41,8 @@ export const Retreat = n.objectType({
     t.string('content');
 
     t.nonNull.int('maxParticipants');
-    t.nonNull.int('bookedParticipants', {
-      async resolve(source, _, ctx) {
-        return ctx.prisma.order.count({ where: { retreatId: source.id, status: OrderStatus.CONFIRMED } });
-      },
-    });
+    t.nonNull.int('bookedParticipants', { resolve: (source, _, ctx) => countBlockingOrders(source.id, ctx) });
+    t.nonNull.boolean('canPlaceOrder', { resolve: (source, _, ctx) => isRetreatOrderable(source, ctx) });
   },
 });
 

@@ -1,5 +1,5 @@
 import { Claims, UserRole } from '@auth0/nextjs-auth0';
-import { Prisma } from '@prisma/client';
+import { OrderStatus, Prisma, Retreat, RetreatStatus } from '@prisma/client';
 
 import { arrayify } from '../lib/utils/array';
 import { Context } from './context';
@@ -45,4 +45,18 @@ export function stripeTimestampToMs(seconds: number) {
 export function ensureArrayOfIds(value: Prisma.JsonValue | null): string[] {
   if (Array.isArray(value)) return value.filter((i): i is string => typeof i === 'string');
   return [];
+}
+
+export async function countBlockingOrders(retreatId: string, ctx: Context): Promise<number> {
+  return ctx.prisma.order.count({ where: { retreatId, status: { in: [OrderStatus.CONFIRMED, OrderStatus.PENDING] } } });
+}
+
+export async function isRetreatOrderable(retreat: Retreat | null | undefined, ctx: Context): Promise<boolean> {
+  if (retreat == null) return false;
+  if (retreat.status !== RetreatStatus.PUBLISHED) return false;
+
+  let totalOrders = await countBlockingOrders(retreat.id, ctx);
+  if (totalOrders >= retreat.maxParticipants) return false;
+
+  return true;
 }
