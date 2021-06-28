@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { IconCoin, IconInfoCircle } from '@tabler/icons';
+import { IconClipboardList, IconCoin, IconInfoCircle } from '@tabler/icons';
 
 import { EditRetreatFormQuery, EditRetreatFormQueryVariables, gql, TypedDocumentNode, useQuery } from 'lib/graphql';
 import { Layout } from 'lib/components';
@@ -44,6 +44,12 @@ const Retreat: NextPage = () => {
       form = <EditRetreatPricing retreat={retreat} />;
       actions = <CreateReatreatProduct retreatId={retreat.id} />;
       title = 'Redigera priser';
+      break;
+
+    case 'bokningar':
+      form = null;
+      actions = null;
+      title = 'Bokningar';
       break;
 
     default:
@@ -118,5 +124,6 @@ export function useRetreatNavLinks(id: string): Layout.NavLinkConfig[] {
   return [
     { label: 'Information', href: base, icon: <IconInfoCircle size={16} /> },
     { label: 'Priser', href: base + '/priser', icon: <IconCoin size={16} /> },
+    { label: 'Bokningar', href: base + '/bokningar', icon: <IconClipboardList size={16} /> },
   ];
 }

@@ -83,6 +83,11 @@ enum OrderEnum {
   DESC
 }
 
+enum OrderOrderByEnum {
+  CREATED_AT
+  STATE
+}
+
 enum OrderStateEnum {
   CANCELLED
   CONFIRMED
@@ -93,17 +98,17 @@ enum OrderStateEnum {
   PENDING
 }
 
+type PaginatedOrder implements PaginatedQuery {
+  items: [Order!]!
+  paginationMeta: PaginationMeta!
+}
+
 interface PaginatedQuery {
   paginationMeta: PaginationMeta!
 }
 
 type PaginatedRetreat implements PaginatedQuery {
   items: [Retreat!]!
-  paginationMeta: PaginationMeta!
-}
-
-type PaginatedUser implements PaginatedQuery {
-  items: [User!]!
   paginationMeta: PaginationMeta!
 }
 
@@ -147,10 +152,10 @@ type Product {
 type Query {
   me: User
   order(id: ID!): Order
+  orders(order: OrderEnum! = ASC, orderBy: OrderOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, state: OrderStateEnum = CONFIRMED): PaginatedOrder!
   retreat(id: ID, slug: String): Retreat
   retreats(order: OrderEnum! = ASC, orderBy: RetreatOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, search: String, status: RetreatStatusEnum): PaginatedRetreat!
   user(id: ID!): User
-  users(order: OrderEnum! = ASC, orderBy: UserSortByEnum! = CREATED_AT, page: Int! = 0, perPage: Int! = 25, search: String): PaginatedUser
 }
 
 type Refund {

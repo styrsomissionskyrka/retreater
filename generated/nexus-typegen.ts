@@ -80,6 +80,7 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   OrderEnum: "asc" | "desc"
+  OrderOrderByEnum: "createdAt" | "state"
   OrderStateEnum: "CANCELLED" | "CONFIRMED" | "CREATED" | "DECLINED" | "ERRORED" | "PARTIALLY_CONFIRMED" | "PENDING"
   RetreatOrderByEnum: "createdAt" | "startDate" | "status"
   RetreatStatusEnum: "ARCHIVED" | "DRAFT" | "PUBLISHED"
@@ -105,12 +106,12 @@ export interface NexusGenObjects {
     checkoutSession: NexusGenRootTypes['CheckoutSession']; // CheckoutSession!
     order: NexusGenRootTypes['Order']; // Order!
   }
-  PaginatedRetreat: { // root type
-    items: NexusGenRootTypes['Retreat'][]; // [Retreat!]!
+  PaginatedOrder: { // root type
+    items: NexusGenRootTypes['Order'][]; // [Order!]!
     paginationMeta: NexusGenRootTypes['PaginationMeta']; // PaginationMeta!
   }
-  PaginatedUser: { // root type
-    items: NexusGenRootTypes['User'][]; // [User!]!
+  PaginatedRetreat: { // root type
+    items: NexusGenRootTypes['Retreat'][]; // [Retreat!]!
     paginationMeta: NexusGenRootTypes['PaginationMeta']; // PaginationMeta!
   }
   PaginationMeta: { // root type
@@ -142,7 +143,7 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
-  PaginatedQuery: NexusGenRootTypes['PaginatedRetreat'] | NexusGenRootTypes['PaginatedUser'];
+  PaginatedQuery: NexusGenRootTypes['PaginatedOrder'] | NexusGenRootTypes['PaginatedRetreat'];
 }
 
 export interface NexusGenUnions {
@@ -198,12 +199,12 @@ export interface NexusGenFieldTypes {
     checkoutSession: NexusGenRootTypes['CheckoutSession']; // CheckoutSession!
     order: NexusGenRootTypes['Order']; // Order!
   }
-  PaginatedRetreat: { // field return type
-    items: NexusGenRootTypes['Retreat'][]; // [Retreat!]!
+  PaginatedOrder: { // field return type
+    items: NexusGenRootTypes['Order'][]; // [Order!]!
     paginationMeta: NexusGenRootTypes['PaginationMeta']; // PaginationMeta!
   }
-  PaginatedUser: { // field return type
-    items: NexusGenRootTypes['User'][]; // [User!]!
+  PaginatedRetreat: { // field return type
+    items: NexusGenRootTypes['Retreat'][]; // [Retreat!]!
     paginationMeta: NexusGenRootTypes['PaginationMeta']; // PaginationMeta!
   }
   PaginationMeta: { // field return type
@@ -242,10 +243,10 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     me: NexusGenRootTypes['User'] | null; // User
     order: NexusGenRootTypes['Order'] | null; // Order
+    orders: NexusGenRootTypes['PaginatedOrder']; // PaginatedOrder!
     retreat: NexusGenRootTypes['Retreat'] | null; // Retreat
     retreats: NexusGenRootTypes['PaginatedRetreat']; // PaginatedRetreat!
     user: NexusGenRootTypes['User'] | null; // User
-    users: NexusGenRootTypes['PaginatedUser'] | null; // PaginatedUser
   }
   Refund: { // field return type
     amount: number; // Int!
@@ -331,12 +332,12 @@ export interface NexusGenFieldTypeNames {
     checkoutSession: 'CheckoutSession'
     order: 'Order'
   }
-  PaginatedRetreat: { // field return type name
-    items: 'Retreat'
+  PaginatedOrder: { // field return type name
+    items: 'Order'
     paginationMeta: 'PaginationMeta'
   }
-  PaginatedUser: { // field return type name
-    items: 'User'
+  PaginatedRetreat: { // field return type name
+    items: 'Retreat'
     paginationMeta: 'PaginationMeta'
   }
   PaginationMeta: { // field return type name
@@ -375,10 +376,10 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     me: 'User'
     order: 'Order'
+    orders: 'PaginatedOrder'
     retreat: 'Retreat'
     retreats: 'PaginatedRetreat'
     user: 'User'
-    users: 'PaginatedUser'
   }
   Refund: { // field return type name
     amount: 'Int'
@@ -471,6 +472,13 @@ export interface NexusGenArgTypes {
     order: { // args
       id: string; // ID!
     }
+    orders: { // args
+      order: NexusGenEnums['OrderEnum']; // OrderEnum!
+      orderBy: NexusGenEnums['OrderOrderByEnum']; // OrderOrderByEnum!
+      page: number; // Int!
+      perPage: number; // Int!
+      state: NexusGenEnums['OrderStateEnum'] | null; // OrderStateEnum
+    }
     retreat: { // args
       id?: string | null; // ID
       slug?: string | null; // String
@@ -486,13 +494,6 @@ export interface NexusGenArgTypes {
     user: { // args
       id: string; // ID!
     }
-    users: { // args
-      order: NexusGenEnums['OrderEnum']; // OrderEnum!
-      orderBy: NexusGenEnums['UserSortByEnum']; // UserSortByEnum!
-      page: number; // Int!
-      perPage: number; // Int!
-      search?: string | null; // String
-    }
   }
   Retreat: {
     orders: { // args
@@ -505,12 +506,12 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  PaginatedQuery: "PaginatedRetreat" | "PaginatedUser"
+  PaginatedQuery: "PaginatedOrder" | "PaginatedRetreat"
 }
 
 export interface NexusGenTypeInterfaces {
+  PaginatedOrder: "PaginatedQuery"
   PaginatedRetreat: "PaginatedQuery"
-  PaginatedUser: "PaginatedQuery"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;

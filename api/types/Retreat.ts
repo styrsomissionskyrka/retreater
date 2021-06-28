@@ -1,5 +1,5 @@
 import { OrderState, Prisma, RetreatStatus } from '@prisma/client';
-import { enumType, objectType, extendType, nonNull, stringArg, arg, inputObjectType, idArg, intArg } from 'nexus';
+import * as n from 'nexus';
 import { UserInputError } from 'apollo-server-micro';
 import slugify from 'slug';
 
@@ -7,12 +7,12 @@ import { compact } from '../../lib/utils/array';
 import { clearUndefined, authorizedWithRoles } from '../utils';
 import { OrderEnum, PaginatedQuery } from '.';
 
-export const RetreatStatusEnum = enumType({
+export const RetreatStatusEnum = n.enumType({
   name: 'RetreatStatusEnum',
   members: RetreatStatus,
 });
 
-export const RetreatOrderByEnum = enumType({
+export const RetreatOrderByEnum = n.enumType({
   name: 'RetreatOrderByEnum',
   members: {
     START_DATE: 'startDate',
@@ -21,7 +21,7 @@ export const RetreatOrderByEnum = enumType({
   },
 });
 
-export const Retreat = objectType({
+export const Retreat = n.objectType({
   name: 'Retreat',
   sourceType: {
     module: '@prisma/client',
@@ -49,7 +49,7 @@ export const Retreat = objectType({
   },
 });
 
-export const PaginatedRetreat = objectType({
+export const PaginatedRetreat = n.objectType({
   name: 'PaginatedRetreat',
   definition(t) {
     t.implements(PaginatedQuery);
@@ -57,24 +57,24 @@ export const PaginatedRetreat = objectType({
   },
 });
 
-export const RetreatQuery = extendType({
+export const RetreatQuery = n.extendType({
   type: 'Query',
   definition(t) {
     t.field('retreats', {
-      type: nonNull(PaginatedRetreat),
+      type: n.nonNull(PaginatedRetreat),
       args: {
-        page: nonNull(intArg({ default: 1 })),
-        perPage: nonNull(intArg({ default: 25 })),
-        order: nonNull(arg({ type: OrderEnum, default: 'asc' })),
-        orderBy: nonNull(arg({ type: RetreatOrderByEnum, default: 'createdAt' })),
-        search: stringArg(),
-        status: arg({ type: RetreatStatusEnum }),
+        page: n.nonNull(n.intArg({ default: 1 })),
+        perPage: n.nonNull(n.intArg({ default: 25 })),
+        order: n.nonNull(n.arg({ type: OrderEnum, default: 'asc' })),
+        orderBy: n.nonNull(n.arg({ type: RetreatOrderByEnum, default: 'createdAt' })),
+        search: n.stringArg(),
+        status: n.arg({ type: RetreatStatusEnum }),
       },
       async resolve(_, args, ctx) {
         let skip = args.perPage * (args.page - 1);
         let take = args.perPage;
 
-        let where = {
+        let where: Prisma.RetreatWhereInput = {
           AND: compact([
             args.status != null ? { status: { in: args.status } } : { status: { not: RetreatStatus.ARCHIVED } },
             args.search != null
@@ -109,7 +109,7 @@ export const RetreatQuery = extendType({
 
     t.field('retreat', {
       type: Retreat,
-      args: { id: idArg(), slug: stringArg() },
+      args: { id: n.idArg(), slug: n.stringArg() },
       async resolve(_, args, ctx) {
         if (isValidArgs(args)) return ctx.prisma.retreat.findUnique({ where: args });
         throw new UserInputError('Query requires either an id or a slug input');
@@ -122,12 +122,12 @@ function isValidArgs(args: any): args is Prisma.RetreatWhereUniqueInput {
   return args.id != null || args.slug != null;
 }
 
-export const RetreatMutation = extendType({
+export const RetreatMutation = n.extendType({
   type: 'Mutation',
   definition(t) {
     t.field('createRetreatDraft', {
       type: Retreat,
-      args: { title: nonNull(stringArg()) },
+      args: { title: n.nonNull(n.stringArg()) },
       authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
       async resolve(_, args, ctx) {
         let slug = slugify(args.title);
@@ -149,8 +149,8 @@ export const RetreatMutation = extendType({
     t.field('updateRetreat', {
       type: Retreat,
       args: {
-        id: nonNull(idArg()),
-        input: nonNull(arg({ type: UpdateRetreatInput })),
+        id: n.nonNull(n.idArg()),
+        input: n.nonNull(n.arg({ type: UpdateRetreatInput })),
       },
       authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
       async resolve(_, args, ctx) {
@@ -163,8 +163,8 @@ export const RetreatMutation = extendType({
     t.field('setRetreatStatus', {
       type: Retreat,
       args: {
-        id: nonNull(idArg()),
-        status: nonNull(arg({ type: RetreatStatusEnum })),
+        id: n.nonNull(n.idArg()),
+        status: n.nonNull(n.arg({ type: RetreatStatusEnum })),
       },
       authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
       async resolve(_, args, ctx) {
@@ -175,7 +175,7 @@ export const RetreatMutation = extendType({
   },
 });
 
-export const UpdateRetreatInput = inputObjectType({
+export const UpdateRetreatInput = n.inputObjectType({
   name: 'UpdateRetreatInput',
   definition(t) {
     t.string('title');

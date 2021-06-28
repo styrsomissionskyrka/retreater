@@ -1,14 +1,23 @@
 import * as n from 'nexus';
-import { Order as PrismaOrder, OrderState } from '@prisma/client';
+import { OrderState, Prisma } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
 
 import { assert } from '../../lib/utils/assert';
 import { ensureArrayOfIds, ignoreNull } from '../utils';
 import { Price, Retreat, CheckoutSession, Refund } from '.';
+import { OrderEnum, PaginatedQuery } from './Shared';
 
 export const OrderStateEnum = n.enumType({
   name: 'OrderStateEnum',
   members: OrderState,
+});
+
+export const OrderOrderByEnum = n.enumType({
+  name: 'OrderOrderByEnum',
+  members: {
+    CREATED_AT: 'createdAt',
+    STATE: 'state',
+  },
 });
 
 export const Order = n.objectType({
@@ -74,6 +83,14 @@ export const Order = n.objectType({
   },
 });
 
+export const PaginatedOrder = n.objectType({
+  name: 'PaginatedOrder',
+  definition(t) {
+    t.implements(PaginatedQuery);
+    t.nonNull.list.nonNull.field('items', { type: Order });
+  },
+});
+
 export const OrderCheckoutSession = n.objectType({
   name: 'OrderCheckoutSession',
   definition(t) {
@@ -90,6 +107,45 @@ export const OrderQuery = n.extendType({
       args: { id: n.nonNull(n.idArg()) },
       resolve(_, args, ctx) {
         return ctx.prisma.order.findUnique({ where: { id: args.id } });
+      },
+    });
+
+    t.field('orders', {
+      type: n.nonNull(PaginatedOrder),
+      args: {
+        page: n.nonNull(n.intArg({ default: 1 })),
+        perPage: n.nonNull(n.intArg({ default: 25 })),
+        order: n.nonNull(n.arg({ type: OrderEnum, default: 'asc' })),
+        orderBy: n.nonNull(n.arg({ type: OrderOrderByEnum, default: 'createdAt' })),
+        state: n.arg({ type: OrderStateEnum, default: OrderState.CONFIRMED }),
+      },
+      async resolve(_, args, ctx) {
+        let skip = args.perPage * (args.page - 1);
+        let take = args.perPage;
+
+        let where: Prisma.OrderWhereInput = {
+          state: ignoreNull(args.state),
+        };
+
+        let orders = await ctx.prisma.order.findMany({
+          take,
+          skip,
+          orderBy: { [args.orderBy]: args.order },
+          where,
+        });
+
+        let total = await ctx.prisma.order.count({ where });
+
+        let paginationMeta = {
+          hasNextPage: args.perPage * (args.page + 1) < total,
+          hasPreviousPage: args.page > 1,
+          currentPage: args.page,
+          totalPages: Math.ceil(total / (args.perPage || 1)),
+          perPage: args.perPage,
+          totalItems: total,
+        };
+
+        return { items: orders, paginationMeta };
       },
     });
   },

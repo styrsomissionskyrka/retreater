@@ -1,9 +1,9 @@
-import { scalarType, enumType, objectType, interfaceType, nonNull } from 'nexus';
+import * as n from 'nexus';
 import { Kind } from 'graphql';
 
 let refDate = new Date('1990-01-01').getTime();
 
-export const DateScalar = scalarType({
+export const DateScalar = n.scalarType({
   name: 'Date',
   asNexusMethod: 'date',
   sourceType: 'Date',
@@ -50,12 +50,12 @@ export const DateScalar = scalarType({
   },
 });
 
-export const OrderEnum = enumType({
+export const OrderEnum = n.enumType({
   name: 'OrderEnum',
   members: { ASC: 'asc', DESC: 'desc' },
 });
 
-export const PaginationMeta = objectType({
+export const PaginationMeta = n.objectType({
   name: 'PaginationMeta',
   definition(t) {
     t.nonNull.boolean('hasNextPage');
@@ -67,13 +67,14 @@ export const PaginationMeta = objectType({
   },
 });
 
-export const PaginatedQuery = interfaceType({
+export const PaginatedQuery = n.interfaceType({
   name: 'PaginatedQuery',
   resolveType(source) {
-    if ('users' in source) return 'PaginatedUser';
+    if (source.items.some((item) => 'slug' in item)) return 'PaginatedRetreat';
+    if (source.items.some((item) => 'price' in item)) return 'PaginatedOrder';
     return null;
   },
   definition(t) {
-    t.field('paginationMeta', { type: nonNull(PaginationMeta) });
+    t.field('paginationMeta', { type: n.nonNull(PaginationMeta) });
   },
 });
