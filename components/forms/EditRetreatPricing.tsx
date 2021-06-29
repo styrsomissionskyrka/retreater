@@ -15,7 +15,7 @@ import {
   TypedDocumentNode,
 } from 'lib/graphql';
 import { Form, BrowserOnly, DataTable, Spinner, ToggleButton, Link } from 'components';
-import { formatCents, toCents } from 'lib/utils/money';
+import { formatCents, parsePriceInput } from 'lib/utils/money';
 
 interface EditPricingProps {
   retreat: EditRetreatPricingFieldsFragment;
@@ -165,16 +165,11 @@ const PriceCell: DataTable.Renderer<DataTable.CellProps<ColumnData, unknown>> = 
   let handleUpdatePrice = (value: string) => {
     if (loading) return;
 
-    let clean = value.replace(/,/g, '.').replace(/\s/g, '');
-    while (clean.split('').filter((char) => char === '.').length > 1) {
-      clean = clean.replace('.', '');
-    }
-    let parsed = Number(clean);
-    if (Number.isNaN(parsed)) {
+    let next = parsePriceInput(value);
+    if (next == null) {
       setError('Priset är inte korrekt formaterat.');
     } else {
-      let amount = toCents(parsed);
-      let formatted = formatCents(amount);
+      let { formatted, amount } = next;
       setControlledValue(formatted);
       setError(null);
       if (row.original.amount !== amount) {

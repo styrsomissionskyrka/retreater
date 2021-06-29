@@ -14,6 +14,8 @@ import get from 'lodash.get';
 
 import { format, parse, getTime } from 'lib/utils/date-fns';
 import { createStrictContext } from 'lib/utils/context';
+import { formatCents, parsePriceInput } from 'lib/utils/money';
+import { composeEventHandlers } from 'lib/utils/events';
 
 import * as FormUI from './Form';
 
@@ -98,6 +100,60 @@ export function Input<FormValues extends FieldValues>({
   return <FormUI.Input {...props} {...formProps} type={type} defaultValue={defaultValue} error={errorMessage} />;
 }
 
+type PriceInputProps<FormValues extends FieldValues> = InputProps<FormValues> & {
+  currency: string;
+};
+
+export function PriceInput<FormValues extends FieldValues>({
+  name,
+  type,
+  required,
+  defaultValue: passedDefaultValue,
+  options: passedOptions,
+  currency,
+  ...props
+}: PriceInputProps<FormValues>): JSX.Element {
+  const { register } = useFormContext<FormValues>();
+  const { errors } = useFormState();
+
+  let fieldError: FieldError | undefined = get(errors, name);
+  let errorMessage = fieldError != null ? fieldError['message'] || DEFAULT_MESSAGES[fieldError.type] : undefined;
+
+  let defaultCents = Number(passedDefaultValue);
+  if (Number.isNaN(defaultCents)) defaultCents = 0;
+  let defaultValue = formatCents(defaultCents);
+
+  let options: RegisterOptions<FormValues> = {
+    required,
+    min: props.min,
+    max: props.max,
+    setValueAs: (value) => {
+      let parsed = parsePriceInput(value);
+      return parsed?.amount ?? 0;
+    },
+  };
+  const formProps = register(name, { ...options, ...passedOptions });
+
+  let handleBlur: React.FocusEventHandler<HTMLInputElement> = (event) => {
+    let parsed = parsePriceInput(event.currentTarget.value);
+    event.currentTarget.value = parsed?.formatted ?? '';
+  };
+
+  return (
+    <FormUI.Input
+      {...props}
+      {...formProps}
+      type="text"
+      inputMode="decimal"
+      defaultValue={defaultValue}
+      error={errorMessage}
+      suffix={currency.toUpperCase()}
+      align="right"
+      onBlur={composeEventHandlers(formProps.onBlur, handleBlur)}
+    />
+  );
+}
+
 interface MarkdownProps<FormValues extends FieldValues>
   extends Omit<FormUI.MarkdownProps, 'name' | 'value' | 'onChange' | 'onBlur'> {
   name: Path<FormValues>;
@@ -129,6 +185,7 @@ export const Submit: React.FC<SubmitProps> = ({ children, ...props }) => {
 export function createConnectedFormComponents<FormValues extends FieldValues>(): {
   Form: React.ComponentType<FormProps<FormValues>>;
   Input: React.ComponentType<InputProps<FormValues>>;
+  PriceInput: React.ComponentType<PriceInputProps<FormValues>>;
   Markdown: React.ComponentType<MarkdownProps<FormValues>>;
   Submit: React.ComponentType<SubmitProps>;
 } & Omit<typeof FormUI, 'Form' | 'Input' | 'Markdown' | 'Submit'> {
@@ -136,6 +193,7 @@ export function createConnectedFormComponents<FormValues extends FieldValues>():
     ...FormUI,
     Form,
     Input,
+    PriceInput,
     Markdown,
     Submit,
   };

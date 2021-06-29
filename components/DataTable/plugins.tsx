@@ -7,6 +7,7 @@ import {
   Hooks,
   useExpanded as _useExpanded,
   TableExpandedToggleProps,
+  HeaderProps,
 } from 'react-table';
 
 export function useExpanded<T extends object>(hooks: Hooks<T>) {
@@ -20,11 +21,7 @@ function visibleColumns<T extends object>(columns: ColumnInstance<T>[]): Column<
   return [
     {
       id: '__expanded__',
-      Header(props) {
-        return (
-          <ExpandedToggle isExpanded={props.isAllRowsExpanded} {...(props as any).getToggleAllRowsExpandedProps()} />
-        );
-      },
+      Header: () => null,
       Cell({ row }: CellProps<T, unknown>) {
         return (
           <ExpandedToggle

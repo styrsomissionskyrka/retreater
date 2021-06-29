@@ -15,6 +15,8 @@ import {
   TypedDocumentNode,
 } from '@apollo/client';
 
+import { useIntersection } from 'lib/hooks';
+
 import { namedOperations } from './generated-apollo-helpers';
 
 export * from '@apollo/client';
@@ -24,6 +26,14 @@ export function useQuery<Data = any, Variables = OperationVariables>(
   options: QueryHookOptions<Data, Variables> = {},
 ): QueryResult<Data, Variables> {
   return _useQuery<Data, Variables>(query, options);
+}
+
+export function useIntersectingQuery<Data = any, Variables = OperationVariables>(
+  query: DocumentNode | TypedDocumentNode<Data, Variables>,
+  options: QueryHookOptions<Data, Variables> & { ref: React.RefObject<HTMLElement> },
+): QueryResult<Data, Variables> {
+  const intersection = useIntersection(options.ref);
+  return _useQuery<Data, Variables>(query, { ...options, skip: !intersection?.isIntersecting || options.skip });
 }
 
 export function useLazyQuery<Data = any, Variables = OperationVariables>(

@@ -59,7 +59,8 @@ model Order {
   status OrderStatus @default(CREATED)
 
   price            String // Id of Stripe.Price
-  checkoutSessions Json // Array Id of Stripe.Checkout.Session
+  checkoutSessions Json? // Array Id of Stripe.Checkout.Session
+  refunds          Json? // Array Id of Stripe.Refund
 
   name  String
   email String

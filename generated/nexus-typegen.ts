@@ -83,6 +83,8 @@ export interface NexusGenEnums {
   OrderEnum: "asc" | "desc"
   OrderOrderByEnum: "createdAt" | "status"
   OrderStatusEnum: "CANCELLED" | "CONFIRMED" | "CREATED" | "DECLINED" | "ERRORED" | "PARTIALLY_CONFIRMED" | "PENDING"
+  RefundReasonEnum: "duplicate" | "fraudulent" | "requested_by_customer"
+  RefundStatusEnum: "canceled" | "failed" | "pending" | "succeeded"
   RetreatOrderByEnum: "createdAt" | "startDate" | "status"
   RetreatStatusEnum: "ARCHIVED" | "DRAFT" | "PUBLISHED"
   UserRoleEnum: "admin" | "editor" | "superadmin"
@@ -178,6 +180,7 @@ export interface NexusGenFieldTypes {
     createOrder: NexusGenRootTypes['Order']; // Order!
     createPrice: NexusGenRootTypes['Price'] | null; // Price
     createProduct: NexusGenRootTypes['Product'] | null; // Product
+    createRefund: NexusGenRootTypes['Refund']; // Refund!
     createRetreatDraft: NexusGenRootTypes['Retreat'] | null; // Retreat
     setRetreatStatus: NexusGenRootTypes['Retreat'] | null; // Retreat
     updatePrice: NexusGenRootTypes['Price'] | null; // Price
@@ -221,8 +224,11 @@ export interface NexusGenFieldTypes {
   }
   PaymentIntent: { // field return type
     amount: number; // Int!
+    created: NexusGenScalars['Date']; // Date!
     currency: string; // String!
     id: string; // ID!
+    refundable: number; // Int!
+    refunded: number; // Int!
   }
   Price: { // field return type
     active: boolean; // Boolean!
@@ -248,14 +254,18 @@ export interface NexusGenFieldTypes {
     me: NexusGenRootTypes['User'] | null; // User
     order: NexusGenRootTypes['Order'] | null; // Order
     orders: NexusGenRootTypes['PaginatedOrder']; // PaginatedOrder!
+    paymentIntent: NexusGenRootTypes['PaymentIntent']; // PaymentIntent!
     retreat: NexusGenRootTypes['Retreat'] | null; // Retreat
     retreats: NexusGenRootTypes['PaginatedRetreat']; // PaginatedRetreat!
     user: NexusGenRootTypes['User'] | null; // User
   }
   Refund: { // field return type
     amount: number; // Int!
+    created: NexusGenScalars['Date']; // Date!
     currency: string; // String!
     id: string; // ID!
+    reason: string | null; // String
+    status: NexusGenEnums['RefundStatusEnum']; // RefundStatusEnum!
   }
   Retreat: { // field return type
     bookedParticipants: number; // Int!
@@ -315,6 +325,7 @@ export interface NexusGenFieldTypeNames {
     createOrder: 'Order'
     createPrice: 'Price'
     createProduct: 'Product'
+    createRefund: 'Refund'
     createRetreatDraft: 'Retreat'
     setRetreatStatus: 'Retreat'
     updatePrice: 'Price'
@@ -358,8 +369,11 @@ export interface NexusGenFieldTypeNames {
   }
   PaymentIntent: { // field return type name
     amount: 'Int'
+    created: 'Date'
     currency: 'String'
     id: 'ID'
+    refundable: 'Int'
+    refunded: 'Int'
   }
   Price: { // field return type name
     active: 'Boolean'
@@ -385,14 +399,18 @@ export interface NexusGenFieldTypeNames {
     me: 'User'
     order: 'Order'
     orders: 'PaginatedOrder'
+    paymentIntent: 'PaymentIntent'
     retreat: 'Retreat'
     retreats: 'PaginatedRetreat'
     user: 'User'
   }
   Refund: { // field return type name
     amount: 'Int'
+    created: 'Date'
     currency: 'String'
     id: 'ID'
+    reason: 'String'
+    status: 'RefundStatusEnum'
   }
   Retreat: { // field return type name
     bookedParticipants: 'Int'
@@ -448,6 +466,12 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['CreateProductInput']; // CreateProductInput!
       retreatId: string; // ID!
     }
+    createRefund: { // args
+      amount?: number | null; // Int
+      order: string; // ID!
+      paymentIntent: string; // ID!
+      reason?: NexusGenEnums['RefundReasonEnum'] | null; // RefundReasonEnum
+    }
     createRetreatDraft: { // args
       title: string; // String!
     }
@@ -489,6 +513,9 @@ export interface NexusGenArgTypes {
       retreatId?: string | null; // ID
       search?: string | null; // String
       status: NexusGenEnums['OrderStatusEnum'] | null; // OrderStatusEnum
+    }
+    paymentIntent: { // args
+      id: string; // ID!
     }
     retreat: { // args
       id?: string | null; // ID

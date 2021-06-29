@@ -8,6 +8,8 @@ import { assert } from 'lib/utils/assert';
 import { format } from 'lib/utils/date-fns';
 import { formatMoney } from 'lib/utils/money';
 import { CopyInline, Layout, OrderUI } from 'components';
+import { OrderPaymentsTable } from 'components/tables/OrderPaymentsTable';
+import { OrderRefundsTable } from 'components/tables/OrderRefundsTable';
 
 const Order: NextPage = () => {
   const { query } = useRouter();
@@ -62,6 +64,14 @@ const Order: NextPage = () => {
             ]}
           />
         </OrderUI.PageSection>
+
+        <OrderUI.PageSection area="payments" title="Betalningar">
+          <OrderPaymentsTable id={order.id} />
+        </OrderUI.PageSection>
+
+        <OrderUI.PageSection area="refunds" title="Återbetalningar">
+          <OrderRefundsTable id={order.id} />
+        </OrderUI.PageSection>
       </OrderUI.PageLayout>
     </Layout.Admin>
   );
@@ -93,12 +103,6 @@ const ADMIN_ORDER_QUERY: TypedDocumentNode<AdminOrderQuery, AdminOrderQueryVaria
           name
           description
         }
-      }
-      checkoutSessions {
-        id
-        amount
-        currency
-        status
       }
     }
   }

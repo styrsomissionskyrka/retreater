@@ -33,20 +33,43 @@ export const Head: React.FC = () => {
   );
 };
 
-export const Body: React.FC = () => {
+interface BodyProps {
+  loading?: React.ReactNode;
+  empty?: React.ReactNode;
+}
+
+export const Body: React.FC<BodyProps> = ({
+  loading: loadingMessage = <Spinner size={24} />,
+  empty: emptyMessage = 'Ingen data.',
+}) => {
   const { getTableBodyProps, rows, prepareRow, visibleColumns, renderExpandedRow, loading } = useDataTable();
+
+  let state: 'loading' | 'empty' | 'idle' = 'idle';
+  if (rows.length < 1 && loading) {
+    state = 'loading';
+  } else if (rows.length < 1) {
+    state = 'empty';
+  }
 
   return (
     <UI.Body {...getTableBodyProps()}>
-      {rows.length < 1 && loading ? (
+      {state === 'loading' && (
         <UI.BodyRow>
           <UI.BodyCell colSpan={visibleColumns.length}>
-            <div className="flex justify-center w-full">
-              <Spinner size={24} />
-            </div>
+            <div className="flex justify-center w-full">{loadingMessage}</div>
           </UI.BodyCell>
         </UI.BodyRow>
-      ) : (
+      )}
+
+      {state === 'empty' && (
+        <UI.BodyRow>
+          <UI.BodyCell colSpan={visibleColumns.length}>
+            <div className="flex justify-center w-full">{emptyMessage}</div>
+          </UI.BodyCell>
+        </UI.BodyRow>
+      )}
+
+      {state === 'idle' &&
         rows.map((row) => {
           prepareRow(row);
           let { key, ...rowProps } = row.getRowProps();
@@ -71,8 +94,7 @@ export const Body: React.FC = () => {
               ) : null}
             </Fragment>
           );
-        })
-      )}
+        })}
     </UI.Body>
   );
 };

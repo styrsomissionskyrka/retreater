@@ -1,5 +1,5 @@
+import { useCallback } from 'react';
 import { useTable, TableInstance, Column, PluginHook, RenderExpandedRow } from 'react-table';
-import { useCallback, useMemo } from 'react';
 
 import { createStrictContext } from 'lib/utils/context';
 
@@ -36,15 +36,7 @@ export function Provider<T extends object>({
     ...hooks,
   );
 
-  const ctx = useMemo<DataTableContextType<T>>(
-    () => ({
-      ...table,
-      loading,
-    }),
-    [loading, table],
-  );
-
-  return <DataTableProvider value={ctx}>{children}</DataTableProvider>;
+  return <DataTableProvider value={{ ...table, loading } as DataTableContextType<T>}>{children}</DataTableProvider>;
 }
 
 export { useDataTable };

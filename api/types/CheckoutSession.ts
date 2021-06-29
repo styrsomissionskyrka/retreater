@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as n from 'nexus';
 
 import { Price } from './Price';
+import { stripeTimestampToMs } from '../utils';
 
 export const CheckoutSessionStatusEnum = n.enumType({
   name: 'CheckoutSessionStatusEnum',
@@ -19,6 +20,30 @@ export const PaymentIntent = n.objectType({
     t.nonNull.id('id');
     t.nonNull.int('amount');
     t.nonNull.string('currency');
+    t.nonNull.date('created', { resolve: (source) => stripeTimestampToMs(source.created) });
+
+    t.nonNull.int('refundable', {
+      description: 'Total amount left to be refunded.',
+      async resolve(source, _, ctx) {
+        const refunds = await ctx.stripe.refunds.list({ payment_intent: source.id }).autoPagingToArray({ limit: 1000 });
+        let total = refunds.reduce((acc, refund) => {
+          return acc - refund.amount;
+        }, source.amount);
+
+        return total;
+      },
+    });
+    t.nonNull.int('refunded', {
+      description: 'Total amount refunded, in cents.',
+      async resolve(source, _, ctx) {
+        const refunds = await ctx.stripe.refunds.list({ payment_intent: source.id }).autoPagingToArray({ limit: 1000 });
+        let total = refunds.reduce((acc, refund) => {
+          return acc + refund.amount;
+        }, 0);
+
+        return total;
+      },
+    });
   },
 });
 
@@ -58,18 +83,29 @@ export const CheckoutSession = n.objectType({
     t.field('paymentIntent', {
       type: PaymentIntent,
       async resolve(source, _, ctx) {
-        if (typeof source.payment_intent === 'string') return ctx.stripe.paymentIntents.retrieve(source.payment_intent);
-        return source.payment_intent;
+        let intent = source.payment_intent;
+        if (typeof intent === 'string') intent = await ctx.stripe.paymentIntents.retrieve(intent);
+        return intent;
       },
     });
 
     t.nonNull.list.nonNull.field('lineItems', {
       type: LineItem,
       async resolve(source, _, ctx) {
-        let existing = source.line_items?.data;
-        if (Array.isArray(existing)) return existing;
-        let response = await ctx.stripe.checkout.sessions.listLineItems(source.id);
-        return response.data;
+        return ctx.stripe.checkout.sessions.listLineItems(source.id).autoPagingToArray({ limit: 1000 });
+      },
+    });
+  },
+});
+
+export const CheckoutSessionQuery = n.extendType({
+  type: 'Query',
+  definition(t) {
+    t.field('paymentIntent', {
+      type: n.nonNull(PaymentIntent),
+      args: { id: n.nonNull(n.idArg()) },
+      resolve(_, args, ctx) {
+        return ctx.stripe.paymentIntents.retrieve(args.id);
       },
     });
   },

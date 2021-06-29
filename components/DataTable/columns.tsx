@@ -9,8 +9,7 @@ import { OrderStatusEnum, RetreatStatusEnum } from 'lib/graphql';
 import { formatMoney } from 'lib/utils/money';
 import { statusColorMap } from 'lib/utils/colors';
 
-import { Link, Menu } from '..';
-import { BrowserOnly } from '../BrowserOnly';
+import { Link, Menu, BrowserOnly, CopyInline } from '..';
 
 export function createStatusCell<T extends object>(config: Column<T>): Column<T> {
   return {
@@ -116,11 +115,21 @@ export function createContextMenuCell<T extends object>({ actions, ...config }: 
   };
 }
 
-export function createCurrencyCell<T extends { amount: number; currency: string }>(config: Column<T>): Column<T> {
+interface CurrencyCellData {
+  amount?: number | null;
+  currency?: string | null;
+}
+
+export function createCurrencyCell<T extends CurrencyCellData>({
+  getData,
+  ...config
+}: Column<T> & { getData?: (item: T) => CurrencyCellData }): Column<T> {
   return {
     ...config,
     Cell(props: CellProps<T, unknown>) {
-      return <BrowserOnly>{formatMoney(props.row.original.amount, props.row.original.currency)}</BrowserOnly>;
+      let { amount, currency } = getData ? getData(props.row.original) : props.row.original;
+      if (amount == null || currency == null) return 'Inte tillgängligt';
+      return <BrowserOnly>{formatMoney(amount, currency)}</BrowserOnly>;
     },
   };
 }
@@ -154,6 +163,15 @@ export function createProgressCell<T extends object>({
           )}
         </div>
       );
+    },
+  };
+}
+
+export function createCopyCell<T extends object>(config: Column<T>): Column<T> {
+  return {
+    ...config,
+    Cell(props: CellProps<T, string>) {
+      return <CopyInline value={props.value}>{props.value}</CopyInline>;
     },
   };
 }
