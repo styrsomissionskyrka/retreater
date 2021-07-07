@@ -9,9 +9,7 @@ import { useRect } from '@reach/rect';
 import { useAuthenticatedUser, useIsomorphicLayoutEffect, useUserHasRoles } from 'lib/hooks';
 import { setGlobalVariable } from 'lib/utils/css';
 import { compact } from 'lib/utils/array';
-
-import { Link, NavLink } from '../Link';
-import { VisuallyHidden } from '../VisuallyHidden';
+import { Link, NavLink, VisuallyHidden } from 'components';
 
 export interface NavLinkConfig {
   href: string | UrlObject;
