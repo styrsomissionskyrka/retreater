@@ -36,7 +36,7 @@ export const OrderRefundsTable: React.FC<{ id: string }> = ({ id }) => {
     (row) => (
       <div className="space-y-1">
         <p>
-          <strong>Referens:</strong> <CopyInline value={row.original.id}>{row.original.id}</CopyInline>
+          <strong>Refund:</strong> <CopyInline value={row.original.id}>{row.original.id}</CopyInline>
         </p>
       </div>
     ),

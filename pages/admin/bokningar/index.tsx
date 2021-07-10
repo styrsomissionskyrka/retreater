@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 
 import { authenticatedPage } from 'lib/auth/hocs';
 import { Layout } from 'components';
-import { OrdersTable } from 'components/tables/OrdersTable';
+import { OrdersTable } from 'components/tables';
 
 const Bokningar: NextPage = () => {
   return (

@@ -89,8 +89,8 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({ retreatId }) => {
             possibleValues={[
               { value: OrderStatusEnum.Created, label: 'Skapad' },
               { value: OrderStatusEnum.Confirmed, label: 'Bekräftad' },
-              { value: OrderStatusEnum.Pending, label: 'Väntanded' },
-              { value: OrderStatusEnum.Cancelled, label: 'Cancellerad' },
+              { value: OrderStatusEnum.Pending, label: 'Väntande' },
+              { value: OrderStatusEnum.Cancelled, label: 'Avbruten' },
               { value: OrderStatusEnum.Declined, label: 'Avvisad' },
               { value: OrderStatusEnum.Errored, label: 'Felaktig' },
             ]}

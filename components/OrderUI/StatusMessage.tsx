@@ -59,9 +59,7 @@ export const StatusMessage: React.FC<{ id: string }> = ({ id }) => {
 
     case OrderStatusEnum.Cancelled:
       message = (
-        <Fragment>
-          Bokningen är cancellerad ({format(order.cancelledAt ?? order.updatedAt, 'yyyy-MM-dd HH:mm')}).
-        </Fragment>
+        <Fragment>Bokningen är avbruten ({format(order.cancelledAt ?? order.updatedAt, 'yyyy-MM-dd HH:mm')}).</Fragment>
       );
       break;
 

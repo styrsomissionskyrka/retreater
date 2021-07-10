@@ -9,8 +9,9 @@ import {
   useIntersectingQuery,
 } from 'lib/graphql';
 import { CreateRefund } from 'components/forms/CreateRefund';
-import { DataTable, Menu, CopyInline } from 'components';
+import { DataTable, Table, Menu, CopyInline } from 'components';
 import { compact } from 'lib/utils/array';
+import { formatMoney } from 'lib/utils/money';
 
 type CheckoutSession = NonNullable<AdminOrderPaymentsQuery['order']>['checkoutSessions'][number];
 
@@ -85,14 +86,27 @@ export const OrderPaymentsTable: React.FC<{ id: string }> = ({ id }) => {
 
   const renderExpandedRow: RenderExpandedRow<CheckoutSession> = useCallback(
     (row) => (
-      <div className="space-y-1">
-        <p>
-          <strong>Referens:</strong> <CopyInline value={row.original.id}>{row.original.id}</CopyInline>
-        </p>
-        <p>
-          <strong>Payment Intent:</strong>{' '}
-          <CopyInline value={row.original.paymentIntent?.id ?? ''}>{row.original.paymentIntent?.id}</CopyInline>
-        </p>
+      <div className="space-y-4">
+        <Table.Table>
+          <Table.Body>
+            {row.original.lineItems.map((item) => (
+              <Table.BodyRow key={item.id}>
+                <Table.BodyCell>{item.price?.product.name ?? 'N/A'}</Table.BodyCell>
+                <Table.BodyCell>{formatMoney(item.amountTotal, item.currency)}</Table.BodyCell>
+              </Table.BodyRow>
+            ))}
+          </Table.Body>
+        </Table.Table>
+
+        <div className="space-y-1">
+          <p>
+            <strong>Checkout Session:</strong> <CopyInline value={row.original.id}>{row.original.id}</CopyInline>
+          </p>
+          <p>
+            <strong>Payment Intent:</strong>{' '}
+            <CopyInline value={row.original.paymentIntent?.id ?? ''}>{row.original.paymentIntent?.id}</CopyInline>
+          </p>
+        </div>
       </div>
     ),
     [],
@@ -127,6 +141,18 @@ const ADMIN_ORDER_PAYMENTS_QUERY: TypedDocumentNode<AdminOrderPaymentsQuery, Adm
         status
         amount
         currency
+        lineItems {
+          id
+          amountTotal
+          currency
+          price {
+            id
+            product {
+              id
+              name
+            }
+          }
+        }
         paymentIntent {
           id
           created

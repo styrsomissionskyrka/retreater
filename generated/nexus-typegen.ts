@@ -170,8 +170,9 @@ export interface NexusGenFieldTypes {
     amountSubtotal: number; // Int!
     amountTotal: number; // Int!
     currency: string; // String!
-    description: NexusGenRootTypes['Price'] | null; // Price
+    description: string | null; // String
     id: string; // ID!
+    price: NexusGenRootTypes['Price'] | null; // Price
     quantity: number | null; // Int
   }
   Mutation: { // field return type
@@ -315,8 +316,9 @@ export interface NexusGenFieldTypeNames {
     amountSubtotal: 'Int'
     amountTotal: 'Int'
     currency: 'String'
-    description: 'Price'
+    description: 'String'
     id: 'ID'
+    price: 'Price'
     quantity: 'Int'
   }
   Mutation: { // field return type name

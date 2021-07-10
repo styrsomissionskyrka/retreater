@@ -48,8 +48,9 @@ type LineItem {
   amountSubtotal: Int!
   amountTotal: Int!
   currency: String!
-  description: Price
+  description: String
   id: ID!
+  price: Price
   quantity: Int
 }
 

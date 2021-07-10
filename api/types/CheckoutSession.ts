@@ -62,7 +62,7 @@ export const LineItem = n.objectType({
     t.int('quantity', { resolve: (source) => source.quantity });
 
     t.string('description');
-    t.field('description', { type: Price });
+    t.field('price', { type: Price });
   },
 });
 

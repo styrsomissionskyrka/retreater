@@ -8,8 +8,7 @@ import { assert } from 'lib/utils/assert';
 import { format } from 'lib/utils/date-fns';
 import { formatMoney } from 'lib/utils/money';
 import { CopyInline, Layout, OrderUI } from 'components';
-import { OrderPaymentsTable } from 'components/tables/OrderPaymentsTable';
-import { OrderRefundsTable } from 'components/tables/OrderRefundsTable';
+import { OrderPaymentsTable, OrderRefundsTable } from 'components/tables';
 
 const Order: NextPage = () => {
   const { query } = useRouter();
