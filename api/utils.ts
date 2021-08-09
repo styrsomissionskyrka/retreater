@@ -44,11 +44,6 @@ export function stripeTimestampToMs(seconds: number) {
   return new Date(seconds * 1000);
 }
 
-export function ensureArrayOfIds(value: Prisma.JsonValue | null): string[] {
-  if (Array.isArray(value)) return value.filter((i): i is string => typeof i === 'string');
-  return [];
-}
-
 export async function countBlockingOrders(retreatId: string, ctx: Context): Promise<number> {
   return ctx.prisma.order.count({ where: { retreatId, status: { in: [OrderStatus.CONFIRMED, OrderStatus.PENDING] } } });
 }

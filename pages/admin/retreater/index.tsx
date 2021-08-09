@@ -27,7 +27,7 @@ const initialVariables: FiltersType = {
 const Retreats: NextPage = () => {
   const [variables, setVariables] = useSearchParams(initialVariables);
 
-  const { previousData, data = previousData, refetch } = useQuery(LIST_RETREATS_QUERY, { variables });
+  const { previousData, data = previousData, refetch, loading } = useQuery(LIST_RETREATS_QUERY, { variables });
   const [setRetreatStatus] = useSetRetreatStatus();
 
   const retreats = compact(data?.retreats?.items ?? []);
@@ -99,7 +99,7 @@ const Retreats: NextPage = () => {
 
   return (
     <Layout.Admin title="Retreater" backLink="/admin" actions={actions}>
-      <DataTable.Provider data={retreats} columns={columns} loading>
+      <DataTable.Provider data={retreats} columns={columns} loading={loading}>
         <DataTable.Layout>
           <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
             <DataTable.Filters.EnumFilter<FiltersType>

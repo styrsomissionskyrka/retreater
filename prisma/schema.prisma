@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgres"
   url      = env("DATABASE_URL")
 }
 
@@ -21,7 +21,7 @@ model Retreat {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  products Json // Array of ids related to Stripe.Product
+  products String[] // Array of ids related to Stripe.Product
 
   status  RetreatStatus @default(DRAFT)
   title   String        @db.VarChar(255)
@@ -60,8 +60,8 @@ model Order {
 
   price            String // Id of Stripe.Price
   coupon           String?
-  checkoutSessions Json? // Array Id of Stripe.Checkout.Session
-  refunds          Json? // Array Id of Stripe.Refund
+  checkoutSessions String[] // Array Id of Stripe.Checkout.Session
+  refunds          String[] // Array Id of Stripe.Refund
 
   name  String
   email String

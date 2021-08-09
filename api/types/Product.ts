@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as n from 'nexus';
 import { UserInputError } from 'apollo-server-micro';
 
-import { stripeTimestampToMs, ignoreNull, ensureArrayOfIds, authorizedWithRoles } from '../utils';
+import { stripeTimestampToMs, ignoreNull, authorizedWithRoles } from '../utils';
 
 export const Product = n.objectType({
   name: 'Product',
@@ -36,7 +36,7 @@ export const RetreatWithProducts = n.extendType({
       type: Product,
       args: { active: n.booleanArg() },
       async resolve(source, args, ctx) {
-        let ids = ensureArrayOfIds(source.products);
+        let ids = source.products;
         if (ids.length < 1) return [];
 
         let result = await ctx.stripe.products.list({ ids, limit: ids.length, active: ignoreNull(args.active) });
@@ -76,7 +76,7 @@ export const ProductMutation = n.extendType({
           images: ignoreNull(args.input.images),
         });
 
-        let products = ensureArrayOfIds(retreat.products);
+        let products = retreat.products;
         products.push(product.id);
 
         await ctx.prisma.retreat.update({ where: { id: args.retreatId }, data: { products } });

@@ -1,9 +1,9 @@
 import * as n from 'nexus';
 import { OrderStatus, Prisma } from '@prisma/client';
-import { AuthenticationError, UserInputError } from 'apollo-server-micro';
+import { UserInputError } from 'apollo-server-micro';
 
 import { assert } from '../../lib/utils/assert';
-import { ensureArrayOfIds, ignoreNull, isRetreatOrderable, createPaginationMeta, authorizedWithRoles } from '../utils';
+import { ignoreNull, isRetreatOrderable, createPaginationMeta, authorizedWithRoles } from '../utils';
 import { Price, Retreat, CheckoutSession, Refund, Coupon } from '.';
 import { OrderEnum, PaginatedQuery } from './Shared';
 
@@ -51,7 +51,7 @@ export const Order = n.objectType({
     t.nonNull.list.nonNull.field('checkoutSessions', {
       type: CheckoutSession,
       async resolve(source, _, ctx) {
-        let ids = ensureArrayOfIds(source.checkoutSessions);
+        let ids = source.checkoutSessions;
         return Promise.all(ids.map((id) => ctx.stripe.checkout.sessions.retrieve(id)));
       },
     });
@@ -59,7 +59,7 @@ export const Order = n.objectType({
     t.nonNull.list.nonNull.field('refunds', {
       type: Refund,
       async resolve(source, _, ctx) {
-        let ids = ensureArrayOfIds(source.checkoutSessions);
+        let ids = source.checkoutSessions;
         let sessions = await Promise.all(ids.map((id) => ctx.stripe.checkout.sessions.retrieve(id)));
         let paymentIntents = sessions
           .map((session) => session.payment_intent)
@@ -256,7 +256,7 @@ export const OrderMutation = n.extendType({
             new URL('/checkout/cancel', process.env.VERCEL_URL).toString() + '?session_id={CHECKOUT_SESSION_ID}',
         });
 
-        let nextCheckoutSessions = [...ensureArrayOfIds(order.checkoutSessions), checkoutSession.id];
+        let nextCheckoutSessions = [...order.checkoutSessions, checkoutSession.id];
         order = await ctx.prisma.order.update({
           where: { id: order.id },
           data: { status: OrderStatus.PENDING, checkoutSessions: nextCheckoutSessions },

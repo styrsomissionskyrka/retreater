@@ -4,7 +4,7 @@ import Stripe from 'stripe';
 import * as n from 'nexus';
 import { UserInputError } from 'apollo-server-micro';
 
-import { ignoreNull, stripeTimestampToMs, ensureArrayOfIds, authorizedWithRoles } from '../utils';
+import { ignoreNull, stripeTimestampToMs, authorizedWithRoles } from '../utils';
 
 const refundStatusMembers = ['pending', 'succeeded', 'failed', 'canceled'] as const;
 type RefundStatusMember = typeof refundStatusMembers[number];
@@ -73,7 +73,7 @@ export const RefundMutation = n.extendType({
 
         await ctx.prisma.order.update({
           where: { id: order.id },
-          data: { refunds: [...ensureArrayOfIds(order.refunds), refund.id] },
+          data: { refunds: [...order.refunds, refund.id] },
         });
 
         return refund;

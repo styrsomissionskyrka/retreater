@@ -2,19 +2,18 @@ version: '3.3'
 
 services:
   db:
-    image: mysql:5.7
+    image: postgres
     restart: always
     environment:
-      MYSQL_DATABASE: 'retreater'
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'password'
-      MYSQL_ROOT_PASSWORD: 'password'
+      POSTGRES_DATABASE: 'retreater'
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'password'
     ports:
-      - '3306:3306'
+      - '5432:5432'
     expose:
-      - '3306'
+      - '5432'
     volumes:
-      - dev-db:/var/lib/mysql
+      - dev-db-postgres:/var/lib/postgresql/data/
 
 volumes:
-  dev-db:
+  dev-db-postgres:
