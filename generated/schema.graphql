@@ -220,6 +220,15 @@ enum RefundStatusEnum {
 
 type Retreat {
   bookedParticipants: Int!
+
+  """
+  Tells if the retreat can be unbublished/archived. Will be false if the retreat has active orders, or is not yet published.
+  """
+  canDeactivate: Boolean!
+
+  """
+  Tells if a new order can be placed on the retreat. Will be false if currently active orders are equal to, or greater than, max participants.
+  """
   canPlaceOrder: Boolean!
   content: String
   createdAt: Date!

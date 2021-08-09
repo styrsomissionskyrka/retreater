@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import FocusLock from 'react-focus-lock';
 import { IconChevronDown, IconDots } from '@tabler/icons';
+import classNames from 'classnames';
 
 import { composeEventHandlers } from 'lib/utils/events';
 import { useId } from 'lib/hooks';
@@ -129,10 +130,9 @@ export const Actions: React.FC = ({ children }) => {
   );
 };
 
-export type ActionKind = 'normal' | 'destructive';
-export type ActionProps = { kind?: ActionKind; onClick: React.MouseEventHandler<HTMLButtonElement> };
+export type ActionProps = { onClick: React.MouseEventHandler<HTMLButtonElement>; disabled?: boolean };
 
-export const Action: React.FC<ActionProps> = ({ onClick, children }) => {
+export const Action: React.FC<ActionProps> = ({ onClick, disabled, children }) => {
   const { setIsExpanded } = useMenuContext();
   const closeMenu = () => setIsExpanded(false);
 
@@ -141,7 +141,12 @@ export const Action: React.FC<ActionProps> = ({ onClick, children }) => {
       role="menuitem"
       type="button"
       onClick={composeEventHandlers(onClick, closeMenu)}
-      className="text-left px-4 py-2 hover:bg-gray-300"
+      className={classNames(
+        'text-left px-4 py-2',
+        !disabled && 'hover:bg-gray-300',
+        disabled && 'text-gray-500 cursor-not-allowed',
+      )}
+      disabled={disabled}
     >
       {children}
     </button>

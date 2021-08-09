@@ -54,6 +54,7 @@ const Retreats: NextPage = () => {
         actions: [
           {
             label: 'Publicera',
+            disabled: (retreat) => retreat.status === RetreatStatusEnum.Published,
             onClick: (retreat) =>
               toast.promise(setRetreatStatus(retreat.id, RetreatStatusEnum.Published), {
                 loading: '...',
@@ -63,6 +64,7 @@ const Retreats: NextPage = () => {
           },
           {
             label: 'Utkast',
+            disabled: (retreat) => retreat.status === RetreatStatusEnum.Draft || !retreat.canDeactivate,
             onClick: (retreat) =>
               toast.promise(setRetreatStatus(retreat.id, RetreatStatusEnum.Draft), {
                 loading: '...',
@@ -72,6 +74,7 @@ const Retreats: NextPage = () => {
           },
           {
             label: 'Arkivera',
+            disabled: (retreat) => retreat.status === RetreatStatusEnum.Archived || !retreat.canDeactivate,
             onClick: (retreat) =>
               toast.promise(setRetreatStatus(retreat.id, RetreatStatusEnum.Archived), {
                 loading: '...',
@@ -161,6 +164,7 @@ const LIST_RETREATS_QUERY: TypedDocumentNode<ListRetreatsQuery, ListRetreatsQuer
         endDate
         maxParticipants
         bookedParticipants
+        canDeactivate
       }
     }
   }

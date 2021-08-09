@@ -1,9 +1,10 @@
-import { Prisma, RetreatStatus } from '@prisma/client';
+import { OrderStatus, Prisma, RetreatStatus } from '@prisma/client';
 import * as n from 'nexus';
 import { UserInputError } from 'apollo-server-micro';
 import slugify from 'slug';
 
 import { compact } from '../../lib/utils/array';
+import { Context } from '../context';
 import {
   clearUndefined,
   authorizedWithRoles,
@@ -48,7 +49,17 @@ export const Retreat = n.objectType({
 
     t.nonNull.int('maxParticipants');
     t.nonNull.int('bookedParticipants', { resolve: (source, _, ctx) => countBlockingOrders(source.id, ctx) });
-    t.nonNull.boolean('canPlaceOrder', { resolve: (source, _, ctx) => isRetreatOrderable(source, ctx) });
+    t.nonNull.boolean('canPlaceOrder', {
+      resolve: (source, _, ctx) => isRetreatOrderable(source, ctx),
+      description:
+        'Tells if a new order can be placed on the retreat. Will be false if currently active orders are equal to, or greater than, max participants.',
+    });
+
+    t.nonNull.boolean('canDeactivate', {
+      resolve: (source, _, ctx) => canDeactivateRetreat(source, ctx),
+      description:
+        'Tells if the retreat can be unbublished/archived. Will be false if the retreat has active orders, or is not yet published.',
+    });
   },
 });
 
@@ -163,6 +174,15 @@ export const RetreatMutation = n.extendType({
       },
       authorize: authorizedWithRoles(['editor', 'admin', 'superadmin']),
       async resolve(_, args, ctx) {
+        let current = await ctx.prisma.retreat.findUnique({ where: { id: args.id } });
+        if (current == null) {
+          throw new UserInputError(`Retreat with id ${args.id} could not be found.`);
+        }
+
+        if (args.status !== RetreatStatus.PUBLISHED && !(await canDeactivateRetreat(current, ctx))) {
+          throw new UserInputError(`Could not update retreat status.`);
+        }
+
         let retreat = await ctx.prisma.retreat.update({ where: { id: args.id }, data: { status: args.status } });
         return retreat;
       },
@@ -180,3 +200,15 @@ export const UpdateRetreatInput = n.inputObjectType({
     t.int('maxParticipants');
   },
 });
+
+async function canDeactivateRetreat(retreat: { id: string; status: RetreatStatus }, ctx: Context) {
+  if (retreat.status !== RetreatStatus.PUBLISHED) return false;
+  let activeOrdersCount = await ctx.prisma.order.count({
+    where: {
+      retreatId: retreat.id,
+      status: { in: [OrderStatus.CONFIRMED, OrderStatus.PARTIALLY_CONFIRMED, OrderStatus.PENDING] },
+    },
+  });
+
+  return activeOrdersCount === 0;
+}

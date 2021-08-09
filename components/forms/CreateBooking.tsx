@@ -87,7 +87,7 @@ export const CreateBooking: React.FC<CreateBookingProps> = ({ retreatId }) => {
             <Form.Checkbox
               name="force"
               defaultChecked={false}
-              label="Skapa order även om alla platser redan är fyllda."
+              label="Skapa bokning även om alla platser redan är fyllda."
             />
           </Form.Row>
 

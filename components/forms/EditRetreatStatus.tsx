@@ -65,6 +65,8 @@ export const EditRetreatStatus: React.FC<EditRetreatStatusProps> = ({ retreat })
     router.replace('/admin/retreater');
   };
 
+  console.log(retreat);
+
   return (
     <Menu.Wrapper>
       <Menu.Button loading={loading} disabled={loading}>
@@ -74,9 +76,15 @@ export const EditRetreatStatus: React.FC<EditRetreatStatusProps> = ({ retreat })
         {retreat.status !== RetreatStatusEnum.Published ? (
           <Menu.Action onClick={activateRetreat}>Publicera</Menu.Action>
         ) : null}
-        {retreat.status !== RetreatStatusEnum.Draft ? <Menu.Action onClick={draftRetreat}>Utkast</Menu.Action> : null}
+        {retreat.status !== RetreatStatusEnum.Draft ? (
+          <Menu.Action onClick={draftRetreat} disabled={!retreat.canDeactivate}>
+            Utkast
+          </Menu.Action>
+        ) : null}
         {retreat.status !== RetreatStatusEnum.Archived ? (
-          <Menu.Action onClick={archiveRetreat}>Arkivera</Menu.Action>
+          <Menu.Action onClick={archiveRetreat} disabled={!retreat.canDeactivate}>
+            Arkivera
+          </Menu.Action>
         ) : null}
       </Menu.Actions>
     </Menu.Wrapper>
@@ -87,6 +95,7 @@ export const EDIT_RETREAT_STATUS_FRAGMENT = gql`
   fragment EditRetreatStatusFields on Retreat {
     id
     status
+    canDeactivate
   }
 `;
 

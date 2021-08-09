@@ -93,7 +93,9 @@ export function createDateRangeCell<T extends object>(config: Column<T>): Column
   };
 }
 
-type MenuCellProps<T extends object> = Column<T> & { actions: { label: React.ReactNode; onClick: (row: T) => void }[] };
+type MenuCellProps<T extends object> = Column<T> & {
+  actions: { label: React.ReactNode; onClick: (row: T) => void; disabled?: boolean | ((row: T) => boolean) }[];
+};
 
 export function createContextMenuCell<T extends object>({ actions, ...config }: MenuCellProps<T>): Column<T> {
   return {
@@ -104,7 +106,11 @@ export function createContextMenuCell<T extends object>({ actions, ...config }: 
           <Menu.ContextButton />
           <Menu.Actions>
             {actions.map((action, i) => (
-              <Menu.Action key={i} onClick={() => action.onClick(row.original)}>
+              <Menu.Action
+                key={i}
+                onClick={() => action.onClick(row.original)}
+                disabled={typeof action.disabled === 'function' ? action.disabled(row.original) : action.disabled}
+              >
                 {action.label}
               </Menu.Action>
             ))}
