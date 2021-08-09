@@ -3,6 +3,9 @@ import { OrderStatus } from '@prisma/client';
 
 import { assert } from 'lib/utils/assert';
 import { prisma } from 'api/context/prisma';
+import { createLogger, OrderEvent } from 'api/logs';
+
+const log = createLogger(prisma);
 
 export async function handleStripeEvents(event: Stripe.Event): Promise<void> {
   switch (event.type) {
@@ -21,6 +24,11 @@ export async function handleStripeEvents(event: Stripe.Event): Promise<void> {
         where: { id: orderId },
         data: { status: nextStatus },
       });
+
+      await Promise.all([
+        log.order(orderId, OrderEvent.ORDER_CHECKOUT_COMPLETED),
+        log.order(orderId, OrderEvent.ORDER_STATUS_UPDATED),
+      ]);
       break;
   }
 }

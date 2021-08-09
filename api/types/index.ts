@@ -1,5 +1,6 @@
 export * from './CheckoutSession';
 export * from './Coupon';
+export * from './LogItem';
 export * from './Order';
 export * from './Price';
 export * from './Product';

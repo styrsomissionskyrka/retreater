@@ -79,3 +79,17 @@ model OrderMetadata {
   order   Order  @relation(fields: [orderId], references: [id])
   orderId String
 }
+
+enum LogItemType {
+  RETREAT
+  ORDER
+}
+
+model LogItem {
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  itemType  LogItemType
+  itemId    String
+  userId    String?
+  event     String
+}

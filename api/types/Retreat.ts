@@ -5,6 +5,7 @@ import slugify from 'slug';
 
 import { compact } from '../../lib/utils/array';
 import { Context } from '../context';
+import { RetreatEvent } from '../logs';
 import {
   clearUndefined,
   authorizedWithRoles,
@@ -148,6 +149,7 @@ export const RetreatMutation = n.extendType({
           data: { title: args.title, slug, maxParticipants: 10, products: [] },
         });
 
+        await ctx.log.retreat(retreat.id, RetreatEvent.RETREAT_CREATED);
         return retreat;
       },
     });
@@ -162,6 +164,7 @@ export const RetreatMutation = n.extendType({
       async resolve(_, args, ctx) {
         let data = clearUndefined(args.input);
         let retreat = await ctx.prisma.retreat.update({ where: { id: args.id }, data });
+        await ctx.log.retreat(retreat.id, RetreatEvent.RETREAT_UPDATED);
         return retreat;
       },
     });
@@ -184,6 +187,15 @@ export const RetreatMutation = n.extendType({
         }
 
         let retreat = await ctx.prisma.retreat.update({ where: { id: args.id }, data: { status: args.status } });
+
+        await ctx.log.retreat(
+          retreat.id,
+          args.status === RetreatStatus.PUBLISHED
+            ? RetreatEvent.RETREAT_PUBLISHED
+            : args.status === RetreatStatus.DRAFT
+            ? RetreatEvent.RETREAT_UNPUBLISHED
+            : RetreatEvent.RETREAT_ARCHIVED,
+        );
         return retreat;
       },
     });

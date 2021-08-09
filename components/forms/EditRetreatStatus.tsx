@@ -65,8 +65,6 @@ export const EditRetreatStatus: React.FC<EditRetreatStatusProps> = ({ retreat })
     router.replace('/admin/retreater');
   };
 
-  console.log(retreat);
-
   return (
     <Menu.Wrapper>
       <Menu.Button loading={loading} disabled={loading}>

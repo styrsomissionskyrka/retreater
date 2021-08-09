@@ -2,6 +2,7 @@ import * as n from 'nexus';
 import { OrderStatus, Prisma } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
 
+import { OrderEvent } from '../logs';
 import { assert } from '../../lib/utils/assert';
 import { ignoreNull, isRetreatOrderable, createPaginationMeta, authorizedWithRoles } from '../utils';
 import { Price, Retreat, CheckoutSession, Refund, Coupon } from '.';
@@ -218,7 +219,7 @@ export const OrderMutation = n.extendType({
           couponId = coupon.id;
         }
 
-        return ctx.prisma.order.create({
+        let order = await ctx.prisma.order.create({
           data: {
             retreatId: args.input.retreatId,
             price: args.input.price,
@@ -228,6 +229,9 @@ export const OrderMutation = n.extendType({
             coupon: couponId,
           },
         });
+
+        await ctx.log.order(order.id, OrderEvent.ORDER_CREATED);
+        return order;
       },
     });
 
@@ -262,6 +266,7 @@ export const OrderMutation = n.extendType({
           data: { status: OrderStatus.PENDING, checkoutSessions: nextCheckoutSessions },
         });
 
+        await ctx.log.order(order.id, OrderEvent.ORDER_CHECKOUT_INIT);
         return { order, checkoutSession };
       },
     });
@@ -281,6 +286,7 @@ export const OrderMutation = n.extendType({
         if (orderId == null) return null;
 
         let order = await ctx.prisma.order.update({ where: { id: orderId }, data: { status: OrderStatus.CANCELLED } });
+        await ctx.log.order(order.id, OrderEvent.ORDER_STATUS_UPDATED);
         return order;
       },
     });

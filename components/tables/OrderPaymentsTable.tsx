@@ -64,7 +64,6 @@ export const OrderPaymentsTable: React.FC<{ id: string }> = ({ id }) => {
             ),
           ]);
 
-          console.log(actions);
           if (actions.length < 1) return null;
 
           return (

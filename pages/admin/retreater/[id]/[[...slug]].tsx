@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { IconClipboardList, IconCoin, IconInfoCircle } from '@tabler/icons';
+import { IconClipboardList, IconCoin, IconInfoCircle, IconNotes } from '@tabler/icons';
 import { Fragment } from 'react';
 
 import { EditRetreatFormQuery, EditRetreatFormQueryVariables, gql, TypedDocumentNode, useQuery } from 'lib/graphql';
@@ -20,6 +20,7 @@ import {
   CreateBooking,
 } from 'components/forms';
 import { OrdersTable } from 'components/tables';
+import { Logs, RefetchLogs } from 'components/Logs';
 
 const Retreat: NextPage = () => {
   const router = useRouter();
@@ -59,6 +60,12 @@ const Retreat: NextPage = () => {
         </Fragment>
       );
       title = 'Bokningar';
+      break;
+
+    case 'loggar':
+      form = <Logs id={id} />;
+      actions = <RefetchLogs id={id} />;
+      title = 'Loggar';
       break;
 
     default:
@@ -134,5 +141,6 @@ export function useRetreatNavLinks(id: string): Layout.NavLinkConfig[] {
     { label: 'Information', href: base, icon: <IconInfoCircle size={16} /> },
     { label: 'Priser', href: base + '/priser', icon: <IconCoin size={16} /> },
     { label: 'Bokningar', href: base + '/bokningar', icon: <IconClipboardList size={16} /> },
+    { label: 'Loggar', href: base + '/loggar', icon: <IconNotes size={16} /> },
   ];
 }

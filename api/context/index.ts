@@ -4,6 +4,7 @@ import { ContextFunction } from 'apollo-server-core';
 import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 
+import { createLogger, Logger } from '../logs';
 import { prisma } from './prisma';
 import { stripe } from './stripe';
 import { Auth0Client } from './auth0';
@@ -15,6 +16,7 @@ export const createContext: ContextFunction<ContextArgs, Context> = async (args)
     prisma,
     stripe,
     auth0: new Auth0Client(session?.accessToken),
+    log: createLogger(prisma),
   };
 };
 
@@ -28,4 +30,5 @@ export type Context = {
   prisma: PrismaClient;
   stripe: Stripe;
   auth0: Auth0Client;
+  log: Logger;
 };

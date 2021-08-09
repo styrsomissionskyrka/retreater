@@ -66,6 +66,30 @@ type LineItem {
   quantity: Int
 }
 
+enum LogEventEnum {
+  ORDER_CHECKOUT_COMPLETED
+  ORDER_CHECKOUT_INIT
+  ORDER_CREATED
+  ORDER_METADATA_UPDATED
+  ORDER_STATUS_UPDATED
+  RETREAT_ARCHIVED
+  RETREAT_CREATED
+  RETREAT_PRICE_CREATED
+  RETREAT_PRICE_UPDATED
+  RETREAT_PUBLISHED
+  RETREAT_UNPUBLISHED
+  RETREAT_UPDATED
+}
+
+type LogItem {
+  createdAt: Date!
+  event: LogEventEnum!
+  id: ID!
+  item: LogItemType
+}
+
+union LogItemType = Order | Retreat
+
 type Mutation {
   cancelOrder(id: ID, sessionId: ID): Order
   checkoutOrder(id: ID!): OrderCheckoutSession!
@@ -187,6 +211,7 @@ type Product {
 }
 
 type Query {
+  logs(id: ID!): [LogItem!]!
   me: User
   order(id: ID!): Order
   orders(order: OrderEnum! = ASC, orderBy: OrderOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, retreatId: ID, search: String, status: OrderStatusEnum = CONFIRMED): PaginatedOrder!

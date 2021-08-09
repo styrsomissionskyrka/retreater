@@ -6,7 +6,7 @@
 
 import type { Context } from "./../api/context/index"
 import type { StripePaymentIntent, StripeLineItem, StripeCheckoutSession, StripeCoupon, StripePrice, StripeProduct, StripeRefund } from "./../api/source-types"
-import type { Order, Retreat } from "@prisma/client"
+import type { LogItem, Order, Retreat } from "@prisma/client"
 import type { core, connectionPluginCore } from "nexus"
 import type { FieldAuthorizeResolver } from "nexus/dist/plugins/fieldAuthorizePlugin"
 declare global {
@@ -81,6 +81,7 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   CheckoutSessionStatusEnum: "no_payment_required" | "paid" | "unpaid"
+  LogEventEnum: "order.checkout_completed" | "order.checkout_initiated" | "order.created" | "order.metadata_updated" | "order.status_updated" | "retreat.archived" | "retreat.created" | "retreat.price_created" | "retreat.price_updated" | "retreat.published" | "retreat.unpublished" | "retreat.updated"
   OrderEnum: "asc" | "desc"
   OrderOrderByEnum: "createdAt" | "status"
   OrderStatusEnum: "CANCELLED" | "CONFIRMED" | "CREATED" | "DECLINED" | "ERRORED" | "PARTIALLY_CONFIRMED" | "PENDING"
@@ -105,6 +106,7 @@ export interface NexusGenObjects {
   CheckoutSession: StripeCheckoutSession;
   Coupon: StripeCoupon;
   LineItem: StripeLineItem;
+  LogItem: LogItem;
   Mutation: {};
   Order: Order;
   OrderCheckoutSession: { // root type
@@ -152,9 +154,10 @@ export interface NexusGenInterfaces {
 }
 
 export interface NexusGenUnions {
+  LogItemType: NexusGenRootTypes['Order'] | NexusGenRootTypes['Retreat'];
 }
 
-export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects
+export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects & NexusGenUnions
 
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
@@ -183,6 +186,12 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     price: NexusGenRootTypes['Price'] | null; // Price
     quantity: number | null; // Int
+  }
+  LogItem: { // field return type
+    createdAt: NexusGenScalars['Date']; // Date!
+    event: NexusGenEnums['LogEventEnum']; // LogEventEnum!
+    id: string; // ID!
+    item: NexusGenRootTypes['LogItemType'] | null; // LogItemType
   }
   Mutation: { // field return type
     cancelOrder: NexusGenRootTypes['Order'] | null; // Order
@@ -262,6 +271,7 @@ export interface NexusGenFieldTypes {
     url: string | null; // String
   }
   Query: { // field return type
+    logs: NexusGenRootTypes['LogItem'][]; // [LogItem!]!
     me: NexusGenRootTypes['User'] | null; // User
     order: NexusGenRootTypes['Order'] | null; // Order
     orders: NexusGenRootTypes['PaginatedOrder']; // PaginatedOrder!
@@ -338,6 +348,12 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
     price: 'Price'
     quantity: 'Int'
+  }
+  LogItem: { // field return type name
+    createdAt: 'Date'
+    event: 'LogEventEnum'
+    id: 'ID'
+    item: 'LogItemType'
   }
   Mutation: { // field return type name
     cancelOrder: 'Order'
@@ -417,6 +433,7 @@ export interface NexusGenFieldTypeNames {
     url: 'String'
   }
   Query: { // field return type name
+    logs: 'LogItem'
     me: 'User'
     order: 'Order'
     orders: 'PaginatedOrder'
@@ -525,6 +542,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    logs: { // args
+      id: string; // ID!
+    }
     order: { // args
       id: string; // ID!
     }
@@ -567,6 +587,7 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
+  LogItemType: "Order" | "Retreat"
   PaginatedQuery: "PaginatedOrder" | "PaginatedRetreat"
 }
 
@@ -585,11 +606,11 @@ export type NexusGenInterfaceNames = keyof NexusGenInterfaces;
 
 export type NexusGenScalarNames = keyof NexusGenScalars;
 
-export type NexusGenUnionNames = never;
+export type NexusGenUnionNames = keyof NexusGenUnions;
 
 export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType = "PaginatedQuery";
+export type NexusGenAbstractsUsingStrategyResolveType = "LogItemType" | "PaginatedQuery";
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {
