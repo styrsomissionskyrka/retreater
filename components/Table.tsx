@@ -5,7 +5,11 @@ import { ElementProps } from 'lib/utils/types';
 
 export const Table = forwardRef<HTMLTableElement, ElementProps<'table'>>(({ children, ...props }, ref) => {
   return (
-    <table {...props} ref={ref} className="w-full border-collapse table-auto leading-none">
+    <table
+      {...props}
+      ref={ref}
+      className={classNames('w-full border-collapse table-auto leading-none', props.className)}
+    >
       {children}
     </table>
   );
@@ -25,7 +29,7 @@ Head.displayName = 'Table.Head';
 
 export const HeadRow = forwardRef<HTMLTableRowElement, ElementProps<'tr'>>(({ children, ...props }, ref) => {
   return (
-    <tr {...props} ref={ref} className="border-b">
+    <tr {...props} ref={ref} className={classNames('border-b', props.className)}>
       {children}
     </tr>
   );
@@ -35,7 +39,7 @@ HeadRow.displayName = 'Table.HeadRow';
 
 export const HeadCell = forwardRef<HTMLTableHeaderCellElement, ElementProps<'th'>>(({ children, ...props }, ref) => {
   return (
-    <th {...props} ref={ref} className="text-left font-medium px-2 pb-3">
+    <th {...props} ref={ref} className={classNames('text-left font-medium px-2 pb-3', props.className)}>
       {children}
     </th>
   );
@@ -45,7 +49,7 @@ HeadCell.displayName = 'Table.HeadCell';
 
 export const Body = forwardRef<HTMLTableSectionElement, ElementProps<'tbody'>>(({ children, ...props }, ref) => {
   return (
-    <tbody {...props} ref={ref} className="divide-y text-sm">
+    <tbody {...props} ref={ref} className={classNames('divide-y text-sm', props.className)}>
       {children}
     </tbody>
   );
@@ -55,7 +59,7 @@ Body.displayName = 'Table.Body';
 
 export const BodyRow = forwardRef<HTMLTableRowElement, ElementProps<'tr'>>(({ children, ...props }, ref) => {
   return (
-    <tr {...props} ref={ref} className={classNames(' hover:bg-gray-100', props.className)}>
+    <tr {...props} ref={ref} className={classNames('hover:bg-gray-100', props.className)}>
       {children}
     </tr>
   );
@@ -65,7 +69,7 @@ BodyRow.displayName = 'Table.BodyRow';
 
 export const BodyCell = forwardRef<HTMLTableDataCellElement, ElementProps<'td'>>(({ children, ...props }, ref) => {
   return (
-    <td {...props} ref={ref} className="p-2 h-16 font-normal text-left">
+    <td {...props} ref={ref} className={classNames('p-2 h-16 font-normal text-left max-w-[10rem]', props.className)}>
       {children}
     </td>
   );

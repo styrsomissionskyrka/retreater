@@ -33,7 +33,7 @@ export function createLinkCell<T extends object>({
     Cell({ value, row }: CellProps<T, string>) {
       return (
         <Link href={getLink(row.original)} className="flex items-center w-full h-full hover:text-blue-500">
-          {value}
+          <span className="truncate">{value}</span>
         </Link>
       );
     },
@@ -83,7 +83,7 @@ export function createDateRangeCell<T extends object>(config: Column<T>): Column
       let end = <time dateTime={formatISO(value.end)}>{format(value.end, 'yyyy-MM-dd')}</time>;
 
       return (
-        <p>
+        <p className="tabular-nums">
           {start}
           <span>{' - '}</span>
           {end}
@@ -157,7 +157,7 @@ export function createProgressCell<T extends object>({
               </div>
             </div>
           ) : (
-            <div className="w-full h-full absolute inset-0 flex items-center justify-center">
+            <div className="w-full h-full absolute inset-0 flex items-center justify-center tabular-nums">
               {progress} / {total}
             </div>
           )}
