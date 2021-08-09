@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as n from 'nexus';
 import { UserInputError } from 'apollo-server-micro';
 
-import { stripeTimestampToMs, ignoreNull, ensureArrayOfIds } from '../utils';
+import { stripeTimestampToMs, ignoreNull, ensureArrayOfIds, authorizedWithRoles } from '../utils';
 
 export const Product = n.objectType({
   name: 'Product',
@@ -57,6 +57,7 @@ export const ProductMutation = n.extendType({
   definition(t) {
     t.field('createProduct', {
       type: Product,
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       args: {
         retreatId: n.nonNull(n.idArg()),
         input: n.nonNull(n.arg({ type: CreateProductInput })),
@@ -85,6 +86,7 @@ export const ProductMutation = n.extendType({
 
     t.field('updateProduct', {
       type: Product,
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       args: {
         id: n.nonNull(n.idArg()),
         input: n.nonNull(n.arg({ type: UpdateProductInput })),

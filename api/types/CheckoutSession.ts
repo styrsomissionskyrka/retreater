@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as n from 'nexus';
 
 import { Price } from './Price';
-import { stripeTimestampToMs } from '../utils';
+import { authorizedWithRoles, stripeTimestampToMs } from '../utils';
 
 export const CheckoutSessionStatusEnum = n.enumType({
   name: 'CheckoutSessionStatusEnum',
@@ -104,6 +104,7 @@ export const CheckoutSessionQuery = n.extendType({
     t.field('paymentIntent', {
       type: n.nonNull(PaymentIntent),
       args: { id: n.nonNull(n.idArg()) },
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       resolve(_, args, ctx) {
         return ctx.stripe.paymentIntents.retrieve(args.id);
       },

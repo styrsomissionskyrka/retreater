@@ -4,7 +4,7 @@ import Stripe from 'stripe';
 import * as n from 'nexus';
 import { UserInputError } from 'apollo-server-micro';
 
-import { ignoreNull, stripeTimestampToMs, ensureArrayOfIds } from '../utils';
+import { ignoreNull, stripeTimestampToMs, ensureArrayOfIds, authorizedWithRoles } from '../utils';
 
 const refundStatusMembers = ['pending', 'succeeded', 'failed', 'canceled'] as const;
 type RefundStatusMember = typeof refundStatusMembers[number];
@@ -50,6 +50,7 @@ export const RefundMutation = n.extendType({
   definition(t) {
     t.field('createRefund', {
       type: n.nonNull(Refund),
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       args: {
         order: n.nonNull(n.idArg()),
         paymentIntent: n.nonNull(n.idArg()),

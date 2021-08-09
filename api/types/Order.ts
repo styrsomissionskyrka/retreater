@@ -3,7 +3,7 @@ import { OrderStatus, Prisma } from '@prisma/client';
 import { AuthenticationError, UserInputError } from 'apollo-server-micro';
 
 import { assert } from '../../lib/utils/assert';
-import { ensureArrayOfIds, ignoreNull, isRetreatOrderable, createPaginationMeta } from '../utils';
+import { ensureArrayOfIds, ignoreNull, isRetreatOrderable, createPaginationMeta, authorizedWithRoles } from '../utils';
 import { Price, Retreat, CheckoutSession, Refund, Coupon } from '.';
 import { OrderEnum, PaginatedQuery } from './Shared';
 
@@ -114,6 +114,7 @@ export const OrderQuery = n.extendType({
   definition(t) {
     t.field('order', {
       type: Order,
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       args: { id: n.nonNull(n.idArg()) },
       resolve(_, args, ctx) {
         return ctx.prisma.order.findUnique({ where: { id: args.id } });
@@ -122,6 +123,7 @@ export const OrderQuery = n.extendType({
 
     t.field('orders', {
       type: n.nonNull(PaginatedOrder),
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       args: {
         page: n.nonNull(n.intArg({ default: 1 })),
         perPage: n.nonNull(n.intArg({ default: 25 })),
@@ -162,6 +164,7 @@ export const RetreatWithOrders = n.extendType({
   definition(t) {
     t.field('orders', {
       type: n.list(n.nonNull(Order)),
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       args: { status: n.arg({ type: OrderStatusEnum }) },
       resolve(source, args, ctx) {
         return ctx.prisma.order.findMany({
@@ -183,22 +186,24 @@ export const OrderMutation = n.extendType({
           description: 'Signed in users can force order creation even if max participants is reached.',
         }),
       },
+      authorize(source, args, ctx) {
+        if (args.force === true || args.input.discount != null) {
+          let authorize = authorizedWithRoles(['admin', 'superadmin']);
+          return authorize(source, args, ctx);
+        }
+
+        return true;
+      },
       async resolve(_, args, ctx) {
         let retreat = await ctx.prisma.retreat.findUnique({ where: { id: args.input.retreatId } });
 
-        let force = ctx.user != null && args.force;
-        let canPlaceOrder = force ? true : await isRetreatOrderable(retreat, ctx);
-
+        let canPlaceOrder = args.force ? true : await isRetreatOrderable(retreat, ctx);
         if (!canPlaceOrder) {
           throw new UserInputError(`Can't place order on retreat with id ${args.input.retreatId}.`);
         }
 
         let couponId: string | undefined = undefined;
         if (args.input.discount != null) {
-          if (ctx.user == null) {
-            throw new AuthenticationError("Unauthenticated users can't apply discounts.");
-          }
-
           let price = await ctx.stripe.prices.retrieve(args.input.price);
           let coupon = await ctx.stripe.coupons.create({
             amount_off: args.input.discount,
@@ -264,6 +269,7 @@ export const OrderMutation = n.extendType({
     t.field('cancelOrder', {
       type: Order,
       args: { sessionId: n.idArg(), id: n.idArg() },
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       async resolve(_, args, ctx) {
         let orderId: string | null = args.id ?? null;
         if (args.sessionId != null) {

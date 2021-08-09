@@ -2,7 +2,7 @@ import * as path from 'path';
 
 import * as n from 'nexus';
 
-import { ignoreNull, stripeTimestampToMs } from '../utils';
+import { authorizedWithRoles, ignoreNull, stripeTimestampToMs } from '../utils';
 import { Product } from './Product';
 
 export const Price = n.objectType({
@@ -48,6 +48,7 @@ export const PriceMutation = n.extendType({
   definition(t) {
     t.field('updateProductPrice', {
       type: Price,
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       args: {
         productId: n.nonNull(n.idArg()),
         input: n.nonNull(n.arg({ type: CreatePriceInput })),
@@ -69,6 +70,7 @@ export const PriceMutation = n.extendType({
 
     t.field('createPrice', {
       type: Price,
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       args: {
         productId: n.nonNull(n.idArg()),
         input: n.nonNull(n.arg({ type: CreatePriceInput })),
@@ -86,6 +88,7 @@ export const PriceMutation = n.extendType({
 
     t.field('updatePrice', {
       type: Price,
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       args: {
         id: n.nonNull(n.idArg()),
         input: n.nonNull(n.arg({ type: UpdatePriceInput })),
