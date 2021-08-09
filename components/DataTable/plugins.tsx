@@ -7,7 +7,6 @@ import {
   Hooks,
   useExpanded as _useExpanded,
   TableExpandedToggleProps,
-  HeaderProps,
 } from 'react-table';
 
 export function useExpanded<T extends object>(hooks: Hooks<T>) {
