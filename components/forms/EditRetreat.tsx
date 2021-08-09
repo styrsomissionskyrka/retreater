@@ -66,16 +66,10 @@ export const EDIT_RETREAT_FRAGMENT = gql`
 `;
 
 export const UPDATE_RETREAT_MUTATION: TypedDocumentNode<UpdateRetreatMutation, UpdateRetreatMutationVariables> = gql`
-  mutation UpdateRetreat(
-    $id: ID!
-    $input: UpdateRetreatInput! # $metadataId: ID! # $metadata: UpdateRetreatMetadataInput!
-  ) {
+  mutation UpdateRetreat($id: ID!, $input: UpdateRetreatInput!) {
     updateRetreat(id: $id, input: $input) {
       ...EditRetreatFields
     }
-    # updateRetreatMetadata(id: $metadataId, input: $metadata) {
-    #   ...EditRetreatMetadataFields
-    # }
   }
 
   ${EDIT_RETREAT_FRAGMENT}

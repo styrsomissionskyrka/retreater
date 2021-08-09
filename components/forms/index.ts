@@ -1,3 +1,4 @@
+export * from './CreateBooking';
 export * from './CreateProductPrice';
 export * from './CreateReatreatProduct';
 export * from './CreateRetreat';

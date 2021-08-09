@@ -18,7 +18,19 @@ enum CheckoutSessionStatusEnum {
   UNPAID
 }
 
+type Coupon {
+  amountOff: Int
+  created: Date!
+  currency: String
+  id: ID!
+  percentOff: Float
+}
+
 input CreateOrderInput {
+  """
+  Optional discount for this specific order. Can only be applied by signed in users. In cents.
+  """
+  discount: Int
   email: String!
   name: String!
   price: ID!
@@ -57,7 +69,13 @@ type LineItem {
 type Mutation {
   cancelOrder(id: ID, sessionId: ID): Order
   checkoutOrder(id: ID!): OrderCheckoutSession!
-  createOrder(input: CreateOrderInput!): Order!
+  createOrder(
+    """
+    Signed in users can force order creation even if max participants is reached.
+    """
+    force: Boolean
+    input: CreateOrderInput!
+  ): Order!
   createPrice(input: CreatePriceInput!, productId: ID!): Price
   createProduct(input: CreateProductInput!, retreatId: ID!): Product
   createRefund(amount: Int, order: ID!, paymentIntent: ID!, reason: RefundReasonEnum): Refund!
@@ -73,6 +91,7 @@ type Order {
   cancelledAt: Date
   checkoutSessions: [CheckoutSession!]!
   confirmedAt: Date
+  coupon: Coupon
   createdAt: Date!
   email: String!
   id: ID!

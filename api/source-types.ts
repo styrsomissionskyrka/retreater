@@ -6,3 +6,4 @@ export type StripeCheckoutSession = Stripe.Checkout.Session;
 export type StripePaymentIntent = Stripe.PaymentIntent;
 export type StripeLineItem = Stripe.LineItem;
 export type StripeRefund = Stripe.Refund;
+export type StripeCoupon = Stripe.Coupon;

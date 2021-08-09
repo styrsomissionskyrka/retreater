@@ -5,7 +5,7 @@
 
 
 import type { Context } from "./../api/context/index"
-import type { StripePaymentIntent, StripeLineItem, StripeCheckoutSession, StripePrice, StripeProduct, StripeRefund } from "./../api/source-types"
+import type { StripePaymentIntent, StripeLineItem, StripeCheckoutSession, StripeCoupon, StripePrice, StripeProduct, StripeRefund } from "./../api/source-types"
 import type { Order, Retreat } from "@prisma/client"
 import type { core, connectionPluginCore } from "nexus"
 import type { FieldAuthorizeResolver } from "nexus/dist/plugins/fieldAuthorizePlugin"
@@ -42,6 +42,7 @@ declare global {
 
 export interface NexusGenInputs {
   CreateOrderInput: { // input type
+    discount?: number | null; // Int
     email: string; // String!
     name: string; // String!
     price: string; // ID!
@@ -102,6 +103,7 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   CheckoutSession: StripeCheckoutSession;
+  Coupon: StripeCoupon;
   LineItem: StripeLineItem;
   Mutation: {};
   Order: Order;
@@ -166,6 +168,13 @@ export interface NexusGenFieldTypes {
     paymentIntent: NexusGenRootTypes['PaymentIntent'] | null; // PaymentIntent
     status: NexusGenEnums['CheckoutSessionStatusEnum']; // CheckoutSessionStatusEnum!
   }
+  Coupon: { // field return type
+    amountOff: number | null; // Int
+    created: NexusGenScalars['Date']; // Date!
+    currency: string | null; // String
+    id: string; // ID!
+    percentOff: number | null; // Float
+  }
   LineItem: { // field return type
     amountSubtotal: number; // Int!
     amountTotal: number; // Int!
@@ -193,6 +202,7 @@ export interface NexusGenFieldTypes {
     cancelledAt: NexusGenScalars['Date'] | null; // Date
     checkoutSessions: NexusGenRootTypes['CheckoutSession'][]; // [CheckoutSession!]!
     confirmedAt: NexusGenScalars['Date'] | null; // Date
+    coupon: NexusGenRootTypes['Coupon'] | null; // Coupon
     createdAt: NexusGenScalars['Date']; // Date!
     email: string; // String!
     id: string; // ID!
@@ -312,6 +322,13 @@ export interface NexusGenFieldTypeNames {
     paymentIntent: 'PaymentIntent'
     status: 'CheckoutSessionStatusEnum'
   }
+  Coupon: { // field return type name
+    amountOff: 'Int'
+    created: 'Date'
+    currency: 'String'
+    id: 'ID'
+    percentOff: 'Float'
+  }
   LineItem: { // field return type name
     amountSubtotal: 'Int'
     amountTotal: 'Int'
@@ -339,6 +356,7 @@ export interface NexusGenFieldTypeNames {
     cancelledAt: 'Date'
     checkoutSessions: 'CheckoutSession'
     confirmedAt: 'Date'
+    coupon: 'Coupon'
     createdAt: 'Date'
     email: 'String'
     id: 'ID'
@@ -458,6 +476,7 @@ export interface NexusGenArgTypes {
       id: string; // ID!
     }
     createOrder: { // args
+      force?: boolean | null; // Boolean
       input: NexusGenInputs['CreateOrderInput']; // CreateOrderInput!
     }
     createPrice: { // args

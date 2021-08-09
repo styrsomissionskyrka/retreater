@@ -60,6 +60,15 @@ const Order: NextPage = () => {
                 key: 'Pris',
                 value: `${order.price.product.name}, ${formatMoney(order.price.amount, order.price.currency)}`,
               },
+              {
+                key: 'Rabatt',
+                value:
+                  order.coupon == null
+                    ? '-'
+                    : order.coupon.amountOff
+                    ? formatMoney(order.coupon.amountOff, order.coupon.currency ?? 'sek')
+                    : `${order.coupon.percentOff}%`,
+              },
             ]}
           />
         </OrderUI.PageSection>
@@ -102,6 +111,12 @@ const ADMIN_ORDER_QUERY: TypedDocumentNode<AdminOrderQuery, AdminOrderQueryVaria
           name
           description
         }
+      }
+      coupon {
+        id
+        amountOff
+        percentOff
+        currency
       }
     }
   }

@@ -171,6 +171,64 @@ export function Markdown<FormValues extends FieldValues>({
   );
 }
 
+interface SelectProps<FormValues extends FieldValues>
+  extends Omit<FormUI.SelectProps, 'name' | 'value' | 'onChange' | 'onBlur' | 'defaultValue'> {
+  name: Path<FormValues>;
+  defaultValue: FormUI.SelectProps['defaultValue'];
+  options?: RegisterOptions<FormValues>;
+}
+
+export function Select<FormValues extends FieldValues>({
+  name,
+  required,
+  defaultValue,
+  options: passedOptions,
+  children,
+  ...props
+}: SelectProps<FormValues>): JSX.Element {
+  const { register } = useFormContext<FormValues>();
+  const { errors } = useFormState();
+
+  let fieldError: FieldError | undefined = get(errors, name);
+  let errorMessage = fieldError != null ? fieldError['message'] || DEFAULT_MESSAGES[fieldError.type] : undefined;
+
+  let options: RegisterOptions<FormValues> = { required };
+
+  const formProps = register(name, { ...options, ...passedOptions });
+  return (
+    <FormUI.Select {...props} {...formProps} defaultValue={defaultValue} error={errorMessage}>
+      {children}
+    </FormUI.Select>
+  );
+}
+
+interface CheckboxProps<FormValues extends FieldValues>
+  extends Omit<FormUI.CheckboxProps, 'name' | 'value' | 'onChange' | 'onBlur' | 'defaultChecked'> {
+  name: Path<FormValues>;
+  defaultChecked: FormUI.CheckboxProps['defaultChecked'];
+  options?: RegisterOptions<FormValues>;
+}
+
+export function Checkbox<FormValues extends FieldValues>({
+  name,
+  required,
+  defaultChecked,
+  options: passedOptions,
+  children,
+  ...props
+}: CheckboxProps<FormValues>): JSX.Element {
+  const { register } = useFormContext<FormValues>();
+  const { errors } = useFormState();
+
+  let fieldError: FieldError | undefined = get(errors, name);
+  let errorMessage = fieldError != null ? fieldError['message'] || DEFAULT_MESSAGES[fieldError.type] : undefined;
+
+  let options: RegisterOptions<FormValues> = { required };
+
+  const formProps = register(name, { ...options, ...passedOptions });
+  return <FormUI.Checkbox {...props} {...formProps} defaultChecked={defaultChecked} error={errorMessage} />;
+}
+
 type SubmitProps = Omit<FormUI.SubmitProps, 'isSubmitting'>;
 
 export const Submit: React.FC<SubmitProps> = ({ children, ...props }) => {
@@ -187,14 +245,18 @@ export function createConnectedFormComponents<FormValues extends FieldValues>():
   Input: React.ComponentType<InputProps<FormValues>>;
   PriceInput: React.ComponentType<PriceInputProps<FormValues>>;
   Markdown: React.ComponentType<MarkdownProps<FormValues>>;
+  Select: React.ComponentType<SelectProps<FormValues>>;
+  Checkbox: React.ComponentType<CheckboxProps<FormValues>>;
   Submit: React.ComponentType<SubmitProps>;
-} & Omit<typeof FormUI, 'Form' | 'Input' | 'Markdown' | 'Submit'> {
+} & Omit<typeof FormUI, 'Form' | 'Input' | 'Markdown' | 'Submit' | 'Select' | 'Checkbox'> {
   return {
     ...FormUI,
     Form,
     Input,
     PriceInput,
     Markdown,
+    Select,
+    Checkbox,
     Submit,
   };
 }

@@ -31,7 +31,7 @@ type Definition = {
 
 export const DefinitionList: React.FC<{ defs: Definition[] }> = ({ defs }) => {
   return (
-    <dl className="grid grid-cols-2 w-full">
+    <dl className={styles.DefinitionList}>
       {defs.map((def) => {
         let dd: React.ReactNode;
         switch (true) {

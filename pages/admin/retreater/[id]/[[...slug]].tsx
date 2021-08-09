@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { IconClipboardList, IconCoin, IconInfoCircle } from '@tabler/icons';
+import { Fragment } from 'react';
 
 import { EditRetreatFormQuery, EditRetreatFormQueryVariables, gql, TypedDocumentNode, useQuery } from 'lib/graphql';
 import { Layout } from 'components';
@@ -16,6 +17,7 @@ import {
   EDIT_RETREAT_STATUS_FRAGMENT,
   EDIT_RETREAT_PRICING_FIELDS,
   ExportRetreatOrders,
+  CreateBooking,
 } from 'components/forms';
 import { OrdersTable } from 'components/tables';
 
@@ -50,7 +52,12 @@ const Retreat: NextPage = () => {
 
     case 'bokningar':
       form = <OrdersTable retreatId={retreat.id} />;
-      actions = <ExportRetreatOrders retreatId={retreat.id} />;
+      actions = (
+        <Fragment>
+          <ExportRetreatOrders retreatId={retreat.id} />
+          <CreateBooking retreatId={retreat.id} />
+        </Fragment>
+      );
       title = 'Bokningar';
       break;
 

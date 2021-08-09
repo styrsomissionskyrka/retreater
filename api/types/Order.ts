@@ -1,10 +1,10 @@
 import * as n from 'nexus';
 import { OrderStatus, Prisma } from '@prisma/client';
-import { UserInputError } from 'apollo-server-micro';
+import { AuthenticationError, UserInputError } from 'apollo-server-micro';
 
 import { assert } from '../../lib/utils/assert';
 import { ensureArrayOfIds, ignoreNull, isRetreatOrderable, createPaginationMeta } from '../utils';
-import { Price, Retreat, CheckoutSession, Refund } from '.';
+import { Price, Retreat, CheckoutSession, Refund, Coupon } from '.';
 import { OrderEnum, PaginatedQuery } from './Shared';
 
 export const OrderStatusEnum = n.enumType({
@@ -38,6 +38,14 @@ export const Order = n.objectType({
     t.nonNull.field('price', {
       type: Price,
       resolve: (source, _, ctx) => ctx.stripe.prices.retrieve(source.price),
+    });
+
+    t.field('coupon', {
+      type: Coupon,
+      resolve(source, _, ctx) {
+        if (source.coupon == null) return null;
+        return ctx.stripe.coupons.retrieve(source.coupon);
+      },
     });
 
     t.nonNull.list.nonNull.field('checkoutSessions', {
@@ -169,18 +177,50 @@ export const OrderMutation = n.extendType({
   definition(t) {
     t.field('createOrder', {
       type: n.nonNull(Order),
-      args: { input: n.nonNull(n.arg({ type: CreateOrderInput })) },
+      args: {
+        input: n.nonNull(n.arg({ type: CreateOrderInput })),
+        force: n.booleanArg({
+          description: 'Signed in users can force order creation even if max participants is reached.',
+        }),
+      },
       async resolve(_, args, ctx) {
         let retreat = await ctx.prisma.retreat.findUnique({ where: { id: args.input.retreatId } });
-        let canPlaceOrder = await isRetreatOrderable(retreat, ctx);
+
+        let force = ctx.user != null && args.force;
+        let canPlaceOrder = force ? true : await isRetreatOrderable(retreat, ctx);
+
         if (!canPlaceOrder) {
           throw new UserInputError(`Can't place order on retreat with id ${args.input.retreatId}.`);
         }
 
+        let couponId: string | undefined = undefined;
+        if (args.input.discount != null) {
+          if (ctx.user == null) {
+            throw new AuthenticationError("Unauthenticated users can't apply discounts.");
+          }
+
+          let price = await ctx.stripe.prices.retrieve(args.input.price);
+          let coupon = await ctx.stripe.coupons.create({
+            amount_off: args.input.discount,
+            currency: price.currency,
+            duration: 'once',
+            name: 'Rabatt',
+            applies_to: {
+              products: [typeof price.product === 'string' ? price.product : price.product.id],
+            },
+          });
+
+          couponId = coupon.id;
+        }
+
         return ctx.prisma.order.create({
           data: {
-            ...args.input,
+            retreatId: args.input.retreatId,
+            price: args.input.price,
+            name: args.input.name,
+            email: args.input.email,
             status: OrderStatus.CREATED,
+            coupon: couponId,
           },
         });
       },
@@ -204,6 +244,7 @@ export const OrderMutation = n.extendType({
           client_reference_id: order.id,
           customer_email: order.email,
           line_items: [{ price: order.price, quantity: 1 }],
+          discounts: order.coupon != null ? [{ coupon: order.coupon }] : undefined,
           success_url:
             new URL('/checkout/success', process.env.VERCEL_URL).toString() + '?session_id={CHECKOUT_SESSION_ID}',
           cancel_url:
@@ -247,5 +288,8 @@ export const CreateOrderInput = n.inputObjectType({
     t.nonNull.id('price');
     t.nonNull.string('name');
     t.nonNull.string('email');
+    t.int('discount', {
+      description: 'Optional discount for this specific order. Can only be applied by signed in users. In cents.',
+    });
   },
 });
