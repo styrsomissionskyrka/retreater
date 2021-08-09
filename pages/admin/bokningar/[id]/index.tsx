@@ -2,22 +2,34 @@ import { Fragment } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 
-import { gql, TypedDocumentNode, AdminOrderQuery, AdminOrderQueryVariables, useQuery } from 'lib/graphql';
+import {
+  gql,
+  TypedDocumentNode,
+  AdminOrderQuery,
+  AdminOrderQueryVariables,
+  AdminCancelOrderMutation,
+  AdminCancelOrderMutationVariables,
+  useQuery,
+  useMutation,
+  OrderStatusEnum,
+} from 'lib/graphql';
 import { authenticatedPage } from 'lib/auth/hocs';
 import { assert } from 'lib/utils/assert';
 import { format } from 'lib/utils/date-fns';
 import { formatMoney } from 'lib/utils/money';
-import { CopyInline, Layout, OrderUI } from 'components';
+import { LoadingButton, CopyInline, Layout, OrderUI } from 'components';
 import { OrderPaymentsTable, OrderRefundsTable } from 'components/tables';
 
 const Order: NextPage = () => {
   const { query } = useRouter();
 
+  assert(typeof query.id === 'string', 'Invalid id passed to query.');
   let id = query.id;
-  assert(typeof id === 'string', 'Invalid id passed to query.');
 
   const { previousData, data = previousData, loading } = useQuery(ADMIN_ORDER_QUERY, { variables: { id } });
   const order = data?.order;
+
+  const [cancelOrder] = useMutation(ADMIN_CANCEL_ORDER, { variables: { id } });
 
   if (loading) return <p>Laddar...</p>;
   if (order == null) return <p>Hittades inte</p>;
@@ -38,11 +50,11 @@ const Order: NextPage = () => {
       backLink={backLink}
     >
       <OrderUI.PageLayout>
-        <OrderUI.PageSection area="status" title="Status">
+        <OrderUI.PageSection title="Status">
           <OrderUI.StatusMessage id={order.id} />
         </OrderUI.PageSection>
 
-        <OrderUI.PageSection area="owner" title="Besökare">
+        <OrderUI.PageSection span={1} title="Besökare">
           <OrderUI.DefinitionList
             defs={[
               { key: 'Namn', value: order.name },
@@ -52,7 +64,7 @@ const Order: NextPage = () => {
           />
         </OrderUI.PageSection>
 
-        <OrderUI.PageSection area="retreat" title="Retreat">
+        <OrderUI.PageSection span={1} title="Retreat">
           <OrderUI.DefinitionList
             defs={[
               { key: 'Titel', value: order.retreat.title, link: retreatHref },
@@ -67,17 +79,29 @@ const Order: NextPage = () => {
                     ? '-'
                     : order.coupon.amountOff
                     ? formatMoney(order.coupon.amountOff, order.coupon.currency ?? 'sek')
-                    : `${order.coupon.percentOff}%`,
+                    : `-${order.coupon.percentOff}%`,
               },
             ]}
           />
         </OrderUI.PageSection>
 
-        <OrderUI.PageSection area="payments" title="Betalningar">
+        <OrderUI.PageSection title="Åtgärder">
+          <LoadingButton
+            variant="danger"
+            size="small"
+            onClick={cancelOrder}
+            disabled={order.status === OrderStatusEnum.Cancelled}
+            messages={{ success: 'Bokning avbruten', error: 'Kunde inte avbryta bokning' }}
+          >
+            Avbryt bokning
+          </LoadingButton>
+        </OrderUI.PageSection>
+
+        <OrderUI.PageSection title="Betalningar">
           <OrderPaymentsTable id={order.id} />
         </OrderUI.PageSection>
 
-        <OrderUI.PageSection area="refunds" title="Återbetalningar">
+        <OrderUI.PageSection title="Återbetalningar">
           <OrderRefundsTable id={order.id} />
         </OrderUI.PageSection>
       </OrderUI.PageLayout>
@@ -87,15 +111,22 @@ const Order: NextPage = () => {
 
 export default authenticatedPage(Order);
 
+const ORDER_FRAGMENT = gql`
+  fragment AdminOrderMeta on Order {
+    id
+    createdAt
+    updatedAt
+    confirmedAt
+    cancelledAt
+    status
+  }
+`;
+
 const ADMIN_ORDER_QUERY: TypedDocumentNode<AdminOrderQuery, AdminOrderQueryVariables> = gql`
   query AdminOrder($id: ID!) {
     order(id: $id) {
+      ...AdminOrderMeta
       id
-      createdAt
-      updatedAt
-      confirmedAt
-      cancelledAt
-      status
       name
       email
       retreat {
@@ -120,4 +151,17 @@ const ADMIN_ORDER_QUERY: TypedDocumentNode<AdminOrderQuery, AdminOrderQueryVaria
       }
     }
   }
+
+  ${ORDER_FRAGMENT}
+`;
+
+const ADMIN_CANCEL_ORDER: TypedDocumentNode<AdminCancelOrderMutation, AdminCancelOrderMutationVariables> = gql`
+  mutation AdminCancelOrder($id: ID!) {
+    cancelOrder(id: $id) {
+      id
+      ...AdminOrderMeta
+    }
+  }
+
+  ${ORDER_FRAGMENT}
 `;

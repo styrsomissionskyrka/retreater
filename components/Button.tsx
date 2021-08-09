@@ -7,6 +7,7 @@ import { ElementProps } from 'lib/utils/types';
 
 import { Spinner } from './Spinner';
 import { VisuallyHidden } from './VisuallyHidden';
+import { toast } from './Toast';
 
 type ButtonVariant = 'default' | 'outline' | 'danger';
 type ButtonSizeBase = 'small' | 'normal' | 'large';
@@ -46,7 +47,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           variant === 'danger' && 'hover:bg-red-700',
           variant === 'danger' && 'disabled:bg-red-300',
 
-          size === 'small' && 'h-8 px-2',
+          size === 'small' && 'h-8 px-3 text-sm',
           size === 'normal' && 'h-10 px-5',
           size === 'large' && 'h-12 px-6',
           size === 'square-small' && 'h-8 w-8 flex-none',
@@ -66,9 +67,16 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = 'Button';
 
+type LoadingMessages = {
+  loading?: string;
+  success: string;
+  error: string;
+};
+
 type LoadingButtonProps = Omit<ButtonProps, 'onClick'> & {
   onClick: () => Promise<any>;
   spinner?: React.ReactNode;
+  messages?: LoadingMessages;
 };
 
 export const LoadingButton: React.FC<LoadingButtonProps> = ({
@@ -77,6 +85,7 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
   disabled,
   children,
   spinner = <Spinner size={16} />,
+  messages,
   ...props
 }) => {
   const [loading, setLoading] = useSafeState(false);
@@ -84,7 +93,11 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
   let handleClick: React.MouseEventHandler<HTMLButtonElement> = async () => {
     setLoading(true);
     try {
-      await onClick();
+      if (messages) {
+        await toast.promise(onClick(), { loading: 'Laddar...', ...messages });
+      } else {
+        await onClick();
+      }
     } finally {
       setLoading(false);
     }

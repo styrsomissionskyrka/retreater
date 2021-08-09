@@ -1,10 +1,5 @@
 .PageLayout {
   display: grid;
-  grid-template-areas:
-    'status status'
-    'owner retreat'
-    'payments payments'
-    'refunds refunds';
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
 }

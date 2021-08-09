@@ -10,10 +10,10 @@ export const PageLayout: React.FC = ({ children }) => {
   return <div className={styles.PageLayout}>{children}</div>;
 };
 
-export const PageSection: React.FC<{ area: GridArea; title?: React.ReactNode }> = ({ area, title, children }) => {
+export const PageSection: React.FC<{ span?: number; title?: React.ReactNode }> = ({ span = 2, title, children }) => {
   return (
     <section
-      style={{ gridArea: area }}
+      style={{ gridColumn: `span ${span}` }}
       className="border border-black rounded overflow-hidden shadow divide-y divide-black"
     >
       {title ? <h2 className="px-4 py-2 bg-gray-100 font-semibold text-lg">{title}</h2> : null}
