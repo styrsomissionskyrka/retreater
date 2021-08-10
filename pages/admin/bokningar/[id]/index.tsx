@@ -17,7 +17,7 @@ import { authenticatedPage } from 'lib/auth/hocs';
 import { assert } from 'lib/utils/assert';
 import { format } from 'lib/utils/date-fns';
 import { formatMoney } from 'lib/utils/money';
-import { LoadingButton, CopyInline, Layout, OrderUI } from 'components';
+import { CopyInline, Layout, OrderUI, ConfirmButton } from 'components';
 import { OrderPaymentsTable, OrderRefundsTable } from 'components/tables';
 
 const Order: NextPage = () => {
@@ -86,7 +86,8 @@ const Order: NextPage = () => {
         </OrderUI.PageSection>
 
         <OrderUI.PageSection title="Åtgärder">
-          <LoadingButton
+          <ConfirmButton
+            confirmMessage="Är du säker?"
             variant="danger"
             size="small"
             onClick={cancelOrder}
@@ -94,7 +95,7 @@ const Order: NextPage = () => {
             messages={{ success: 'Bokning avbruten', error: 'Kunde inte avbryta bokning' }}
           >
             Avbryt bokning
-          </LoadingButton>
+          </ConfirmButton>
         </OrderUI.PageSection>
 
         <OrderUI.PageSection title="Betalningar">

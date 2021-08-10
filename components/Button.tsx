@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { forwardRef, useRef } from 'react';
+import { forwardRef, Fragment, useRef, useState } from 'react';
 
 import { useControlledInput, useIsomorphicLayoutEffect, useSafeState } from 'lib/hooks';
 import { composeEventHandlers } from 'lib/utils/events';
@@ -8,6 +8,7 @@ import { ElementProps } from 'lib/utils/types';
 import { Spinner } from './Spinner';
 import { VisuallyHidden } from './VisuallyHidden';
 import { toast } from './Toast';
+import { Dialog } from './Dialog';
 
 type ButtonVariant = 'default' | 'outline' | 'danger';
 type ButtonSizeBase = 'small' | 'normal' | 'large';
@@ -188,4 +189,15 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
       {children ? <span>{children}</span> : null}
     </label>
   );
+};
+
+type ConfirmButtonProps = LoadingButtonProps & { confirmMessage: string };
+
+export const ConfirmButton: React.FC<ConfirmButtonProps> = ({ confirmMessage, onClick, children, ...props }) => {
+  const handler = async () => {
+    let confirmed = window.confirm(confirmMessage);
+    if (confirmed) return onClick();
+  };
+
+  return <LoadingButton {...props} onClick={handler} />;
 };
