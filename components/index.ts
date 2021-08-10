@@ -11,6 +11,7 @@ export * from './Button';
 export * from './CopyInline';
 export * from './Dialog';
 export * from './Link';
+export * from './PageLoading';
 export * from './PolyfillScript';
 export * from './Popover';
 export * from './Portal';

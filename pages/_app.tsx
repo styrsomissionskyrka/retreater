@@ -9,7 +9,7 @@ import { ApolloProvider } from 'lib/graphql';
 import { useAppClient } from 'lib/graphql/client';
 import { PageWrapper, AdminWrapper } from 'components/PageWrappers';
 import { ExtendedAppProps, ExtendedNextComponentType } from 'lib/types/next';
-import { PolyfillScript, Toaster } from 'components';
+import { PolyfillScript, Toaster, PageLoading } from 'components';
 
 const App: React.FC<ExtendedAppProps> = ({ Component, pageProps }) => {
   const client = useAppClient({ initialState: pageProps.initialState });
@@ -21,6 +21,7 @@ const App: React.FC<ExtendedAppProps> = ({ Component, pageProps }) => {
         <title key="title">Retreater | Styrsö Missionskyrka</title>
       </Head>
       <PolyfillScript key="polyfills" />
+      <PageLoading />
       <ApolloProvider client={client}>
         <UserProvider user={pageProps.user}>
           <Layout>
