@@ -56,6 +56,20 @@ const Home: NextPage = () => {
 
   return (
     <header>
+      <button
+        onClick={() => {
+          fetch('/api/test')
+            .then((r) => r.json())
+            .then((r) => {
+              console.log(r.result.data);
+              console.log(r.result.html);
+              console.log(r.result.text);
+            })
+            .catch((e) => console.error(e));
+        }}
+      >
+        MD
+      </button>
       <h1>Styrsö Missionskyrka | Retreater</h1>
       <Link href="/admin">Admin</Link>
       <div className="mt-10">

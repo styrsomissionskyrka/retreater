@@ -2,11 +2,11 @@ import * as n from 'nexus';
 import { OrderStatus, Prisma } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
 
-import { OrderEvent } from '../logs';
 import { assert } from '../../lib/utils/assert';
+import { OrderEvent } from '../logs';
 import { ignoreNull, isRetreatOrderable, createPaginationMeta, authorizedWithRoles } from '../utils';
-import { Price, Retreat, CheckoutSession, Refund, Coupon } from '.';
 import { OrderEnum, PaginatedQuery } from './Shared';
+import { Price, Retreat, CheckoutSession, Refund, Coupon } from '.';
 
 export const OrderStatusEnum = n.enumType({
   name: 'OrderStatusEnum',
