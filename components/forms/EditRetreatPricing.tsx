@@ -89,7 +89,7 @@ export const EDIT_RETREAT_PRODUCT_FIELDS = gql`
   ${EDIT_RETREAT_PRICE_FIELDS}
 `;
 
-export const EDIT_RETREAT_PRICING_FIELDS = gql`
+export const EDIT_RETREAT_PRICING_FRAGMENT = gql`
   fragment EditRetreatPricingFields on Retreat {
     id
     products {

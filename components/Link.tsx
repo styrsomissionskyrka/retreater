@@ -53,7 +53,7 @@ export const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
     let passedClass = classNames(passedClassName, isActive && activeClassName);
 
     return (
-      <Link {...props} ref={ref} href={href} className={passedClass}>
+      <Link {...props} ref={ref} href={href} className={passedClass} data-active={isActive}>
         {children}
       </Link>
     );

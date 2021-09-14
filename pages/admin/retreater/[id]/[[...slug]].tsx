@@ -15,7 +15,7 @@ import {
   EditRetreatPricing,
   EDIT_RETREAT_FRAGMENT,
   EDIT_RETREAT_STATUS_FRAGMENT,
-  EDIT_RETREAT_PRICING_FIELDS,
+  EDIT_RETREAT_PRICING_FRAGMENT,
   ExportRetreatOrders,
   CreateBooking,
 } from 'components/forms';
@@ -92,7 +92,7 @@ const EDIT_RETREAT_FORM_QUERY: TypedDocumentNode<EditRetreatFormQuery, EditRetre
 
   ${EDIT_RETREAT_FRAGMENT}
   ${EDIT_RETREAT_STATUS_FRAGMENT}
-  ${EDIT_RETREAT_PRICING_FIELDS}
+  ${EDIT_RETREAT_PRICING_FRAGMENT}
 `;
 
 export default authenticatedPage(Retreat);
