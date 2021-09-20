@@ -4,37 +4,36 @@ import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import { useRouter } from 'next/router';
 import React, { forwardRef } from 'react';
 
+import { styled } from 'styles/stitches.config';
+
+const A = styled('a', {
+  '&:hover': { color: '$blue500' },
+});
+
 type LinkProps = Omit<NextLinkProps, 'as' | 'passHref'> &
   Omit<React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>, 'href' | 'ref'>;
 
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
-  (
-    {
-      href,
-      replace,
-      scroll,
-      shallow,
-      prefetch,
-      locale,
-      children,
-      target,
-      rel: passedRel,
-      className = 'hover:text-blue-500',
-      ...anchor
-    },
-    ref,
-  ) => {
+  ({ href, replace, scroll, shallow, prefetch, locale, children, target, rel: passedRel, ...anchor }, ref) => {
     let rel = passedRel;
     if (target === '_blank' && ref != null) {
       rel = 'noopener noreferrer';
     }
 
     return (
-      <NextLink href={href} replace={replace} scroll={scroll} shallow={shallow} prefetch={prefetch} locale={locale}>
-        <a {...anchor} ref={ref} target={target} rel={rel} className={className}>
+      <NextLink
+        href={href}
+        replace={replace}
+        scroll={scroll}
+        shallow={shallow}
+        prefetch={prefetch}
+        locale={locale}
+        passHref
+      >
+        <A {...anchor} ref={ref} target={target} rel={rel}>
           {children}
           {target === '_blank' ? ' ↗' : ''}
-        </a>
+        </A>
       </NextLink>
     );
   },
@@ -50,10 +49,10 @@ export const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
 
     let h = typeof href === 'string' ? href : href.pathname ?? '';
     let isActive = router.asPath.split('?')[0] === h;
-    let passedClass = classNames(passedClassName, isActive && activeClassName);
+    let className = classNames(passedClassName, isActive && activeClassName);
 
     return (
-      <Link {...props} ref={ref} href={href} className={passedClass} data-active={isActive}>
+      <Link {...props} ref={ref} href={href} className={className} data-active={isActive}>
         {children}
       </Link>
     );

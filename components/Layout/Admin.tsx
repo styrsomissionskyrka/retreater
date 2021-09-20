@@ -236,7 +236,7 @@ const SidebarNavLink = styled(NavLink, {
 
   '&:hover': {
     background: '$black',
-    color: '$white',
+    color: '$white !important',
   },
 
   '&[data-active="true"]': {

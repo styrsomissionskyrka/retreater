@@ -1,78 +1,33 @@
-import classNames from 'classnames';
-import { forwardRef } from 'react';
+import { styled } from 'styles/stitches.config';
 
-import { ElementProps } from 'lib/utils/types';
-
-export const Table = forwardRef<HTMLTableElement, ElementProps<'table'>>(({ children, ...props }, ref) => {
-  return (
-    <table
-      {...props}
-      ref={ref}
-      className={classNames('w-full border-collapse table-auto leading-none', props.className)}
-    >
-      {children}
-    </table>
-  );
+export const Table = styled('table', {
+  width: '$full',
+  borderCollapse: 'collapse',
+  tableLayout: 'auto',
+  lineHeight: '$none',
 });
-
 Table.displayName = 'Table.Table';
 
-export const Head = forwardRef<HTMLTableSectionElement, ElementProps<'thead'>>(({ children, ...props }, ref) => {
-  return (
-    <thead {...props} ref={ref}>
-      {children}
-    </thead>
-  );
-});
-
+export const Head = styled('thead', {});
 Head.displayName = 'Table.Head';
 
-export const HeadRow = forwardRef<HTMLTableRowElement, ElementProps<'tr'>>(({ children, ...props }, ref) => {
-  return (
-    <tr {...props} ref={ref} className={classNames('border-b', props.className)}>
-      {children}
-    </tr>
-  );
-});
-
+export const HeadRow = styled('tr', { borderBottom: '1px solid $black' });
 HeadRow.displayName = 'Table.HeadRow';
 
-export const HeadCell = forwardRef<HTMLTableHeaderCellElement, ElementProps<'th'>>(({ children, ...props }, ref) => {
-  return (
-    <th {...props} ref={ref} className={classNames('text-left font-medium px-2 pb-3', props.className)}>
-      {children}
-    </th>
-  );
-});
-
+export const HeadCell = styled('th', { textAlign: 'left', fontWeight: '$medium', px: '$2', paddingBottom: '$3' });
 HeadCell.displayName = 'Table.HeadCell';
 
-export const Body = forwardRef<HTMLTableSectionElement, ElementProps<'tbody'>>(({ children, ...props }, ref) => {
-  return (
-    <tbody {...props} ref={ref} className={classNames('divide-y text-sm', props.className)}>
-      {children}
-    </tbody>
-  );
-});
-
+export const Body = styled('tbody', { divideY: '$1', text: '$sm' });
 Body.displayName = 'Table.Body';
 
-export const BodyRow = forwardRef<HTMLTableRowElement, ElementProps<'tr'>>(({ children, ...props }, ref) => {
-  return (
-    <tr {...props} ref={ref} className={classNames('hover:bg-gray-100', props.className)}>
-      {children}
-    </tr>
-  );
-});
-
+export const BodyRow = styled('tr', { '&:hover': { background: '$gray100' } });
 BodyRow.displayName = 'Table.BodyRow';
 
-export const BodyCell = forwardRef<HTMLTableDataCellElement, ElementProps<'td'>>(({ children, ...props }, ref) => {
-  return (
-    <td {...props} ref={ref} className={classNames('p-2 h-16 font-normal text-left max-w-[10rem]', props.className)}>
-      {children}
-    </td>
-  );
+export const BodyCell = styled('td', {
+  padding: '$2',
+  height: '$16',
+  fontWeight: '$normal',
+  textAlign: 'left',
+  maxWidth: '10rem',
 });
-
 BodyCell.displayName = 'Table.BodyCell';

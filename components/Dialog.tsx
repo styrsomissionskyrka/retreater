@@ -1,11 +1,11 @@
 import { forwardRef, useCallback, useRef } from 'react';
 import FocusLock from 'react-focus-lock';
 import { RemoveScroll } from 'react-remove-scroll';
-import classNames from 'classnames';
 
 import { useComposedRefs } from 'lib/hooks';
 import { composeEventHandlers } from 'lib/utils/events';
 import { ElementProps } from 'lib/utils/types';
+import { styled } from 'styles/stitches.config';
 
 import { Portal } from './Portal';
 
@@ -17,12 +17,20 @@ export interface OverlayProps {
   onDismiss?: (event?: React.SyntheticEvent) => void;
 }
 
+const OverlayImpl = styled('div', {
+  position: 'fixed',
+  inset: '$0',
+  overflow: 'auto',
+  backgroundColor: 'hsl(220deg 9% 5% / 20%)', // $black with 20% opacity
+  padding: '$8',
+  zIndex: '$50',
+});
+
 const Overlay = forwardRef<HTMLDivElement, OverlayProps & ElementProps<'div'>>(
   (
     {
       isOpen,
       initialFocusRef,
-      className,
       onDismiss = noop,
       onClick = noop,
       onKeyDown = noop,
@@ -64,16 +72,15 @@ const Overlay = forwardRef<HTMLDivElement, OverlayProps & ElementProps<'div'>>(
       <Portal>
         <FocusLock autoFocus returnFocus onActivation={activateFocusLock}>
           <RemoveScroll>
-            <div
+            <OverlayImpl
               {...props}
               ref={ref}
-              className={classNames(className, 'fixed inset-0 overflow-auto bg-opacity-20 bg-black p-8 z-50')}
               onClick={composeEventHandlers(onClick, handleClick)}
               onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
               onMouseDown={composeEventHandlers(onMouseDown, handleMouseDown)}
             >
               {children}
-            </div>
+            </OverlayImpl>
           </RemoveScroll>
         </FocusLock>
       </Portal>
@@ -85,23 +92,30 @@ Overlay.displayName = 'Dialog.Inner';
 
 export type ContentProps = Omit<ElementProps<'div'>, 'aria-modal' | 'role' | 'tabIndex'>;
 
-export const Content = forwardRef<HTMLDivElement, ContentProps>(
-  ({ className, onClick = noop, children, ...props }, ref) => {
-    return (
-      <div
-        {...props}
-        ref={ref}
-        aria-modal="true"
-        role="dialog"
-        tabIndex={-1}
-        onClick={composeEventHandlers(onClick, (event) => event.stopPropagation())}
-        className={classNames(className, 'w-full mx-auto bg-white border border-black p-8')}
-      >
-        {children}
-      </div>
-    );
-  },
-);
+export const ContentImpl = styled('div', {
+  width: '$full',
+  mx: 'auto',
+  padding: '$8',
+  background: '$white',
+  border: '1px solid $black',
+  maxWidth: '$max2xl',
+  marginTop: '$20',
+});
+
+export const Content = forwardRef<HTMLDivElement, ContentProps>(({ onClick = noop, children, ...props }, ref) => {
+  return (
+    <ContentImpl
+      {...props}
+      ref={ref}
+      aria-modal="true"
+      role="dialog"
+      tabIndex={-1}
+      onClick={composeEventHandlers(onClick, (event) => event.stopPropagation())}
+    >
+      {children}
+    </ContentImpl>
+  );
+});
 
 Content.displayName = 'Dialog.Content';
 
@@ -109,7 +123,7 @@ export const Dialog = forwardRef<HTMLDivElement, OverlayProps & ContentProps>(
   ({ isOpen, initialFocusRef, onDismiss, className, children, ...props }, ref) => {
     return (
       <Overlay isOpen={isOpen} initialFocusRef={initialFocusRef} onDismiss={onDismiss}>
-        <Content {...props} ref={ref} className={classNames(className, 'max-w-2xl mt-20')}>
+        <Content {...props} ref={ref}>
           {children}
         </Content>
       </Overlay>

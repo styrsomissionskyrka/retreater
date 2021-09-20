@@ -90,10 +90,11 @@ const Retreats: NextPage = () => {
   const actions = (
     <Fragment>
       <LoadingButton
-        size="square-normal"
+        square
+        size="normal"
         onClick={refetch}
         iconStart={<IconRefresh size={16} />}
-        spinner={<Spinner icon={IconRefresh} size={16} />}
+        spinner={<Spinner as={IconRefresh} size={16} reverse />}
         aria-label="Uppdatera listan"
       />
       <CreateReatreat />

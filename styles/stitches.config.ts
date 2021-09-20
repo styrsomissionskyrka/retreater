@@ -274,11 +274,11 @@ const shadows = {
 
 export type BorderWidth = keyof typeof borderWidths;
 const borderWidths = {
-  0: 0,
-  1: 1,
-  2: 2,
-  4: 4,
-  8: 8,
+  0: '0px',
+  1: '1px',
+  2: '2px',
+  4: '4px',
+  8: '8px',
 } as const;
 
 export type BorderStyle = keyof typeof borderStyles;
@@ -299,15 +299,18 @@ const colors = {
   gray50: 'hsl(210deg 20% 98%)',
   gray100: 'hsl(220deg 14% 96%)',
   gray200: 'hsl(220deg 13% 91%)',
+  gray300: 'hsl(220deg 12% 84%)',
   gray400: 'hsl(220deg 11% 65%)',
   gray500: 'hsl(220deg 9% 46%)',
   blue500: 'hsl(220deg 91% 60%)',
   blue600: 'hsl(220deg 83% 53%)',
   blue700: 'hsl(220deg 76% 48%)',
+  red300: 'hsl(0deg 94% 82%)',
   red500: 'hsl(0deg 84% 60%)',
   red700: 'hsl(0deg 74% 42%)',
   red800: 'hsl(0deg 70% 35%)',
   yellow800: 'hsl(23deg 82% 31%)',
+  green500: 'hsl(160deg 84% 39%)',
   green800: 'hsl(163deg 88% 20%)',
   orange800: 'hsl(23deg 82% 31%)',
 };
@@ -331,19 +334,38 @@ export const { styled, css, globalCss, keyframes, getCssText, theme, createTheme
   media,
   utils: {
     text: (value: Accessor<Extract<LineHeight, FontSize>>) => ({ fontSize: value, lineHeight: value }),
+    size: (value: Accessor<Size>) => ({ width: value, height: value }),
+
     mx: (value: Accessor<Space> | 'auto') => ({ marginLeft: value, marginRight: value }),
     my: (value: Accessor<Space>) => ({ marginTop: value, marginBottom: value }),
     px: (value: Accessor<Space>) => ({ paddingLeft: value, paddingRight: value }),
     py: (value: Accessor<Space>) => ({ paddingTop: value, paddingBottom: value }),
+
     roundedTop: (value: Accessor<Radii>) => ({ borderTopLeftRadius: value, borderTopRightRadius: value }),
     roundedBottom: (value: Accessor<Radii>) => ({ borderBottomLeftRadius: value, borderBottomRightRadius: value }),
     roundedRight: (value: Accessor<Radii>) => ({ borderTopRightRadius: value, borderBottomRightRadius: value }),
     roundedLeft: (value: Accessor<Radii>) => ({ borderTopLeftRadius: value, borderBottomLeftRadius: value }),
+
     borderT: (value: Accessor<BorderWidth>) => ({ borderTop: value }),
     borderB: (value: Accessor<BorderWidth>) => ({ borderBottom: value }),
     borderL: (value: Accessor<BorderWidth>) => ({ borderLeft: value }),
     borderR: (value: Accessor<BorderWidth>) => ({ borderRight: value }),
+
     spaceX: (value: Accessor<Space>) => ({ '& > * + *': { marginLeft: value } }),
     spaceY: (value: Accessor<Space>) => ({ '& > * + *': { marginTop: value } }),
+    divideX: (value: Accessor<BorderWidth>) => ({
+      '& > * + *': { borderRightWidth: value },
+    }),
+    divideY: (value: Accessor<BorderWidth>) => ({
+      '& > * + *': { borderTopWidth: value },
+    }),
+
+    inset: (value: Accessor<Size>) => ({ top: value, right: value, bottom: value, left: value }),
+
+    trans: (value: string) => ({
+      transitionProperty: value,
+      transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+      transitionDUration: '150ms',
+    }),
   } as const,
 });

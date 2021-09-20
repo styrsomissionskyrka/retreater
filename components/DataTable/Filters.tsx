@@ -105,7 +105,8 @@ export function OrderFilter<T extends QueryObject>({ queryKey }: FilterBaseProps
 
   return (
     <Button
-      size="square-normal"
+      square
+      size="normal"
       onClick={() => setValue((value === OrderEnum.Asc ? OrderEnum.Desc : OrderEnum.Asc) as T[keyof T])}
       iconStart={value === OrderEnum.Desc ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
     />

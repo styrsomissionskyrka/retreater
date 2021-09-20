@@ -1,12 +1,12 @@
-import { useState } from 'react';
 import { IconCopy } from '@tabler/icons';
+
+import { styled } from 'styles/stitches.config';
 
 import { toast } from './Toast';
 
 type CopyProps = { children: string } | { value: string; children: React.ReactNode };
 
 export const CopyInline = (props: CopyProps) => {
-  const [showIcon, setShowIcon] = useState(false);
   const { children } = props;
 
   const handleClick = async () => {
@@ -19,16 +19,19 @@ export const CopyInline = (props: CopyProps) => {
   };
 
   return (
-    <button
-      className="cursor-pointer inline-flex space-x-1 items-center"
-      onClick={handleClick}
-      onMouseEnter={() => setShowIcon(true)}
-      onMouseLeave={() => setShowIcon(false)}
-      onFocus={() => setShowIcon(true)}
-      onBlur={() => setShowIcon(false)}
-    >
+    <InlineButton onClick={handleClick}>
       <span>{children}</span>
-      <IconCopy size="1em" className={showIcon ? 'opacity-100 visible' : 'opacity-0 invisible'} />
-    </button>
+      <IconCopy size="1em" />
+    </InlineButton>
   );
 };
+
+const InlineButton = styled('button', {
+  display: 'inline-flex',
+  alignItems: 'center',
+  spaceX: '$1',
+  cursor: 'pointer',
+
+  '& svg': { opacity: 0, visibility: 'hidden' },
+  '&:hover svg, &:focus svg': { opacity: 1, visibility: 'visible' },
+});

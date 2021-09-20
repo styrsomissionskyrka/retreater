@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { composeEventHandlers } from 'lib/utils/events';
 import { useId } from 'lib/hooks';
 import { createStrictContext } from 'lib/utils/context';
+import { styled } from 'styles/stitches.config';
 
 import { Portal } from './Portal';
 import { Popover } from './Popover';
@@ -68,7 +69,7 @@ export const Wrapper: React.FC = ({ children }) => {
 export const ContextButton: React.FC<{ label?: string }> = ({ label = 'Meny' }) => {
   const props = useMenuButton();
   return (
-    <UIButton {...props} size="square-small" variant="outline" iconStart={<IconDots size={16} />} aria-label={label} />
+    <UIButton {...props} square size="small" variant="outline" iconStart={<IconDots size={16} />} aria-label={label} />
   );
 };
 
@@ -84,6 +85,14 @@ export const Button: React.FC<Omit<ButtonProps, keyof MenuButtonProps> & { loadi
     </UIButton>
   );
 };
+
+const ActionWrapper = styled('div', {
+  display: 'flex',
+  flexFlow: 'column nowrap',
+  border: '2px solid $black',
+  divideY: '$2',
+  background: '$white',
+});
 
 export const Actions: React.FC = ({ children }) => {
   const { buttonRef, menuId, buttonId, isExpanded, setIsExpanded } = useMenuContext();
@@ -113,17 +122,16 @@ export const Actions: React.FC = ({ children }) => {
     <Portal>
       <Popover ref={popoverRef} targetRef={buttonRef} hidden={!isExpanded}>
         <FocusLock autoFocus={false} returnFocus disabled={!isExpanded}>
-          <div
+          <ActionWrapper
             id={menuId}
             onClick={(event) => event.stopPropagation()}
             onKeyDown={handleKeyDown}
             role="menu"
             tabIndex={-1}
             aria-labelledby={buttonId}
-            className="flex flex-col border-2 border-black divide-y-2 divide-black bg-white"
           >
             {children}
-          </div>
+          </ActionWrapper>
         </FocusLock>
       </Popover>
     </Portal>
@@ -132,24 +140,28 @@ export const Actions: React.FC = ({ children }) => {
 
 export type ActionProps = { onClick: React.MouseEventHandler<HTMLButtonElement>; disabled?: boolean };
 
+const ActionImpl = styled('button', {
+  px: '$4',
+  py: '$2',
+  textAlign: 'left',
+  '&:hover': { background: '$gray300' },
+  '&:disabled': {
+    color: '$gray500',
+    cursor: 'not-allowed',
+  },
+  '&:disabled:hover': {
+    background: '$white',
+  },
+});
+
 export const Action: React.FC<ActionProps> = ({ onClick, disabled, children }) => {
   const { setIsExpanded } = useMenuContext();
   const closeMenu = () => setIsExpanded(false);
 
   return (
-    <button
-      role="menuitem"
-      type="button"
-      onClick={composeEventHandlers(onClick, closeMenu)}
-      className={classNames(
-        'text-left px-4 py-2',
-        !disabled && 'hover:bg-gray-300',
-        disabled && 'text-gray-500 cursor-not-allowed',
-      )}
-      disabled={disabled}
-    >
+    <ActionImpl role="menuitem" type="button" onClick={composeEventHandlers(onClick, closeMenu)} disabled={disabled}>
       {children}
-    </button>
+    </ActionImpl>
   );
 };
 
