@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react';
 import { useUser as useAuth0User, UserContext as Auth0UserContext, UserRole, UserProfile } from '@auth0/nextjs-auth0';
 
-import { hasIntersection } from 'lib/utils/array';
-import { ensure } from 'lib/utils/assert';
+import { hasIntersection } from '../utils/array';
+import { ensure } from '../utils/assert';
 
 interface UserContext extends Auth0UserContext {
   hasRoles(roles: UserRole[]): boolean;

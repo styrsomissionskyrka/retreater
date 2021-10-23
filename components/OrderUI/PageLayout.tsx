@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 
-import { CopyInline, Link } from 'components';
-
+import { CopyInline } from '../CopyInline';
+import { Link } from '../Link';
 import styles from './PageLayout.module.css';
 
 export type GridArea = 'status' | 'owner' | 'retreat' | 'payments' | 'refunds';

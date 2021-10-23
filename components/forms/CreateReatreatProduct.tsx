@@ -2,7 +2,6 @@ import { Fragment, useState } from 'react';
 import { IconPlus } from '@tabler/icons';
 import { SubmitHandler } from 'react-hook-form';
 
-import { Button, ConnectedForm, Dialog, toast } from 'components';
 import {
   gql,
   TypedDocumentNode,
@@ -11,6 +10,11 @@ import {
   CreateRetreatProductMutationVariables,
   CreateProductInput,
 } from 'lib/graphql';
+
+import { Button } from '../Button';
+import * as ConnectedForm from '../ConnectedForm';
+import { Dialog } from '../Dialog';
+import { toast } from '../Toast';
 
 export const CREATE_RETREAT_PRODUCT_MUTATION: TypedDocumentNode<
   CreateRetreatProductMutation,

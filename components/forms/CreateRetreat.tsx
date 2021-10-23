@@ -4,9 +4,13 @@ import { SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
 import { gql, TypedDocumentNode, useMutation } from 'lib/graphql';
-import { Button, ConnectedForm, Dialog, toast } from 'components';
 import { CreateRetreatMutation, CreateRetreatMutationVariables } from 'lib/graphql';
 import * as log from 'lib/utils/log';
+
+import { Button } from '../Button';
+import * as ConnectedForm from '../ConnectedForm';
+import { Dialog } from '../Dialog';
+import { toast } from '../Toast';
 
 export const CREATE_RETREAT_MUTATION: TypedDocumentNode<CreateRetreatMutation, CreateRetreatMutationVariables> = gql`
   mutation CreateRetreat($title: String!) {

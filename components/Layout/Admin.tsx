@@ -9,8 +9,10 @@ import { useRect } from '@reach/rect';
 import { useAuthenticatedUser, useIsomorphicLayoutEffect, useUserHasRoles } from 'lib/hooks';
 import { setGlobalVariable } from 'lib/utils/css';
 import { compact } from 'lib/utils/array';
-import { Link, NavLink, VisuallyHidden } from 'components';
 import { styled } from 'styles/stitches.config';
+
+import { Link, NavLink } from '../Link';
+import { VisuallyHidden } from '../VisuallyHidden';
 
 export interface NavLinkConfig {
   href: string | UrlObject;

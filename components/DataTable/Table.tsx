@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-import classNames from 'classnames';
 
 import { Spinner } from '../Spinner';
 import * as UI from '../Table';
@@ -55,16 +54,16 @@ export const Body: React.FC<BodyProps> = ({
     <UI.Body {...getTableBodyProps()}>
       {state === 'loading' && (
         <UI.BodyRow>
-          <UI.BodyCell colSpan={visibleColumns.length}>
-            <div className="flex justify-center w-full">{loadingMessage}</div>
+          <UI.BodyCell colSpan={visibleColumns.length} full>
+            <div>{loadingMessage}</div>
           </UI.BodyCell>
         </UI.BodyRow>
       )}
 
       {state === 'empty' && (
         <UI.BodyRow>
-          <UI.BodyCell colSpan={visibleColumns.length}>
-            <div className="flex justify-center w-full">{emptyMessage}</div>
+          <UI.BodyCell colSpan={visibleColumns.length} full>
+            <div>{emptyMessage}</div>
           </UI.BodyCell>
         </UI.BodyRow>
       )}
@@ -73,9 +72,10 @@ export const Body: React.FC<BodyProps> = ({
         rows.map((row) => {
           prepareRow(row);
           let { key, ...rowProps } = row.getRowProps();
+
           return (
             <Fragment key={key}>
-              <UI.BodyRow {...rowProps} className={classNames(row.isExpanded && 'bg-gray-100')}>
+              <UI.BodyRow {...rowProps} expanded={row.isExpanded ? 'parent' : undefined}>
                 {row.cells.map((cell) => {
                   let { key, ...cellProps } = cell.getCellProps();
                   return (
@@ -87,7 +87,7 @@ export const Body: React.FC<BodyProps> = ({
               </UI.BodyRow>
 
               {row.isExpanded && typeof renderExpandedRow === 'function' ? (
-                <UI.BodyRow {...rowProps} className="!border-t-0 bg-gray-100">
+                <UI.BodyRow {...rowProps} expanded="child">
                   <UI.BodyCell />
                   <UI.BodyCell colSpan={visibleColumns.length - 1}>{renderExpandedRow(row)}</UI.BodyCell>
                 </UI.BodyRow>

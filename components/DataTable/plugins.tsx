@@ -1,13 +1,7 @@
 import { IconChevronDown, IconChevronRight } from '@tabler/icons';
-import classNames from 'classnames';
-import {
-  CellProps,
-  ColumnInstance,
-  Column,
-  Hooks,
-  useExpanded as _useExpanded,
-  TableExpandedToggleProps,
-} from 'react-table';
+import { CellProps, ColumnInstance, Column, Hooks, useExpanded as _useExpanded } from 'react-table';
+
+import { styled } from 'styles/stitches.config';
 
 export function useExpanded<T extends object>(hooks: Hooks<T>) {
   _useExpanded(hooks);
@@ -22,14 +16,13 @@ function visibleColumns<T extends object>(columns: ColumnInstance<T>[]): Column<
       id: '__expanded__',
       Header: () => null,
       Cell({ row }: CellProps<T, unknown>) {
+        let { isExpanded } = row;
+        let { key } = row.getToggleRowExpandedProps();
+
         return (
-          <ExpandedToggle
-            isExpanded={row.isExpanded}
-            {...row.getToggleRowExpandedProps()}
-            aria-label="Visa mer"
-            aria-pressed={row.isExpanded ? 'true' : 'false'}
-            className={classNames('flex items-center', 'cursor-pointer text-black')}
-          />
+          <ToggleButton key={key} type="button" aria-label="Visa mer" aria-pressed={isExpanded ? 'true' : 'false'}>
+            {isExpanded ? <IconChevronDown size={16} /> : <IconChevronRight size={16} />}
+          </ToggleButton>
         );
       },
     },
@@ -37,21 +30,15 @@ function visibleColumns<T extends object>(columns: ColumnInstance<T>[]): Column<
   ];
 }
 
-const ExpandedToggle: React.FC<{ isExpanded: boolean } & TableExpandedToggleProps> = ({ isExpanded, ...props }) => {
-  return (
-    <button
-      {...props}
-      type="button"
-      aria-label="Visa mer"
-      aria-pressed={isExpanded ? 'true' : 'false'}
-      className={classNames(
-        'flex items-center justify-center',
-        'cursor-pointer text-black',
-        'w-full h-full',
-        'focus:outline-black',
-      )}
-    >
-      {isExpanded ? <IconChevronDown size={16} /> : <IconChevronRight size={16} />}
-    </button>
-  );
-};
+const ToggleButton = styled('button', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  cursor: 'pointer',
+  color: '$black',
+  width: '100%',
+  height: '100%',
+  '&:focus': {
+    outlineColor: '$black',
+  },
+});

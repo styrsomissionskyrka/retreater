@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import FocusLock from 'react-focus-lock';
 import { IconChevronDown, IconDots } from '@tabler/icons';
-import classNames from 'classnames';
 
 import { composeEventHandlers } from 'lib/utils/events';
 import { useId } from 'lib/hooks';

@@ -5,8 +5,8 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { UserRole, getSession, Session } from '@auth0/nextjs-auth0';
 
-import { useUser } from 'lib/hooks';
-import { hasIntersection } from 'lib/utils/array';
+import { useUser } from '../hooks';
+import { hasIntersection } from '../utils/array';
 
 export function authenticatedPage<P = {}, IP = P>(
   Page: NextPage<P, IP>,

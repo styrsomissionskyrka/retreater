@@ -8,7 +8,9 @@ import {
   TypedDocumentNode,
   useIntersectingQuery,
 } from 'lib/graphql';
-import { DataTable, CopyInline } from 'components';
+
+import * as DataTable from '../DataTable';
+import { CopyInline } from '../CopyInline';
 
 type Refund = NonNullable<AdminOrderRefundsQuery['order']>['refunds'][number];
 

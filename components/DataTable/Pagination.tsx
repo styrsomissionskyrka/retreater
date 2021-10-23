@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 import { PaginationFieldsFragment } from 'lib/graphql';
 import { omit } from 'lib/utils/object';
+import { styled } from 'styles/stitches.config';
 
 import { Link } from '../Link';
 import { useDataTable } from './Context';
@@ -29,7 +30,7 @@ export const Pagination: React.FC<Props> = ({ meta = defaultMeta }) => {
   let rangeEnd = rangeStart + Math.min(meta.perPage, table.rows.length) - 1;
 
   return (
-    <div className="flex space-x-8">
+    <Wrapper>
       <span>
         Visar {rangeStart} - {rangeEnd} av {meta.totalItems} resultat
       </span>
@@ -41,7 +42,7 @@ export const Pagination: React.FC<Props> = ({ meta = defaultMeta }) => {
       <PaginationLink page={current + 1} disabled={!meta.hasNextPage}>
         Nästa
       </PaginationLink>
-    </div>
+    </Wrapper>
   );
 };
 
@@ -49,7 +50,7 @@ const PaginationLink: React.FC<{ page: number; disabled: boolean }> = ({ page, d
   const router = useRouter();
 
   if (disabled) {
-    return <span className="cursor-default">{children}</span>;
+    return <span style={{ cursor: 'default' }}>{children}</span>;
   }
 
   let href: UrlObject =
@@ -58,3 +59,8 @@ const PaginationLink: React.FC<{ page: number; disabled: boolean }> = ({ page, d
       : { pathname: router.pathname, query: { ...router.query, page } };
   return <Link href={href}>{children}</Link>;
 };
+
+const Wrapper = styled('div', {
+  display: 'flex',
+  spaceX: '$8',
+});

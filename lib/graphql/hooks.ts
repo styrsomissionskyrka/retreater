@@ -15,8 +15,7 @@ import {
   TypedDocumentNode,
 } from '@apollo/client';
 
-import { useIntersection } from 'lib/hooks';
-
+import { useIntersection } from '../hooks';
 import { namedOperations } from './generated-apollo-helpers';
 
 export * from '@apollo/client';

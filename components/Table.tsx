@@ -20,7 +20,20 @@ HeadCell.displayName = 'Table.HeadCell';
 export const Body = styled('tbody', { divideY: '$1', text: '$sm' });
 Body.displayName = 'Table.Body';
 
-export const BodyRow = styled('tr', { '&:hover': { background: '$gray100' } });
+export const BodyRow = styled('tr', {
+  '&:hover': { background: '$gray100' },
+  variants: {
+    expanded: {
+      parent: {
+        backgroundColor: '$gray100',
+      },
+      child: {
+        borderTopWidth: '0px',
+        backgroundColor: '$gray100',
+      },
+    },
+  },
+});
 BodyRow.displayName = 'Table.BodyRow';
 
 export const BodyCell = styled('td', {
@@ -29,5 +42,19 @@ export const BodyCell = styled('td', {
   fontWeight: '$normal',
   textAlign: 'left',
   maxWidth: '10rem',
+
+  variants: {
+    full: {
+      true: {
+        '& > *': {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+        },
+      },
+    },
+  },
 });
+
 BodyCell.displayName = 'Table.BodyCell';

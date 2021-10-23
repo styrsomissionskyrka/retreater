@@ -309,10 +309,10 @@ const colors = {
   red500: 'hsl(0deg 84% 60%)',
   red700: 'hsl(0deg 74% 42%)',
   red800: 'hsl(0deg 70% 35%)',
+  yellow500: 'hsl(38deg 92% 50%)',
   yellow800: 'hsl(23deg 82% 31%)',
   green500: 'hsl(160deg 84% 39%)',
   green800: 'hsl(163deg 88% 20%)',
-  orange800: 'hsl(23deg 82% 31%)',
 };
 
 export const { styled, css, globalCss, keyframes, getCssText, theme, createTheme, config } = createStitches({

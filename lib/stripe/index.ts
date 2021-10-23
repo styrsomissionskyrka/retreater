@@ -1,7 +1,7 @@
 import { Stripe } from '@stripe/stripe-js';
 import { useEffect } from 'react';
 
-import { assert, ensure } from 'lib/utils/assert';
+import { assert, ensure } from '../utils/assert';
 
 const PUBLISHABLE_KEY = ensure(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,

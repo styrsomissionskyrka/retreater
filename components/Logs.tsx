@@ -5,6 +5,7 @@ import { format, formatISO } from 'lib/utils/date-fns';
 
 import { LoadingButton } from './Button';
 import { Spinner } from './Spinner';
+import { Time } from './Time';
 
 export const Logs: React.FC<{ id: string }> = ({ id }) => {
   const { data } = useQuery(LOGS_QUERY, { variables: { id } });
@@ -15,10 +16,8 @@ export const Logs: React.FC<{ id: string }> = ({ id }) => {
       <ul>
         {logs.map((log) => (
           <li key={log.id}>
-            <time className="tabular-nums" dateTime={formatISO(log.createdAt)}>
-              {format(log.createdAt, 'yyyy-MM-dd HH:mm:ss')}
-            </time>
-            : {getMessage(log.event)}
+            <Time dateTime={formatISO(log.createdAt)}>{format(log.createdAt, 'yyyy-MM-dd HH:mm:ss')}</Time>:{' '}
+            {getMessage(log.event)}
           </li>
         ))}
       </ul>

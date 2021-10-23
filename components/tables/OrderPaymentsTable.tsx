@@ -8,10 +8,14 @@ import {
   TypedDocumentNode,
   useIntersectingQuery,
 } from 'lib/graphql';
-import { CreateRefund } from 'components/forms/CreateRefund';
-import { DataTable, Table, Menu, CopyInline } from 'components';
 import { compact } from 'lib/utils/array';
 import { formatMoney } from 'lib/utils/money';
+
+import * as DataTable from '../DataTable';
+import * as Table from '../Table';
+import * as Menu from '../Menu';
+import { CopyInline } from '../CopyInline';
+import { CreateRefund } from '../forms/CreateRefund';
 
 type CheckoutSession = NonNullable<AdminOrderPaymentsQuery['order']>['checkoutSessions'][number];
 

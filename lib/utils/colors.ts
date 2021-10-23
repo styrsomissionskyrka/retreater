@@ -1,4 +1,4 @@
-import { OrderStatusEnum, RetreatStatusEnum } from 'lib/graphql';
+import { OrderStatusEnum, RetreatStatusEnum } from '../graphql';
 
 export const statusColorMap: Record<RetreatStatusEnum | OrderStatusEnum, string> = {
   [RetreatStatusEnum.Archived]: 'bg-gray-300',

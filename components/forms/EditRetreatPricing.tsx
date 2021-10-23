@@ -14,8 +14,14 @@ import {
   useMutation,
   TypedDocumentNode,
 } from 'lib/graphql';
-import { Form, BrowserOnly, DataTable, Spinner, ToggleButton, Link } from 'components';
 import { formatCents, parsePriceInput } from 'lib/utils/money';
+
+import * as Form from '../Form';
+import { BrowserOnly } from '../BrowserOnly';
+import * as DataTable from '../DataTable';
+import { Spinner } from '../Spinner';
+import { ToggleButton } from '../Button';
+import { Link } from '../Link';
 
 interface EditPricingProps {
   retreat: EditRetreatPricingFieldsFragment;

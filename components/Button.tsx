@@ -68,17 +68,17 @@ const ButtonImpl = styled('button', {
     {
       size: 'small',
       square: true,
-      css: { width: '$8' },
+      css: { width: '$8', padding: '$0' },
     },
     {
       size: 'normal',
       square: true,
-      css: { width: '$10' },
+      css: { width: '$10', padding: '$0' },
     },
     {
       size: 'large',
       square: true,
-      css: { width: '$12' },
+      css: { width: '$12', padding: '$0' },
     },
   ],
   defaultVariants: {

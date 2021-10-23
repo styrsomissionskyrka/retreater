@@ -11,7 +11,8 @@ import {
 } from 'lib/graphql';
 import { format } from 'lib/utils/date-fns';
 import { statusColorMap } from 'lib/utils/colors';
-import { Spinner } from 'components/Spinner';
+
+import { Spinner } from '../Spinner';
 
 const ORDER_STATUS_QUERY: TypedDocumentNode<AdminOrderStatusQuery, AdminOrderStatusQueryVariables> = gql`
   query AdminOrderStatus($id: ID!) {

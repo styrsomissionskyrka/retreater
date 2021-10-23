@@ -1,28 +1,39 @@
 import { UrlObject } from 'url';
 
 import { CellProps, Column } from 'react-table';
-import classNames from 'classnames';
-import { useState } from 'react';
 
 import { format, formatISO, formatRelative } from 'lib/utils/date-fns';
 import { OrderStatusEnum, RetreatStatusEnum } from 'lib/graphql';
 import { formatMoney } from 'lib/utils/money';
-import { statusColorMap } from 'lib/utils/colors';
+import { styled } from 'styles/stitches.config';
 
-import { Link, Menu, BrowserOnly, CopyInline } from '..';
+import { Link } from '../Link';
+import * as Menu from '../Menu';
+import { BrowserOnly } from '../BrowserOnly';
+import { CopyInline } from '../CopyInline';
+import { StatusIndicator } from '../StatusIndicator';
+import { Time } from '../Time';
+import { Truncate } from '../Truncate';
+import { Progress } from '../Progress';
 
 export function createStatusCell<T extends object>(config: Column<T>): Column<T> {
   return {
     ...config,
     Cell(props: CellProps<T, RetreatStatusEnum | OrderStatusEnum>) {
-      return (
-        <div className="flex items-center justify-center text-center">
-          <span className={classNames(statusColorMap[props.value], 'block w-2 h-2 rounded-full')} />
-        </div>
-      );
+      return <StatusIndicator status={props.value} />;
     },
   };
 }
+
+const LinkCell = styled(Link, {
+  display: 'flex',
+  alignItems: 'center',
+  width: '100%',
+  height: '100%',
+  '&:hover': {
+    color: '$blue500',
+  },
+});
 
 export function createLinkCell<T extends object>({
   getLink,
@@ -32,9 +43,9 @@ export function createLinkCell<T extends object>({
     ...config,
     Cell({ value, row }: CellProps<T, string>) {
       return (
-        <Link href={getLink(row.original)} className="flex items-center w-full h-full hover:text-blue-500">
-          <span className="truncate">{value}</span>
-        </Link>
+        <LinkCell href={getLink(row.original)}>
+          <Truncate>{value}</Truncate>
+        </LinkCell>
       );
     },
   };
@@ -48,9 +59,9 @@ export function createFormattedDateCell<T extends object>({
     ...config,
     Cell({ value }: CellProps<T, Date | number>) {
       return (
-        <time dateTime={formatISO(value)} title={format(value, 'yyyy-MM-dd HH:mm')}>
+        <Time dateTime={formatISO(value)} title={format(value, 'yyyy-MM-dd HH:mm')}>
           {format(value, dateFormat)}
-        </time>
+        </Time>
       );
     },
   };
@@ -64,9 +75,9 @@ export function createRelativeDateCell<T extends object>({
     ...config,
     Cell({ value }: CellProps<T, Date | number>) {
       return (
-        <time dateTime={formatISO(value)} title={format(value, 'yyyy-MM-dd HH:mm')}>
+        <Time dateTime={formatISO(value)} title={format(value, 'yyyy-MM-dd HH:mm')}>
           {formatRelative(value, base)}
-        </time>
+        </Time>
       );
     },
   };
@@ -77,13 +88,13 @@ export function createDateRangeCell<T extends object>(config: Column<T>): Column
     ...config,
     Cell({ value }: CellProps<T, { start?: Date | number | null; end?: Date | number | null }>) {
       if (value.start == null) return null;
-      let start = <time dateTime={formatISO(value.start)}>{format(value.start, 'yyyy-MM-dd')}</time>;
+      let start = <Time dateTime={formatISO(value.start)}>{format(value.start, 'yyyy-MM-dd')}</Time>;
 
       if (value.end == null) return <p>{start}</p>;
-      let end = <time dateTime={formatISO(value.end)}>{format(value.end, 'yyyy-MM-dd')}</time>;
+      let end = <Time dateTime={formatISO(value.end)}>{format(value.end, 'yyyy-MM-dd')}</Time>;
 
       return (
-        <p className="tabular-nums">
+        <p>
           {start}
           <span>{' - '}</span>
           {end}
@@ -148,27 +159,7 @@ export function createProgressCell<T extends object>({
     ...config,
     Cell(props: CellProps<T, unknown>) {
       let { progress, total } = getProgress(props.row.original);
-      let [isHovering, setIsHovering] = useState(false);
-
-      return (
-        <div
-          className="w-full h-full relative"
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-        >
-          {!isHovering ? (
-            <div className="w-full h-full absolute inset-0 flex items-center justify-center">
-              <div className="relative w-full h-2 rounded border border-black overflow-hidden">
-                <div className="h-full bg-black" style={{ width: `calc(100% * (${progress} / ${total}))` }} />
-              </div>
-            </div>
-          ) : (
-            <div className="w-full h-full absolute inset-0 flex items-center justify-center tabular-nums">
-              {progress} / {total}
-            </div>
-          )}
-        </div>
-      );
+      return <Progress progress={progress} total={total} />;
     },
   };
 }

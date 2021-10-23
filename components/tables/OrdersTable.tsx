@@ -14,7 +14,8 @@ import { PAGINATION_FRAGMENT } from 'lib/graphql/fragments';
 import { useSearchParams } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
 import { PaginatedType } from 'lib/utils/types';
-import { DataTable } from 'components';
+
+import * as DataTable from '../DataTable';
 
 type OrderType = PaginatedType<'orders', ListAdminOrdersQuery>;
 type FiltersType = Omit<ListAdminOrdersQueryVariables, 'retreatId'>;

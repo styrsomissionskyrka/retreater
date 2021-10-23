@@ -1,6 +1,5 @@
 import { SubmitHandler } from 'react-hook-form';
 
-import { ConnectedForm, toast } from 'components';
 import {
   gql,
   TypedDocumentNode,
@@ -10,6 +9,9 @@ import {
   useMutation,
   UpdateRetreatInput,
 } from 'lib/graphql';
+
+import * as ConnectedForm from '../ConnectedForm';
+import { toast } from '../Toast';
 
 interface EditRetreatProps {
   retreat: EditRetreatFieldsFragment;

@@ -12,9 +12,12 @@ import {
   AdminCreateOrderMutationVariables,
   CreateOrderInput,
 } from 'lib/graphql';
-import { Button, Dialog, toast } from 'components';
-import { createConnectedFormComponents } from 'components/ConnectedForm';
 import { formatMoney } from 'lib/utils/money';
+
+import { createConnectedFormComponents } from '../ConnectedForm';
+import { Button } from '../Button';
+import { Dialog } from '../Dialog';
+import { toast } from '../Toast';
 
 type FormValues = AdminCreateOrderMutationVariables['input'] & { force: boolean };
 const Form = createConnectedFormComponents<FormValues>();

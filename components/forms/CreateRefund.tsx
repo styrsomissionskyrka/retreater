@@ -10,8 +10,11 @@ import {
   useMutation,
   useQuery,
 } from 'lib/graphql';
-import { Dialog, ConnectedForm, toast } from 'components';
 import { formatMoney } from 'lib/utils/money';
+
+import * as ConnectedForm from '../ConnectedForm';
+import { Dialog } from '../Dialog';
+import { toast } from '../Toast';
 
 type FormValues = Pick<CreateRefundMutationVariables, 'amount'>;
 const Form = ConnectedForm.createConnectedFormComponents<FormValues>();
