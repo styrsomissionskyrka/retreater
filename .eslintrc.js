@@ -44,4 +44,16 @@ module.exports = {
       },
     ],
   },
+  overrides: [...restrictedImports()],
 };
+
+function restrictedImports() {
+  let message =
+    'To prevent import order conflicts you should only do relative imports of modules within the same folder.';
+  return ['api', 'components', 'lib'].map((folder) => ({
+    files: [`${folder}/**`],
+    rules: {
+      'no-restricted-imports': ['error', { patterns: [{ group: [`${folder}/*`, folder], message }] }],
+    },
+  }));
+}
