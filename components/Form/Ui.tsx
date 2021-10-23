@@ -1,43 +1,41 @@
 import React, { forwardRef } from 'react';
-import classNames from 'classnames';
 
 import { ElementProps } from 'lib/utils/types';
+import { styled } from 'styles/stitches.config';
 
 import { Button, ButtonProps } from '../Button';
 import { Spinner } from '../Spinner';
 
 export type FormProps = ElementProps<'form'>;
 
+const FormWrapper = styled('div', {
+  display: 'flex',
+  flexFlow: 'column',
+  spaceY: '$8',
+  width: '100%',
+  maxWidth: '$max2xl',
+});
+
 export const Form = forwardRef<HTMLFormElement, FormProps>(({ children, ...props }, ref) => {
   return (
     <form {...props} ref={ref}>
-      <div className="flex flex-col space-y-8 w-full max-w-2xl">{children}</div>
+      <FormWrapper>{children}</FormWrapper>
     </form>
   );
 });
 
 Form.displayName = 'Form';
 
-export const Row = forwardRef<HTMLDivElement, { className?: string; children?: React.ReactNode }>(
-  ({ className, children }, ref) => {
-    return (
-      <div ref={ref} className={classNames('flex items-start space-x-8 w-full', className)}>
-        {children}
-      </div>
-    );
-  },
-);
+export const Row = styled('div', {
+  display: 'flex',
+  alignItems: 'flex-start',
+  spaceX: '$8',
+  width: '100%',
+});
 
 Row.displayName = 'Form.Row';
 
-export const ActionRow = forwardRef<HTMLDivElement, { children?: React.ReactNode }>(({ children }, ref) => {
-  return (
-    <Row ref={ref} className="justify-end space-x-4">
-      {children}
-    </Row>
-  );
-});
-
+export const ActionRow = styled(Row, { justifyContent: 'flex-end', spaceX: '$4' });
 ActionRow.displayName = 'Form.ActionRow';
 
 export type SubmitProps = Omit<ElementProps<'button'>, 'type'> & ButtonProps & { isSubmitting?: boolean };
