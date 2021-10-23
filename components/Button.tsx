@@ -19,7 +19,9 @@ const ButtonImpl = styled('button', {
   spaceX: '$2',
   lineHeight: '$none',
   borderRadius: '$md',
+
   '&:disabled': { cursor: 'not-allowed' },
+  '&:focus': { outline: '$black' },
 
   variants: {
     variant: {

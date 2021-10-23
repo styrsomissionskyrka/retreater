@@ -367,5 +367,13 @@ export const { styled, css, globalCss, keyframes, getCssText, theme, createTheme
       transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
       transitionDUration: '150ms',
     }),
+
+    outline: (value: Accessor<Color> | 'none') =>
+      value === 'none'
+        ? { outline: 'none' }
+        : {
+            outline: value === '$transparent' ? '2px solid transparent' : `2px dotted ${value}`,
+            outlineOffset: '2px',
+          },
   } as const,
 });
