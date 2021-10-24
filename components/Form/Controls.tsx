@@ -198,7 +198,6 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         error={error}
         disabled={disabled}
         prefix={prefix}
-        suffix={suffix}
         input={
           <BaseControl {...props} as="select" ref={forwardedRef} disabled={disabled} aria-invalid={invalid}>
             {children}

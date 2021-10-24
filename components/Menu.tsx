@@ -144,13 +144,12 @@ const ActionImpl = styled('button', {
   py: '$2',
   textAlign: 'left',
   '&:hover': { background: '$gray300' },
+  '&:focus': { outline: '$black' },
   '&:disabled': {
     color: '$gray500',
     cursor: 'not-allowed',
   },
-  '&:disabled:hover': {
-    background: '$white',
-  },
+  '&:disabled:hover': { background: '$white' },
 });
 
 export const Action: React.FC<ActionProps> = ({ onClick, disabled, children }) => {

@@ -8,6 +8,7 @@ import { styled } from 'styles/stitches.config';
 
 const A = styled('a', {
   '&:hover': { color: '$blue500' },
+  '&:focus': { outline: '$black' },
 });
 
 type LinkProps = Omit<NextLinkProps, 'as' | 'passHref'> &
