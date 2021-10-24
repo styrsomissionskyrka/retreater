@@ -1,13 +1,19 @@
 import { UseExpandedOptions, UseExpandedInstanceProps, UseExpandedState, UseExpandedRowProps } from 'react-table';
 
 declare module 'react-table' {
-  type RenderExpandedRow<T extends object> = (row: Row<T>) => JSX.Element;
+  export type RenderExpandedRow<T extends object> = (row: Row<T>) => JSX.Element;
+
+  export type ExpandedRowOptions = {
+    span?: number;
+  };
 
   export interface TableOptions<D extends object> extends UseExpandedOptions<D> {
     renderExpandedRow?: RenderExpandedRow<D>;
+    expandedRowOptions?: ExpandedRowOptions;
   }
   export interface TableInstance<D extends object> extends UseExpandedInstanceProps<D> {
     renderExpandedRow?: RenderExpandedRow<D>;
+    expandedRowOptions?: ExpandedRowOptions;
   }
 
   export interface TableState<D extends object = {}> extends UseExpandedState<D> {}

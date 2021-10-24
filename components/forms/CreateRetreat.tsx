@@ -9,7 +9,7 @@ import * as log from 'lib/utils/log';
 
 import { Button } from '../Button';
 import * as ConnectedForm from '../ConnectedForm';
-import { Dialog } from '../Dialog';
+import { Dialog, Title } from '../Dialog';
 import { toast } from '../Toast';
 
 export const CREATE_RETREAT_MUTATION: TypedDocumentNode<CreateRetreatMutation, CreateRetreatMutationVariables> = gql`
@@ -52,7 +52,7 @@ export const CreateReatreat: React.FC = () => {
         Ny retreat
       </Button>
       <Dialog isOpen={showDialog} onDismiss={() => setShowDialog(false)}>
-        <h2 className="text-xl font-medium mb-8 text-center">Skapa retreat</h2>
+        <Title>Skapa retreat</Title>
         <Form.Form onSubmit={handleSubmit}>
           <Form.Input name="title" defaultValue="" label="Titel" required />
           <Form.ActionRow>

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useTable, TableInstance, Column, PluginHook, RenderExpandedRow } from 'react-table';
+import { useTable, TableInstance, Column, PluginHook, TableOptions } from 'react-table';
 
 import { createStrictContext } from 'lib/utils/context';
 
@@ -9,20 +9,20 @@ interface DataTableContextType<T extends object> extends TableInstance<T> {
 
 const [DataTableProvider, useDataTable] = createStrictContext<DataTableContextType<any>>('DataTableContext');
 
-interface DataTableProps<T extends object> {
+type DataTableProps<T extends object> = {
   data: T[];
   columns: Column<T>[];
   hooks?: PluginHook<T>[];
-  renderExpandedRow?: RenderExpandedRow<T>;
   loading?: boolean;
   children?: React.ReactNode;
-}
+} & Pick<TableOptions<T>, 'renderExpandedRow' | 'expandedRowOptions'>;
 
 export function Provider<T extends object>({
   data,
   columns,
   hooks = [],
   renderExpandedRow,
+  expandedRowOptions,
   loading,
   children,
 }: DataTableProps<T>) {
@@ -32,7 +32,7 @@ export function Provider<T extends object>({
   }, []);
 
   const table = useTable<T>(
-    { data, columns, expandSubRows: false, autoResetExpanded: false, renderExpandedRow, getRowId },
+    { data, columns, expandSubRows: false, autoResetExpanded: false, renderExpandedRow, expandedRowOptions, getRowId },
     ...hooks,
   );
 

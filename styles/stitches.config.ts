@@ -359,6 +359,9 @@ export const { styled, css, globalCss, keyframes, getCssText, theme, createTheme
     divideY: (value: Accessor<BorderWidth>) => ({
       '& > * + *': { borderTopWidth: value },
     }),
+    divideColor: (value: Accessor<Color>) => ({
+      '& > * + *': { borderColor: value },
+    }),
 
     inset: (value: Accessor<Size>) => ({ top: value, right: value, bottom: value, left: value }),
 

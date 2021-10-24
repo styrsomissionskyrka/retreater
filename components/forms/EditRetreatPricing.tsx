@@ -15,6 +15,7 @@ import {
   TypedDocumentNode,
 } from 'lib/graphql';
 import { formatCents, parsePriceInput } from 'lib/utils/money';
+import { styled } from 'styles/stitches.config';
 
 import * as Form from '../Form';
 import { BrowserOnly } from '../BrowserOnly';
@@ -61,6 +62,7 @@ export const EditRetreatPricing: React.FC<EditPricingProps> = ({ retreat }) => {
       data={data}
       columns={columns}
       renderExpandedRow={renderExpandedRow}
+      expandedRowOptions={{ span: 1 }}
       hooks={[DataTable.Plugins.useExpanded]}
     >
       <DataTable.Layout>
@@ -258,8 +260,8 @@ const DescriptionCell: React.FC<Row<ColumnData>> = ({ original }) => {
   };
 
   return (
-    <div className="flex w-full">
-      <div className="w-1/3">
+    <DescriptionCellWrapper>
+      <TextareaWrapper>
         <Form.Textarea
           defaultValue={initialValue}
           placeholder="Beskrivning"
@@ -267,17 +269,23 @@ const DescriptionCell: React.FC<Row<ColumnData>> = ({ original }) => {
           onBlur={handleBlur}
           disabled={loading || !original.active}
         />
-      </div>
+      </TextareaWrapper>
 
-      <div className="ml-auto flex flex-col space-y-2 pr-10 justify-end">
-        <Link
-          href={`https://dashboard.stripe.com/test/products/${original.id}`}
-          target="_blank"
-          className="text-blue-500 hover:text-blue-700"
-        >
-          Visa produkten i Stripe
-        </Link>
-      </div>
-    </div>
+      <Link href={`https://dashboard.stripe.com/test/products/${original.id}`} target="_blank">
+        Visa produkten i Stripe
+      </Link>
+    </DescriptionCellWrapper>
   );
 };
+
+const DescriptionCellWrapper = styled('div', {
+  display: 'flex',
+  flexFlow: 'column nowrap',
+  width: '100%',
+  spaceY: '$2',
+});
+
+const TextareaWrapper = styled('div', {
+  width: '100%',
+  maxWidth: '$maxSm',
+});

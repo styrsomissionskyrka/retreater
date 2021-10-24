@@ -10,6 +10,7 @@ import {
 } from 'lib/graphql';
 import { compact } from 'lib/utils/array';
 import { formatMoney } from 'lib/utils/money';
+import { styled } from 'styles/stitches.config';
 
 import * as DataTable from '../DataTable';
 import * as Table from '../Table';
@@ -87,34 +88,6 @@ export const OrderPaymentsTable: React.FC<{ id: string }> = ({ id }) => {
 
   const sessions = data?.order?.checkoutSessions ?? [];
 
-  const renderExpandedRow: RenderExpandedRow<CheckoutSession> = useCallback(
-    (row) => (
-      <div className="space-y-4">
-        <Table.Table>
-          <Table.Body>
-            {row.original.lineItems.map((item) => (
-              <Table.BodyRow key={item.id}>
-                <Table.BodyCell>{item.price?.product.name ?? 'N/A'}</Table.BodyCell>
-                <Table.BodyCell>{formatMoney(item.amountTotal, item.currency)}</Table.BodyCell>
-              </Table.BodyRow>
-            ))}
-          </Table.Body>
-        </Table.Table>
-
-        <div className="space-y-1">
-          <p>
-            <strong>Checkout Session:</strong> <CopyInline value={row.original.id}>{row.original.id}</CopyInline>
-          </p>
-          <p>
-            <strong>Payment Intent:</strong>{' '}
-            <CopyInline value={row.original.paymentIntent?.id ?? ''}>{row.original.paymentIntent?.id}</CopyInline>
-          </p>
-        </div>
-      </div>
-    ),
-    [],
-  );
-
   return (
     <div ref={ref}>
       <DataTable.Provider
@@ -167,3 +140,31 @@ const ADMIN_ORDER_PAYMENTS_QUERY: TypedDocumentNode<AdminOrderPaymentsQuery, Adm
     }
   }
 `;
+
+const renderExpandedRow: RenderExpandedRow<CheckoutSession> = (row) => (
+  <ExpandedWrapper>
+    <Table.Table>
+      <Table.Body>
+        {row.original.lineItems.map((item) => (
+          <Table.BodyRow key={item.id}>
+            <Table.BodyCell>{item.price?.product.name ?? 'N/A'}</Table.BodyCell>
+            <Table.BodyCell>{formatMoney(item.amountTotal, item.currency)}</Table.BodyCell>
+          </Table.BodyRow>
+        ))}
+      </Table.Body>
+    </Table.Table>
+
+    <InfoWrapper>
+      <p>
+        <strong>Checkout Session:</strong> <CopyInline value={row.original.id}>{row.original.id}</CopyInline>
+      </p>
+      <p>
+        <strong>Payment Intent:</strong>{' '}
+        <CopyInline value={row.original.paymentIntent?.id ?? ''}>{row.original.paymentIntent?.id}</CopyInline>
+      </p>
+    </InfoWrapper>
+  </ExpandedWrapper>
+);
+
+const ExpandedWrapper = styled('div', { spaceY: '$4' });
+const InfoWrapper = styled('div', { spaceY: '$1' });

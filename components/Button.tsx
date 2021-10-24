@@ -140,6 +140,7 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
       } else {
         await onClick();
       }
+    } catch (error) {
     } finally {
       setLoading(false);
     }
@@ -178,7 +179,7 @@ const ToggleButtonWrapper = styled('div', {
         height: '$6',
         width: '$10',
         padding: '$1',
-        borderRadius: '$xl',
+        borderRadius: '$2xl',
       },
       normal: {
         height: '$8',
@@ -279,8 +280,13 @@ type ConfirmButtonProps = LoadingButtonProps & { confirmMessage: string };
 export const ConfirmButton: React.FC<ConfirmButtonProps> = ({ confirmMessage, onClick, children, ...props }) => {
   const handler = async () => {
     let confirmed = window.confirm(confirmMessage);
-    if (confirmed) return onClick();
+    if (!confirmed) throw new Error('Action cancelled');
+    return onClick();
   };
 
-  return <LoadingButton {...props} onClick={handler} />;
+  return (
+    <LoadingButton {...props} onClick={handler}>
+      {children}
+    </LoadingButton>
+  );
 };

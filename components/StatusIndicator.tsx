@@ -10,14 +10,14 @@ export const StatusIndicator: React.FC<{ status: RetreatStatusEnum | OrderStatus
 };
 
 const StatusWrapper = styled('div', {
-  display: 'flex',
+  display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
 });
 
 export const StatusRing = styled('span', {
-  disply: 'block',
+  display: 'inline-block',
   size: '$2',
   borderRadius: '100%',
   variants: {

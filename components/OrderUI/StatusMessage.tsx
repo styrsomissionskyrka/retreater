@@ -1,5 +1,4 @@
 import { Fragment, useEffect } from 'react';
-import classNames from 'classnames';
 
 import {
   gql,
@@ -10,9 +9,10 @@ import {
   AdminOrderStatusQueryVariables,
 } from 'lib/graphql';
 import { format } from 'lib/utils/date-fns';
-import { statusColorMap } from 'lib/utils/colors';
+import { styled } from 'styles/stitches.config';
 
 import { Spinner } from '../Spinner';
+import { StatusIndicator } from '../StatusIndicator';
 
 const ORDER_STATUS_QUERY: TypedDocumentNode<AdminOrderStatusQuery, AdminOrderStatusQueryVariables> = gql`
   query AdminOrderStatus($id: ID!) {
@@ -46,7 +46,6 @@ export const StatusMessage: React.FC<{ id: string }> = ({ id }) => {
   let order = data.order;
 
   let message: React.ReactNode = null;
-  let bg = statusColorMap[order.status];
 
   switch (order.status) {
     case OrderStatusEnum.Confirmed:
@@ -78,9 +77,11 @@ export const StatusMessage: React.FC<{ id: string }> = ({ id }) => {
   }
 
   return (
-    <p className="text-sm">
-      <span className={classNames('inline-block w-2 h-2 rounded-full mr-2', bg)} />
-      {message}
-    </p>
+    <Message>
+      <StatusIndicator status={order.status} />
+      <span>{message}</span>
+    </Message>
   );
 };
+
+const Message = styled('p', { text: '$sm', spaceX: '$2' });

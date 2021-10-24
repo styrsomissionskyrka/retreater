@@ -16,7 +16,7 @@ import { formatMoney } from 'lib/utils/money';
 
 import { createConnectedFormComponents } from '../ConnectedForm';
 import { Button } from '../Button';
-import { Dialog } from '../Dialog';
+import { Dialog, Title } from '../Dialog';
 import { toast } from '../Toast';
 
 type FormValues = AdminCreateOrderMutationVariables['input'] & { force: boolean };
@@ -65,7 +65,7 @@ export const CreateBooking: React.FC<CreateBookingProps> = ({ retreatId }) => {
     <Fragment>
       <Button onClick={() => setIsOpen(true)}>Ny bokning</Button>
       <Dialog isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
-        <h2 className="text-xl font-medium mb-8 text-center">Skapa bokning</h2>
+        <Title>Skapa bokning</Title>
         <Form.Form onSubmit={handleSubmit}>
           <Form.Row>
             <Form.Input name="name" label="Namn" defaultValue="" required />

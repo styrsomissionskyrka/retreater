@@ -79,7 +79,7 @@ export const Admin: React.FC<Props> = ({
       <PageWrapper>
         <Sidebar style={{ top: rect?.height ?? 0, height: `calc(100vh - ${rect?.height ?? 0}px)` }}>
           <SidebarTitle>
-            {!backLink ? (
+            {backLink ? (
               <SidebarBackLink href={backLink ?? '/'}>
                 <IconChevronLeft size={16} />
                 <VisuallyHidden>Gå tillbaka</VisuallyHidden>

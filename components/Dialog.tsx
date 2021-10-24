@@ -120,7 +120,7 @@ export const Content = forwardRef<HTMLDivElement, ContentProps>(({ onClick = noo
 Content.displayName = 'Dialog.Content';
 
 export const Dialog = forwardRef<HTMLDivElement, OverlayProps & ContentProps>(
-  ({ isOpen, initialFocusRef, onDismiss, className, children, ...props }, ref) => {
+  ({ isOpen, initialFocusRef, onDismiss, children, ...props }, ref) => {
     return (
       <Overlay isOpen={isOpen} initialFocusRef={initialFocusRef} onDismiss={onDismiss}>
         <Content {...props} ref={ref}>
@@ -132,3 +132,10 @@ export const Dialog = forwardRef<HTMLDivElement, OverlayProps & ContentProps>(
 );
 
 Dialog.displayName = 'Dialog';
+
+export const Title = styled('h2', {
+  text: '$xl',
+  fontWeight: '$medium',
+  marginBottom: '$8',
+  textAlign: 'center',
+});

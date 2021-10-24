@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import { ExpandedRowOptions, RenderExpandedRow, Row, TableRowProps } from 'react-table';
 
 import { Spinner } from '../Spinner';
 import * as UI from '../Table';
@@ -41,7 +42,8 @@ export const Body: React.FC<BodyProps> = ({
   loading: loadingMessage = <Spinner size={24} />,
   empty: emptyMessage = 'Ingen data.',
 }) => {
-  const { getTableBodyProps, rows, prepareRow, visibleColumns, renderExpandedRow, loading } = useDataTable();
+  const { getTableBodyProps, rows, prepareRow, visibleColumns, renderExpandedRow, expandedRowOptions, loading } =
+    useDataTable();
 
   let state: 'loading' | 'empty' | 'idle' = 'idle';
   if (rows.length < 1 && loading) {
@@ -87,14 +89,36 @@ export const Body: React.FC<BodyProps> = ({
               </UI.BodyRow>
 
               {row.isExpanded && typeof renderExpandedRow === 'function' ? (
-                <UI.BodyRow {...rowProps} expanded="child">
-                  <UI.BodyCell />
-                  <UI.BodyCell colSpan={visibleColumns.length - 1}>{renderExpandedRow(row)}</UI.BodyCell>
-                </UI.BodyRow>
+                <ExpandedRow
+                  row={row}
+                  columnCount={visibleColumns.length}
+                  renderExpandedRow={renderExpandedRow}
+                  expandedRowOptions={expandedRowOptions}
+                />
               ) : null}
             </Fragment>
           );
         })}
     </UI.Body>
+  );
+};
+
+type ExpandedRowProps<T extends object> = {
+  row: Row<T>;
+  columnCount: number;
+  renderExpandedRow: RenderExpandedRow<T>;
+  expandedRowOptions?: ExpandedRowOptions;
+};
+
+const ExpandedRow: React.FC<ExpandedRowProps<{}>> = ({ row, columnCount, renderExpandedRow, expandedRowOptions }) => {
+  let maxSpan = columnCount - 1;
+  let span = Math.min(expandedRowOptions?.span ?? maxSpan, maxSpan);
+  let fill = Array.from({ length: maxSpan - span }, (_, index) => <UI.BodyCell key={index} />);
+  return (
+    <UI.BodyRow expanded="child">
+      <UI.BodyCell />
+      <UI.BodyCell colSpan={span}>{renderExpandedRow(row)}</UI.BodyCell>
+      {fill}
+    </UI.BodyRow>
   );
 };

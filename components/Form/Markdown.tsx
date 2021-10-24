@@ -79,8 +79,6 @@ export const Markdown = forwardRef<HTMLTextAreaElement, MarkdownProps>(
       suggestionsDropdown: suggestionsDropdown().toString(),
     };
 
-    console.log(classes);
-
     return (
       <Label
         error={error}

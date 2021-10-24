@@ -13,7 +13,7 @@ import {
 
 import { Button } from '../Button';
 import * as ConnectedForm from '../ConnectedForm';
-import { Dialog } from '../Dialog';
+import { Dialog, Title } from '../Dialog';
 import { toast } from '../Toast';
 
 export const CREATE_RETREAT_PRODUCT_MUTATION: TypedDocumentNode<
@@ -53,7 +53,7 @@ export const CreateReatreatProduct: React.FC<{ retreatId: string }> = ({ retreat
         Ny variant
       </Button>
       <Dialog isOpen={showDialog} onDismiss={() => setShowDialog(false)}>
-        <h2 className="text-xl font-medium mb-8 text-center">Skapa variant</h2>
+        <Title>Skapa variant</Title>
         <Form.Form onSubmit={handleSubmit}>
           <Form.Input name="name" defaultValue="" label="Titel" required />
           <Form.ActionRow>

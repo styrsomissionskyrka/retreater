@@ -36,7 +36,7 @@ export const OrderRefundsTable: React.FC<{ id: string }> = ({ id }) => {
 
   const renderExpandedRow: RenderExpandedRow<Refund> = useCallback(
     (row) => (
-      <div className="space-y-1">
+      <div>
         <p>
           <strong>Refund:</strong> <CopyInline value={row.original.id}>{row.original.id}</CopyInline>
         </p>

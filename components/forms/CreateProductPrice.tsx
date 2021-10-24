@@ -14,7 +14,7 @@ import { toCents } from 'lib/utils/money';
 
 import { Button } from '../Button';
 import * as ConnectedForm from '../ConnectedForm';
-import { Dialog } from '../Dialog';
+import { Dialog, Title } from '../Dialog';
 import { toast } from '../Toast';
 
 export const CREATE_PRICE_MUTATION: TypedDocumentNode<
@@ -56,7 +56,7 @@ export const CreateProductPrice: React.FC<{ productId: string }> = ({ productId 
         Nytt pris
       </Button>
       <Dialog isOpen={showDialog} onDismiss={() => setShowDialog(false)}>
-        <h2 className="text-xl font-medium mb-8 text-center">Skapa variant</h2>
+        <Title>Skapa variant</Title>
         <Form.Form onSubmit={handleSubmit}>
           <Form.Input type="number" name="amount" defaultValue="" label="Värde" required suffix="SEK" />
           <Form.Input name="nickname" defaultValue="" label="Namn (internt)" />

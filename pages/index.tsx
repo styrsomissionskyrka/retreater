@@ -72,8 +72,8 @@ const Home: NextPage = () => {
       </button>
       <h1>Styrsö Missionskyrka | Retreater</h1>
       <Link href="/admin">Admin</Link>
-      <div className="mt-10">
-        <ul className="space-y-8">
+      <div>
+        <ul>
           {retreats.map((retreat) => (
             <li key={retreat.id}>
               <h2>

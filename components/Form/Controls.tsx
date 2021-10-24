@@ -131,11 +131,7 @@ export const Label: React.FC<LabelProps> = ({ input, children, error, disabled, 
         </InputWrapper>
       </LabelEl>
 
-      {error != null ? (
-        <ErrorMessage role="alert" className="block text-sm text-red-500">
-          {error}
-        </ErrorMessage>
-      ) : null}
+      {error != null ? <ErrorMessage role="alert">{error}</ErrorMessage> : null}
     </LabelWrapper>
   );
 };

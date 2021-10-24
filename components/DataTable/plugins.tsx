@@ -17,10 +17,16 @@ function visibleColumns<T extends object>(columns: ColumnInstance<T>[]): Column<
       Header: () => null,
       Cell({ row }: CellProps<T, unknown>) {
         let { isExpanded } = row;
-        let { key } = row.getToggleRowExpandedProps();
+        let { key, ...rest } = row.getToggleRowExpandedProps();
 
         return (
-          <ToggleButton key={key} type="button" aria-label="Visa mer" aria-pressed={isExpanded ? 'true' : 'false'}>
+          <ToggleButton
+            key={key}
+            type="button"
+            aria-label="Visa mer"
+            aria-pressed={isExpanded ? 'true' : 'false'}
+            {...rest}
+          >
             {isExpanded ? <IconChevronDown size={16} /> : <IconChevronRight size={16} />}
           </ToggleButton>
         );
