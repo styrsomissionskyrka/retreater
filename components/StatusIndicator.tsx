@@ -9,7 +9,7 @@ export const StatusIndicator: React.FC<{ status: RetreatStatusEnum | OrderStatus
   );
 };
 
-const StatusWrapper = styled('div', {
+const StatusWrapper = styled('span', {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',

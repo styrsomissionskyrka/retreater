@@ -11,6 +11,7 @@ import {
   FieldError,
 } from 'react-hook-form';
 import get from 'lodash.get';
+import { useIsMounted } from '@fransvilhelm/hooks';
 
 import { format, parse, getTime } from 'lib/utils/date-fns';
 import { createStrictContext } from 'lib/utils/context';
@@ -35,6 +36,7 @@ interface FormProps<FormValues extends FieldValues> {
 export function Form<FormValues extends FieldValues>({ onSubmit, children }: FormProps<FormValues>): JSX.Element {
   const methods = useForm<FormValues>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isMounted = useIsMounted();
 
   const handleSubmit: SubmitHandler<FormValues> = useCallback(
     async (values) => {
@@ -46,10 +48,10 @@ export function Form<FormValues extends FieldValues>({ onSubmit, children }: For
       } catch (e) {
         throw e;
       } finally {
-        setIsSubmitting(false);
+        if (isMounted()) setIsSubmitting(false);
       }
     },
-    [isSubmitting, onSubmit],
+    [isSubmitting, onSubmit, isMounted],
   );
 
   return (
@@ -240,6 +242,38 @@ export const Submit: React.FC<SubmitProps> = ({ children, ...props }) => {
   );
 };
 
+interface PriceDropdownProps<FormValues extends FieldValues>
+  extends SelectProps<FormValues>,
+    Omit<FormUI.PriceDropdownProps, 'name' | 'value' | 'onChange' | 'onBlur' | 'defaultValue'> {}
+
+export function PriceDropdown<FormValues extends FieldValues>({
+  retreatId,
+  name,
+  required,
+  defaultValue,
+  options: passedOptions,
+  ...props
+}: PriceDropdownProps<FormValues>) {
+  const { register } = useFormContext<FormValues>();
+  const { errors } = useFormState();
+
+  let fieldError: FieldError | undefined = get(errors, name);
+  let errorMessage = fieldError != null ? fieldError['message'] || DEFAULT_MESSAGES[fieldError.type] : undefined;
+
+  let options: RegisterOptions<FormValues> = { required };
+  const formProps = register(name, { ...options, ...passedOptions });
+
+  return (
+    <FormUI.PriceDropdown
+      {...props}
+      {...formProps}
+      retreatId={retreatId}
+      defaultValue={defaultValue}
+      error={errorMessage}
+    />
+  );
+}
+
 export function createConnectedFormComponents<FormValues extends FieldValues>(): {
   Form: React.ComponentType<FormProps<FormValues>>;
   Input: React.ComponentType<InputProps<FormValues>>;
@@ -248,7 +282,8 @@ export function createConnectedFormComponents<FormValues extends FieldValues>():
   Select: React.ComponentType<SelectProps<FormValues>>;
   Checkbox: React.ComponentType<CheckboxProps<FormValues>>;
   Submit: React.ComponentType<SubmitProps>;
-} & Omit<typeof FormUI, 'Form' | 'Input' | 'Markdown' | 'Submit' | 'Select' | 'Checkbox'> {
+  PriceDropdown: React.ComponentType<PriceDropdownProps<FormValues>>;
+} & Omit<typeof FormUI, 'Form' | 'Input' | 'Markdown' | 'Submit' | 'Select' | 'Checkbox' | 'PriceDropdown'> {
   return {
     ...FormUI,
     Form,
@@ -258,6 +293,7 @@ export function createConnectedFormComponents<FormValues extends FieldValues>():
     Select,
     Checkbox,
     Submit,
+    PriceDropdown,
   };
 }
 

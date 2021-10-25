@@ -1,5 +1,5 @@
 import { Claims, UserRole } from '@auth0/nextjs-auth0';
-import { OrderStatus, Prisma, Retreat, RetreatStatus } from '@prisma/client';
+import { OrderStatus, Retreat, RetreatStatus } from '@prisma/client';
 
 import { PaginationMeta } from 'lib/graphql';
 

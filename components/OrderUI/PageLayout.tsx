@@ -32,6 +32,7 @@ const SectionTitle = styled('h2', {
 
 const Section = styled('div', {
   padding: '$4',
+  spaceY: '$4',
 });
 
 export const PageSection: React.FC<{ span?: number; title?: React.ReactNode }> = ({ span = 2, title, children }) => {

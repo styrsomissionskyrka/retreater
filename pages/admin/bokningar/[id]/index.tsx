@@ -19,6 +19,7 @@ import { format } from 'lib/utils/date-fns';
 import { formatMoney } from 'lib/utils/money';
 import { CopyInline, Layout, OrderUI, ConfirmButton } from 'components';
 import { OrderPaymentsTable, OrderRefundsTable } from 'components/tables';
+import { EditPriceDialog } from 'components/OrderUI';
 
 const Order: NextPage = () => {
   const { query } = useRouter();
@@ -83,6 +84,8 @@ const Order: NextPage = () => {
               },
             ]}
           />
+
+          <EditPriceDialog id={order.id} />
         </OrderUI.PageSection>
 
         <OrderUI.PageSection title="Åtgärder">

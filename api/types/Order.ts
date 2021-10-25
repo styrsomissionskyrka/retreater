@@ -1,8 +1,9 @@
 import * as n from 'nexus';
 import { OrderStatus, Prisma } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
+import { Stripe } from 'stripe';
 
-import { assert } from '../../lib/utils/assert';
+import { assert, truthy } from '../../lib/utils/assert';
 import { OrderEvent } from '../logs';
 import { ignoreNull, isRetreatOrderable, createPaginationMeta, authorizedWithRoles } from '../utils';
 import { OrderEnum, PaginatedQuery } from './Shared';
@@ -276,7 +277,7 @@ export const OrderMutation = n.extendType({
       args: { sessionId: n.idArg(), id: n.idArg() },
       authorize: authorizedWithRoles(['admin', 'superadmin']),
       async resolve(_, args, ctx) {
-        let orderId: string | null = args.id ?? null;
+        let orderId = args.id ?? null;
         if (args.sessionId != null) {
           let session = await ctx.stripe.checkout.sessions.retrieve(args.sessionId);
           assert(session.client_reference_id != null, 'Encountered session without order reference.');
@@ -288,6 +289,44 @@ export const OrderMutation = n.extendType({
         let order = await ctx.prisma.order.update({ where: { id: orderId }, data: { status: OrderStatus.CANCELLED } });
         await ctx.log.order(order.id, OrderEvent.ORDER_STATUS_UPDATED);
         return order;
+      },
+    });
+
+    t.field('updateOrderPrice', {
+      type: Order,
+      args: { id: n.nonNull(n.idArg()), input: n.nonNull(n.arg({ type: UpdateOrderPriceInput })) },
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
+      async resolve(_, args, ctx) {
+        let select = { id: true, coupon: true, price: true } as const;
+        let order = await ctx.prisma.order.findUnique({ where: { id: args.id }, select });
+
+        if (order == null) return null;
+
+        let priceId = order.price;
+        let couponId = order.coupon;
+
+        let price = await ctx.stripe.prices.retrieve(args.input.price ?? order.price);
+        if (price.id !== order.price) {
+          priceId = price.id;
+        }
+
+        if ((await shouldUpdateCoupon(args.input.discount, order.coupon, ctx.stripe)) && args.input.discount != null) {
+          let coupon = await ctx.stripe.coupons.create({
+            amount_off: args.input.discount,
+            currency: price.currency,
+            duration: 'once',
+            name: 'Rabatt',
+            applies_to: {
+              products: [typeof price.product === 'string' ? price.product : price.product.id],
+            },
+          });
+
+          couponId = coupon.id;
+        } else if (args.input.discount === 0) {
+          couponId = null;
+        }
+
+        return ctx.prisma.order.update({ where: { id: order.id }, data: { price: priceId, coupon: couponId } });
       },
     });
   },
@@ -305,3 +344,26 @@ export const CreateOrderInput = n.inputObjectType({
     });
   },
 });
+
+export const UpdateOrderPriceInput = n.inputObjectType({
+  name: 'UpdateOrderPriceInput',
+  definition(t) {
+    t.id('price');
+    t.int('discount');
+  },
+});
+
+async function shouldUpdateCoupon(
+  discount: number | null | undefined,
+  previousCoupon: string | null | undefined,
+  stripe: Stripe,
+): Promise<boolean> {
+  if (discount == null || discount === 0) return false;
+
+  if (previousCoupon) {
+    let coupon = await stripe.coupons.retrieve(previousCoupon);
+    return coupon == null || coupon.amount_off !== discount;
+  }
+
+  return true;
+}

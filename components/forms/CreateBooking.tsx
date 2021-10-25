@@ -12,7 +12,7 @@ import {
   AdminCreateOrderMutationVariables,
   CreateOrderInput,
 } from 'lib/graphql';
-import { formatMoney } from 'lib/utils/money';
+import { formatProductPrices } from 'lib/utils/price';
 
 import { createConnectedFormComponents } from '../ConnectedForm';
 import { Button } from '../Button';
@@ -54,12 +54,7 @@ export const CreateBooking: React.FC<CreateBookingProps> = ({ retreatId }) => {
     }
   };
 
-  let priceOptions = data?.retreat?.products.flatMap((product) =>
-    product.prices.map((price) => ({
-      value: price.id,
-      label: `${product.name}, ${formatMoney(price.amount, price.currency)}`,
-    })),
-  );
+  let priceOptions = data?.retreat?.products.flatMap((product) => formatProductPrices(product));
 
   return (
     <Fragment>

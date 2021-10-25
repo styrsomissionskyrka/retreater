@@ -105,6 +105,7 @@ type Mutation {
   createRefund(amount: Int, order: ID!, paymentIntent: ID!, reason: RefundReasonEnum): Refund!
   createRetreatDraft(title: String!): Retreat
   setRetreatStatus(id: ID!, status: RetreatStatusEnum!): Retreat
+  updateOrderPrice(id: ID!, input: UpdateOrderPriceInput!): Order
   updatePrice(id: ID!, input: UpdatePriceInput!): Price
   updateProduct(id: ID!, input: UpdateProductInput!): Product
   updateProductPrice(input: CreatePriceInput!, productId: ID!): Price
@@ -279,6 +280,11 @@ enum RetreatStatusEnum {
   ARCHIVED
   DRAFT
   PUBLISHED
+}
+
+input UpdateOrderPriceInput {
+  discount: Int
+  price: ID
 }
 
 input UpdatePriceInput {

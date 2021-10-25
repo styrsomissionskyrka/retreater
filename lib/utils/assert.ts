@@ -29,3 +29,10 @@ export function warning(value: unknown, message: string) {
     } catch (error) {}
   }
 }
+
+export function truthy<T>(value: T | null | undefined | '' | 0): value is T {
+  if (value === '') return false;
+  if (value === 0) return false;
+  if (value == null) return false;
+  return true;
+}

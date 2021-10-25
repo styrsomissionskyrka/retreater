@@ -60,6 +60,10 @@ export interface NexusGenInputs {
     images?: string[] | null; // [String!]
     name: string; // String!
   }
+  UpdateOrderPriceInput: { // input type
+    discount?: number | null; // Int
+    price?: string | null; // ID
+  }
   UpdatePriceInput: { // input type
     active?: boolean | null; // Boolean
     nickname?: string | null; // String
@@ -202,6 +206,7 @@ export interface NexusGenFieldTypes {
     createRefund: NexusGenRootTypes['Refund']; // Refund!
     createRetreatDraft: NexusGenRootTypes['Retreat'] | null; // Retreat
     setRetreatStatus: NexusGenRootTypes['Retreat'] | null; // Retreat
+    updateOrderPrice: NexusGenRootTypes['Order'] | null; // Order
     updatePrice: NexusGenRootTypes['Price'] | null; // Price
     updateProduct: NexusGenRootTypes['Product'] | null; // Product
     updateProductPrice: NexusGenRootTypes['Price'] | null; // Price
@@ -364,6 +369,7 @@ export interface NexusGenFieldTypeNames {
     createRefund: 'Refund'
     createRetreatDraft: 'Retreat'
     setRetreatStatus: 'Retreat'
+    updateOrderPrice: 'Order'
     updatePrice: 'Price'
     updateProduct: 'Product'
     updateProductPrice: 'Price'
@@ -518,6 +524,10 @@ export interface NexusGenArgTypes {
     setRetreatStatus: { // args
       id: string; // ID!
       status: NexusGenEnums['RetreatStatusEnum']; // RetreatStatusEnum!
+    }
+    updateOrderPrice: { // args
+      id: string; // ID!
+      input: NexusGenInputs['UpdateOrderPriceInput']; // UpdateOrderPriceInput!
     }
     updatePrice: { // args
       id: string; // ID!
