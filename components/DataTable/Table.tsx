@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { ExpandedRowOptions, RenderExpandedRow, Row, TableRowProps } from 'react-table';
+import { ExpandedRowOptions, RenderExpandedRow, Row } from 'react-table';
 
 import { Spinner } from '../Spinner';
 import * as UI from '../Table';

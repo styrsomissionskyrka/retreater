@@ -58,12 +58,14 @@ export const EditPriceDialog: React.FC<{ id: string }> = ({ id }) => {
           <Spinner />
         ) : (
           <Form.Form onSubmit={handleSubmit}>
-            <Form.PriceDropdown name="price" defaultValue={data.order.price.id} retreatId={data.order.retreat.id} />
-            <Form.PriceInput
-              name="discount"
-              defaultValue={data.order.coupon?.amountOff ?? ''}
-              currency={data.order.price.currency}
-            />
+            <Form.Row>
+              <Form.PriceDropdown name="price" defaultValue={data.order.price.id} retreatId={data.order.retreat.id} />
+              <Form.PriceInput
+                name="discount"
+                defaultValue={data.order.coupon?.amountOff ?? ''}
+                currency={data.order.price.currency}
+              />
+            </Form.Row>
 
             <Form.ActionRow>
               <Button variant="outline" onClick={() => setShowDialog(false)}>

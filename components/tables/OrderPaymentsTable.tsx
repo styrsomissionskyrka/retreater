@@ -1,4 +1,4 @@
-import { useRef, useMemo, useState, useCallback, Fragment } from 'react';
+import { useRef, useMemo, useState, Fragment } from 'react';
 import { RenderExpandedRow } from 'react-table';
 
 import {

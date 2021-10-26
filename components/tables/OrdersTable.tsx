@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { NextRouter } from 'next/router';
 
 import {
   gql,
@@ -45,9 +46,8 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({ retreatId }) => {
 
   const orders = compact(data?.orders?.items ?? []);
   const columns = useMemo<DataTable.Column<OrderType>[]>(() => {
-    const getLink = (row: OrderType) => {
-      let suffix = retreatId == null ? '' : '?from=retreat';
-      return `/admin/bokningar/${row.id}${suffix}`;
+    const getLink = (row: OrderType, router: NextRouter) => {
+      return `${router.asPath}/${row.id}`;
     };
 
     return compact([

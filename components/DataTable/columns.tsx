@@ -1,6 +1,7 @@
 import { UrlObject } from 'url';
 
 import { CellProps, Column } from 'react-table';
+import { NextRouter, useRouter } from 'next/router';
 
 import { format, formatISO, formatRelative } from 'lib/utils/date-fns';
 import { OrderStatusEnum, RetreatStatusEnum } from 'lib/graphql';
@@ -38,12 +39,13 @@ const LinkCell = styled(Link, {
 export function createLinkCell<T extends object>({
   getLink,
   ...config
-}: Column<T> & { getLink: (row: T) => string | UrlObject }): Column<T> {
+}: Column<T> & { getLink: (row: T, router: NextRouter) => string | UrlObject }): Column<T> {
   return {
     ...config,
     Cell({ value, row }: CellProps<T, string>) {
+      const router = useRouter();
       return (
-        <LinkCell href={getLink(row.original)}>
+        <LinkCell href={getLink(row.original, router)}>
           <Truncate>{value}</Truncate>
         </LinkCell>
       );

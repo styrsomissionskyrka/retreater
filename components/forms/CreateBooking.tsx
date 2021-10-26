@@ -3,16 +3,12 @@ import { SubmitHandler } from 'react-hook-form';
 
 import {
   gql,
-  useQuery,
   useMutation,
   TypedDocumentNode,
-  AdminRetreatPricesQuery,
-  AdminRetreatPricesQueryVariables,
   AdminCreateOrderMutation,
   AdminCreateOrderMutationVariables,
   CreateOrderInput,
 } from 'lib/graphql';
-import { formatProductPrices } from 'lib/utils/price';
 
 import { createConnectedFormComponents } from '../ConnectedForm';
 import { Button } from '../Button';
@@ -28,7 +24,6 @@ interface CreateBookingProps {
 
 export const CreateBooking: React.FC<CreateBookingProps> = ({ retreatId }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data } = useQuery(RETREAT_PRICES, { variables: { id: retreatId }, skip: !isOpen });
   const [createOrder] = useMutation(CREATE_ORDER, { refetchQueries: ['ListAdminOrders'] });
 
   const handleSubmit: SubmitHandler<FormValues> = async (values) => {
@@ -54,8 +49,6 @@ export const CreateBooking: React.FC<CreateBookingProps> = ({ retreatId }) => {
     }
   };
 
-  let priceOptions = data?.retreat?.products.flatMap((product) => formatProductPrices(product));
-
   return (
     <Fragment>
       <Button onClick={() => setIsOpen(true)}>Ny bokning</Button>
@@ -67,18 +60,8 @@ export const CreateBooking: React.FC<CreateBookingProps> = ({ retreatId }) => {
             <Form.Input name="email" label="E-post" type="email" defaultValue="" required />
           </Form.Row>
           <Form.Row>
-            {priceOptions != null ? (
-              <Fragment>
-                <Form.Select name="price" label="Pris" required defaultValue={priceOptions[0]?.value}>
-                  {priceOptions.map((price) => (
-                    <option key={price.value} value={price.value}>
-                      {price.label}
-                    </option>
-                  ))}
-                </Form.Select>
-                <Form.PriceInput name="discount" label="Rabatt" currency="sek" defaultValue={0} />
-              </Fragment>
-            ) : null}
+            <Form.PriceDropdown retreatId={retreatId} name="price" label="Pris" required defaultValue="" />
+            <Form.PriceInput name="discount" label="Rabatt" currency="sek" defaultValue={0} />
           </Form.Row>
 
           <Form.Row>
@@ -97,23 +80,6 @@ export const CreateBooking: React.FC<CreateBookingProps> = ({ retreatId }) => {
     </Fragment>
   );
 };
-
-const RETREAT_PRICES: TypedDocumentNode<AdminRetreatPricesQuery, AdminRetreatPricesQueryVariables> = gql`
-  query AdminRetreatPrices($id: ID!) {
-    retreat(id: $id) {
-      id
-      products(active: true) {
-        id
-        name
-        prices(active: true) {
-          id
-          amount
-          currency
-        }
-      }
-    }
-  }
-`;
 
 const CREATE_ORDER: TypedDocumentNode<AdminCreateOrderMutation, AdminCreateOrderMutationVariables> = gql`
   mutation AdminCreateOrder($input: CreateOrderInput!, $force: Boolean!) {

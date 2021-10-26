@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { IconClipboardList, IconCoin, IconInfoCircle, IconNotes } from '@tabler/icons';
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 
 import { EditRetreatFormQuery, EditRetreatFormQueryVariables, gql, TypedDocumentNode, useQuery } from 'lib/graphql';
 import { Layout } from 'components';
@@ -109,12 +109,12 @@ export const getServerSideProps = authenticatedSSP(
   ]),
 );
 
-export const RetreatLayout: React.FC<{ id: string; title: React.ReactNode; actions?: React.ReactNode }> = ({
-  id,
-  title,
-  actions,
-  children,
-}) => {
+export const RetreatLayout: React.FC<{
+  id: string;
+  title: React.ReactNode;
+  actions?: React.ReactNode;
+  subTitle?: React.ReactNode;
+}> = ({ id, title, actions, subTitle, children }) => {
   const { data } = useQuery(EDIT_RETREAT_FORM_QUERY, { variables: { id } });
   const navLinks = useRetreatNavLinks(id);
 
@@ -123,6 +123,7 @@ export const RetreatLayout: React.FC<{ id: string; title: React.ReactNode; actio
   return (
     <Layout.Admin
       title={retreat?.title ?? ''}
+      subTitle={subTitle}
       sidebarTitle={retreat?.title ?? ''}
       headerTitle={title}
       backLink="/admin/retreater"
