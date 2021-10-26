@@ -1,7 +1,7 @@
 import { ParsedUrlQuery } from 'querystring';
 
 import { useEffect } from 'react';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage, PreviewData } from 'next';
 import { useRouter } from 'next/router';
 import { UserRole, getSession, Session } from '@auth0/nextjs-auth0';
 
@@ -39,10 +39,13 @@ export function authenticatedPage<P = {}, IP = P>(
   return AuthenticatedPage;
 }
 
+type WithUser<P extends { [key: string]: any } = { [key: string]: any }> = P & { user: Session['user'] };
+
 export function authenticatedSSP<
   P extends { [key: string]: any } = { [key: string]: any },
   Q extends ParsedUrlQuery = ParsedUrlQuery,
->(handler?: GetServerSideProps<P, Q>, requiredRoles?: UserRole[]): GetServerSideProps<P & Pick<Session, 'user'>, Q> {
+  D extends PreviewData = PreviewData,
+>(handler?: GetServerSideProps<P, Q, D>, requiredRoles?: UserRole[]): GetServerSideProps<WithUser<P>, Q, D> {
   return async (ctx) => {
     const session = getSession(ctx.req, ctx.res);
 
@@ -61,17 +64,17 @@ export function authenticatedSSP<
     }
 
     if (handler == null) {
-      let props = { user: session.user } as P & Pick<Session, 'user'>;
+      let props = { user: session.user } as WithUser<P>;
       return { props };
     }
 
     let handlerResult = await handler(ctx);
 
     if ('props' in handlerResult) {
+      let handlerProps = await handlerResult.props;
       return {
-        ...handlerResult,
         props: {
-          ...handlerResult.props,
+          ...handlerProps,
           user: session.user,
         },
       };

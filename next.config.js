@@ -3,7 +3,4 @@ module.exports = {
   images: {
     domains: ['s.gravatar.com'],
   },
-  experimental: {
-    esmExternals: true,
-  },
 };
