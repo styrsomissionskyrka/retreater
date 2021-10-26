@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['react-app', 'react-app/jest', 'next', 'plugin:cypress/recommended'],
+  extends: ['react-app', 'react-app/jest', 'next/core-web-vitals', 'plugin:cypress/recommended'],
   plugins: ['cypress', 'graphql'],
   settings: {
     'import/resolver': { typescript: {} },
