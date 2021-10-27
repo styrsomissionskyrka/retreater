@@ -3,7 +3,7 @@ import { OrderStatus, Prisma } from '@prisma/client';
 import { UserInputError } from 'apollo-server-micro';
 import { Stripe } from 'stripe';
 
-import { assert, truthy } from '../../lib/utils/assert';
+import { assert } from '../../lib/utils/assert';
 import { OrderEvent } from '../logs';
 import { ignoreNull, isRetreatOrderable, createPaginationMeta, authorizedWithRoles } from '../utils';
 import { OrderEnum, PaginatedQuery } from './Shared';

@@ -6,10 +6,12 @@ import Image from 'next/image';
 import { IconCalendarEvent, IconChevronLeft, IconClipboardList, IconUsers } from '@tabler/icons';
 import { useRect } from '@reach/rect';
 
-import { useAuthenticatedUser, useIsomorphicLayoutEffect } from 'lib/hooks';
+import { useIsomorphicLayoutEffect } from 'lib/hooks';
 import { setGlobalVariable } from 'lib/utils/css';
 import { compact } from 'lib/utils/array';
 import { styled } from 'styles/stitches.config';
+import { useQuery } from 'lib/graphql';
+import { ME } from 'lib/graphql/queries';
 
 import { Link, NavLink } from '../Link';
 import { VisuallyHidden } from '../VisuallyHidden';
@@ -55,7 +57,7 @@ export const Admin: React.FC<Props> = ({
     ]);
   }
 
-  const session = useAuthenticatedUser();
+  const { data } = useQuery(ME);
   const headerRef = useRef<HTMLElement>(null);
   const rect = useRect(headerRef, { observe: false });
 
@@ -100,14 +102,14 @@ export const Admin: React.FC<Props> = ({
             </NavList>
           </nav>
 
-          {session.user != null && (
+          {data?.me != null && (
             <Footer>
-              <Link href={`/admin/anvandare/${encodeURIComponent(session.user.email ?? '')}`}>
-                <ProfileImage src={session.user.image!} width={32} height={32} alt="" />
+              <Link style={{ display: 'flex' }} href={`/admin/anvandare/${data.me.id}`}>
+                <ProfileImage src={data.me.image!} width={32} height={32} alt="" />
               </Link>
               <FooterMeta>
-                <FooterLink href={`/admin/anvandare/${encodeURIComponent(session.user.email ?? '')}`}>
-                  {session.user.name ?? session.user.email ?? 'Unknown'}
+                <FooterLink href={`/admin/anvandare/${data.me.id}`}>
+                  {data.me.name ?? data.me.email ?? 'Unknown'}
                 </FooterLink>
                 <FooterSignOutLink href="/admin/logout" replace>
                   Logga ut

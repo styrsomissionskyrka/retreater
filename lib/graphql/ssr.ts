@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-imports */
 import { ParsedUrlQuery } from 'querystring';
 
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, PreviewData } from 'next';
 import { SchemaLink } from '@apollo/client/link/schema';
 import { ApolloClient, NormalizedCacheObject, OperationVariables, TypedDocumentNode } from '@apollo/client';
 
@@ -24,29 +24,31 @@ export function createSchemaLink(ctx: Pick<GetServerSidePropsContext, 'req' | 'r
   return link;
 }
 
-type GetServerSidePropsWithClient<
+export type GetServerSidePropsWithClient<
   P extends { [key: string]: any } = { [key: string]: any },
   Q extends ParsedUrlQuery = ParsedUrlQuery,
+  D extends PreviewData = PreviewData,
 > = (
-  ctx: GetServerSidePropsContext<Q>,
+  ctx: GetServerSidePropsContext<Q, D>,
   client: ApolloClient<NormalizedCacheObject>,
 ) => Promise<GetServerSidePropsResult<P>>;
 
 export function withClient<
   P extends { [key: string]: any } = { [key: string]: any },
   Q extends ParsedUrlQuery = ParsedUrlQuery,
->(handler: GetServerSidePropsWithClient<P, Q>): GetServerSideProps<P, Q> {
+  D extends PreviewData = PreviewData,
+>(handler: GetServerSidePropsWithClient<P, Q, D>): GetServerSideProps<P, Q, D> {
   return async (ctx) => {
     let client = prepareSSRClient(createApolloClient({}), ctx);
     let result = await handler(ctx, client);
 
     if ('props' in result) {
       let initialState = client.cache.extract();
+      let handlerProps = await result.props;
       return {
-        ...result,
         props: {
           initialState,
-          ...result.props,
+          ...handlerProps,
         },
       };
     }
@@ -55,7 +57,7 @@ export function withClient<
   };
 }
 
-type QueryConfig<
+export type QueryConfig<
   Variables extends OperationVariables = OperationVariables,
   Query extends ParsedUrlQuery = Record<keyof Variables, string | string[] | undefined>,
 > = [

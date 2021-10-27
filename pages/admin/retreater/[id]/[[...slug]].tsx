@@ -5,7 +5,8 @@ import React, { Fragment } from 'react';
 
 import { EditRetreatFormQuery, EditRetreatFormQueryVariables, gql, TypedDocumentNode, useQuery } from 'lib/graphql';
 import { Layout } from 'components';
-import { authenticatedPage, authenticatedSSP } from 'lib/auth/hocs';
+import { authenticatedPage } from 'lib/auth/hocs';
+import { authenticatedSSP } from 'lib/auth/ssr';
 import { preloadQueries } from 'lib/graphql/ssr';
 import { assert } from 'lib/utils/assert';
 import {
