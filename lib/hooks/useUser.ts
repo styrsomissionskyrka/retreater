@@ -1,35 +1,10 @@
-import { useCallback, useMemo } from 'react';
-import { useUser as useAuth0User, UserContext as Auth0UserContext, UserRole, UserProfile } from '@auth0/nextjs-auth0';
+import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 
-import { hasIntersection } from '../utils/array';
-import { ensure } from '../utils/assert';
+export function useAuthenticatedUser(): Session {
+  const session = useSession();
 
-interface UserContext extends Auth0UserContext {
-  hasRoles(roles: UserRole[]): boolean;
-}
+  if (session.status === 'authenticated') return session.data;
 
-export function useUser(): UserContext {
-  const ctx = useAuth0User();
-
-  const hasRoles = useCallback(
-    (roles: UserRole[]) => {
-      if (ctx.user == null) return false;
-      if (roles.length < 1) return true;
-      let userRoles = ctx.user['https://styrsomissionskyrka.se/roles'] ?? [];
-      return hasIntersection(roles, userRoles);
-    },
-    [ctx.user],
-  );
-
-  return useMemo<UserContext>(() => ({ ...ctx, hasRoles }), [ctx, hasRoles]);
-}
-
-export function useAuthenticatedUser(): UserProfile {
-  const { user } = useUser();
-  return ensure(user, 'User not authorized. Make sure this hook is used only within an authenticated page.');
-}
-
-export function useUserHasRoles(roles: UserRole[]) {
-  const { hasRoles } = useUser();
-  return hasRoles(roles);
+  throw new Error('User not authorized. Make sure this hook is used only within an authenticated page.');
 }

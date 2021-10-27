@@ -1,21 +1,17 @@
 import { NextPage } from 'next';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-
-import { useUser } from 'lib/hooks';
+import { signIn, useSession } from 'next-auth/react';
 
 const Login: NextPage = () => {
   const { replace, query } = useRouter();
-  const { user, isLoading } = useUser();
+  const { status } = useSession();
 
   useEffect(() => {
-    if (isLoading) return;
-    if (user == null) {
-      if (!('Cypress' in window)) replace({ pathname: '/api/auth/login', query });
-    } else {
-      replace('/admin');
-    }
-  }, [isLoading, query, replace, user]);
+    if (status === 'loading') return;
+    if (status === 'authenticated') replace('/admin');
+    if (status === 'unauthenticated') signIn();
+  }, [query, replace, status]);
 
   return <p>Redirecting...</p>;
 };

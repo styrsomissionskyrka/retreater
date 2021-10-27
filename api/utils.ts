@@ -1,9 +1,7 @@
-import { Claims, UserRole } from '@auth0/nextjs-auth0';
 import { OrderStatus, Retreat, RetreatStatus } from '@prisma/client';
 
 import { PaginationMeta } from 'lib/graphql';
 
-import { arrayify } from '../lib/utils/array';
 import { Context } from './context';
 
 export function ignoreNull<T>(value: T | null | undefined): T | undefined {
@@ -28,15 +26,9 @@ type RequiredFields<P> = {
   [K in keyof P]-?: NonNullable<P[K]>;
 };
 
-export function userHasRoles(user: Claims, roles: UserRole | UserRole[]) {
-  let expectedRoles = arrayify(roles);
-  let userRoles = user['https://styrsomissionskyrka.se/roles'] ?? [];
-  return expectedRoles.some((role) => userRoles.includes(role));
-}
-
-export function authorizedWithRoles(roles: UserRole[]) {
+export function authorizedWithRoles(_: string[]) {
   return (_: unknown, __: unknown, ctx: Context) => {
-    return ctx.user != null && userHasRoles(ctx.user, roles);
+    return ctx.session != null;
   };
 }
 

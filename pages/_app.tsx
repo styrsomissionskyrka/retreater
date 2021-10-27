@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import Head from 'next/head';
-import { UserProvider } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
+import { SessionProvider } from 'next-auth/react';
 
 import { globalStyles } from 'styles/global';
 import { ApolloProvider } from 'lib/graphql';
@@ -23,13 +23,13 @@ const App: React.FC<ExtendedAppProps> = ({ Component, pageProps }) => {
       </Head>
       <PolyfillScript key="polyfills" />
       <PageLoading />
-      <ApolloProvider client={client}>
-        <UserProvider user={pageProps.user}>
+      <SessionProvider session={pageProps.session}>
+        <ApolloProvider client={client}>
           <Layout>
             <Component {...pageProps} />
           </Layout>
-        </UserProvider>
-      </ApolloProvider>
+        </ApolloProvider>
+      </SessionProvider>
       <Toaster />
     </Fragment>
   );

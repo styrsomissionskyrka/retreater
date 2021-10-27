@@ -1,6 +1,6 @@
 module.exports = {
-  extends: ['react-app', 'react-app/jest', 'next/core-web-vitals', 'plugin:cypress/recommended'],
-  plugins: ['cypress', 'graphql'],
+  extends: ['react-app', 'react-app/jest', 'next/core-web-vitals'],
+  plugins: ['graphql'],
   settings: {
     'import/resolver': { typescript: {} },
   },

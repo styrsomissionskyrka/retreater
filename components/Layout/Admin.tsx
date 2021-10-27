@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { IconCalendarEvent, IconChevronLeft, IconClipboardList, IconUsers } from '@tabler/icons';
 import { useRect } from '@reach/rect';
 
-import { useAuthenticatedUser, useIsomorphicLayoutEffect, useUserHasRoles } from 'lib/hooks';
+import { useAuthenticatedUser, useIsomorphicLayoutEffect } from 'lib/hooks';
 import { setGlobalVariable } from 'lib/utils/css';
 import { compact } from 'lib/utils/array';
 import { styled } from 'styles/stitches.config';
@@ -44,7 +44,6 @@ export const Admin: React.FC<Props> = ({
   shallowLinks,
   children,
 }) => {
-  const isAdmin = useUserHasRoles(['admin', 'superadmin']);
   let navLinks: NavLinkConfig[];
   if (passedNavLinks) {
     navLinks = passedNavLinks;
@@ -52,11 +51,11 @@ export const Admin: React.FC<Props> = ({
     navLinks = compact([
       { href: '/admin/retreater', label: 'Retreater', icon: <IconCalendarEvent size={16} /> },
       { href: '/admin/bokningar', label: 'Bokningar', icon: <IconClipboardList size={16} /> },
-      isAdmin ? { href: '/admin/anvandare', label: 'Användare', icon: <IconUsers size={16} /> } : null,
+      { href: '/admin/anvandare', label: 'Användare', icon: <IconUsers size={16} /> },
     ]);
   }
 
-  const user = useAuthenticatedUser();
+  const session = useAuthenticatedUser();
   const headerRef = useRef<HTMLElement>(null);
   const rect = useRect(headerRef, { observe: false });
 
@@ -101,19 +100,21 @@ export const Admin: React.FC<Props> = ({
             </NavList>
           </nav>
 
-          <Footer>
-            <Link href={`/admin/anvandare/${encodeURIComponent(user.sub ?? '')}`}>
-              <ProfileImage src={user.picture!} width={32} height={32} alt="" />
-            </Link>
-            <FooterMeta>
-              <FooterLink href={`/admin/anvandare/${encodeURIComponent(user.sub ?? '')}`}>
-                {user.name ?? user.email}
-              </FooterLink>
-              <FooterSignOutLink href="/admin/logout" replace>
-                Logga ut
-              </FooterSignOutLink>
-            </FooterMeta>
-          </Footer>
+          {session.user != null && (
+            <Footer>
+              <Link href={`/admin/anvandare/${encodeURIComponent(session.user.email ?? '')}`}>
+                <ProfileImage src={session.user.image!} width={32} height={32} alt="" />
+              </Link>
+              <FooterMeta>
+                <FooterLink href={`/admin/anvandare/${encodeURIComponent(session.user.email ?? '')}`}>
+                  {session.user.name ?? session.user.email ?? 'Unknown'}
+                </FooterLink>
+                <FooterSignOutLink href="/admin/logout" replace>
+                  Logga ut
+                </FooterSignOutLink>
+              </FooterMeta>
+            </Footer>
+          )}
         </Sidebar>
 
         <Main>

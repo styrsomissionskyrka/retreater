@@ -1,21 +1,17 @@
 import { NextPage } from 'next';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-
-import { useUser } from 'lib/hooks';
+import { signOut, useSession } from 'next-auth/react';
 
 const Logout: NextPage = () => {
   const { replace } = useRouter();
-  const { user, isLoading } = useUser();
+  const { status } = useSession();
 
   useEffect(() => {
-    if (isLoading) return;
-    if (user == null) {
-      replace('/');
-    } else {
-      replace('/api/auth/logout');
-    }
-  }, [isLoading, replace, user]);
+    if (status === 'loading') return;
+    if (status === 'unauthenticated') replace('/');
+    if (status === 'authenticated') signOut();
+  }, [replace, status]);
 
   return <p>Redirecting...</p>;
 };

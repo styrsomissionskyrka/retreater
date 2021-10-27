@@ -3,23 +3,17 @@ import { ParsedUrlQuery } from 'querystring';
 import { useEffect } from 'react';
 import { GetServerSideProps, NextPage, PreviewData } from 'next';
 import { useRouter } from 'next/router';
-import { UserRole, getSession, Session } from '@auth0/nextjs-auth0';
+import { useSession, getSession } from 'next-auth/react';
+import { Session } from 'next-auth';
 
-import { useUser } from '../hooks';
-import { hasIntersection } from '../utils/array';
-
-export function authenticatedPage<P = {}, IP = P>(
-  Page: NextPage<P, IP>,
-  requiredRoles: UserRole[] = [],
-): NextPage<P, IP> {
+export function authenticatedPage<P = {}, IP = P>(Page: NextPage<P, IP>): NextPage<P, IP> {
   const AuthenticatedPage: NextPage<P, IP> = (props) => {
     const router = useRouter();
-    const { user, isLoading, error, hasRoles } = useUser();
+    const session = useSession();
 
     useEffect(() => {
-      if (isLoading) return;
-      if (error != null) return;
-      if (user != null && hasRoles(requiredRoles)) return;
+      if (session.status === 'loading') return;
+      if (session.status === 'authenticated') return;
 
       router.replace({
         ...router,
@@ -28,9 +22,8 @@ export function authenticatedPage<P = {}, IP = P>(
       });
     });
 
-    if (isLoading) return <p>Loading</p>;
-    if (error != null) return <p>An error occured</p>;
-    if (user != null) return <Page {...props} />;
+    if (session.status === 'loading') return <p>Laddar</p>;
+    if (session.status === 'authenticated') return <Page {...props} />;
 
     return null;
   };
@@ -39,32 +32,27 @@ export function authenticatedPage<P = {}, IP = P>(
   return AuthenticatedPage;
 }
 
-type WithUser<P extends { [key: string]: any } = { [key: string]: any }> = P & { user: Session['user'] };
+type WithUser<P extends { [key: string]: any } = { [key: string]: any }> = P & { session: Session };
 
 export function authenticatedSSP<
   P extends { [key: string]: any } = { [key: string]: any },
   Q extends ParsedUrlQuery = ParsedUrlQuery,
   D extends PreviewData = PreviewData,
->(handler?: GetServerSideProps<P, Q, D>, requiredRoles?: UserRole[]): GetServerSideProps<WithUser<P>, Q, D> {
-  return async (ctx) => {
-    const session = getSession(ctx.req, ctx.res);
+>(handler?: GetServerSideProps<P, Q, D>): GetServerSideProps<WithUser<P>, Q, D> {
+  let handl: GetServerSideProps<WithUser<P>, Q, D> = async (ctx) => {
+    const session = await getSession(ctx);
 
     let redirect = {
       destination: `/admin/login?${new URLSearchParams({ returnTo: ctx.resolvedUrl })}`,
       permanent: false,
     };
 
-    if (session?.user == null) {
+    if (session == null) {
       return { redirect };
     }
 
-    if (session?.user != null && Array.isArray(requiredRoles)) {
-      let userRoles = session.user['https://styrsomissionskyrka.se/roles'] ?? [];
-      if (!hasIntersection(requiredRoles, userRoles)) return { redirect };
-    }
-
     if (handler == null) {
-      let props = { user: session.user } as WithUser<P>;
+      let props = { session } as WithUser<P>;
       return { props };
     }
 
@@ -75,11 +63,13 @@ export function authenticatedSSP<
       return {
         props: {
           ...handlerProps,
-          user: session.user,
+          session,
         },
       };
     }
 
     return handlerResult;
   };
+
+  return handl;
 }

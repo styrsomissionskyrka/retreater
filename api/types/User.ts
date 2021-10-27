@@ -34,19 +34,11 @@ export const User = n.objectType({
     t.nonNull.list.nonNull.field('roles', {
       type: UserRoleEnum,
       async resolve(user, _, ctx) {
-        return ctx.auth0.roles.load(user.id);
+        return [];
       },
     });
   },
 });
-
-// export const PaginatedUser = n.objectType({
-//   name: 'PaginatedUser',
-//   definition(t) {
-//     t.implements(PaginatedQuery);
-//     t.nonNull.list.nonNull.field('items', { type: User });
-//   },
-// });
 
 export const UserQuery = n.extendType({
   type: 'Query',
@@ -54,16 +46,7 @@ export const UserQuery = n.extendType({
     t.field('me', {
       type: User,
       async resolve(_, __, ctx) {
-        let user = ctx.user;
-        if (user == null || user.sub == null) return null;
-
-        try {
-          let id = user.sub;
-          let data = await ctx.auth0.user.load(id);
-          return data;
-        } catch (error) {
-          return null;
-        }
+        return null;
       },
     });
 
@@ -72,36 +55,8 @@ export const UserQuery = n.extendType({
       args: { id: n.nonNull(n.idArg()) },
       authorize: authorizedWithRoles(['admin', 'superadmin']),
       async resolve(_, args, ctx) {
-        return ctx.auth0.user.load(args.id);
+        return null;
       },
     });
-
-    // t.field('users', {
-    //   type: PaginatedUser,
-    //   args: {
-    //     page: n.nonNull(n.intArg({ default: 0 })),
-    //     perPage: n.nonNull(n.intArg({ default: 25 })),
-    //     order: n.nonNull(n.arg({ type: OrderEnum, default: 'asc' })),
-    //     orderBy: n.nonNull(n.arg({ type: UserOrderByEnum, default: 'created_at' })),
-    //     search: n.stringArg(),
-    //   },
-    //   authorize: authorizedWithRoles(['admin', 'superadmin']),
-    //   async resolve(_, args, ctx) {
-    //     let { users, pagination } = await ctx.auth0.listUsers(args);
-    //     let totalPages = Math.ceil(pagination.total / (pagination.limit || 1));
-
-    //     return {
-    //       paginationMeta: {
-    //         hasNextPage: pagination.start < totalPages - 1,
-    //         hasPreviousPage: pagination.start > 0,
-    //         currentPage: pagination.start,
-    //         totalPages,
-    //         perPage: pagination.limit,
-    //         totalItems: pagination.total,
-    //       },
-    //       items: users,
-    //     };
-    //   },
-    // });
   },
 });
