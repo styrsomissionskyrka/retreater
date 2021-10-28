@@ -71,7 +71,7 @@ const Home: NextPage = () => {
         MD
       </button>
       <h1>Styrsö Missionskyrka | Retreater</h1>
-      <Link href="/admin">Admin</Link>
+      <Link href="/admin/login">Logga in</Link>
       <div>
         <ul>
           {retreats.map((retreat) => (

@@ -2,14 +2,6 @@
 ### Do not make changes to this file directly
 
 
-type Account {
-  id: ID!
-  provider: String!
-  providerAccountId: String!
-  type: String!
-  user: User
-}
-
 type CheckoutSession {
   amount: Int
   currency: String
@@ -175,11 +167,6 @@ type PaginatedRetreat implements PaginatedQuery {
   paginationMeta: PaginationMeta!
 }
 
-type PaginatedUser implements PaginatedQuery {
-  items: [User!]!
-  paginationMeta: PaginationMeta!
-}
-
 type PaginationMeta {
   currentPage: Int!
   hasNextPage: Boolean!
@@ -226,14 +213,11 @@ type Product {
 
 type Query {
   logs(id: ID!): [LogItem!]!
-  me: User
   order(id: ID!): Order
   orders(order: OrderEnum! = ASC, orderBy: OrderOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, retreatId: ID, search: String, status: OrderStatusEnum = CONFIRMED): PaginatedOrder!
   paymentIntent(id: ID!): PaymentIntent!
   retreat(id: ID, slug: String): Retreat
   retreats(order: OrderEnum! = ASC, orderBy: RetreatOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, search: String, status: RetreatStatusEnum): PaginatedRetreat!
-  user(email: String, id: ID): User
-  users(page: Int! = 1, perPage: Int! = 25, search: String): PaginatedUser!
 }
 
 type Refund {
@@ -296,12 +280,6 @@ enum RetreatStatusEnum {
   PUBLISHED
 }
 
-type Session {
-  expires: Date!
-  id: ID!
-  user: User
-}
-
 input UpdateOrderPriceInput {
   discount: Int
   price: ID
@@ -328,11 +306,8 @@ input UpdateRetreatInput {
 }
 
 type User {
-  accounts: [Account]
   email: String
-  emailVerified: Date
   id: ID!
   image: String
   name: String
-  sessions: [Session]
 }

@@ -6,12 +6,10 @@ import Image from 'next/image';
 import { IconCalendarEvent, IconChevronLeft, IconClipboardList, IconUsers } from '@tabler/icons';
 import { useRect } from '@reach/rect';
 
-import { useIsomorphicLayoutEffect } from 'lib/hooks';
+import { useIsomorphicLayoutEffect, useAuthenticatedUser } from 'lib/hooks';
 import { setGlobalVariable } from 'lib/utils/css';
 import { compact } from 'lib/utils/array';
 import { styled } from 'styles/stitches.config';
-import { useQuery } from 'lib/graphql';
-import { ME } from 'lib/graphql/queries';
 
 import { Link, NavLink } from '../Link';
 import { VisuallyHidden } from '../VisuallyHidden';
@@ -58,7 +56,7 @@ export const Admin: React.FC<Props> = ({
     ]);
   }
 
-  const { data } = useQuery(ME);
+  const { user } = useAuthenticatedUser();
   const headerRef = useRef<HTMLElement>(null);
   const rect = useRect(headerRef, { observe: false });
 
@@ -103,21 +101,17 @@ export const Admin: React.FC<Props> = ({
             </NavList>
           </nav>
 
-          {data?.me != null && (
-            <Footer>
-              <Link style={{ display: 'flex' }} href={`/admin/anvandare/${data.me.id}`}>
-                <Avatar src={data.me.image!} width={32} height={32} alt="" />
-              </Link>
-              <FooterMeta>
-                <FooterLink href={`/admin/anvandare/${data.me.id}`}>
-                  {data.me.name ?? data.me.email ?? 'Unknown'}
-                </FooterLink>
-                <FooterSignOutLink href="/admin/logout" replace>
-                  Logga ut
-                </FooterSignOutLink>
-              </FooterMeta>
-            </Footer>
-          )}
+          <Footer>
+            <Link style={{ display: 'flex' }} href={`/admin/anvandare/${user.id}`}>
+              <Avatar src={user.image!} width={32} height={32} alt="" />
+            </Link>
+            <FooterMeta>
+              <FooterLink href={`/admin/anvandare/${user.id}`}>{user.name ?? user.email ?? 'Unknown'}</FooterLink>
+              <FooterSignOutLink href="/admin/logout" replace>
+                Logga ut
+              </FooterSignOutLink>
+            </FooterMeta>
+          </Footer>
         </Sidebar>
 
         <Main>

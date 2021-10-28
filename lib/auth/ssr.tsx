@@ -5,7 +5,6 @@ import { getSession } from 'next-auth/react';
 import { Session } from 'next-auth';
 
 import { withClient, GetServerSidePropsWithClient } from '../graphql/ssr';
-import { ME } from '../graphql/queries';
 
 type WithUser<P extends { [key: string]: any } = { [key: string]: any }> = P & { session: Session };
 
@@ -25,8 +24,6 @@ export function authenticatedSSP<
     if (session == null) {
       return { redirect };
     }
-
-    await client.query({ query: ME });
 
     if (handler == null) {
       let props = { session } as WithUser<P>;

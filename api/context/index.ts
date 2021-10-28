@@ -11,6 +11,7 @@ import { stripe } from './stripe';
 
 export const createContext: ContextFunction<ContextArgs, Context> = async (args) => {
   let session = await getSession(args);
+
   return {
     session,
     prisma,

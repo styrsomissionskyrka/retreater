@@ -10,7 +10,7 @@ const Login: NextPage = () => {
   useEffect(() => {
     if (status === 'loading') return;
     if (status === 'authenticated') replace('/admin');
-    if (status === 'unauthenticated') signIn();
+    if (status === 'unauthenticated') signIn('auth0');
   }, [query, replace, status]);
 
   return <p>Redirecting...</p>;

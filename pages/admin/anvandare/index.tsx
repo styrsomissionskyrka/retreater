@@ -5,14 +5,10 @@ import { IconSend } from '@tabler/icons';
 import { authenticatedPage } from 'lib/auth/hocs';
 import { authenticatedSSP } from 'lib/auth/ssr';
 import { Button, DataTable, Layout } from 'components';
-import { TypedDocumentNode, AdminUsersQuery, AdminUsersQueryVariables, gql, useQuery } from 'lib/graphql';
-import { PAGINATION_FRAGMENT } from 'lib/graphql/fragments';
-import { preloadQueries } from 'lib/graphql/ssr';
-import { useSearchParams, extractCurrentParams } from 'lib/hooks';
-import { PaginatedType } from 'lib/utils/types';
+import { useSearchParams } from 'lib/hooks';
 
-type UserType = PaginatedType<'users', AdminUsersQuery>;
-type FiltersType = AdminUsersQueryVariables;
+type UserType = { id: string; email: string; name: string; image: string };
+type FiltersType = { page: number; perPage: number; search?: string | null };
 
 const initialVariables: FiltersType = {
   page: 1,
@@ -22,9 +18,7 @@ const initialVariables: FiltersType = {
 
 const Users: NextPage = () => {
   const [variables, setVariables] = useSearchParams(initialVariables);
-  const { previousData, data = previousData, loading } = useQuery(LIST_USERS_QUERY, { variables });
-
-  let users = data?.users.items ?? [];
+  let users: UserType[] = [];
 
   const columns = useMemo<DataTable.Column<UserType>[]>(() => {
     return [
@@ -60,7 +54,7 @@ const Users: NextPage = () => {
 
   return (
     <Layout.Admin title="Användare" backLink="/admin" actions={actions}>
-      <DataTable.Provider data={users} columns={columns} loading={loading}>
+      <DataTable.Provider data={users} columns={columns} loading={false}>
         <DataTable.Layout>
           <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
             <DataTable.Filters.SearchFilter<FiltersType> queryKey="search" placeholder="Sök" />
@@ -71,7 +65,7 @@ const Users: NextPage = () => {
             <DataTable.Body />
           </DataTable.Table>
 
-          <DataTable.Pagination meta={data?.users.paginationMeta} />
+          <DataTable.Pagination meta={undefined} />
         </DataTable.Layout>
       </DataTable.Provider>
     </Layout.Admin>
@@ -79,25 +73,4 @@ const Users: NextPage = () => {
 };
 
 export default authenticatedPage(Users);
-
-const LIST_USERS_QUERY: TypedDocumentNode<AdminUsersQuery, AdminUsersQueryVariables> = gql`
-  query AdminUsers($page: Int!, $perPage: Int!, $search: String) {
-    users(page: $page, perPage: $perPage, search: $search) {
-      items {
-        id
-        name
-        email
-        image
-      }
-      paginationMeta {
-        ...PaginationFields
-      }
-    }
-  }
-
-  ${PAGINATION_FRAGMENT}
-`;
-
-export const getServerSideProps = authenticatedSSP(
-  preloadQueries([[LIST_USERS_QUERY, (ctx) => extractCurrentParams<FiltersType>(ctx.query, initialVariables)]]),
-);
+export const getServerSideProps = authenticatedSSP();
