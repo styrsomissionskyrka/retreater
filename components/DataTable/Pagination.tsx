@@ -7,7 +7,6 @@ import { omit } from 'lib/utils/object';
 import { styled } from 'styles/stitches.config';
 
 import { Link } from '../Link';
-import { useDataTable } from './Context';
 
 interface Props {
   meta?: PaginationFieldsFragment;
@@ -23,11 +22,9 @@ const defaultMeta: PaginationFieldsFragment = {
 };
 
 export const Pagination: React.FC<Props> = ({ meta = defaultMeta }) => {
-  const table = useDataTable();
   let current = meta.currentPage;
-
   let rangeStart = (current - 1) * meta.perPage + 1;
-  let rangeEnd = rangeStart + Math.min(meta.perPage, table.rows.length) - 1;
+  let rangeEnd = rangeStart + meta.perPage - 1;
 
   return (
     <Wrapper>

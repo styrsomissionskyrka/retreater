@@ -15,6 +15,7 @@ import { ME } from 'lib/graphql/queries';
 
 import { Link, NavLink } from '../Link';
 import { VisuallyHidden } from '../VisuallyHidden';
+import { Avatar } from '../Avatar';
 
 export interface NavLinkConfig {
   href: string | UrlObject;
@@ -105,7 +106,7 @@ export const Admin: React.FC<Props> = ({
           {data?.me != null && (
             <Footer>
               <Link style={{ display: 'flex' }} href={`/admin/anvandare/${data.me.id}`}>
-                <ProfileImage src={data.me.image!} width={32} height={32} alt="" />
+                <Avatar src={data.me.image!} width={32} height={32} alt="" />
               </Link>
               <FooterMeta>
                 <FooterLink href={`/admin/anvandare/${data.me.id}`}>
@@ -255,8 +256,6 @@ const Footer = styled('div', {
   marginTop: 'auto',
   spaceX: '$2',
 });
-
-const ProfileImage = styled(Image, { borderRadius: '$full' });
 
 const FooterMeta = styled('div', { display: 'flex', flexFlow: 'column nowrap' });
 

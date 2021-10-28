@@ -16,10 +16,12 @@ import { StatusIndicator } from '../StatusIndicator';
 import { Time } from '../Time';
 import { Truncate } from '../Truncate';
 import { Progress } from '../Progress';
+import { Avatar } from '../Avatar';
 
 export function createStatusCell<T extends object>(config: Column<T>): Column<T> {
   return {
     ...config,
+    style: { width: 8 + 16 },
     Cell(props: CellProps<T, RetreatStatusEnum | OrderStatusEnum>) {
       return <StatusIndicator status={props.value} />;
     },
@@ -113,6 +115,7 @@ type MenuCellProps<T extends object> = Column<T> & {
 export function createContextMenuCell<T extends object>({ actions, ...config }: MenuCellProps<T>): Column<T> {
   return {
     ...config,
+    style: { width: 32 + 16 },
     Cell({ row }: CellProps<T, unknown>) {
       return (
         <Menu.Wrapper>
@@ -171,6 +174,24 @@ export function createCopyCell<T extends object>(config: Column<T>): Column<T> {
     ...config,
     Cell(props: CellProps<T, string>) {
       return <CopyInline value={props.value}>{props.value}</CopyInline>;
+    },
+  };
+}
+
+export function createAvatarCell<T extends object>(config: Column<T> & { alt?: (row: T) => string }): Column<T> {
+  return {
+    ...config,
+    style: { width: 32 + 16 },
+    Cell(props: CellProps<T, string>) {
+      return (
+        <div style={{ display: 'flex' }}>
+          {props.value != null ? (
+            <Avatar src={props.value} width={32} height={32} alt={config.alt ? config.alt(props.row.original) : ''} />
+          ) : (
+            <Avatar as="div" style={{ width: 32, aspectRatio: '1/1' }} />
+          )}
+        </div>
+      );
     },
   };
 }

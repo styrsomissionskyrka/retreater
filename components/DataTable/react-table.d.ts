@@ -22,5 +22,9 @@ declare module 'react-table' {
   // export interface ColumnInstance<D extends object = {}> {}
   // export interface Cell<D extends object = {}> {}
 
+  export interface ColumnInterface<D extends object = {}> extends UseTableColumnOptions<D> {
+    style?: React.CSSProperties;
+  }
+
   export interface Row<D extends object = {}> extends UseExpandedRowProps<D> {}
 }

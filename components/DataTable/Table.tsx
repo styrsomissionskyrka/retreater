@@ -80,8 +80,10 @@ export const Body: React.FC<BodyProps> = ({
               <UI.BodyRow {...rowProps} expanded={row.isExpanded ? 'parent' : undefined}>
                 {row.cells.map((cell) => {
                   let { key, ...cellProps } = cell.getCellProps();
+                  let style = { ...cellProps.style, ...cell.column.style };
+
                   return (
-                    <UI.BodyCell {...cellProps} key={key}>
+                    <UI.BodyCell {...cellProps} style={style} key={key}>
                       {cell.render('Cell')}
                     </UI.BodyCell>
                   );
