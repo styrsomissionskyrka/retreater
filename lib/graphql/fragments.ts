@@ -10,12 +10,3 @@ export const PAGINATION_FRAGMENT = gql`
     totalItems
   }
 `;
-
-export const USER_FRAGMENT = gql`
-  fragment UserFields on User {
-    id
-    name
-    email
-    image
-  }
-`;

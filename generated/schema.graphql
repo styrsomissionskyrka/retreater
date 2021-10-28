@@ -167,6 +167,11 @@ type PaginatedRetreat implements PaginatedQuery {
   paginationMeta: PaginationMeta!
 }
 
+type PaginatedUser implements PaginatedQuery {
+  items: [User!]!
+  paginationMeta: PaginationMeta!
+}
+
 type PaginationMeta {
   currentPage: Int!
   hasNextPage: Boolean!
@@ -213,11 +218,14 @@ type Product {
 
 type Query {
   logs(id: ID!): [LogItem!]!
+  me: User
   order(id: ID!): Order
   orders(order: OrderEnum! = ASC, orderBy: OrderOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, retreatId: ID, search: String, status: OrderStatusEnum = CONFIRMED): PaginatedOrder!
   paymentIntent(id: ID!): PaymentIntent!
   retreat(id: ID, slug: String): Retreat
   retreats(order: OrderEnum! = ASC, orderBy: RetreatOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, search: String, status: RetreatStatusEnum): PaginatedRetreat!
+  user(email: String, id: ID): User
+  users(page: Int! = 1, perPage: Int! = 25, search: String): PaginatedUser!
 }
 
 type Refund {
@@ -306,8 +314,15 @@ input UpdateRetreatInput {
 }
 
 type User {
+  createdAt: Date
   email: String
+  emailVerified: Boolean
   id: ID!
-  image: String
+  lastIp: String
+  lastLogin: String
+  loginsCount: Int
   name: String
+  nickname: String
+  picture: String
+  updatedAt: Date
 }

@@ -10,6 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model ApplicationConfig {
+  id               Int     @id @default(autoincrement())
+  auth0AccessToken String?
+}
+
 enum RetreatStatus {
   PUBLISHED
   DRAFT

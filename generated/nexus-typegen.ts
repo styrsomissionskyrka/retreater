@@ -5,7 +5,7 @@
 
 
 import type { Context } from "./../api/context/index"
-import type { StripePaymentIntent, StripeLineItem, StripeCheckoutSession, StripeCoupon, StripePrice, StripeProduct, StripeRefund } from "./../api/source-types"
+import type { StripePaymentIntent, StripeLineItem, StripeCheckoutSession, StripeCoupon, StripePrice, StripeProduct, StripeRefund, User } from "./../api/source-types"
 import type { LogItem, Order, Retreat } from "@prisma/client"
 import type { core, connectionPluginCore } from "nexus"
 import type { FieldAuthorizeResolver } from "nexus/dist/plugins/fieldAuthorizePlugin"
@@ -123,6 +123,10 @@ export interface NexusGenObjects {
     items: NexusGenRootTypes['Retreat'][]; // [Retreat!]!
     paginationMeta: NexusGenRootTypes['PaginationMeta']; // PaginationMeta!
   }
+  PaginatedUser: { // root type
+    items: NexusGenRootTypes['User'][]; // [User!]!
+    paginationMeta: NexusGenRootTypes['PaginationMeta']; // PaginationMeta!
+  }
   PaginationMeta: { // root type
     currentPage: number; // Int!
     hasNextPage: boolean; // Boolean!
@@ -137,16 +141,11 @@ export interface NexusGenObjects {
   Query: {};
   Refund: StripeRefund;
   Retreat: Retreat;
-  User: { // root type
-    email?: string | null; // String
-    id: string; // ID!
-    image?: string | null; // String
-    name?: string | null; // String
-  }
+  User: User;
 }
 
 export interface NexusGenInterfaces {
-  PaginatedQuery: NexusGenRootTypes['PaginatedOrder'] | NexusGenRootTypes['PaginatedRetreat'];
+  PaginatedQuery: NexusGenRootTypes['PaginatedOrder'] | NexusGenRootTypes['PaginatedRetreat'] | NexusGenRootTypes['PaginatedUser'];
 }
 
 export interface NexusGenUnions {
@@ -231,6 +230,10 @@ export interface NexusGenFieldTypes {
     items: NexusGenRootTypes['Retreat'][]; // [Retreat!]!
     paginationMeta: NexusGenRootTypes['PaginationMeta']; // PaginationMeta!
   }
+  PaginatedUser: { // field return type
+    items: NexusGenRootTypes['User'][]; // [User!]!
+    paginationMeta: NexusGenRootTypes['PaginationMeta']; // PaginationMeta!
+  }
   PaginationMeta: { // field return type
     currentPage: number; // Int!
     hasNextPage: boolean; // Boolean!
@@ -269,11 +272,14 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     logs: NexusGenRootTypes['LogItem'][]; // [LogItem!]!
+    me: NexusGenRootTypes['User'] | null; // User
     order: NexusGenRootTypes['Order'] | null; // Order
     orders: NexusGenRootTypes['PaginatedOrder']; // PaginatedOrder!
     paymentIntent: NexusGenRootTypes['PaymentIntent']; // PaymentIntent!
     retreat: NexusGenRootTypes['Retreat'] | null; // Retreat
     retreats: NexusGenRootTypes['PaginatedRetreat']; // PaginatedRetreat!
+    user: NexusGenRootTypes['User'] | null; // User
+    users: NexusGenRootTypes['PaginatedUser']; // PaginatedUser!
   }
   Refund: { // field return type
     amount: number; // Int!
@@ -301,10 +307,17 @@ export interface NexusGenFieldTypes {
     updatedAt: NexusGenScalars['Date']; // Date!
   }
   User: { // field return type
+    createdAt: NexusGenScalars['Date'] | null; // Date
     email: string | null; // String
+    emailVerified: boolean | null; // Boolean
     id: string; // ID!
-    image: string | null; // String
+    lastIp: string | null; // String
+    lastLogin: string | null; // String
+    loginsCount: number | null; // Int
     name: string | null; // String
+    nickname: string | null; // String
+    picture: string | null; // String
+    updatedAt: NexusGenScalars['Date'] | null; // Date
   }
   PaginatedQuery: { // field return type
     paginationMeta: NexusGenRootTypes['PaginationMeta']; // PaginationMeta!
@@ -385,6 +398,10 @@ export interface NexusGenFieldTypeNames {
     items: 'Retreat'
     paginationMeta: 'PaginationMeta'
   }
+  PaginatedUser: { // field return type name
+    items: 'User'
+    paginationMeta: 'PaginationMeta'
+  }
   PaginationMeta: { // field return type name
     currentPage: 'Int'
     hasNextPage: 'Boolean'
@@ -423,11 +440,14 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     logs: 'LogItem'
+    me: 'User'
     order: 'Order'
     orders: 'PaginatedOrder'
     paymentIntent: 'PaymentIntent'
     retreat: 'Retreat'
     retreats: 'PaginatedRetreat'
+    user: 'User'
+    users: 'PaginatedUser'
   }
   Refund: { // field return type name
     amount: 'Int'
@@ -455,10 +475,17 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'Date'
   }
   User: { // field return type name
+    createdAt: 'Date'
     email: 'String'
+    emailVerified: 'Boolean'
     id: 'ID'
-    image: 'String'
+    lastIp: 'String'
+    lastLogin: 'String'
+    loginsCount: 'Int'
     name: 'String'
+    nickname: 'String'
+    picture: 'String'
+    updatedAt: 'Date'
   }
   PaginatedQuery: { // field return type name
     paginationMeta: 'PaginationMeta'
@@ -556,6 +583,15 @@ export interface NexusGenArgTypes {
       search?: string | null; // String
       status?: NexusGenEnums['RetreatStatusEnum'] | null; // RetreatStatusEnum
     }
+    user: { // args
+      email?: string | null; // String
+      id?: string | null; // ID
+    }
+    users: { // args
+      page: number; // Int!
+      perPage: number; // Int!
+      search?: string | null; // String
+    }
   }
   Retreat: {
     orders: { // args
@@ -569,12 +605,13 @@ export interface NexusGenArgTypes {
 
 export interface NexusGenAbstractTypeMembers {
   LogItemType: "Order" | "Retreat"
-  PaginatedQuery: "PaginatedOrder" | "PaginatedRetreat"
+  PaginatedQuery: "PaginatedOrder" | "PaginatedRetreat" | "PaginatedUser"
 }
 
 export interface NexusGenTypeInterfaces {
   PaginatedOrder: "PaginatedQuery"
   PaginatedRetreat: "PaginatedQuery"
+  PaginatedUser: "PaginatedQuery"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
