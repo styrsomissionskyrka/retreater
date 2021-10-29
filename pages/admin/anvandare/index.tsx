@@ -1,10 +1,9 @@
 import { NextPage } from 'next';
 import { useMemo } from 'react';
 import { IconSend } from '@tabler/icons';
-import { useSession } from 'next-auth/react';
 
 import { authenticatedPage } from 'lib/auth/hocs';
-import { authenticatedSSP } from 'lib/auth/ssr';
+import { authenticatedSSP } from 'lib/auth/server';
 import { Button, DataTable, Layout } from 'components';
 import { useAuthenticatedUser, useSearchParams } from 'lib/hooks';
 import { PAGINATION_FRAGMENT } from 'lib/graphql/fragments';

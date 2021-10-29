@@ -4,9 +4,21 @@ import * as n from 'nexus';
 import { User as Auth0User, GetUsersDataPaged } from 'auth0';
 
 import { ensure } from '../../lib/utils/assert';
-import { User as ApiUser } from '../source-types';
-import { createPaginationMeta } from '../utils';
+import { createPaginationMeta, hasKey } from '../utils';
 import { PaginatedQuery } from './Shared';
+
+export const Role = n.objectType({
+  name: 'Role',
+  sourceType: {
+    module: path.join(process.cwd(), 'api/source-types.ts'),
+    export: 'Role',
+  },
+  definition(t) {
+    t.nonNull.id('id', { resolve: (source) => ensure(source.id, ' Role without id encountered') });
+    t.nonNull.string('name', { resolve: (source) => ensure(source.name, ' Role without name encountered') });
+    t.string('description');
+  },
+});
 
 export const User = n.objectType({
   name: 'User',
@@ -26,6 +38,14 @@ export const User = n.objectType({
     t.string('lastIp', { resolve: (source) => source.last_ip ?? null });
     t.string('lastLogin', { resolve: (source) => source.last_login ?? null });
     t.int('loginsCount', { resolve: (source) => source.logins_count ?? null });
+
+    t.nonNull.list.field('roles', {
+      type: n.nonNull(Role),
+      async resolve(source, _, ctx) {
+        let roles = await ctx.auth0.getUserRoles({ id: source.user_id });
+        return roles.filter(hasKey('id'));
+      },
+    });
   },
 });
 
@@ -47,7 +67,7 @@ export const UserQuery = n.extendType({
         if (sessionUser?.id == null) return null;
 
         let user = await ctx.auth0.getUser({ id: sessionUser.id });
-        return isValidUser(user) ? user : null;
+        return hasKey('user_id', user) ? user : null;
       },
     });
 
@@ -74,7 +94,7 @@ export const UserQuery = n.extendType({
           }
         }
 
-        return isValidUser(user) ? user : null;
+        return user && hasKey('user_id', user) ? user : null;
       },
     });
 
@@ -100,13 +120,9 @@ export const UserQuery = n.extendType({
         let response = await ctx.auth0.getUsers(params);
         let paginationMeta = createPaginationMeta(args.page - 1, args.perPage, response.total);
 
-        let items = response.users.filter(isValidUser);
+        let items = response.users.filter(hasKey('user_id'));
         return { items, paginationMeta };
       },
     });
   },
 });
-
-function isValidUser(user: Auth0User | null | undefined): user is ApiUser {
-  return user?.user_id != null;
-}

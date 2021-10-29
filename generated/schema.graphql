@@ -288,6 +288,12 @@ enum RetreatStatusEnum {
   PUBLISHED
 }
 
+type Role {
+  description: String
+  id: ID!
+  name: String!
+}
+
 input UpdateOrderPriceInput {
   discount: Int
   price: ID
@@ -324,5 +330,6 @@ type User {
   name: String
   nickname: String
   picture: String
+  roles: [Role!]!
   updatedAt: Date
 }

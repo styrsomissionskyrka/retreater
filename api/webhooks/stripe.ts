@@ -2,8 +2,9 @@ import Stripe from 'stripe';
 import { OrderStatus } from '@prisma/client';
 
 import { assert } from 'lib/utils/assert';
-import { prisma } from 'api/context/prisma';
-import { createLogger, OrderEvent } from 'api/logs';
+
+import { prisma } from '../context/prisma';
+import { createLogger, OrderEvent } from '../logs';
 
 const log = createLogger(prisma);
 

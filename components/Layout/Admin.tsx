@@ -102,9 +102,7 @@ export const Admin: React.FC<Props> = ({
           </nav>
 
           <Footer>
-            <Link style={{ display: 'flex' }} href={`/admin/anvandare/${user.id}`}>
-              <Avatar src={user.image!} width={32} height={32} alt="" />
-            </Link>
+            <Avatar id={user.id ?? ''} image={user.image ?? undefined} />
             <FooterMeta>
               <FooterLink href={`/admin/anvandare/${user.id}`}>{user.name ?? user.email ?? 'Unknown'}</FooterLink>
               <FooterSignOutLink href="/admin/logout" replace>

@@ -5,7 +5,7 @@
 
 
 import type { Context } from "./../api/context/index"
-import type { StripePaymentIntent, StripeLineItem, StripeCheckoutSession, StripeCoupon, StripePrice, StripeProduct, StripeRefund, User } from "./../api/source-types"
+import type { StripePaymentIntent, StripeLineItem, StripeCheckoutSession, StripeCoupon, StripePrice, StripeProduct, StripeRefund, Role, User } from "./../api/source-types"
 import type { LogItem, Order, Retreat } from "@prisma/client"
 import type { core, connectionPluginCore } from "nexus"
 import type { FieldAuthorizeResolver } from "nexus/dist/plugins/fieldAuthorizePlugin"
@@ -141,6 +141,7 @@ export interface NexusGenObjects {
   Query: {};
   Refund: StripeRefund;
   Retreat: Retreat;
+  Role: Role;
   User: User;
 }
 
@@ -306,6 +307,11 @@ export interface NexusGenFieldTypes {
     title: string; // String!
     updatedAt: NexusGenScalars['Date']; // Date!
   }
+  Role: { // field return type
+    description: string | null; // String
+    id: string; // ID!
+    name: string; // String!
+  }
   User: { // field return type
     createdAt: NexusGenScalars['Date'] | null; // Date
     email: string | null; // String
@@ -317,6 +323,7 @@ export interface NexusGenFieldTypes {
     name: string | null; // String
     nickname: string | null; // String
     picture: string | null; // String
+    roles: NexusGenRootTypes['Role'][]; // [Role!]!
     updatedAt: NexusGenScalars['Date'] | null; // Date
   }
   PaginatedQuery: { // field return type
@@ -474,6 +481,11 @@ export interface NexusGenFieldTypeNames {
     title: 'String'
     updatedAt: 'Date'
   }
+  Role: { // field return type name
+    description: 'String'
+    id: 'ID'
+    name: 'String'
+  }
   User: { // field return type name
     createdAt: 'Date'
     email: 'String'
@@ -485,6 +497,7 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     nickname: 'String'
     picture: 'String'
+    roles: 'Role'
     updatedAt: 'Date'
   }
   PaginatedQuery: { // field return type name

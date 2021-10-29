@@ -1,10 +1,10 @@
 import { NextApiHandler } from 'next';
-import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { OrderStatus } from '@prisma/client';
 import stringify from 'csv-stringify';
 
 import { prisma } from 'api/context/prisma';
 import { format } from 'lib/utils/date-fns';
+import { authenticatedApi } from 'lib/auth/server';
 
 const handler: NextApiHandler = async (req, res) => {
   try {
@@ -57,4 +57,4 @@ const handler: NextApiHandler = async (req, res) => {
   }
 };
 
-export default withApiAuthRequired(handler);
+export default authenticatedApi(handler);

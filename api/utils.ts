@@ -60,3 +60,13 @@ export function createPaginationMeta(page: number, perPage: number, totalItems: 
     totalItems: totalItems,
   };
 }
+
+type I<Key extends string | number | symbol> = { [key in Key]?: unknown | null | undefined };
+type O<Type extends I<Key>, Key extends keyof Type> = Type & Required<Pick<Type, Key>>;
+
+export function hasKey<T extends I<K>, K extends keyof T>(key: K, type: T): type is O<T, K>;
+export function hasKey<T extends I<K>, K extends keyof T>(key: K): (type: T) => type is O<T, K>;
+export function hasKey<T extends I<K>, K extends keyof T>(key: K, type?: T) {
+  if (type) return key in type && type[key] != null;
+  return (item: T): item is O<T, K> => key in item && item[key] != null;
+}

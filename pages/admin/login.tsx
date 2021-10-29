@@ -13,7 +13,7 @@ const Login: NextPage = () => {
     if (status === 'unauthenticated') signIn('auth0');
   }, [query, replace, status]);
 
-  return <p>Redirecting...</p>;
+  return <p>Loading...</p>;
 };
 
 export default Login;

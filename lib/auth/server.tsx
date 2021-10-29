@@ -1,6 +1,6 @@
 import { ParsedUrlQuery } from 'querystring';
 
-import { GetServerSideProps, PreviewData } from 'next';
+import { GetServerSideProps, NextApiHandler, PreviewData } from 'next';
 import { getSession } from 'next-auth/react';
 import { Session } from 'next-auth';
 
@@ -44,4 +44,20 @@ export function authenticatedSSP<
 
     return handlerResult;
   });
+}
+
+type UnauthorizedResponse = {
+  error: string;
+};
+
+export function authenticatedApi<T = any>(handler: NextApiHandler<T>): NextApiHandler<T | UnauthorizedResponse> {
+  return async (req, res) => {
+    let session = await getSession({ req });
+    if (session == null) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    await handler(req, res);
+  };
 }

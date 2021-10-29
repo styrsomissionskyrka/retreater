@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 
 import { authenticatedPage } from 'lib/auth/hocs';
-import { authenticatedSSP } from 'lib/auth/ssr';
+import { authenticatedSSP } from 'lib/auth/server';
 import { Layout } from 'components';
 
 const Admin: NextPage = () => {

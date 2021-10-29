@@ -19,3 +19,38 @@ export async function updateAppConfig(data: Partial<ApplicationConfig>, prisma: 
   });
   return config;
 }
+
+export class App {
+  static async create(prisma: PrismaClient) {
+    let config = await prisma.applicationConfig.findUnique({ where: { id: SYSTEM_ID } });
+    if (config == null) {
+      config = await prisma.applicationConfig.create({ data: { id: SYSTEM_ID } });
+    }
+
+    return new App(config!, prisma);
+  }
+
+  #config: ApplicationConfig;
+  #prisma: PrismaClient;
+
+  constructor(config: ApplicationConfig, prisma: PrismaClient) {
+    this.#config = config;
+    this.#prisma = prisma;
+  }
+
+  get<K extends keyof ApplicationConfig>(key: K): ApplicationConfig[K] {
+    return this.#config[key];
+  }
+
+  set<K extends keyof ApplicationConfig, V extends ApplicationConfig[K]>(key: K, value: V) {
+    this.#config[key] = value;
+    this.#prisma.applicationConfig
+      .update({
+        data: { [key]: value, id: SYSTEM_ID },
+        where: { id: SYSTEM_ID },
+      })
+      .catch(() => {
+        console.error(`Failed to update app config key ${key} with value ${JSON.stringify(value)}`);
+      });
+  }
+}

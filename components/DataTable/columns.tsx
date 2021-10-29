@@ -178,18 +178,20 @@ export function createCopyCell<T extends object>(config: Column<T>): Column<T> {
   };
 }
 
-export function createAvatarCell<T extends object>(config: Column<T> & { alt?: (row: T) => string }): Column<T> {
+export function createAvatarCell<T extends { id: string }>(
+  config: Column<T> & { alt?: (row: T) => string },
+): Column<T> {
   return {
     ...config,
     style: { width: 32 + 16 },
     Cell(props: CellProps<T, string>) {
       return (
         <div style={{ display: 'flex' }}>
-          {props.value != null ? (
-            <Avatar src={props.value} width={32} height={32} alt={config.alt ? config.alt(props.row.original) : ''} />
-          ) : (
-            <Avatar as="div" style={{ width: 32, aspectRatio: '1/1' }} />
-          )}
+          <Avatar
+            id={props.row.original.id}
+            image={props.value}
+            alt={config.alt ? config.alt(props.row.original) : ''}
+          />
         </div>
       );
     },
