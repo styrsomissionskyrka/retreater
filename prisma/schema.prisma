@@ -11,8 +11,9 @@ datasource db {
 }
 
 model ApplicationConfig {
-  id               Int     @id @default(autoincrement())
-  auth0AccessToken String?
+  id                     Int       @id @default(autoincrement())
+  auth0AccessToken       String?
+  auth0AccessTokenExpiry DateTime?
 }
 
 enum RetreatStatus {

@@ -1,4 +1,5 @@
 import { ManagementClient, AuthenticationClient } from 'auth0';
+import { isAfter } from 'date-fns';
 
 import { ensure } from '../../lib/utils/assert';
 import { App } from './app';
@@ -21,8 +22,10 @@ export async function createAuth0Client(app: App) {
 }
 
 async function getAccessToken(app: App) {
+  let expiry = app.get('auth0AccessTokenExpiry');
   let auth0AccessToken = app.get('auth0AccessToken');
-  if (auth0AccessToken) return auth0AccessToken;
+
+  if (auth0AccessToken && !hasExpired(expiry)) return auth0AccessToken;
 
   let audience = new URL('/api/v2/', AUTH0_ISSUER);
 
@@ -38,5 +41,13 @@ async function getAccessToken(app: App) {
   });
 
   app.set('auth0AccessToken', result.access_token);
+  // Set the token to expire one hour before its actual expiry
+  app.set('auth0AccessTokenExpiry', new Date(Date.now() + result.expires_in * 1000 - 1000 * 60 * 60));
+
   return result.access_token;
+}
+
+function hasExpired(date: Date | null): boolean {
+  if (date == null) return true;
+  return isAfter(Date.now(), date);
 }

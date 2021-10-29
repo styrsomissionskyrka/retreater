@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import { useMemo } from 'react';
 import { IconSend } from '@tabler/icons';
+import { useRouter } from 'next/router';
 
 import { authenticatedPage } from 'lib/auth/hocs';
 import { authenticatedSSP } from 'lib/auth/server';
@@ -20,6 +21,7 @@ const initialVariables: FiltersType = {
 };
 
 const Users: NextPage = () => {
+  const router = useRouter();
   const [variables, setVariables] = useSearchParams(initialVariables);
   const { previousData, data = previousData, loading } = useQuery(USERS_QUERY, { variables });
   let users = data?.users.items ?? [];
@@ -51,10 +53,14 @@ const Users: NextPage = () => {
             disabled: (row) => row.id === user.id,
             onClick: (row) => {},
           },
+          {
+            label: 'Redigera',
+            onClick: (row) => router.push(`${router.asPath}/${row.id}`),
+          },
         ],
       }),
     ];
-  }, [user]);
+  }, [user, router]);
 
   const actions = <Button iconStart={<IconSend size={16} />}>Bjud in</Button>;
 
