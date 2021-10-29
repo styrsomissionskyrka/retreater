@@ -23,7 +23,7 @@ const Users: NextPage = () => {
   const [variables, setVariables] = useSearchParams(initialVariables);
   const { previousData, data = previousData, loading } = useQuery(USERS_QUERY, { variables });
   let users = data?.users.items ?? [];
-  let { user } = useAuthenticatedUser();
+  let user = useAuthenticatedUser();
 
   const columns = useMemo<DataTable.Column<UserType>[]>(() => {
     return [

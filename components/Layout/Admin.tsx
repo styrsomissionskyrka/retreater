@@ -56,7 +56,7 @@ export const Admin: React.FC<Props> = ({
     ]);
   }
 
-  const { user } = useAuthenticatedUser();
+  const user = useAuthenticatedUser();
   const headerRef = useRef<HTMLElement>(null);
   const rect = useRect(headerRef, { observe: false });
 
@@ -102,9 +102,11 @@ export const Admin: React.FC<Props> = ({
           </nav>
 
           <Footer>
-            <Avatar id={user.id ?? ''} image={user.image ?? undefined} />
+            <Avatar id={user.id ?? ''} image={user.picture ?? undefined} />
             <FooterMeta>
-              <FooterLink href={`/admin/anvandare/${user.id}`}>{user.name ?? user.email ?? 'Unknown'}</FooterLink>
+              <FooterLink href={`/admin/anvandare/${encodeURIComponent(user.id)}`}>
+                {user.name ?? user.email ?? '-'}
+              </FooterLink>
               <FooterSignOutLink href="/admin/logout" replace>
                 Logga ut
               </FooterSignOutLink>

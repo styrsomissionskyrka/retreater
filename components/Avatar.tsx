@@ -11,7 +11,12 @@ export interface AvatarProps {
   href?: string;
 }
 
-export const Avatar: React.FC<AvatarProps> = ({ id, image, alt = '', href = `/admin/anvandare/${id}` }) => {
+export const Avatar: React.FC<AvatarProps> = ({
+  id,
+  image,
+  alt = '',
+  href = `/admin/anvandare/${encodeURIComponent(id)}`,
+}) => {
   return (
     <AvatarLink href={href}>
       {image ? <Img src={image} width={32} height={32} alt={alt} /> : <Img as="div" />}
