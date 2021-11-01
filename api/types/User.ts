@@ -4,7 +4,7 @@ import * as n from 'nexus';
 import { User as Auth0User, GetUsersDataPaged } from 'auth0';
 
 import { ensure } from '../../lib/utils/assert';
-import { createPaginationMeta, hasKey } from '../utils';
+import { createPaginationMeta, hasKey, authorizedWithRoles } from '../utils';
 import { PaginatedQuery } from './Shared';
 
 export const Role = n.objectType({
@@ -57,6 +57,14 @@ export const PaginatedUser = n.objectType({
   },
 });
 
+export const InviteUser = n.objectType({
+  name: 'InviteUser',
+  definition(t) {
+    t.nonNull.field('user', { type: User });
+    t.nonNull.string('ticket');
+  },
+});
+
 export const UserQuery = n.extendType({
   type: 'Query',
   definition(t) {
@@ -100,6 +108,7 @@ export const UserQuery = n.extendType({
 
     t.field('users', {
       type: n.nonNull(PaginatedUser),
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       args: {
         page: n.nonNull(n.intArg({ default: 1 })),
         perPage: n.nonNull(n.intArg({ default: 25 })),
@@ -132,6 +141,7 @@ export const UserMutation = n.extendType({
   definition(t) {
     t.field('updateUser', {
       type: User,
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
       args: {
         id: n.nonNull(n.idArg()),
         input: n.nonNull(n.arg({ type: UpdateUserInput })),
@@ -147,6 +157,46 @@ export const UserMutation = n.extendType({
         );
 
         return hasKey('user_id', user) ? user : null;
+      },
+    });
+
+    t.field('removeUser', {
+      type: User,
+      authorize: authorizedWithRoles(['superadmin']),
+      args: { id: n.nonNull(n.idArg()) },
+      async resolve(_, args, ctx) {
+        if (args.id === ctx.session?.user.id) {
+          throw new Error('Can not remove the currently signed in user.');
+        }
+
+        let user = await ctx.auth0.getUser({ id: args.id });
+        await ctx.auth0.deleteUser({ id: args.id });
+        return hasKey('user_id', user) ? user : null;
+      },
+    });
+
+    t.field('inviteUser', {
+      type: InviteUser,
+      authorize: authorizedWithRoles(['superadmin']),
+      args: { email: n.nonNull(n.stringArg()) },
+      async resolve(_, args, ctx) {
+        let user = await ctx.auth0.createUser({
+          email: args.email,
+          email_verified: false,
+          connection: 'auth0',
+        });
+
+        if (!hasKey('user_id', user)) return null;
+
+        let { ticket } = await ctx.auth0.createPasswordChangeTicket({
+          user_id: user.user_id,
+          email: user.email,
+          result_url: 'localhost:3000/admin',
+          ttl_sec: 86400,
+          mark_email_as_verified: true,
+        });
+
+        return { user, ticket };
       },
     });
   },

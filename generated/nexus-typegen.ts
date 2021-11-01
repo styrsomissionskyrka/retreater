@@ -112,6 +112,10 @@ export interface NexusGenScalars {
 export interface NexusGenObjects {
   CheckoutSession: StripeCheckoutSession;
   Coupon: StripeCoupon;
+  InviteUser: { // root type
+    ticket: string; // String!
+    user: NexusGenRootTypes['User']; // User!
+  }
   LineItem: StripeLineItem;
   LogItem: LogItem;
   Mutation: {};
@@ -179,6 +183,10 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     percentOff: number | null; // Float
   }
+  InviteUser: { // field return type
+    ticket: string; // String!
+    user: NexusGenRootTypes['User']; // User!
+  }
   LineItem: { // field return type
     amountSubtotal: number; // Int!
     amountTotal: number; // Int!
@@ -202,6 +210,8 @@ export interface NexusGenFieldTypes {
     createProduct: NexusGenRootTypes['Product'] | null; // Product
     createRefund: NexusGenRootTypes['Refund']; // Refund!
     createRetreatDraft: NexusGenRootTypes['Retreat'] | null; // Retreat
+    inviteUser: NexusGenRootTypes['InviteUser'] | null; // InviteUser
+    removeUser: NexusGenRootTypes['User'] | null; // User
     setRetreatStatus: NexusGenRootTypes['Retreat'] | null; // Retreat
     updateOrderPrice: NexusGenRootTypes['Order'] | null; // Order
     updatePrice: NexusGenRootTypes['Price'] | null; // Price
@@ -354,6 +364,10 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
     percentOff: 'Float'
   }
+  InviteUser: { // field return type name
+    ticket: 'String'
+    user: 'User'
+  }
   LineItem: { // field return type name
     amountSubtotal: 'Int'
     amountTotal: 'Int'
@@ -377,6 +391,8 @@ export interface NexusGenFieldTypeNames {
     createProduct: 'Product'
     createRefund: 'Refund'
     createRetreatDraft: 'Retreat'
+    inviteUser: 'InviteUser'
+    removeUser: 'User'
     setRetreatStatus: 'Retreat'
     updateOrderPrice: 'Order'
     updatePrice: 'Price'
@@ -541,6 +557,12 @@ export interface NexusGenArgTypes {
     }
     createRetreatDraft: { // args
       title: string; // String!
+    }
+    inviteUser: { // args
+      email: string; // String!
+    }
+    removeUser: { // args
+      id: string; // ID!
     }
     setRetreatStatus: { // args
       id: string; // ID!

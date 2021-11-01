@@ -6,3 +6,4 @@ export * from './EditRetreat';
 export * from './EditRetreatPricing';
 export * from './EditRetreatStatus';
 export * from './ExportRetreatOrders';
+export * from './InviteUser';

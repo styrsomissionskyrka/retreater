@@ -56,6 +56,11 @@ The javascript `Date` as integer. Type represents date and time as number of mil
 """
 scalar Date
 
+type InviteUser {
+  ticket: String!
+  user: User!
+}
+
 type LineItem {
   amountSubtotal: Int!
   amountTotal: Int!
@@ -104,6 +109,8 @@ type Mutation {
   createProduct(input: CreateProductInput!, retreatId: ID!): Product
   createRefund(amount: Int, order: ID!, paymentIntent: ID!, reason: RefundReasonEnum): Refund!
   createRetreatDraft(title: String!): Retreat
+  inviteUser(email: String!): InviteUser
+  removeUser(id: ID!): User
   setRetreatStatus(id: ID!, status: RetreatStatusEnum!): Retreat
   updateOrderPrice(id: ID!, input: UpdateOrderPriceInput!): Order
   updatePrice(id: ID!, input: UpdatePriceInput!): Price

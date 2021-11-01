@@ -1,16 +1,23 @@
 import { NextPage } from 'next';
 import { useMemo } from 'react';
-import { IconSend } from '@tabler/icons';
 import { useRouter } from 'next/router';
 
 import { authenticatedPage } from 'lib/auth/hocs';
 import { authenticatedSSP } from 'lib/auth/server';
-import { Button, DataTable, Layout } from 'components';
+import { DataTable, Layout, toast } from 'components';
 import { useAuthenticatedUser, useSearchParams } from 'lib/hooks';
 import { PAGINATION_FRAGMENT, USER_FRAGMENT } from 'lib/graphql/fragments';
-import { gql, useQuery, TypedDocumentNode, AdminUsersQuery, AdminUsersQueryVariables } from 'lib/graphql';
+import {
+  gql,
+  useQuery,
+  TypedDocumentNode,
+  AdminUsersQuery,
+  AdminUsersQueryVariables,
+  useRemoveUser,
+} from 'lib/graphql';
 import { PaginatedType } from 'lib/utils/types';
 import { EditUser } from 'components/forms/EditUser';
+import { InviteUser } from 'components/forms';
 
 type UserType = PaginatedType<'users', AdminUsersQuery>;
 type FiltersType = AdminUsersQueryVariables;
@@ -25,6 +32,8 @@ const Users: NextPage = () => {
   const router = useRouter();
   const [variables, setVariables] = useSearchParams(initialVariables);
   const { previousData, data = previousData, loading } = useQuery(USERS_QUERY, { variables });
+  const [removeUser] = useRemoveUser();
+
   let users = data?.users.items ?? [];
   let user = useAuthenticatedUser();
 
@@ -52,7 +61,13 @@ const Users: NextPage = () => {
           {
             label: 'Ta bort',
             disabled: (row) => row.id === user.id,
-            onClick: (row) => {},
+            onClick: (row) => {
+              return toast.promise(removeUser(row.id), {
+                loading: 'Laddar...',
+                success: 'Användare borttagen',
+                error: 'Kunder inte ta bort användare',
+              });
+            },
           },
           {
             label: 'Redigera',
@@ -61,9 +76,9 @@ const Users: NextPage = () => {
         ],
       }),
     ];
-  }, [user, router]);
+  }, [user.id, removeUser, router]);
 
-  const actions = <Button iconStart={<IconSend size={16} />}>Bjud in</Button>;
+  const actions = <InviteUser />;
   let userId = Array.isArray(router.query.slug) ? router.query.slug[0] : null;
 
   return (
