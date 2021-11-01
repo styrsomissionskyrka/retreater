@@ -13,6 +13,7 @@ import {
   PureQueryOptions,
   OperationVariables,
   TypedDocumentNode,
+  ApolloError,
 } from '@apollo/client';
 
 import { useIntersection } from '../hooks';
@@ -20,19 +21,42 @@ import { namedOperations } from './generated-apollo-helpers';
 
 export * from '@apollo/client';
 
+type StatefulQueryResult<Data = any> =
+  | { state: 'loading'; error: undefined; data: undefined }
+  | { state: 'error'; error: ApolloError; data: undefined }
+  | { state: 'success'; error: undefined; data: Data };
+
+type ExtendedQueryResult<Data = any, Variables = OperationVariables> = Omit<
+  QueryResult<Data, Variables>,
+  'data' | 'error'
+> &
+  StatefulQueryResult<Data>;
+
 export function useQuery<Data = any, Variables = OperationVariables>(
   query: DocumentNode | TypedDocumentNode<Data, Variables>,
   options: QueryHookOptions<Data, Variables> = {},
-): QueryResult<Data, Variables> {
-  return _useQuery<Data, Variables>(query, options);
+): ExtendedQueryResult<Data, Variables> {
+  let result = _useQuery<Data, Variables>(query, options);
+
+  let state: StatefulQueryResult<Data>;
+
+  if (result.error != null) {
+    state = { state: 'error', error: result.error, data: undefined };
+  } else if (result.data != null) {
+    state = { state: 'success', error: undefined, data: result.data };
+  } else {
+    state = { state: 'loading', error: undefined, data: undefined };
+  }
+
+  return { ...result, ...state };
 }
 
 export function useIntersectingQuery<Data = any, Variables = OperationVariables>(
   query: DocumentNode | TypedDocumentNode<Data, Variables>,
   options: QueryHookOptions<Data, Variables> & { ref: React.RefObject<HTMLElement> },
-): QueryResult<Data, Variables> {
+) {
   const intersection = useIntersection(options.ref);
-  return _useQuery<Data, Variables>(query, { ...options, skip: !intersection?.isIntersecting || options.skip });
+  return useQuery<Data, Variables>(query, { ...options, skip: !intersection?.isIntersecting || options.skip });
 }
 
 export function useLazyQuery<Data = any, Variables = OperationVariables>(

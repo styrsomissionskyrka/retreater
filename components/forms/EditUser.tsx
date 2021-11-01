@@ -26,7 +26,7 @@ interface EditUserProps {
 }
 
 export const EditUser: React.FC<EditUserProps> = ({ id, onSuccess }) => {
-  const { data, error, loading } = useQuery(EDIT_USER_QUERY, { variables: { id }, skip: id == null });
+  const { state, data } = useQuery(EDIT_USER_QUERY, { variables: { id }, skip: id == null });
   const [mutate] = useMutation(UPDATE_USER_MUTATION);
 
   const handleSubmit: SubmitHandler<UpdateUserInput> = async (values) => {
@@ -43,18 +43,18 @@ export const EditUser: React.FC<EditUserProps> = ({ id, onSuccess }) => {
   return (
     <Dialog isOpen={id != null} mode="sidebar" onDismiss={onSuccess}>
       <Title>Redigera {data?.user?.name}</Title>
-      {loading && <Spinner />}
-      {error != null && <p>Kunde inte hämta data</p>}
-      {data?.user != null ? (
+      {state === 'loading' && <Spinner />}
+      {state === 'error' && <p>Kunde inte hämta data</p>}
+      {state === 'success' && (
         <Form.Form onSubmit={handleSubmit}>
           <Form.Row>
-            <Form.Input name="email" type="email" defaultValue={data.user.email ?? ''} label="E-post" />
+            <Form.Input name="email" type="email" defaultValue={data?.user?.email ?? ''} label="E-post" />
           </Form.Row>
           <Form.Row>
-            <Form.Input name="name" defaultValue={data.user.name ?? ''} label="Namn" />
+            <Form.Input name="name" defaultValue={data?.user?.name ?? ''} label="Namn" />
           </Form.Row>
           <Form.Row>
-            <Form.Input name="nickname" defaultValue={data.user.nickname ?? ''} label="Smeknamn" />
+            <Form.Input name="nickname" defaultValue={data?.user?.nickname ?? ''} label="Smeknamn" />
           </Form.Row>
 
           <Form.ActionRow>
@@ -62,8 +62,6 @@ export const EditUser: React.FC<EditUserProps> = ({ id, onSuccess }) => {
             <Form.Submit>Spara</Form.Submit>
           </Form.ActionRow>
         </Form.Form>
-      ) : (
-        <p>Kunde inte hämta data</p>
       )}
     </Dialog>
   );
