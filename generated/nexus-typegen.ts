@@ -81,6 +81,11 @@ export interface NexusGenInputs {
     startDate?: NexusGenScalars['Date'] | null; // Date
     title?: string | null; // String
   }
+  UpdateUserInput: { // input type
+    email?: string | null; // String
+    name?: string | null; // String
+    nickname?: string | null; // String
+  }
 }
 
 export interface NexusGenEnums {
@@ -203,6 +208,7 @@ export interface NexusGenFieldTypes {
     updateProduct: NexusGenRootTypes['Product'] | null; // Product
     updateProductPrice: NexusGenRootTypes['Price'] | null; // Price
     updateRetreat: NexusGenRootTypes['Retreat'] | null; // Retreat
+    updateUser: NexusGenRootTypes['User'] | null; // User
   }
   Order: { // field return type
     cancelledAt: NexusGenScalars['Date'] | null; // Date
@@ -377,6 +383,7 @@ export interface NexusGenFieldTypeNames {
     updateProduct: 'Product'
     updateProductPrice: 'Price'
     updateRetreat: 'Retreat'
+    updateUser: 'User'
   }
   Order: { // field return type name
     cancelledAt: 'Date'
@@ -558,6 +565,10 @@ export interface NexusGenArgTypes {
     updateRetreat: { // args
       id: string; // ID!
       input: NexusGenInputs['UpdateRetreatInput']; // UpdateRetreatInput!
+    }
+    updateUser: { // args
+      id: string; // ID!
+      input: NexusGenInputs['UpdateUserInput']; // UpdateUserInput!
     }
   }
   Product: {

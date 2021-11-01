@@ -20,7 +20,7 @@ const BaseControl = styled('input', {
     roundedRight: '$md',
   },
 
-  '&:disabled': {
+  '&:disabled, &:read-only': {
     background: '$gray100',
     color: '$gray400',
     borderColor: '$gray500',

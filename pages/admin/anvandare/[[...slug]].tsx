@@ -7,9 +7,10 @@ import { authenticatedPage } from 'lib/auth/hocs';
 import { authenticatedSSP } from 'lib/auth/server';
 import { Button, DataTable, Layout } from 'components';
 import { useAuthenticatedUser, useSearchParams } from 'lib/hooks';
-import { PAGINATION_FRAGMENT } from 'lib/graphql/fragments';
+import { PAGINATION_FRAGMENT, USER_FRAGMENT } from 'lib/graphql/fragments';
 import { gql, useQuery, TypedDocumentNode, AdminUsersQuery, AdminUsersQueryVariables } from 'lib/graphql';
 import { PaginatedType } from 'lib/utils/types';
+import { EditUser } from 'components/forms/EditUser';
 
 type UserType = PaginatedType<'users', AdminUsersQuery>;
 type FiltersType = AdminUsersQueryVariables;
@@ -55,7 +56,7 @@ const Users: NextPage = () => {
           },
           {
             label: 'Redigera',
-            onClick: (row) => router.push(`${router.asPath}/${row.id}`),
+            onClick: (row) => router.push(`/admin/anvandare/${row.id}`),
           },
         ],
       }),
@@ -63,6 +64,7 @@ const Users: NextPage = () => {
   }, [user, router]);
 
   const actions = <Button iconStart={<IconSend size={16} />}>Bjud in</Button>;
+  let userId = Array.isArray(router.query.slug) ? router.query.slug[0] : null;
 
   return (
     <Layout.Admin title="Användare" backLink="/admin" actions={actions}>
@@ -78,6 +80,8 @@ const Users: NextPage = () => {
           </DataTable.Table>
 
           <DataTable.Pagination meta={undefined} />
+
+          <EditUser id={userId} onSuccess={() => router.push('/admin/anvandare')} />
         </DataTable.Layout>
       </DataTable.Provider>
     </Layout.Admin>
@@ -92,14 +96,13 @@ export const USERS_QUERY: TypedDocumentNode<AdminUsersQuery, AdminUsersQueryVari
       }
       items {
         id
-        email
-        name
-        picture
+        ...UserFields
       }
     }
   }
 
   ${PAGINATION_FRAGMENT}
+  ${USER_FRAGMENT}
 `;
 
 export default authenticatedPage(Users);

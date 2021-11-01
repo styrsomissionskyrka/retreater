@@ -17,5 +17,6 @@ export const USER_FRAGMENT = gql`
     email
     name
     picture
+    nickname
   }
 `;

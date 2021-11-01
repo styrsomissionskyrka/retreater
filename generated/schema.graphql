@@ -110,6 +110,7 @@ type Mutation {
   updateProduct(id: ID!, input: UpdateProductInput!): Product
   updateProductPrice(input: CreatePriceInput!, productId: ID!): Price
   updateRetreat(id: ID!, input: UpdateRetreatInput!): Retreat
+  updateUser(id: ID!, input: UpdateUserInput!): User
 }
 
 type Order {
@@ -317,6 +318,12 @@ input UpdateRetreatInput {
   maxParticipants: Int
   startDate: Date
   title: String
+}
+
+input UpdateUserInput {
+  email: String
+  name: String
+  nickname: String
 }
 
 type User {

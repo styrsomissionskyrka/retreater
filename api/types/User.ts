@@ -126,3 +126,37 @@ export const UserQuery = n.extendType({
     });
   },
 });
+
+export const UserMutation = n.extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('updateUser', {
+      type: User,
+      args: {
+        id: n.nonNull(n.idArg()),
+        input: n.nonNull(n.arg({ type: UpdateUserInput })),
+      },
+      async resolve(_, args, ctx) {
+        let user = await ctx.auth0.updateUser(
+          { id: args.id },
+          {
+            email: args.input.email ?? undefined,
+            name: args.input.name ?? undefined,
+            nickname: args.input.nickname ?? undefined,
+          },
+        );
+
+        return hasKey('user_id', user) ? user : null;
+      },
+    });
+  },
+});
+
+export const UpdateUserInput = n.inputObjectType({
+  name: 'UpdateUserInput',
+  definition(t) {
+    t.string('email');
+    t.string('name');
+    t.string('nickname');
+  },
+});

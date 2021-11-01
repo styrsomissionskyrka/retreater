@@ -1,15 +1,20 @@
-import { forwardRef, useCallback, useRef } from 'react';
+import React, { forwardRef, useCallback, useRef } from 'react';
 import FocusLock from 'react-focus-lock';
 import { RemoveScroll } from 'react-remove-scroll';
 
 import { useComposedRefs } from 'lib/hooks';
 import { composeEventHandlers } from 'lib/utils/events';
-import { ElementProps } from 'lib/utils/types';
 import { styled } from 'styles/stitches.config';
 
 import { Portal } from './Portal';
 
 const noop = () => {};
+
+export const Title = styled('h2', {
+  text: '$xl',
+  fontWeight: '$medium',
+  marginBottom: '$8',
+});
 
 export interface OverlayProps {
   isOpen?: boolean;
@@ -22,11 +27,22 @@ const OverlayImpl = styled('div', {
   inset: '$0',
   overflow: 'auto',
   backgroundColor: 'hsl(220deg 9% 5% / 20%)', // $black with 20% opacity
-  padding: '$8',
   zIndex: '$50',
+
+  variants: {
+    mode: {
+      dialog: {
+        padding: '$8',
+      },
+      sidebar: {},
+    },
+  },
+  defaultVariants: {
+    mode: 'dialog',
+  },
 });
 
-const Overlay = forwardRef<HTMLDivElement, OverlayProps & ElementProps<'div'>>(
+const Overlay = forwardRef<HTMLDivElement, OverlayProps & React.ComponentProps<typeof OverlayImpl>>(
   (
     {
       isOpen,
@@ -90,17 +106,41 @@ const Overlay = forwardRef<HTMLDivElement, OverlayProps & ElementProps<'div'>>(
 
 Overlay.displayName = 'Dialog.Inner';
 
-export type ContentProps = Omit<ElementProps<'div'>, 'aria-modal' | 'role' | 'tabIndex'>;
-
 export const ContentImpl = styled('div', {
   width: '$full',
-  mx: 'auto',
-  padding: '$8',
   background: '$white',
+  padding: '$8',
   border: '1px solid $black',
-  maxWidth: '$max2xl',
-  marginTop: '$20',
+
+  variants: {
+    mode: {
+      dialog: {
+        mx: 'auto',
+        maxWidth: '$max2xl',
+        marginTop: '$20',
+        [`& ${Title}`]: {
+          textAlign: 'center',
+        },
+      },
+      sidebar: {
+        height: '100vh',
+        maxHeight: '100vh',
+        margin: '0 0 auto auto',
+        maxWidth: '$maxMd',
+        overflow: 'scroll',
+
+        [`& ${Title}`]: {
+          textAlign: 'left',
+        },
+      },
+    },
+  },
+  defaultVariants: {
+    mode: 'dialog',
+  },
 });
+
+export type ContentProps = Omit<React.ComponentProps<typeof ContentImpl>, 'aria-modal' | 'role' | 'tabIndex'>;
 
 export const Content = forwardRef<HTMLDivElement, ContentProps>(({ onClick = noop, children, ...props }, ref) => {
   return (
@@ -120,10 +160,10 @@ export const Content = forwardRef<HTMLDivElement, ContentProps>(({ onClick = noo
 Content.displayName = 'Dialog.Content';
 
 export const Dialog = forwardRef<HTMLDivElement, OverlayProps & ContentProps>(
-  ({ isOpen, initialFocusRef, onDismiss, children, ...props }, ref) => {
+  ({ isOpen, mode, initialFocusRef, onDismiss, children, ...props }, ref) => {
     return (
-      <Overlay isOpen={isOpen} initialFocusRef={initialFocusRef} onDismiss={onDismiss}>
-        <Content {...props} ref={ref}>
+      <Overlay isOpen={isOpen} mode={mode} initialFocusRef={initialFocusRef} onDismiss={onDismiss}>
+        <Content {...props} mode={mode} ref={ref}>
           {children}
         </Content>
       </Overlay>
@@ -132,10 +172,3 @@ export const Dialog = forwardRef<HTMLDivElement, OverlayProps & ContentProps>(
 );
 
 Dialog.displayName = 'Dialog';
-
-export const Title = styled('h2', {
-  text: '$xl',
-  fontWeight: '$medium',
-  marginBottom: '$8',
-  textAlign: 'center',
-});
