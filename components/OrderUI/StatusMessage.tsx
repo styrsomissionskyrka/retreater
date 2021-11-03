@@ -9,7 +9,6 @@ import {
   AdminOrderStatusQueryVariables,
 } from 'lib/graphql';
 import { format } from 'lib/utils/date-fns';
-import { styled } from 'styles/stitches.config';
 
 import { Spinner } from '../Spinner';
 import { StatusIndicator } from '../StatusIndicator';
@@ -77,11 +76,9 @@ export const StatusMessage: React.FC<{ id: string }> = ({ id }) => {
   }
 
   return (
-    <Message>
+    <p className="text-sm space-x-2">
       <StatusIndicator status={order.status} />
       <span>{message}</span>
-    </Message>
+    </p>
   );
 };
-
-const Message = styled('p', { text: '$sm', spaceX: '$2' });

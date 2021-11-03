@@ -15,7 +15,6 @@ import {
   TypedDocumentNode,
 } from 'lib/graphql';
 import { formatCents, parsePriceInput } from 'lib/utils/money';
-import { styled } from 'styles/stitches.config';
 
 import * as Form from '../Form';
 import { BrowserOnly } from '../BrowserOnly';
@@ -260,8 +259,8 @@ const DescriptionCell: React.FC<Row<ColumnData>> = ({ original }) => {
   };
 
   return (
-    <DescriptionCellWrapper>
-      <TextareaWrapper>
+    <div className="flex flex-col w-full space-y-2">
+      <div className="w-full max-w-sm">
         <Form.Textarea
           defaultValue={initialValue}
           placeholder="Beskrivning"
@@ -269,23 +268,11 @@ const DescriptionCell: React.FC<Row<ColumnData>> = ({ original }) => {
           onBlur={handleBlur}
           disabled={loading || !original.active}
         />
-      </TextareaWrapper>
+      </div>
 
       <Link href={`https://dashboard.stripe.com/test/products/${original.id}`} target="_blank">
         Visa produkten i Stripe
       </Link>
-    </DescriptionCellWrapper>
+    </div>
   );
 };
-
-const DescriptionCellWrapper = styled('div', {
-  display: 'flex',
-  flexFlow: 'column nowrap',
-  width: '100%',
-  spaceY: '$2',
-});
-
-const TextareaWrapper = styled('div', {
-  width: '100%',
-  maxWidth: '$maxSm',
-});

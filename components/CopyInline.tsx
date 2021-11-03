@@ -1,6 +1,7 @@
 import { IconCopy } from '@tabler/icons';
+import classNames from 'classnames';
 
-import { styled } from 'styles/stitches.config';
+import { useHover } from 'lib/hooks';
 
 import { toast } from './Toast';
 
@@ -8,6 +9,7 @@ type CopyProps = { children: string } | { value: string; children: React.ReactNo
 
 export const CopyInline = (props: CopyProps) => {
   const { children } = props;
+  const { isHovering, ...elProps } = useHover();
 
   const handleClick = async () => {
     let text = 'value' in props ? props.value : props.children;
@@ -19,19 +21,13 @@ export const CopyInline = (props: CopyProps) => {
   };
 
   return (
-    <InlineButton onClick={handleClick}>
+    <button
+      onClick={handleClick}
+      className="inline-flex items-center space-x-1 cursor-pointer focus:outline-black"
+      {...elProps}
+    >
       <span>{children}</span>
-      <IconCopy size="1em" />
-    </InlineButton>
+      <IconCopy size="1em" className={classNames(isHovering ? 'opacity-100 visible' : 'opacity-0 invisible')} />
+    </button>
   );
 };
-
-const InlineButton = styled('button', {
-  display: 'inline-flex',
-  alignItems: 'center',
-  spaceX: '$1',
-  cursor: 'pointer',
-
-  '& svg': { opacity: 0, visibility: 'hidden' },
-  '&:hover svg, &:focus svg': { opacity: 1, visibility: 'visible' },
-});

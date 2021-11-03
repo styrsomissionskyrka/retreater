@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 
 import { PaginationFieldsFragment } from 'lib/graphql';
 import { omit } from 'lib/utils/object';
-import { styled } from 'styles/stitches.config';
 
 import { Link } from '../Link';
 
@@ -27,7 +26,7 @@ export const Pagination: React.FC<Props> = ({ meta = defaultMeta }) => {
   let rangeEnd = rangeStart + meta.perPage - 1;
 
   return (
-    <Wrapper>
+    <div className="flex space-x-8">
       <span>
         Visar {rangeStart} - {rangeEnd} av {meta.totalItems} resultat
       </span>
@@ -39,7 +38,7 @@ export const Pagination: React.FC<Props> = ({ meta = defaultMeta }) => {
       <PaginationLink page={current + 1} disabled={!meta.hasNextPage}>
         Nästa
       </PaginationLink>
-    </Wrapper>
+    </div>
   );
 };
 
@@ -56,8 +55,3 @@ const PaginationLink: React.FC<{ page: number; disabled: boolean }> = ({ page, d
       : { pathname: router.pathname, query: { ...router.query, page } };
   return <Link href={href}>{children}</Link>;
 };
-
-const Wrapper = styled('div', {
-  display: 'flex',
-  spaceX: '$8',
-});

@@ -1,17 +1,7 @@
-import { IconLoader } from '@tabler/icons';
+import { IconLoader, TablerIcon, TablerIconProps } from '@tabler/icons';
 
-import { styled, keyframes } from 'styles/stitches.config';
+export type SpinnerProps = { as?: TablerIcon; reverse?: boolean } & TablerIconProps;
 
-const spin = keyframes({
-  from: { transform: 'rotate(0deg)' },
-  to: { transform: 'rotate(360deg)' },
-});
-
-export const Spinner = styled(IconLoader, {
-  animation: `${spin} 1s linear infinite`,
-  variants: {
-    reverse: {
-      true: { animationDirection: 'reverse' },
-    },
-  },
-});
+export const Spinner: React.FC<SpinnerProps> = ({ as: Icon = IconLoader, reverse, ...props }) => {
+  return <Icon {...props} className="animate-spin" style={{ animationDirection: reverse ? 'reverse' : undefined }} />;
+};

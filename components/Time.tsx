@@ -1,5 +1,1 @@
-import { styled } from 'styles/stitches.config';
-
-export const Time = styled('time', {
-  fontVariantNumeric: 'tabular-nums',
-});
+export const Time: React.FC = ({ children }) => <time className="tabular-nums">{children}</time>;

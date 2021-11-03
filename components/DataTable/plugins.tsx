@@ -1,8 +1,6 @@
 import { IconChevronDown, IconChevronRight } from '@tabler/icons';
 import { CellProps, ColumnInstance, Column, Hooks, useExpanded as _useExpanded } from 'react-table';
 
-import { styled } from 'styles/stitches.config';
-
 export function useExpanded<T extends object>(hooks: Hooks<T>) {
   _useExpanded(hooks);
   hooks.visibleColumns.push(visibleColumns);
@@ -20,31 +18,19 @@ function visibleColumns<T extends object>(columns: ColumnInstance<T>[]): Column<
         let { key, ...rest } = row.getToggleRowExpandedProps();
 
         return (
-          <ToggleButton
+          <button
             key={key}
             type="button"
             aria-label="Visa mer"
             aria-pressed={isExpanded ? 'true' : 'false'}
+            className="flex items-center justify-center cursor-pointer text-black w-full h-full focus:outline-black"
             {...rest}
           >
             {isExpanded ? <IconChevronDown size={16} /> : <IconChevronRight size={16} />}
-          </ToggleButton>
+          </button>
         );
       },
     },
     ...columns,
   ];
 }
-
-const ToggleButton = styled('button', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  cursor: 'pointer',
-  color: '$black',
-  width: '100%',
-  height: '100%',
-  '&:focus': {
-    outlineColor: '$black',
-  },
-});

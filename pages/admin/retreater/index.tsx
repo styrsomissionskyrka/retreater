@@ -104,7 +104,7 @@ const Retreats: NextPage = () => {
 
   return (
     <Layout.Admin title="Retreater" backLink="/admin" actions={actions}>
-      <DataTable.Provider data={retreats} columns={columns} loading={loading}>
+      <DataTable.Provider data={retreats} columns={columns} loading={true}>
         <DataTable.Layout>
           <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
             <DataTable.Filters.EnumFilter<FiltersType>

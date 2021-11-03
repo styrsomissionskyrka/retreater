@@ -1,108 +1,84 @@
 import { forwardRef, useRef } from 'react';
+import classNames from 'classnames';
 
 import { useControlledInput, useIsomorphicLayoutEffect, useSafeState } from 'lib/hooks';
 import { composeEventHandlers } from 'lib/utils/events';
 import { ElementProps } from 'lib/utils/types';
-import { styled } from 'styles/stitches.config';
 
 import { Spinner } from './Spinner';
 import { VisuallyHidden } from './VisuallyHidden';
 import { toast } from './Toast';
 
-type ButtonVariant = 'default' | 'outline' | 'danger';
-type ButtonSizeBase = 'small' | 'normal' | 'large';
+export type ButtonSize = 'small' | 'normal' | 'large';
+export type ButtonVariant = 'default' | 'outline' | 'danger';
 
-const ButtonImpl = styled('button', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  spaceX: '$2',
-  lineHeight: '$none',
-  borderRadius: '$md',
-
-  '&:disabled': { cursor: 'not-allowed' },
-  '&:focus': { outline: '$black' },
-
-  variants: {
-    variant: {
-      default: {
-        background: '$black',
-        color: '$white',
-        '&:hover': { background: '$gray500' },
-        '&:disabled': { background: '$gray500' },
-      },
-      outline: {
-        background: '$white',
-        color: '$black',
-        border: '2px solid $black',
-        '&:hover': { background: '$gray200' },
-        '&:disabled': {
-          borderColor: '$gray400',
-          color: '$gray400',
-          background: '$gray200',
-        },
-      },
-      danger: {
-        background: '$red500',
-        color: '$white',
-        '&:hover': { background: '$red700' },
-        '&:disabled': { background: '$red300' },
-      },
-    },
-    size: {
-      small: {
-        height: '$8',
-        px: '$3',
-        text: '$sm',
-      },
-      normal: {
-        height: '$10',
-        px: '$5',
-      },
-      large: {
-        height: '$12',
-        px: '$6',
-      },
-    },
-    square: { true: { flex: 'none', padding: '$0' } },
-  },
-  compoundVariants: [
-    {
-      size: 'small',
-      square: true,
-      css: { width: '$8', padding: '$0' },
-    },
-    {
-      size: 'normal',
-      square: true,
-      css: { width: '$10', padding: '$0' },
-    },
-    {
-      size: 'large',
-      square: true,
-      css: { width: '$12', padding: '$0' },
-    },
-  ],
-  defaultVariants: {
-    variant: 'default',
-    size: 'normal',
-    square: false,
-  },
-});
-
-export type ButtonProps = React.ComponentProps<typeof ButtonImpl> & {
+export type ButtonProps = ElementProps<'button'> & {
   iconStart?: React.ReactNode;
   iconEnd?: React.ReactNode;
+  square?: boolean;
+  size?: ButtonSize;
+  variant?: ButtonVariant;
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ iconStart, iconEnd, type = 'button', children, ...props }, ref) => {
+  (
+    {
+      type = 'button',
+      variant = 'default',
+      size = 'normal',
+      iconStart,
+      iconEnd,
+      square,
+      className: passedClassName,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    let className = classNames(
+      'flex items-center justify-center space-x-2 leading-none rounded-md',
+      'disabled:cursor-not-allowed focus:outline-black',
+
+      // variant
+      {
+        'bg-black text-white hover:bg-gray-500 disabled:bg-gray-500': variant === 'default',
+        'hover:bg-gray-500': variant === 'default',
+        'disabled:bg-gray-500': variant === 'default',
+
+        'bg-white text-black border-2 border-black': variant === 'outline',
+        'hover:bg-gray-400': variant === 'outline',
+        'disabled:bg-gray-200 disabled:text-gray-400 disabled:border-gray-200': variant === 'outline',
+
+        'bg-red-500 text-white': variant === 'danger',
+        'hover:bg-red-700': variant === 'danger',
+        'disabled:bg-red-300': variant === 'danger',
+      },
+
+      // size
+      {
+        'h-8 text-sm': size === 'small',
+        'h-10': size === 'normal',
+        'h-12': size === 'large',
+        'px-3': size === 'small' && !square,
+        'px-5': size === 'normal' && !square,
+        'px-6': size === 'large' && !square,
+      },
+
+      // square
+      {
+        'flex-none p-0': square,
+        'w-8': square && size === 'small',
+        'w-10': square && size === 'normal',
+        'w-12': square && size === 'large',
+      },
+    );
+
     return (
-      <ButtonImpl {...props} ref={ref} type={type}>
+      <button {...props} className={className} ref={ref} type={type}>
         {iconStart}
         {children ? <span>{children}</span> : null}
         {iconEnd}
-      </ButtonImpl>
+      </button>
     );
   },
 );
@@ -155,78 +131,10 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
   );
 };
 
-const ToggleButtonLabel = styled('label', {
-  display: 'flex',
-  alignItems: 'center',
-  spaceX: '$2',
-  '&:focus-within': { outline: '$black' },
-});
-
-const ToggleButtonWrapper = styled('div', {
-  border: '2px solid $black',
-  display: 'flex',
-  alignItems: 'center',
-  trans: 'background',
-
-  variants: {
-    state: {
-      checked: { justifyContent: 'flex-start', background: '$green500' },
-      unchecked: { justifyContent: 'flex-end', background: '$white' },
-      pending: { justifyContent: 'center', background: '$gray300' },
-    },
-    size: {
-      small: {
-        height: '$6',
-        width: '$10',
-        padding: '$1',
-        borderRadius: '$2xl',
-      },
-      normal: {
-        height: '$8',
-        width: '$14',
-        padding: '$1',
-        borderRadius: '$2xl',
-      },
-      large: {
-        height: '$10',
-        width: '$16',
-        padding: '$1',
-        borderRadius: '20px',
-      },
-    },
-    disabled: {
-      true: {
-        background: '$white',
-        borderColor: '$gray500',
-      },
-    },
-  },
-});
-
-const ToggleButtonCheck = styled('div', {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderRadius: '$full',
-  background: '$black',
-  color: '$white',
-
-  variants: {
-    size: {
-      small: { size: '$4' },
-      normal: { size: '$6' },
-      large: { size: '$8' },
-    },
-    disabled: {
-      true: { background: '$gray400' },
-    },
-  },
-});
-
 type ToggleButtonProps = Omit<ElementProps<'input'>, 'type' | 'value' | 'defaultValue' | 'size'> & {
   pending?: boolean;
   variant?: ButtonVariant;
-  size?: ButtonSizeBase;
+  size?: ButtonSize;
 };
 
 export const ToggleButton: React.FC<ToggleButtonProps> = ({
@@ -253,8 +161,43 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
 
   let spinnerSize = size === 'small' ? 10 : size === 'normal' ? 16 : 18;
 
+  let wrapperClassName = classNames(
+    'flex items-center border-2 border-black transition-colors p-1',
+    // state
+    {
+      'justify-start bg-green-500': state === 'checked',
+      'justify-center bg-gray-300': state === 'pending',
+      'justify-end bg-white': state === 'unchecked',
+    },
+    // size
+    {
+      'h-6 w-10 rounded-2xl': size === 'small',
+      'h-8 w-14 rounded-2xl': size === 'normal',
+      'h-10 w-16 rounded-[20px]': size === 'large',
+    },
+    // disabled
+    {
+      'bg-white border-gray-500': disabled,
+    },
+  );
+
+  let toggleClassName = classNames(
+    'flex justify-center items-center rounded-full text-white',
+    // size
+    {
+      'w-4 h-4': size === 'small',
+      'w-6 h-6': size === 'normal',
+      'w-8 h-8': size === 'large',
+    },
+    // disabled
+    {
+      'bg-black': !disabled,
+      'bg-gray-400': disabled,
+    },
+  );
+
   return (
-    <ToggleButtonLabel>
+    <label className="flex items-center space-x-2 focus-within:outline-black">
       <VisuallyHidden>
         <input
           {...props}
@@ -265,13 +208,11 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
           onChange={composeEventHandlers(onChange, (e) => setControlledChecked(e.target.checked))}
         />
       </VisuallyHidden>
-      <ToggleButtonWrapper size={size} state={state} disabled={disabled}>
-        <ToggleButtonCheck size={size} disabled={disabled}>
-          {state === 'pending' ? <Spinner size={spinnerSize} /> : null}
-        </ToggleButtonCheck>
-      </ToggleButtonWrapper>
+      <div className={wrapperClassName}>
+        <div className={toggleClassName}>{state === 'pending' ? <Spinner size={spinnerSize} /> : null}</div>
+      </div>
       {children ? <span>{children}</span> : null}
-    </ToggleButtonLabel>
+    </label>
   );
 };
 

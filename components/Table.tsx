@@ -1,60 +1,32 @@
-import { styled } from 'styles/stitches.config';
+import classNames from 'classnames';
 
-export const Table = styled('table', {
-  width: '$full',
-  borderCollapse: 'collapse',
-  tableLayout: 'auto',
-  lineHeight: '$none',
-});
-Table.displayName = 'Table.Table';
+import { capitalize } from 'lib/utils/string';
+import { ElementProps } from 'lib/utils/types';
 
-export const Head = styled('thead', {});
-Head.displayName = 'Table.Head';
+function createTableComponent<Type extends keyof JSX.IntrinsicElements, Props extends {} = {}>(
+  Element: Type,
+  className: string | ((props: ElementProps<Type> & Props) => string),
+): React.FC<ElementProps<Type> & Props> {
+  const Component: React.FC<any> = (props) => {
+    let cname = typeof className === 'function' ? className(props) : className;
+    return <Element {...props} className={classNames(props.className, cname)} />;
+  };
 
-export const HeadRow = styled('tr', { borderBottom: '1px solid $black' });
-HeadRow.displayName = 'Table.HeadRow';
+  Component.displayName = `Table.${capitalize(Element)}`;
+  return Component;
+}
 
-export const HeadCell = styled('th', { textAlign: 'left', fontWeight: '$medium', px: '$2', paddingBottom: '$3' });
-HeadCell.displayName = 'Table.HeadCell';
+export const Table = createTableComponent('table', 'w-full border-collapse table-auto leading-none');
+export const Head = createTableComponent('thead', '');
+export const HeadRow = createTableComponent('tr', 'border-b border-black');
+export const HeadCell = createTableComponent('th', 'text-left font-medium px-2 pb-3');
+export const Body = createTableComponent('tbody', 'divide-y text-sm');
 
-export const Body = styled('tbody', { divideY: '$1', text: '$sm' });
-Body.displayName = 'Table.Body';
+export const BodyRow = createTableComponent<'tr', { expanded?: 'child' | 'parent' }>('tr', ({ expanded }) =>
+  classNames('hover:bg-gray-100', {
+    'bg-gray-100': expanded === 'parent',
+    '!border-t-0 bg-gray-100': expanded === 'child',
+  }),
+);
 
-export const BodyRow = styled('tr', {
-  '&:hover': { background: '$gray100' },
-  variants: {
-    expanded: {
-      parent: {
-        backgroundColor: '$gray100',
-      },
-      child: {
-        borderTopWidth: '0px',
-        backgroundColor: '$gray100',
-      },
-    },
-  },
-});
-BodyRow.displayName = 'Table.BodyRow';
-
-export const BodyCell = styled('td', {
-  padding: '$2',
-  height: '$16',
-  fontWeight: '$normal',
-  textAlign: 'left',
-  maxWidth: '10rem',
-
-  variants: {
-    full: {
-      true: {
-        '& > *': {
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-        },
-      },
-    },
-  },
-});
-
-BodyCell.displayName = 'Table.BodyCell';
+export const BodyCell = createTableComponent('td', 'p-2 h-16 font-normal text-left max-w-[10rem]');

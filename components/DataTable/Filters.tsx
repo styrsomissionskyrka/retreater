@@ -5,7 +5,6 @@ import debounce from 'lodash.debounce';
 import { QueryObject, SetParamsCallback } from 'lib/hooks';
 import { assert, ensure } from 'lib/utils/assert';
 import { OrderEnum } from 'lib/graphql';
-import { styled } from 'styles/stitches.config';
 
 import { Form, Button } from '..';
 
@@ -29,12 +28,6 @@ function useFilter<T extends QueryObject>(key: keyof T): [value: T[keyof T], set
   return [value, setValue];
 }
 
-const FormWrapper = styled('form', {
-  display: 'flex',
-  alignItems: 'center',
-  spaceX: '$4',
-});
-
 interface FiltersProps<T extends QueryObject> extends FiltersContextType<T> {
   children?: React.ReactNode;
 }
@@ -43,7 +36,9 @@ export function Filters<T extends QueryObject>({ values, setValues, children }: 
   const ctx = useMemo<FiltersContextType<T>>(() => ({ values, setValues }), [setValues, values]);
   return (
     <FiltersContext.Provider value={ctx}>
-      <FormWrapper onSubmit={(e) => e.preventDefault()}>{children}</FormWrapper>
+      <form className="flex items-center space-x-4" onSubmit={(e) => e.preventDefault()}>
+        {children}
+      </form>
     </FiltersContext.Provider>
   );
 }

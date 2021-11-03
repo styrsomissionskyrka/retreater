@@ -6,7 +6,6 @@ import { NextRouter, useRouter } from 'next/router';
 import { format, formatISO, formatRelative } from 'lib/utils/date-fns';
 import { OrderStatusEnum, RetreatStatusEnum } from 'lib/graphql';
 import { formatMoney } from 'lib/utils/money';
-import { styled } from 'styles/stitches.config';
 
 import { Link } from '../Link';
 import * as Menu from '../Menu';
@@ -28,16 +27,6 @@ export function createStatusCell<T extends object>(config: Column<T>): Column<T>
   };
 }
 
-const LinkCell = styled(Link, {
-  display: 'flex',
-  alignItems: 'center',
-  width: '100%',
-  height: '100%',
-  '&:hover': {
-    color: '$blue500',
-  },
-});
-
 export function createLinkCell<T extends object>({
   getLink,
   ...config
@@ -47,9 +36,9 @@ export function createLinkCell<T extends object>({
     Cell({ value, row }: CellProps<T, string>) {
       const router = useRouter();
       return (
-        <LinkCell href={getLink(row.original, router)}>
+        <Link href={getLink(row.original, router)} className="flex items-center w-full h-full hover:text-blue-500">
           <Truncate>{value}</Truncate>
-        </LinkCell>
+        </Link>
       );
     },
   };

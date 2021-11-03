@@ -1,7 +1,5 @@
 import Image from 'next/image';
 
-import { styled } from 'styles/stitches.config';
-
 import { Link } from './Link';
 
 export interface AvatarProps {
@@ -17,12 +15,15 @@ export const Avatar: React.FC<AvatarProps> = ({
   alt = '',
   href = `/admin/anvandare/${encodeURIComponent(id)}`,
 }) => {
+  let className = 'rounded-full bg-gray-200 w-8 object-cover';
+
   return (
-    <AvatarLink href={href}>
-      {image ? <Img src={image} width={32} height={32} alt={alt} /> : <Img as="div" />}
-    </AvatarLink>
+    <Link href={href} className="rounded-full flex aspect-1-1">
+      {image ? (
+        <Image src={image} width={32} height={32} alt={alt} className={className} />
+      ) : (
+        <div className={className} />
+      )}
+    </Link>
   );
 };
-
-const AvatarLink = styled(Link, { borderRadius: '$full', display: 'flex' });
-const Img = styled(Image, { borderRadius: '$full', background: '$gray200', width: 32, aspectRatio: '1 / 1' });

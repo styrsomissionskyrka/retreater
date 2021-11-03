@@ -10,7 +10,6 @@ import {
 } from 'lib/graphql';
 import { compact } from 'lib/utils/array';
 import { formatMoney } from 'lib/utils/money';
-import { styled } from 'styles/stitches.config';
 
 import * as DataTable from '../DataTable';
 import * as Table from '../Table';
@@ -142,7 +141,7 @@ const ADMIN_ORDER_PAYMENTS_QUERY: TypedDocumentNode<AdminOrderPaymentsQuery, Adm
 `;
 
 const renderExpandedRow: RenderExpandedRow<CheckoutSession> = (row) => (
-  <ExpandedWrapper>
+  <div className="space-y-4">
     <Table.Table>
       <Table.Body>
         {row.original.lineItems.map((item) => (
@@ -154,7 +153,7 @@ const renderExpandedRow: RenderExpandedRow<CheckoutSession> = (row) => (
       </Table.Body>
     </Table.Table>
 
-    <InfoWrapper>
+    <div className="space-y-1">
       <p>
         <strong>Checkout Session:</strong> <CopyInline value={row.original.id}>{row.original.id}</CopyInline>
       </p>
@@ -162,9 +161,6 @@ const renderExpandedRow: RenderExpandedRow<CheckoutSession> = (row) => (
         <strong>Payment Intent:</strong>{' '}
         <CopyInline value={row.original.paymentIntent?.id ?? ''}>{row.original.paymentIntent?.id}</CopyInline>
       </p>
-    </InfoWrapper>
-  </ExpandedWrapper>
+    </div>
+  </div>
 );
-
-const ExpandedWrapper = styled('div', { spaceY: '$4' });
-const InfoWrapper = styled('div', { spaceY: '$1' });

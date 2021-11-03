@@ -1,6 +1,4 @@
-import { useState } from 'react';
-
-import { styled } from 'styles/stitches.config';
+import { useHover } from 'lib/hooks';
 
 export interface ProgressProps {
   progress: number;
@@ -8,61 +6,24 @@ export interface ProgressProps {
 }
 
 export const Progress: React.FC<ProgressProps> = ({ progress, total }) => {
-  let [isHovering, setIsHovering] = useState(false);
+  const { isHovering, ...elProps } = useHover();
 
   return (
-    <Wrapper onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
+    <div className="relative w-full h-full" {...elProps}>
       {!isHovering ? (
-        <BarWrapper>
-          <BarBorder>
-            <Bar style={{ width: `calc(100% * (${progress + 3} / ${total}))` }} />
-          </BarBorder>
-        </BarWrapper>
+        <div className="absolute w-full h-full inset-0 flex items-center justify-center">
+          <div className="relative w-full h-2 rounded-md border border-black overflow-hidden">
+            <div
+              className="h-full bg-black rounded-md"
+              style={{ width: `calc(100% * (${progress + 3} / ${total}))` }}
+            />
+          </div>
+        </div>
       ) : (
-        <Display>
+        <div className="absolute inset-0 flex items-center justify-center tabular-nums">
           {progress} / {total}
-        </Display>
+        </div>
       )}
-    </Wrapper>
+    </div>
   );
 };
-
-const Wrapper = styled('div', {
-  position: 'relative',
-  width: '100%',
-  height: '100%',
-});
-
-const BarWrapper = styled('div', {
-  position: 'absolute',
-  width: '100%',
-  height: '100%',
-  inset: '$0',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-});
-
-const BarBorder = styled('div', {
-  position: 'relative',
-  width: '100%',
-  height: '$2',
-  borderRadius: '$md',
-  border: '1px solid $black',
-  overflow: 'hidden',
-});
-
-const Bar = styled('div', {
-  height: '100%',
-  backgroundColor: '$black',
-  borderRadius: '$md',
-});
-
-const Display = styled('div', {
-  position: 'absolute',
-  inset: '$0',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontVariantNumeric: 'tabular-nums',
-});

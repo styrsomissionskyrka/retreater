@@ -9,7 +9,6 @@ import { useRect } from '@reach/rect';
 import { useIsomorphicLayoutEffect, useAuthenticatedUser } from 'lib/hooks';
 import { setGlobalVariable } from 'lib/utils/css';
 import { compact } from 'lib/utils/array';
-import { styled } from 'styles/stitches.config';
 
 import { Link, NavLink } from '../Link';
 import { VisuallyHidden } from '../VisuallyHidden';
@@ -72,194 +71,67 @@ export const Admin: React.FC<Props> = ({
         <title key="title">{headTitle}</title>
       </Head>
 
-      <Header ref={headerRef}>
+      <header ref={headerRef} className="sticky flex items-center top-0 px-4 w-screen h-14 bg-black z-10">
         <Image src="/icon.svg" width={48} height={48} alt="" />
-      </Header>
+      </header>
 
-      <PageWrapper>
-        <Sidebar style={{ top: rect?.height ?? 0, height: `calc(100vh - ${rect?.height ?? 0}px)` }}>
-          <SidebarTitle>
+      <div className="relative flex flex-row">
+        <div
+          className="sticky flex flex-col w-1/4 py-8 px-10 border-r border-gray-200 md:w-1/6"
+          style={{ top: rect?.height ?? 0, height: `calc(100vh - ${rect?.height ?? 0}px)` }}
+        >
+          <p className="flex items-center mb-12 text-lg font-medium space-x-2">
             {backLink ? (
-              <SidebarBackLink href={backLink ?? '/'}>
+              <Link href={backLink ?? '/'} className="-ml-6 hover:text-blue-500">
                 <IconChevronLeft size={16} />
                 <VisuallyHidden>Gå tillbaka</VisuallyHidden>
-              </SidebarBackLink>
+              </Link>
             ) : null}
             <span>{sidebarTitle}</span>
-          </SidebarTitle>
+          </p>
 
           <nav aria-label="Primär navigation">
-            <NavList>
+            <ul className="space-y-4">
               {navLinks.map(({ href, label, icon }, index) => (
                 <li key={index}>
-                  <SidebarNavLink href={href} shallow={shallowLinks}>
+                  <NavLink
+                    href={href}
+                    className="flex items-center space-x-2 rounded-md -ml-2 px-2 py-1 hover:bg-black hover:text-white"
+                    activeClassName="text-blue-600"
+                  >
                     {cloneElement(icon, { style: { flex: 'none' } })}
                     <span>{label}</span>
-                  </SidebarNavLink>
+                  </NavLink>
                 </li>
               ))}
-            </NavList>
+            </ul>
           </nav>
 
-          <Footer>
+          <div className="flex items-center mt-auto space-x-2">
             <Avatar id={user.id ?? ''} image={user.picture ?? undefined} />
-            <FooterMeta>
-              <FooterLink href={`/admin/anvandare/${encodeURIComponent(user.id)}`}>
+            <div className="flex flex-col">
+              <Link href={`/admin/anvandare/${encodeURIComponent(user.id)}`} className="text-sm">
                 {user.name ?? user.email ?? '-'}
-              </FooterLink>
-              <FooterSignOutLink href="/admin/logout" replace>
+              </Link>
+              <Link href="/admin/logout" replace className="text-xs text-red-500 hover:text-red-800">
                 Logga ut
-              </FooterSignOutLink>
-            </FooterMeta>
-          </Footer>
-        </Sidebar>
+              </Link>
+            </div>
+          </div>
+        </div>
 
-        <Main>
-          <MainHeader>
-            <TitleWrapper>
-              <PageTitle>{headerTitle}</PageTitle>
-              {subTitle ? <SubTitle>{subTitle}</SubTitle> : null}
-            </TitleWrapper>
-            {actions ? <Actions>{actions}</Actions> : null}
-          </MainHeader>
+        <main className="flex-1 px-8 pt-10 pb-20">
+          <div className="flex items-start w-full max-w-4xl mx-auto mb-20">
+            <div className="flex items-baseline space-x-4">
+              <h1 className="text-4xl font-medium">{headerTitle}</h1>
+              {subTitle ? <small className="text-sm text-gray-500">{subTitle}</small> : null}
+            </div>
+            {actions ? <div className="flex items-center ml-auto space-x-2">{actions}</div> : null}
+          </div>
 
-          <Content>{children}</Content>
-        </Main>
-      </PageWrapper>
+          <div className="relative w-full max-w-4xl mx-auto">{children}</div>
+        </main>
+      </div>
     </Fragment>
   );
 };
-
-const Header = styled('header', {
-  position: 'sticky',
-  display: 'flex',
-  alignItems: 'center',
-  top: '0',
-  px: '$4',
-  width: '100vw',
-  height: '$14',
-  background: '$black',
-  zIndex: '$10',
-});
-
-const PageWrapper = styled('div', {
-  position: 'relative',
-  display: 'flex',
-  flexFlow: 'row nowrap',
-});
-
-const Main = styled('main', {
-  flex: '1 1 0%',
-  px: '$8',
-  paddingTop: '$10',
-  paddingBottom: '$20',
-});
-
-const Content = styled('div', {
-  position: 'relative',
-  width: '100%',
-  maxWidth: '$max4xl',
-  mx: 'auto',
-});
-
-const MainHeader = styled('div', {
-  display: 'flex',
-  alignItems: 'start',
-  width: '100%',
-  maxWidth: '$max4xl',
-  mx: 'auto',
-  marginBottom: '$20',
-});
-
-const TitleWrapper = styled('div', {
-  display: 'flex',
-  alignItems: 'baseline',
-  spaceX: '$4',
-});
-
-const PageTitle = styled('h1', {
-  text: '$4xl',
-  fontWeight: '$medium',
-});
-
-const SubTitle = styled('small', {
-  text: '$sm',
-  color: '$gray500',
-});
-
-const Actions = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  marginLeft: 'auto',
-  spaceX: '$2',
-});
-
-const Sidebar = styled('div', {
-  position: 'sticky',
-  display: 'flex',
-  flexFlow: 'column nowrap',
-  width: '$1/4',
-  py: '$8',
-  px: '$10',
-  borderRight: '1px solid $gray200',
-  '@md': { width: '$1/6' },
-});
-
-const SidebarTitle = styled('p', {
-  display: 'flex',
-  alignItems: 'center',
-  marginBottom: '$12',
-  text: '$lg',
-  fontWeight: '$medium',
-  spaceX: '$2',
-});
-
-const SidebarBackLink = styled(Link, {
-  marginLeft: 'calc($6 * -1)',
-  '&:hover': {
-    color: '$blue500',
-  },
-});
-
-const NavList = styled('ul', {
-  spaceY: '$4',
-});
-
-const SidebarNavLink = styled(NavLink, {
-  display: 'flex',
-  alignItems: 'center',
-  spaceX: '$2',
-  borderRadius: '$md',
-  marginLeft: 'calc($2 * -1)',
-  px: '$2',
-  py: '$1',
-
-  '&:hover': {
-    background: '$black',
-    color: '$white !important',
-  },
-
-  '&[data-active="true"]': {
-    color: '$blue600',
-  },
-});
-
-const Footer = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  marginTop: 'auto',
-  spaceX: '$2',
-});
-
-const FooterMeta = styled('div', { display: 'flex', flexFlow: 'column nowrap' });
-
-const FooterLink = styled(Link, {
-  text: '$sm',
-  '&:hover': { color: '$blue500' },
-});
-
-const FooterSignOutLink = styled(Link, {
-  text: '$xs',
-  color: '$red500',
-  '&:hover': { color: '$red800' },
-});

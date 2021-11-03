@@ -2,6 +2,7 @@ export * from './useControlledInput';
 export * from './useDebouncedValue';
 export * from './useDevelopmentWarning';
 export * from './useForceUpdate';
+export * from './useHover';
 export * from './useId';
 export * from './useIntersection';
 export * from './useIsMounted';

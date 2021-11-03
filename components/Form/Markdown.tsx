@@ -12,12 +12,13 @@ import {
   IconPhoto,
   IconStrikethrough,
 } from '@tabler/icons';
+import classNames from 'classnames';
 
 import { useIsomorphicLayoutEffect, useResizedTextarea, useId, useProxyRefObject } from 'lib/hooks';
 import { setAttribute, toggleAttribute } from 'lib/utils/dom';
-import { css } from 'styles/stitches.config';
 
 import { Label } from './Controls';
+import styles from './Markdown.module.css';
 
 export interface MarkdownProps {
   value?: string;
@@ -71,12 +72,8 @@ export const Markdown = forwardRef<HTMLTextAreaElement, MarkdownProps>(
     ];
 
     const classes = {
-      // ...styles,
-      reactMde: reactMde({ invalid: error != null }).toString(),
-      toolbar: toolbar().toString(),
-      textArea: textArea().toString(),
-      preview: preview().toString(),
-      suggestionsDropdown: suggestionsDropdown().toString(),
+      ...styles,
+      reactMde: classNames(styles.reactMde, error != null && styles.invalid),
     };
 
     return (
@@ -134,76 +131,3 @@ const getIcon: GetIcon = (name) => {
       return null;
   }
 };
-
-const reactMde = css({
-  border: '1px solid $black',
-  borderRadius: '$md',
-  width: '100%',
-
-  '&:focus-within': { outline: '$black' },
-
-  '& .invisible': {
-    display: 'hidden',
-  },
-
-  variants: {
-    invalid: {
-      true: {
-        borderWidth: '2px',
-        borderColor: '$red500',
-      },
-    },
-  },
-});
-
-const toolbar = css({
-  borderBottom: '1px solid black',
-  spaceX: '$8',
-  roundedTop: '$md',
-  backgroundColor: '$white',
-  position: 'sticky',
-  top: 'var(--header-height)',
-  display: 'flex',
-  alignItems: 'center',
-
-  '& .mde-tabs button': {
-    padding: '$3',
-    lineHeight: 1,
-  },
-  '& .mde-tabs button:hover, & .mde-tabs button.selected': {
-    backgroundColor: '$gray200',
-  },
-
-  '& .mde-header-group': {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  '& .mde-header-group .mde-header-item button': {
-    padding: '$3',
-    display: 'flex',
-    alignItems: 'center',
-  },
-  '& .mde-header-group .mde-header-item button:hover': {
-    backgroundColor: '$gray200',
-  },
-});
-
-const textArea = css({
-  borderRadius: '$md',
-  padding: '$3',
-  display: 'block',
-  width: '100%',
-  margin: 0,
-  border: 0,
-  tabSize: '4',
-  resize: 'none',
-  overflowY: 'auto',
-  minHeight: '$48',
-
-  '&:focus': {
-    outline: 'none',
-  },
-});
-
-const preview = css({});
-const suggestionsDropdown = css({});

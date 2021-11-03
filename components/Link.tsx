@@ -4,22 +4,32 @@ import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import { useRouter } from 'next/router';
 import React, { forwardRef } from 'react';
 
-import { styled } from 'styles/stitches.config';
-
-const A = styled('a', {
-  '&:hover': { color: '$blue500' },
-  '&:focus': { outline: '$black' },
-});
-
 type LinkProps = Omit<NextLinkProps, 'as' | 'passHref'> &
   Omit<React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>, 'href' | 'ref'>;
 
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ href, replace, scroll, shallow, prefetch, locale, children, target, rel: passedRel, ...anchor }, ref) => {
+  (
+    {
+      href,
+      replace,
+      scroll,
+      shallow,
+      prefetch,
+      locale,
+      children,
+      target,
+      rel: passedRel,
+      className: passedClassName,
+      ...anchor
+    },
+    ref,
+  ) => {
     let rel = passedRel;
     if (target === '_blank' && ref != null) {
       rel = 'noopener noreferrer';
     }
+
+    let className = classNames('hover:text-blue-500 focus:outline-black', passedClassName);
 
     return (
       <NextLink
@@ -31,10 +41,10 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
         locale={locale}
         passHref
       >
-        <A {...anchor} ref={ref} target={target} rel={rel}>
+        <a {...anchor} ref={ref} target={target} rel={rel} className={className}>
           {children}
           {target === '_blank' ? ' ↗' : ''}
-        </A>
+        </a>
       </NextLink>
     );
   },

@@ -1,46 +1,23 @@
 import { Fragment } from 'react';
 
-import { styled } from 'styles/stitches.config';
-
 import { CopyInline } from '../CopyInline';
 import { Link } from '../Link';
 
 export type GridArea = 'status' | 'owner' | 'retreat' | 'payments' | 'refunds';
 
-export const PageLayout = styled('div', {
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
-  gap: '$8',
-});
-
-const PageSectionWrapper = styled('section', {
-  border: '1px solid $black',
-  borderRadius: '$md',
-  overflow: 'hidden',
-  boxShadow: '$md',
-  divideY: '$1',
-  divideColor: '$black',
-});
-
-const SectionTitle = styled('h2', {
-  px: '$4',
-  py: '$2',
-  backgroundColor: '$gray100',
-  fontWeight: '$semibold',
-  text: '$lg',
-});
-
-const Section = styled('div', {
-  padding: '$4',
-  spaceY: '$4',
-});
+export const PageLayout: React.FC = ({ children }) => {
+  return <div className="grid grid-cols-2 gap-8">{children}</div>;
+};
 
 export const PageSection: React.FC<{ span?: number; title?: React.ReactNode }> = ({ span = 2, title, children }) => {
   return (
-    <PageSectionWrapper style={{ gridColumn: `span ${span}` }}>
-      {title ? <SectionTitle>{title}</SectionTitle> : null}
-      <Section>{children}</Section>
-    </PageSectionWrapper>
+    <section
+      className="border border-black rounded-md overflow-hidden shadow-md divide-y divide-black"
+      style={{ gridColumn: `span ${span}` }}
+    >
+      {title ? <h2 className="px-4 py-2 bg-gray-100 font-semibold text-lg">{title}</h2> : null}
+      <div className="p-4 space-y-4">{children}</div>
+    </section>
   );
 };
 
@@ -53,7 +30,7 @@ type Definition = {
 
 export const DefinitionList: React.FC<{ defs: Definition[] }> = ({ defs }) => {
   return (
-    <Dl>
+    <dl className="w-full grid gap-x-4 gap-y-0" style={{ gridTemplateColumns: 'min-content auto' }}>
       {defs.map((def) => {
         let dd: React.ReactNode;
         switch (true) {
@@ -69,20 +46,11 @@ export const DefinitionList: React.FC<{ defs: Definition[] }> = ({ defs }) => {
 
         return (
           <Fragment key={def.key}>
-            <Dt>{def.key}:</Dt>
+            <dt className="font-semibold">{def.key}:</dt>
             <dd>{dd}</dd>
           </Fragment>
         );
       })}
-    </Dl>
+    </dl>
   );
 };
-
-const Dl = styled('dl', {
-  width: '100%',
-  display: 'grid',
-  gridTemplateColumns: 'min-content auto',
-  gap: '0 1rem',
-});
-
-const Dt = styled('dt', { fontWeight: '$semibold' });

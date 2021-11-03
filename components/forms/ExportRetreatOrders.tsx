@@ -1,7 +1,6 @@
 import { Fragment, useState } from 'react';
 
 import { getNewFileHandle, verifyPermission, writeFile, supportsFileSystemAPI } from 'lib/utils/files';
-import { styled } from 'styles/stitches.config';
 
 import { Button } from '../Button';
 import { Dialog } from '../Dialog';
@@ -54,7 +53,12 @@ export const ExportRetreatOrders: React.FC<ExportRetreatOrdersProps> = ({ retrea
     <Fragment>
       <Button onClick={() => setShowDialog(true)}>Exportera</Button>
       <Dialog isOpen={showDialog} onDismiss={() => setShowDialog(false)}>
-        <FormWrapper method="GET" action={action} onSubmit={exportRetreatOrders}>
+        <form
+          method="GET"
+          action={action}
+          onSubmit={exportRetreatOrders}
+          className="w-full flex items-center justify-space-between"
+        >
           <input type="hidden" name="retreatId" value={retreatId} />
           <Form.Checkbox
             name="confirmedOnly"
@@ -66,15 +70,8 @@ export const ExportRetreatOrders: React.FC<ExportRetreatOrdersProps> = ({ retrea
           <Form.Submit size="small" variant="outline" isSubmitting={isSubmitting}>
             Exportera
           </Form.Submit>
-        </FormWrapper>
+        </form>
       </Dialog>
     </Fragment>
   );
 };
-
-const FormWrapper = styled('form', {
-  width: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-});
