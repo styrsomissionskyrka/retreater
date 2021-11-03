@@ -1,11 +1,14 @@
 import { UrlObject } from 'url';
 
 import { useRouter } from 'next/router';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 
 import { PaginationFieldsFragment } from 'lib/graphql';
 import { omit } from 'lib/utils/object';
 
+import { VisuallyHidden } from '../VisuallyHidden';
 import { Link } from '../Link';
+import { useDataTable } from '.';
 
 interface Props {
   meta?: PaginationFieldsFragment;
@@ -21,37 +24,54 @@ const defaultMeta: PaginationFieldsFragment = {
 };
 
 export const Pagination: React.FC<Props> = ({ meta = defaultMeta }) => {
+  let table = useDataTable();
+
   let current = meta.currentPage;
   let rangeStart = (current - 1) * meta.perPage + 1;
-  let rangeEnd = rangeStart + meta.perPage - 1;
+  let rangeEnd = Math.min(rangeStart + meta.perPage - 1, table.data.length);
 
   return (
-    <div className="flex space-x-8">
-      <span>
+    <div className="flex items-center justify-between border-t border-black h-16 !mt-0 px-2 leading-none">
+      <p className="text-sm">
         Visar {rangeStart} - {rangeEnd} av {meta.totalItems} resultat
-      </span>
+      </p>
 
-      <PaginationLink page={current - 1} disabled={!meta.hasPreviousPage}>
-        Föregående
-      </PaginationLink>
+      <div className="flex gap-4">
+        <PaginationLink page={current - 1} disabled={!meta.hasPreviousPage}>
+          <IconChevronLeft size={16} />
+          <VisuallyHidden>Föregående</VisuallyHidden>
+        </PaginationLink>
 
-      <PaginationLink page={current + 1} disabled={!meta.hasNextPage}>
-        Nästa
-      </PaginationLink>
+        <PaginationLink page={current + 1} disabled={!meta.hasNextPage}>
+          <IconChevronRight size={16} />
+          <VisuallyHidden>Nästa</VisuallyHidden>
+        </PaginationLink>
+      </div>
     </div>
   );
 };
 
-const PaginationLink: React.FC<{ page: number; disabled: boolean }> = ({ page, disabled, children }) => {
+const PaginationLink: React.FC<{ page: number; disabled: boolean; className?: string }> = ({
+  page,
+  disabled,
+  className,
+  children,
+}) => {
   const router = useRouter();
 
   if (disabled) {
-    return <span style={{ cursor: 'default' }}>{children}</span>;
+    return (
+      <span style={{ cursor: 'default' }} className={className}>
+        {children}
+      </span>
+    );
   }
 
-  let href: UrlObject =
-    page === 1
-      ? { pathname: router.pathname, query: omit(router.query, 'page') }
-      : { pathname: router.pathname, query: { ...router.query, page } };
-  return <Link href={href}>{children}</Link>;
+  let href: UrlObject = page === 1 ? { query: omit(router.query, 'page') } : { query: { ...router.query, page } };
+
+  return (
+    <Link href={href} className={className}>
+      {children}
+    </Link>
+  );
 };

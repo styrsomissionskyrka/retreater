@@ -105,7 +105,7 @@ export type ContentProps = {
 };
 
 export const Content = forwardRef<HTMLDivElement, ContentProps & ElementProps<'div'>>(
-  ({ mode, onClick = noop, children, ...props }, ref) => {
+  ({ mode = 'dialog', onClick = noop, children, ...props }, ref) => {
     return (
       <div
         {...props}
@@ -128,7 +128,7 @@ export const Content = forwardRef<HTMLDivElement, ContentProps & ElementProps<'d
 Content.displayName = 'Dialog.Content';
 
 export const Dialog = forwardRef<HTMLDivElement, OverlayProps & ContentProps>(
-  ({ isOpen, mode, initialFocusRef, onDismiss, children, ...props }, ref) => {
+  ({ isOpen, mode = 'dialog', initialFocusRef, onDismiss, children, ...props }, ref) => {
     return (
       <Overlay isOpen={isOpen} mode={mode} initialFocusRef={initialFocusRef} onDismiss={onDismiss}>
         <Content {...props} mode={mode} ref={ref}>
