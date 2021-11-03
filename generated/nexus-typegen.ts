@@ -203,6 +203,7 @@ export interface NexusGenFieldTypes {
     item: NexusGenRootTypes['LogItemType'] | null; // LogItemType
   }
   Mutation: { // field return type
+    assignUserRoles: NexusGenRootTypes['User'] | null; // User
     cancelOrder: NexusGenRootTypes['Order'] | null; // Order
     checkoutOrder: NexusGenRootTypes['OrderCheckoutSession']; // OrderCheckoutSession!
     createOrder: NexusGenRootTypes['Order']; // Order!
@@ -295,6 +296,7 @@ export interface NexusGenFieldTypes {
     paymentIntent: NexusGenRootTypes['PaymentIntent']; // PaymentIntent!
     retreat: NexusGenRootTypes['Retreat'] | null; // Retreat
     retreats: NexusGenRootTypes['PaginatedRetreat']; // PaginatedRetreat!
+    roles: NexusGenRootTypes['Role'][]; // [Role!]!
     user: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['PaginatedUser']; // PaginatedUser!
   }
@@ -384,6 +386,7 @@ export interface NexusGenFieldTypeNames {
     item: 'LogItemType'
   }
   Mutation: { // field return type name
+    assignUserRoles: 'User'
     cancelOrder: 'Order'
     checkoutOrder: 'OrderCheckoutSession'
     createOrder: 'Order'
@@ -476,6 +479,7 @@ export interface NexusGenFieldTypeNames {
     paymentIntent: 'PaymentIntent'
     retreat: 'Retreat'
     retreats: 'PaginatedRetreat'
+    roles: 'Role'
     user: 'User'
     users: 'PaginatedUser'
   }
@@ -530,6 +534,10 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    assignUserRoles: { // args
+      id: string; // ID!
+      roles: string[]; // [ID!]!
+    }
     cancelOrder: { // args
       id?: string | null; // ID
       sessionId?: string | null; // ID

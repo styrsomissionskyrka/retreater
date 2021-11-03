@@ -11,6 +11,7 @@ import {
   UpdateUserInput,
   useQuery,
   useMutation,
+  ROLE_FRAGMENT,
 } from 'lib/graphql';
 
 import { createConnectedFormComponents } from '../ConnectedForm';
@@ -18,7 +19,9 @@ import { Spinner } from '../Spinner';
 import { toast } from '../Toast';
 import { Dialog, Title } from '../Dialog';
 
-const Form = createConnectedFormComponents<UpdateUserInput>();
+type FormValues = UpdateUserInput & { roles: string[] };
+
+const Form = createConnectedFormComponents<FormValues>();
 
 interface EditUserProps {
   id: string | null;
@@ -26,12 +29,13 @@ interface EditUserProps {
 }
 
 export const EditUser: React.FC<EditUserProps> = ({ id, onSuccess }) => {
-  const { state, data } = useQuery(EDIT_USER_QUERY, { variables: { id }, skip: id == null });
-  const [mutate] = useMutation(UPDATE_USER_MUTATION);
+  const query = useQuery(EDIT_USER_QUERY, { variables: { id }, skip: id == null });
+  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
 
-  const handleSubmit: SubmitHandler<UpdateUserInput> = async (values) => {
+  const handleSubmit: SubmitHandler<FormValues> = async ({ roles, ...input }) => {
     if (id == null) return;
-    await toast.promise(mutate({ variables: { id, input: values } }), {
+
+    await toast.promise(updateUser({ variables: { id, input, roles } }), {
       loading: '...',
       success: 'Användare uppdaterad',
       error: 'Kunde inte uppdatera användare',
@@ -42,19 +46,32 @@ export const EditUser: React.FC<EditUserProps> = ({ id, onSuccess }) => {
 
   return (
     <Dialog isOpen={id != null} mode="sidebar" onDismiss={onSuccess}>
-      <Title>Redigera {data?.user?.name}</Title>
-      {state === 'loading' && <Spinner />}
-      {state === 'error' && <p>Kunde inte hämta data</p>}
-      {state === 'success' && (
+      <Title>Redigera {query.data?.user?.name}</Title>
+      {query.state === 'loading' && <Spinner />}
+      {query.state === 'error' && <p>Kunde inte hämta data</p>}
+      {query.state === 'success' && (
         <Form.Form onSubmit={handleSubmit}>
           <Form.Row>
-            <Form.Input name="email" type="email" defaultValue={data?.user?.email ?? ''} label="E-post" />
+            <Form.Input name="email" type="email" defaultValue={query.data.user?.email ?? ''} label="E-post" />
           </Form.Row>
           <Form.Row>
-            <Form.Input name="name" defaultValue={data?.user?.name ?? ''} label="Namn" />
+            <Form.Input name="name" defaultValue={query.data.user?.name ?? ''} label="Namn" />
           </Form.Row>
           <Form.Row>
-            <Form.Input name="nickname" defaultValue={data?.user?.nickname ?? ''} label="Smeknamn" />
+            <Form.Input name="nickname" defaultValue={query.data.user?.nickname ?? ''} label="Smeknamn" />
+          </Form.Row>
+          <Form.Row>
+            <Form.CheckboxList
+              name="roles"
+              defaultValues={query.data.user?.roles.map((role) => role.id) ?? []}
+              options={
+                query.data.roles.map((role) => ({
+                  value: role.id,
+                  label: role.name,
+                })) ?? []
+              }
+              label="Roller"
+            />
           </Form.Row>
 
           <Form.ActionRow>
@@ -73,14 +90,22 @@ export const EDIT_USER_QUERY: TypedDocumentNode<AdminEditUserQuery, AdminEditUse
       id
       ...UserFields
     }
+    roles {
+      ...RoleFields
+    }
   }
 
   ${USER_FRAGMENT}
+  ${ROLE_FRAGMENT}
 `;
 
 export const UPDATE_USER_MUTATION: TypedDocumentNode<AdminUpdateUserMutation, AdminUpdateUserMutationVariables> = gql`
-  mutation AdminUpdateUser($id: ID!, $input: UpdateUserInput!) {
+  mutation AdminUpdateUser($id: ID!, $input: UpdateUserInput!, $roles: [ID!]!) {
     updateUser(id: $id, input: $input) {
+      id
+      ...UserFields
+    }
+    assignUserRoles(id: $id, roles: $roles) {
       id
       ...UserFields
     }

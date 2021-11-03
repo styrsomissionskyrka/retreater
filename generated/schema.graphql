@@ -96,6 +96,7 @@ type LogItem {
 union LogItemType = Order | Retreat
 
 type Mutation {
+  assignUserRoles(id: ID!, roles: [ID!]!): User
   cancelOrder(id: ID, sessionId: ID): Order
   checkoutOrder(id: ID!): OrderCheckoutSession!
   createOrder(
@@ -232,6 +233,7 @@ type Query {
   paymentIntent(id: ID!): PaymentIntent!
   retreat(id: ID, slug: String): Retreat
   retreats(order: OrderEnum! = ASC, orderBy: RetreatOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, search: String, status: RetreatStatusEnum): PaginatedRetreat!
+  roles: [Role!]!
   user(email: String, id: ID): User
   users(page: Int! = 1, perPage: Int! = 25, search: String): PaginatedUser!
 }

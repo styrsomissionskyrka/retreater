@@ -135,6 +135,15 @@ export const UserQuery = n.extendType({
         return { items, paginationMeta };
       },
     });
+
+    t.field('roles', {
+      type: n.nonNull(n.list(n.nonNull(Role))),
+      authorize: authorizedWithRoles(['admin', 'superadmin']),
+      async resolve(_, __, ctx) {
+        let roles = await ctx.auth0.getRoles();
+        return roles.filter(hasKey('id'));
+      },
+    });
   },
 });
 
@@ -158,6 +167,31 @@ export const UserMutation = n.extendType({
           },
         );
 
+        return hasKey('user_id', user) ? user : null;
+      },
+    });
+
+    t.field('assignUserRoles', {
+      type: User,
+      authorize: authorizedWithRoles(['superadmin']),
+      args: {
+        id: n.nonNull(n.idArg()),
+        roles: n.nonNull(n.list(n.nonNull(n.idArg()))),
+      },
+      async resolve(_, args, ctx) {
+        let currentRoles = await ctx.auth0.getUserRoles({ id: args.id });
+
+        let unassign = currentRoles
+          .filter(hasKey('id'))
+          .filter((role) => role.id != null && !args.roles.includes(role.id))
+          .map((role) => role.id);
+
+        await Promise.all([
+          ctx.auth0.assignRolestoUser({ id: args.id }, { roles: args.roles }),
+          unassign.length > 0 ? ctx.auth0.removeRolesFromUser({ id: args.id }, { roles: unassign }) : null,
+        ]);
+
+        let user = await ctx.auth0.getUser({ id: args.id });
         return hasKey('user_id', user) ? user : null;
       },
     });

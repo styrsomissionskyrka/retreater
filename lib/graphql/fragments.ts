@@ -11,6 +11,13 @@ export const PAGINATION_FRAGMENT = gql`
   }
 `;
 
+export const ROLE_FRAGMENT = gql`
+  fragment RoleFields on Role {
+    id
+    name
+  }
+`;
+
 export const USER_FRAGMENT = gql`
   fragment UserFields on User {
     id
@@ -18,5 +25,10 @@ export const USER_FRAGMENT = gql`
     name
     picture
     nickname
+    roles {
+      ...RoleFields
+    }
   }
+
+  ${ROLE_FRAGMENT}
 `;

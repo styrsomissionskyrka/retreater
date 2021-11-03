@@ -54,6 +54,13 @@ const Users: NextPage = () => {
         Header: 'E-post',
         getLink: (row) => `/admin/anvandare/${row.id}`,
       }),
+      {
+        accessor: 'roles',
+        Header: 'Roller',
+        Cell({ value }) {
+          return <p>{value.map((role) => role.name).join(', ')}</p>;
+        },
+      },
       DataTable.Columns.createContextMenuCell({
         accessor: 'id',
         Header: '',
@@ -112,6 +119,10 @@ export const USERS_QUERY: TypedDocumentNode<AdminUsersQuery, AdminUsersQueryVari
       items {
         id
         ...UserFields
+        roles {
+          id
+          name
+        }
       }
     }
   }

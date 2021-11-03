@@ -205,7 +205,7 @@ export function Select<FormValues extends FieldValues>({
 }
 
 interface CheckboxProps<FormValues extends FieldValues>
-  extends Omit<FormUI.CheckboxProps, 'name' | 'value' | 'onChange' | 'onBlur' | 'defaultChecked'> {
+  extends Omit<FormUI.CheckboxProps, 'name' | 'onChange' | 'onBlur' | 'defaultChecked'> {
   name: Path<FormValues>;
   defaultChecked: FormUI.CheckboxProps['defaultChecked'];
   options?: RegisterOptions<FormValues>;
@@ -229,6 +229,38 @@ export function Checkbox<FormValues extends FieldValues>({
 
   const formProps = register(name, { ...options, ...passedOptions });
   return <FormUI.Checkbox {...props} {...formProps} defaultChecked={defaultChecked} error={errorMessage} />;
+}
+
+interface CheckboxListProps<FormValues extends FieldValues>
+  extends Omit<FormUI.CheckboxProps, 'name' | 'value' | 'onChange' | 'onBlur' | 'defaultChecked'> {
+  name: Path<FormValues>;
+  defaultValues: string[];
+  options: { value: string; label: string }[];
+  label?: React.ReactNode;
+}
+
+export function CheckboxList<FormValues extends FieldValues>({
+  name,
+  defaultValues,
+  options,
+  label,
+}: CheckboxListProps<FormValues>) {
+  return (
+    <div>
+      <p>{label}</p>
+      {options.map((option) => {
+        return (
+          <Checkbox
+            key={option.value}
+            name={name}
+            value={option.value}
+            defaultChecked={defaultValues.includes(option.value)}
+            label={option.label}
+          />
+        );
+      })}
+    </div>
+  );
 }
 
 type SubmitProps = Omit<FormUI.SubmitProps, 'isSubmitting'>;
@@ -281,6 +313,7 @@ export function createConnectedFormComponents<FormValues extends FieldValues>():
   Markdown: React.ComponentType<MarkdownProps<FormValues>>;
   Select: React.ComponentType<SelectProps<FormValues>>;
   Checkbox: React.ComponentType<CheckboxProps<FormValues>>;
+  CheckboxList: React.ComponentType<CheckboxListProps<FormValues>>;
   Submit: React.ComponentType<SubmitProps>;
   PriceDropdown: React.ComponentType<PriceDropdownProps<FormValues>>;
 } & Omit<typeof FormUI, 'Form' | 'Input' | 'Markdown' | 'Submit' | 'Select' | 'Checkbox' | 'PriceDropdown'> {
@@ -292,6 +325,7 @@ export function createConnectedFormComponents<FormValues extends FieldValues>():
     Markdown,
     Select,
     Checkbox,
+    CheckboxList,
     Submit,
     PriceDropdown,
   };
