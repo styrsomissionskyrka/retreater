@@ -32,8 +32,8 @@ export const REMOVE_USER: TypedDocumentNode<RemoveUserMutation, RemoveUserMutati
 `;
 
 export const INVITE_USER: TypedDocumentNode<InviteUserMutation, InviteUserMutationVariables> = gql`
-  mutation InviteUser($email: String!) {
-    inviteUser(email: $email) {
+  mutation InviteUser($email: String!, $name: String) {
+    inviteUser(email: $email, name: $name) {
       ticket
       user {
         id

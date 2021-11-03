@@ -2,7 +2,9 @@ import * as path from 'path';
 
 import * as n from 'nexus';
 import { User as Auth0User, GetUsersDataPaged } from 'auth0';
+import { nanoid } from 'nanoid';
 
+import { addSeconds } from '../../lib/utils/date-fns';
 import { ensure } from '../../lib/utils/assert';
 import { createPaginationMeta, hasKey, authorizedWithRoles } from '../utils';
 import { PaginatedQuery } from './Shared';
@@ -178,22 +180,33 @@ export const UserMutation = n.extendType({
     t.field('inviteUser', {
       type: InviteUser,
       authorize: authorizedWithRoles(['superadmin']),
-      args: { email: n.nonNull(n.stringArg()) },
+      args: { email: n.nonNull(n.stringArg()), name: n.stringArg() },
       async resolve(_, args, ctx) {
         let user = await ctx.auth0.createUser({
           email: args.email,
+          name: args.name ?? undefined,
+          connection: 'Username-Password-Authentication',
           email_verified: false,
-          connection: 'auth0',
+          password: nanoid(24),
         });
 
         if (!hasKey('user_id', user)) return null;
 
+        let ttl = 86400;
         let { ticket } = await ctx.auth0.createPasswordChangeTicket({
-          user_id: user.user_id,
           email: user.email,
-          result_url: 'localhost:3000/admin',
-          ttl_sec: 86400,
+          result_url: new URL('/api/auth/callback/auth0', process.env.VERCEL_URL).toString(),
+          ttl_sec: ttl,
           mark_email_as_verified: true,
+          connection_id: 'con_tN7UG4X4U1eJ0tPY', // Username-Password-Authentication connection id
+        });
+
+        await ctx.mail.send('invite', args.email, {
+          email: args.email,
+          name: user.name,
+          ticket,
+          expires: addSeconds(Date.now(), ttl),
+          from: ctx.session?.user.name,
         });
 
         return { user, ticket };

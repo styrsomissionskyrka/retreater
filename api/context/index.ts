@@ -11,6 +11,7 @@ import { prisma } from './prisma';
 import { stripe } from './stripe';
 import { createAuth0Client } from './auth0';
 import { App } from './app';
+import { MailService } from './mail';
 
 type ContextArgs = {
   req: NextApiRequest | GetServerSidePropsContext['req'];
@@ -24,6 +25,7 @@ export type Context = {
   stripe: Stripe;
   log: Logger;
   auth0: ManagementClient;
+  mail: MailService;
 };
 
 const ContextCache = new Map<string, Promise<Context>>();
@@ -45,6 +47,8 @@ export const createContext: ContextFunction<ContextArgs, Context> = async (args)
 async function createContextInternal(session: Session | null): Promise<Context> {
   let app = await App.create(prisma);
   let auth0 = await createAuth0Client(app);
+  let mail = new MailService();
+
   return {
     app,
     session,
@@ -52,6 +56,7 @@ async function createContextInternal(session: Session | null): Promise<Context> 
     stripe,
     log: createLogger(prisma),
     auth0,
+    mail,
   };
 }
 

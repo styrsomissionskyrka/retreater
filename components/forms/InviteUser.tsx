@@ -33,6 +33,7 @@ export const InviteUser: React.FC = () => {
         <Form.Form onSubmit={handleSubmit}>
           <Form.Row>
             <Form.Input name="email" type="email" defaultValue="" label="E-post" required />
+            <Form.Input name="name" defaultValue="" label="Namn" />
           </Form.Row>
           <Form.ActionRow>
             <Button variant="outline" onClick={() => setShowDialog(false)}>

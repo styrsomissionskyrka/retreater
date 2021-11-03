@@ -560,6 +560,7 @@ export interface NexusGenArgTypes {
     }
     inviteUser: { // args
       email: string; // String!
+      name?: string | null; // String
     }
     removeUser: { // args
       id: string; // ID!
