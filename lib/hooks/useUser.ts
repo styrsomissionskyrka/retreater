@@ -13,6 +13,7 @@ export function useAuthenticatedUser(): Omit<UserFieldsFragment, '__typename'> {
       email: session.data.user.email,
       name: session.data.user.name,
       picture: session.data.user.image,
+      roles: [],
     };
   }
 

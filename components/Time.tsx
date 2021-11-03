@@ -1,1 +1,7 @@
-export const Time: React.FC = ({ children }) => <time className="tabular-nums">{children}</time>;
+import { ElementProps } from 'lib/utils/types';
+
+export const Time: React.FC<ElementProps<'time'>> = ({ children, ...props }) => (
+  <time {...props} className="tabular-nums">
+    {children}
+  </time>
+);

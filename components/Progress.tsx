@@ -13,10 +13,7 @@ export const Progress: React.FC<ProgressProps> = ({ progress, total }) => {
       {!isHovering ? (
         <div className="absolute w-full h-full inset-0 flex items-center justify-center">
           <div className="relative w-full h-2 rounded-md border border-black overflow-hidden">
-            <div
-              className="h-full bg-black rounded-md"
-              style={{ width: `calc(100% * (${progress + 3} / ${total}))` }}
-            />
+            <div className="h-full bg-black rounded-md" style={{ width: `calc(100% * (${progress} / ${total}))` }} />
           </div>
         </div>
       ) : (

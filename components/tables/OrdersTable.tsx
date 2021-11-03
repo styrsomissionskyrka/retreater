@@ -63,26 +63,21 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({ retreatId }) => {
             getLink: (row) => `/admin/retreater/${row.retreat.id}/bokningar`,
           }),
 
-      DataTable.Columns.createRelativeDateCell({ accessor: 'createdAt', Header: 'Skapad' }),
+      DataTable.Columns.createRelativeDateCell({
+        accessor: 'createdAt',
+        Header: 'Skapad',
+        sortable: OrderOrderByEnum.CreatedAt,
+      }),
     ]);
   }, [retreatId]);
 
   let paginationMeta = data?.orders?.paginationMeta;
 
   return (
-    <DataTable.Provider data={orders} columns={columns} loading={loading}>
+    <DataTable.Provider data={orders} columns={columns} loading={loading} filters={variables} setFilters={setVariables}>
       <DataTable.Layout>
         <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
           <DataTable.Filters.SearchFilter<FiltersType> queryKey="search" placeholder="Sök e-post" />
-          <DataTable.Filters.EnumFilter<FiltersType>
-            queryKey="orderBy"
-            label="Sortera efter"
-            possibleValues={[
-              { value: OrderOrderByEnum.CreatedAt, label: 'Skapad' },
-              { value: OrderOrderByEnum.Status, label: 'Status' },
-            ]}
-          />
-
           <DataTable.Filters.EnumFilter<FiltersType>
             queryKey="status"
             label="Status"
@@ -96,8 +91,6 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({ retreatId }) => {
               { value: OrderStatusEnum.Errored, label: 'Felaktig' },
             ]}
           />
-
-          <DataTable.Filters.OrderFilter<FiltersType> queryKey="order" />
         </DataTable.Filters>
 
         <DataTable.Table>

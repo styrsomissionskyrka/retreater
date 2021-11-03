@@ -1,5 +1,9 @@
 import { Fragment } from 'react';
 import { ExpandedRowOptions, RenderExpandedRow, Row } from 'react-table';
+import router, { useRouter } from 'next/router';
+import { IconChevronDown, IconChevronUp } from '@tabler/icons';
+
+import { ensureOrderEnum, OrderEnum } from 'lib/graphql';
 
 import { Spinner } from '../Spinner';
 import * as UI from '../Table';
@@ -11,7 +15,8 @@ export const Table: React.FC = ({ children }) => {
 };
 
 export const Head: React.FC = () => {
-  const { headerGroups } = useDataTable();
+  const { headerGroups, filters, setFilters } = useDataTable();
+
   return (
     <UI.Head>
       {headerGroups.map((headerGroup) => {
@@ -20,9 +25,30 @@ export const Head: React.FC = () => {
           <UI.HeadRow {...headerGroupProps} key={key}>
             {headerGroup.headers.map((column) => {
               let { key, ...headerProps } = column.getHeaderProps();
+              let children = column.render('Header');
+
+              let isSorted = filters?.orderBy === column.sortable;
+              let order = ensureOrderEnum(filters?.order, OrderEnum.Asc);
+
               return (
                 <UI.HeadCell {...headerProps} key={key}>
-                  {column.render('Header')}
+                  {column.sortable != null && setFilters != null ? (
+                    <button
+                      className="flex space-x-2 hover:text-blue-500 focus:outline-black"
+                      onClick={() =>
+                        setFilters({
+                          orderBy: column.sortable,
+                          order: isSorted && order === OrderEnum.Desc ? OrderEnum.Asc : OrderEnum.Desc,
+                        })
+                      }
+                    >
+                      <span>{children}</span>
+                      {isSorted && order === OrderEnum.Asc && <IconChevronUp size={16} />}
+                      {isSorted && order === OrderEnum.Desc && <IconChevronDown size={16} />}
+                    </button>
+                  ) : (
+                    children
+                  )}
                 </UI.HeadCell>
               );
             })}

@@ -29,4 +29,6 @@ export const BodyRow = createTableComponent<'tr', { expanded?: 'child' | 'parent
   }),
 );
 
-export const BodyCell = createTableComponent('td', 'p-2 h-16 font-normal text-left max-w-[10rem]');
+export const BodyCell = createTableComponent<'td', { full?: boolean }>('td', ({ full }) =>
+  classNames('p-2 h-16 font-normal text-left max-w-[10rem]', full && 'w-full flex items-center'),
+);

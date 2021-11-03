@@ -48,8 +48,13 @@ const Retreats: NextPage = () => {
       DataTable.Columns.createDateRangeCell({
         Header: 'Datum',
         accessor: (row: RetreatType) => ({ start: row.startDate, end: row.endDate }),
+        sortable: RetreatOrderByEnum.StartDate,
       }),
-      DataTable.Columns.createRelativeDateCell({ Header: 'Skapad', accessor: 'createdAt' }),
+      DataTable.Columns.createRelativeDateCell({
+        Header: 'Skapad',
+        accessor: 'createdAt',
+        sortable: RetreatOrderByEnum.CreatedAt,
+      }),
       DataTable.Columns.createContextMenuCell({
         accessor: 'id',
         actions: [
@@ -104,19 +109,15 @@ const Retreats: NextPage = () => {
 
   return (
     <Layout.Admin title="Retreater" backLink="/admin" actions={actions}>
-      <DataTable.Provider data={retreats} columns={columns} loading={true}>
+      <DataTable.Provider
+        data={retreats}
+        columns={columns}
+        loading={loading}
+        filters={variables}
+        setFilters={setVariables}
+      >
         <DataTable.Layout>
           <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
-            <DataTable.Filters.EnumFilter<FiltersType>
-              queryKey="orderBy"
-              label="Sortera efter"
-              possibleValues={[
-                { value: RetreatOrderByEnum.CreatedAt, label: 'Skapad' },
-                { value: RetreatOrderByEnum.StartDate, label: 'Startdatum' },
-                { value: RetreatOrderByEnum.Status, label: 'Status' },
-              ]}
-            />
-
             <DataTable.Filters.EnumFilter<FiltersType>
               queryKey="status"
               label="Status"
@@ -127,8 +128,6 @@ const Retreats: NextPage = () => {
                 { value: RetreatStatusEnum.Archived, label: 'Arkiverat' },
               ]}
             />
-
-            <DataTable.Filters.OrderFilter<FiltersType> queryKey="order" />
           </DataTable.Filters>
 
           <DataTable.Table>

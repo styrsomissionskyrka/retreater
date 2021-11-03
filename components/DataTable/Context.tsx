@@ -2,44 +2,69 @@ import { useCallback } from 'react';
 import { useTable, TableInstance, Column, PluginHook, TableOptions } from 'react-table';
 
 import { createStrictContext } from 'lib/utils/context';
+import { SetParamsCallback } from 'lib/hooks';
 
-interface DataTableContextType<T extends object> extends TableInstance<T> {
+type TableFilters = { order: string; orderBy: string };
+
+interface DataTableContextType<T extends object, F extends TableFilters> extends TableInstance<T> {
   loading?: boolean;
+  filters?: F;
+  setFilters?: SetParamsCallback<F>;
 }
 
-const [DataTableProvider, useDataTable] = createStrictContext<DataTableContextType<any>>('DataTableContext');
+const [DataTableProvider, _useDataTable] = createStrictContext<DataTableContextType<any, any>>('DataTableContext');
 
-type DataTableProps<T extends object> = {
+export function useDataTable<T extends object, F extends TableFilters = TableFilters>(): DataTableContextType<T, F> {
+  return _useDataTable();
+}
+
+type DataTableProps<T extends object, F extends TableFilters> = {
   data: T[];
   columns: Column<T>[];
   hooks?: PluginHook<T>[];
   loading?: boolean;
+  filters?: F;
+  setFilters?: SetParamsCallback<F>;
   children?: React.ReactNode;
-} & Pick<TableOptions<T>, 'renderExpandedRow' | 'expandedRowOptions'>;
+} & TableOptions<T>;
 
-export function Provider<T extends object>({
+export function Provider<T extends object, F extends TableFilters>({
   data,
   columns,
   hooks = [],
   renderExpandedRow,
   expandedRowOptions,
   loading,
+  filters,
+  setFilters,
   children,
-}: DataTableProps<T>) {
+  ...props
+}: DataTableProps<T, F>) {
   const getRowId = useCallback((original: T, index: number) => {
     if (hasIdProp(original)) return original.id;
     return index.toString();
   }, []);
 
   const table = useTable<T>(
-    { data, columns, expandSubRows: false, autoResetExpanded: false, renderExpandedRow, expandedRowOptions, getRowId },
+    {
+      data,
+      columns,
+      expandSubRows: false,
+      autoResetExpanded: false,
+      renderExpandedRow,
+      expandedRowOptions,
+      getRowId,
+      ...props,
+    },
     ...hooks,
   );
 
-  return <DataTableProvider value={{ ...table, loading } as DataTableContextType<T>}>{children}</DataTableProvider>;
+  return (
+    <DataTableProvider value={{ ...table, loading, filters, setFilters } as DataTableContextType<T, F>}>
+      {children}
+    </DataTableProvider>
+  );
 }
-
-export { useDataTable };
 
 function hasIdProp(obj: any): obj is { id: string } {
   return typeof obj === 'object' && obj != null && 'id' in obj && typeof obj.id === 'string';
