@@ -5,7 +5,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { SessionProvider } from 'next-auth/react';
 
-import { globalStyles } from 'styles/global';
 import { ApolloProvider } from 'lib/graphql';
 import { useAppClient } from 'lib/graphql/client';
 import { PageWrapper, AdminWrapper } from 'components/PageWrappers';
@@ -15,8 +14,6 @@ import { PolyfillScript, Toaster, PageLoading } from 'components';
 const App: React.FC<ExtendedAppProps> = ({ Component, pageProps }) => {
   const client = useAppClient({ initialState: pageProps.initialState });
   const Layout = useDefaultLayout(Component);
-
-  globalStyles();
 
   return (
     <Fragment>
