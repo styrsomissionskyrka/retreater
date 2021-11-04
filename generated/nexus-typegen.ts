@@ -98,6 +98,7 @@ export interface NexusGenEnums {
   RefundStatusEnum: "canceled" | "failed" | "pending" | "succeeded"
   RetreatOrderByEnum: "createdAt" | "startDate" | "status"
   RetreatStatusEnum: "ARCHIVED" | "DRAFT" | "PUBLISHED"
+  UserOrderByEnum: "created_at" | "email" | "name"
 }
 
 export interface NexusGenScalars {
@@ -643,6 +644,8 @@ export interface NexusGenArgTypes {
       id?: string | null; // ID
     }
     users: { // args
+      order: NexusGenEnums['OrderEnum']; // OrderEnum!
+      orderBy: NexusGenEnums['UserOrderByEnum']; // UserOrderByEnum!
       page: number; // Int!
       perPage: number; // Int!
       search?: string | null; // String

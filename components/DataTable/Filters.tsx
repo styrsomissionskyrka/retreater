@@ -36,7 +36,7 @@ export function Filters<T extends QueryObject>({ values, setValues, children }: 
   const ctx = useMemo<FiltersContextType<T>>(() => ({ values, setValues }), [setValues, values]);
   return (
     <FiltersContext.Provider value={ctx}>
-      <form className="flex items-center space-x-4" onSubmit={(e) => e.preventDefault()}>
+      <form className="flex flex-col space-y-4" onSubmit={(e) => e.preventDefault()}>
         {children}
       </form>
     </FiltersContext.Provider>
@@ -44,12 +44,12 @@ export function Filters<T extends QueryObject>({ values, setValues, children }: 
 }
 
 interface FilterBaseProps<T extends QueryObject> {
+  label?: React.ReactNode;
   queryKey: keyof T;
 }
 
 interface EnumFilterProps<T extends QueryObject> extends FilterBaseProps<T> {
   possibleValues: { value: string; label: React.ReactNode }[];
-  label: React.ReactNode;
   allowEmpty?: boolean;
   emptyLabel?: React.ReactNode;
 }
@@ -74,6 +74,7 @@ export function EnumFilter<T extends QueryObject>({
 
   return (
     <Form.Select
+      label={sharedLabel}
       value={finalValue as string}
       onChange={(e) => {
         if (e.target.value === EMPTY) {
@@ -83,14 +84,10 @@ export function EnumFilter<T extends QueryObject>({
         }
       }}
     >
-      {allowEmpty ? (
-        <option value={EMPTY}>
-          {sharedLabel} {emptyLabel}
-        </option>
-      ) : null}
+      {allowEmpty ? <option value={EMPTY}>{emptyLabel}</option> : null}
       {possibleValues.map(({ value, label }) => (
         <option key={value} value={value}>
-          {sharedLabel} {label}
+          {label}
         </option>
       ))}
     </Form.Select>
@@ -99,24 +96,10 @@ export function EnumFilter<T extends QueryObject>({
 
 Filters.EnumFilter = EnumFilter;
 
-export function OrderFilter<T extends QueryObject>({ queryKey }: FilterBaseProps<T>) {
-  const [value, setValue] = useFilter<T>(queryKey);
-
-  return (
-    <Button
-      square
-      size="normal"
-      onClick={() => setValue((value === OrderEnum.Asc ? OrderEnum.Desc : OrderEnum.Asc) as T[keyof T])}
-      iconStart={value === OrderEnum.Desc ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
-    />
-  );
-}
-
-Filters.OrderFilter = OrderFilter;
-
 export function SearchFilter<T extends QueryObject>({
   queryKey,
   placeholder,
+  label,
 }: FilterBaseProps<T> & { placeholder: string }) {
   const [value, setValue] = useFilter<T>(queryKey);
   const [proxyValue, setProxyValue] = useState(value?.toString() ?? '');
@@ -124,6 +107,7 @@ export function SearchFilter<T extends QueryObject>({
 
   return (
     <Form.Input
+      label={label}
       name={queryKey as string}
       value={proxyValue}
       placeholder={placeholder}

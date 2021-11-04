@@ -8,6 +8,16 @@ import { addSeconds } from '../../lib/utils/date-fns';
 import { ensure } from '../../lib/utils/assert';
 import { createPaginationMeta, hasKey, authorizedWithRoles } from '../utils';
 import { PaginatedQuery } from './Shared';
+import { OrderEnum } from '.';
+
+export const UserOrderByEnum = n.enumType({
+  name: 'UserOrderByEnum',
+  members: {
+    EMAIL: 'email',
+    NAME: 'name',
+    CREATED_AT: 'created_at',
+  },
+});
 
 export const Role = n.objectType({
   name: 'Role',
@@ -114,14 +124,18 @@ export const UserQuery = n.extendType({
       args: {
         page: n.nonNull(n.intArg({ default: 1 })),
         perPage: n.nonNull(n.intArg({ default: 25 })),
+        order: n.nonNull(n.arg({ type: OrderEnum, default: 'asc' })),
+        orderBy: n.nonNull(n.arg({ type: UserOrderByEnum, default: 'created_at' })),
         search: n.stringArg(),
       },
       async resolve(_, args, ctx) {
+        let sort = `${args.orderBy}:${args.order === 'asc' ? '1' : '-1'}`;
         let params: GetUsersDataPaged = {
           include_totals: true,
           search_engine: 'v3',
           page: args.page - 1,
           per_page: args.perPage,
+          sort,
         };
 
         if (args.search != null) {
@@ -129,7 +143,7 @@ export const UserQuery = n.extendType({
         }
 
         let response = await ctx.auth0.getUsers(params);
-        let paginationMeta = createPaginationMeta(args.page - 1, args.perPage, response.total);
+        let paginationMeta = createPaginationMeta(args.page, args.perPage, response.total);
 
         let items = response.users.filter(hasKey('user_id'));
         return { items, paginationMeta };

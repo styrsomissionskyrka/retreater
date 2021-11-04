@@ -76,29 +76,29 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({ retreatId }) => {
   return (
     <DataTable.Provider data={orders} columns={columns} loading={loading} filters={variables} setFilters={setVariables}>
       <DataTable.Layout>
-        <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
-          <DataTable.Filters.SearchFilter<FiltersType> queryKey="search" placeholder="Sök e-post" />
-          <DataTable.Filters.EnumFilter<FiltersType>
-            queryKey="status"
-            label="Status"
-            allowEmpty
-            possibleValues={[
-              { value: OrderStatusEnum.Created, label: 'Skapad' },
-              { value: OrderStatusEnum.Confirmed, label: 'Bekräftad' },
-              { value: OrderStatusEnum.Pending, label: 'Väntande' },
-              { value: OrderStatusEnum.Cancelled, label: 'Avbruten' },
-              { value: OrderStatusEnum.Declined, label: 'Avvisad' },
-              { value: OrderStatusEnum.Errored, label: 'Felaktig' },
-            ]}
-          />
-        </DataTable.Filters>
-
         <DataTable.Table>
           <DataTable.Head />
           <DataTable.Body />
         </DataTable.Table>
 
-        <DataTable.Pagination meta={paginationMeta} />
+        <DataTable.Pagination meta={paginationMeta}>
+          <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
+            <DataTable.Filters.SearchFilter<FiltersType> queryKey="search" placeholder="Sök e-post" label="Sök" />
+            <DataTable.Filters.EnumFilter<FiltersType>
+              queryKey="status"
+              label="Status"
+              allowEmpty
+              possibleValues={[
+                { value: OrderStatusEnum.Created, label: 'Skapad' },
+                { value: OrderStatusEnum.Confirmed, label: 'Bekräftad' },
+                { value: OrderStatusEnum.Pending, label: 'Väntande' },
+                { value: OrderStatusEnum.Cancelled, label: 'Avbruten' },
+                { value: OrderStatusEnum.Declined, label: 'Avvisad' },
+                { value: OrderStatusEnum.Errored, label: 'Felaktig' },
+              ]}
+            />
+          </DataTable.Filters>
+        </DataTable.Pagination>
       </DataTable.Layout>
     </DataTable.Provider>
   );

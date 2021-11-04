@@ -235,7 +235,7 @@ type Query {
   retreats(order: OrderEnum! = ASC, orderBy: RetreatOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, search: String, status: RetreatStatusEnum): PaginatedRetreat!
   roles: [Role!]!
   user(email: String, id: ID): User
-  users(page: Int! = 1, perPage: Int! = 25, search: String): PaginatedUser!
+  users(order: OrderEnum! = ASC, orderBy: UserOrderByEnum! = CREATED_AT, page: Int! = 1, perPage: Int! = 25, search: String): PaginatedUser!
 }
 
 type Refund {
@@ -348,4 +348,10 @@ type User {
   picture: String
   roles: [Role!]!
   updatedAt: Date
+}
+
+enum UserOrderByEnum {
+  CREATED_AT
+  EMAIL
+  NAME
 }

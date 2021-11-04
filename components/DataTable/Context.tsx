@@ -4,7 +4,7 @@ import { useTable, TableInstance, Column, PluginHook, TableOptions } from 'react
 import { createStrictContext } from 'lib/utils/context';
 import { SetParamsCallback } from 'lib/hooks';
 
-type TableFilters = { order: string; orderBy: string };
+type TableFilters = { order?: string | null; orderBy?: string | null };
 
 interface DataTableContextType<T extends object, F extends TableFilters> extends TableInstance<T> {
   loading?: boolean;

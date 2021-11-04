@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
 import { ExpandedRowOptions, RenderExpandedRow, Row } from 'react-table';
-import router, { useRouter } from 'next/router';
 import { IconChevronDown, IconChevronUp } from '@tabler/icons';
 
 import { ensureOrderEnum, OrderEnum } from 'lib/graphql';
@@ -15,7 +14,7 @@ export const Table: React.FC = ({ children }) => {
 };
 
 export const Head: React.FC = () => {
-  const { headerGroups, filters, setFilters } = useDataTable();
+  const { headerGroups, loading, data } = useDataTable();
 
   return (
     <UI.Head>
@@ -23,32 +22,21 @@ export const Head: React.FC = () => {
         let { key, ...headerGroupProps } = headerGroup.getHeaderGroupProps();
         return (
           <UI.HeadRow {...headerGroupProps} key={key}>
-            {headerGroup.headers.map((column) => {
+            {headerGroup.headers.map((column, index) => {
               let { key, ...headerProps } = column.getHeaderProps();
-              let children = column.render('Header');
 
-              let isSorted = filters?.orderBy === column.sortable;
-              let order = ensureOrderEnum(filters?.order, OrderEnum.Asc);
+              /**
+               * Show spinner if:
+               *   1. This is the first header cell
+               *   2. `loading` is true
+               *   3. Previous data exists, if first load a bigger spinner is shown
+               */
+              let showSpinner = data.length > 0 && index === 0 && loading;
 
               return (
                 <UI.HeadCell {...headerProps} key={key}>
-                  {column.sortable != null && setFilters != null ? (
-                    <button
-                      className="flex space-x-2 hover:text-blue-500 focus:outline-black"
-                      onClick={() =>
-                        setFilters({
-                          orderBy: column.sortable,
-                          order: isSorted && order === OrderEnum.Desc ? OrderEnum.Asc : OrderEnum.Desc,
-                        })
-                      }
-                    >
-                      <span>{children}</span>
-                      {isSorted && order === OrderEnum.Asc && <IconChevronUp size={16} />}
-                      {isSorted && order === OrderEnum.Desc && <IconChevronDown size={16} />}
-                    </button>
-                  ) : (
-                    children
-                  )}
+                  {showSpinner && <Spinner size={16} />}
+                  <SortableButton sortable={column.sortable}>{column.render('Header')}</SortableButton>
                 </UI.HeadCell>
               );
             })}
@@ -83,7 +71,7 @@ export const Body: React.FC<BodyProps> = ({
       {state === 'loading' && (
         <UI.BodyRow>
           <UI.BodyCell colSpan={visibleColumns.length} full>
-            <div>{loadingMessage}</div>
+            {loadingMessage}
           </UI.BodyCell>
         </UI.BodyRow>
       )}
@@ -91,7 +79,7 @@ export const Body: React.FC<BodyProps> = ({
       {state === 'empty' && (
         <UI.BodyRow>
           <UI.BodyCell colSpan={visibleColumns.length} full>
-            <div>{emptyMessage}</div>
+            {emptyMessage}
           </UI.BodyCell>
         </UI.BodyRow>
       )}
@@ -148,5 +136,32 @@ const ExpandedRow: React.FC<ExpandedRowProps<{}>> = ({ row, columnCount, renderE
       <UI.BodyCell colSpan={span}>{renderExpandedRow(row)}</UI.BodyCell>
       {fill}
     </UI.BodyRow>
+  );
+};
+
+const SortableButton: React.FC<{ sortable?: string }> = ({ sortable, children }) => {
+  let { filters, setFilters } = useDataTable();
+
+  if (sortable == null || filters == null || setFilters == null) return <Fragment>{children}</Fragment>;
+
+  let isSorted = filters.orderBy === sortable;
+  let order = ensureOrderEnum(filters?.order, OrderEnum.Asc);
+
+  return (
+    <button
+      className="flex space-x-2 hover:text-blue-500 focus:outline-black"
+      onClick={() => {
+        if (setFilters != null) {
+          setFilters({
+            orderBy: sortable,
+            order: isSorted && order === OrderEnum.Desc ? OrderEnum.Asc : OrderEnum.Desc,
+          });
+        }
+      }}
+    >
+      <span>{children}</span>
+      {isSorted && order === OrderEnum.Asc && <IconChevronUp size={16} />}
+      {isSorted && order === OrderEnum.Desc && <IconChevronDown size={16} />}
+    </button>
   );
 };

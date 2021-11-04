@@ -14,6 +14,8 @@ import {
   AdminUsersQuery,
   AdminUsersQueryVariables,
   useRemoveUser,
+  OrderEnum,
+  UserOrderByEnum,
 } from 'lib/graphql';
 import { PaginatedType } from 'lib/utils/types';
 import { EditUser } from 'components/forms/EditUser';
@@ -25,6 +27,8 @@ type FiltersType = AdminUsersQueryVariables;
 const initialVariables: FiltersType = {
   page: 1,
   perPage: 25,
+  order: OrderEnum.Asc,
+  orderBy: UserOrderByEnum.CreatedAt,
   search: null,
 };
 
@@ -48,11 +52,13 @@ const Users: NextPage = () => {
         accessor: (row) => `${row.name}${row.id === user.id ? ' (jag)' : ''}`,
         Header: 'Namn',
         getLink: (row) => `/admin/anvandare/${row.id}`,
+        sortable: UserOrderByEnum.Name,
       }),
       DataTable.Columns.createLinkCell({
         accessor: 'email',
         Header: 'E-post',
         getLink: (row) => `/admin/anvandare/${row.id}`,
+        sortable: UserOrderByEnum.Email,
       }),
       {
         accessor: 'roles',
@@ -61,6 +67,12 @@ const Users: NextPage = () => {
           return <p>{value.map((role) => role.name).join(', ')}</p>;
         },
       },
+      DataTable.Columns.createFormattedDateCell({
+        accessor: 'createdAt',
+        dateFormat: 'yyyy-MM-dd',
+        Header: 'Skapad',
+        sortable: UserOrderByEnum.CreatedAt,
+      }),
       DataTable.Columns.createContextMenuCell({
         accessor: 'id',
         Header: '',
@@ -90,18 +102,28 @@ const Users: NextPage = () => {
 
   return (
     <Layout.Admin title="Användare" backLink="/admin" actions={actions}>
-      <DataTable.Provider data={users} columns={columns} loading={loading}>
+      <DataTable.Provider
+        data={users}
+        columns={columns}
+        loading={loading}
+        filters={variables}
+        setFilters={setVariables}
+      >
         <DataTable.Layout>
-          <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
-            <DataTable.Filters.SearchFilter<FiltersType> queryKey="search" placeholder="Sök" />
-          </DataTable.Filters>
-
           <DataTable.Table>
             <DataTable.Head />
             <DataTable.Body />
           </DataTable.Table>
 
-          <DataTable.Pagination meta={undefined} />
+          <DataTable.Pagination meta={data?.users.paginationMeta}>
+            <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
+              <DataTable.Filters.SearchFilter<FiltersType>
+                queryKey="search"
+                placeholder="Sök email eller namn"
+                label="Sök"
+              />
+            </DataTable.Filters>
+          </DataTable.Pagination>
 
           <EditUser id={userId} onSuccess={() => router.push('/admin/anvandare')} />
         </DataTable.Layout>
@@ -111,13 +133,14 @@ const Users: NextPage = () => {
 };
 
 export const USERS_QUERY: TypedDocumentNode<AdminUsersQuery, AdminUsersQueryVariables> = gql`
-  query AdminUsers($page: Int, $perPage: Int, $search: String) {
-    users(page: $page, perPage: $perPage, search: $search) {
+  query AdminUsers($page: Int, $perPage: Int, $order: OrderEnum, $orderBy: UserOrderByEnum, $search: String) {
+    users(page: $page, perPage: $perPage, order: $order, orderBy: $orderBy, search: $search) {
       paginationMeta {
         ...PaginationFields
       }
       items {
         id
+        createdAt
         ...UserFields
         roles {
           id

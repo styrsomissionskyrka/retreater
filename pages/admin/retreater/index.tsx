@@ -1,11 +1,10 @@
-import { useMemo, Fragment } from 'react';
+import { useMemo } from 'react';
 import { NextPage } from 'next';
-import { IconRefresh } from '@tabler/icons';
 
 import { gql, RetreatStatusEnum, TypedDocumentNode, useQuery } from 'lib/graphql';
 import { authenticatedPage } from 'lib/auth/hocs';
 import { authenticatedSSP } from 'lib/auth/server';
-import { Layout, DataTable, toast, LoadingButton, Spinner } from 'components';
+import { Layout, DataTable, toast } from 'components';
 import { useSearchParams, extractCurrentParams } from 'lib/hooks';
 import { compact } from 'lib/utils/array';
 import { ListRetreatsQuery, ListRetreatsQueryVariables, OrderEnum, RetreatOrderByEnum } from 'lib/graphql';
@@ -28,7 +27,7 @@ const initialVariables: FiltersType = {
 const Retreats: NextPage = () => {
   const [variables, setVariables] = useSearchParams(initialVariables);
 
-  const { previousData, data = previousData, refetch, loading } = useQuery(LIST_RETREATS_QUERY, { variables });
+  const { previousData, data = previousData, loading } = useQuery(LIST_RETREATS_QUERY, { variables });
   const [setRetreatStatus] = useSetRetreatStatus();
 
   const retreats = compact(data?.retreats?.items ?? []);
@@ -93,22 +92,8 @@ const Retreats: NextPage = () => {
     ];
   }, [setRetreatStatus]);
 
-  const actions = (
-    <Fragment>
-      <LoadingButton
-        square
-        size="normal"
-        onClick={refetch}
-        iconStart={<IconRefresh size={16} />}
-        spinner={<Spinner as={IconRefresh} size={16} reverse />}
-        aria-label="Uppdatera listan"
-      />
-      <CreateReatreat />
-    </Fragment>
-  );
-
   return (
-    <Layout.Admin title="Retreater" backLink="/admin" actions={actions}>
+    <Layout.Admin title="Retreater" backLink="/admin" actions={<CreateReatreat />}>
       <DataTable.Provider
         data={retreats}
         columns={columns}
@@ -117,25 +102,25 @@ const Retreats: NextPage = () => {
         setFilters={setVariables}
       >
         <DataTable.Layout>
-          <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
-            <DataTable.Filters.EnumFilter<FiltersType>
-              queryKey="status"
-              label="Status"
-              allowEmpty
-              possibleValues={[
-                { value: RetreatStatusEnum.Published, label: 'Publicerad' },
-                { value: RetreatStatusEnum.Draft, label: 'Utkast' },
-                { value: RetreatStatusEnum.Archived, label: 'Arkiverat' },
-              ]}
-            />
-          </DataTable.Filters>
-
           <DataTable.Table>
             <DataTable.Head />
             <DataTable.Body />
           </DataTable.Table>
 
-          <DataTable.Pagination meta={data?.retreats.paginationMeta} />
+          <DataTable.Pagination meta={data?.retreats.paginationMeta}>
+            <DataTable.Filters<FiltersType> values={variables} setValues={setVariables}>
+              <DataTable.Filters.EnumFilter<FiltersType>
+                queryKey="status"
+                label="Status"
+                allowEmpty
+                possibleValues={[
+                  { value: RetreatStatusEnum.Published, label: 'Publicerad' },
+                  { value: RetreatStatusEnum.Draft, label: 'Utkast' },
+                  { value: RetreatStatusEnum.Archived, label: 'Arkiverat' },
+                ]}
+              />
+            </DataTable.Filters>
+          </DataTable.Pagination>
         </DataTable.Layout>
       </DataTable.Provider>
     </Layout.Admin>
