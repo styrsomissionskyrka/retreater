@@ -1,7 +1,7 @@
 import { PRect, useRect } from '@reach/rect';
 import { forwardRef, useRef } from 'react';
+import { useComposedRefs } from '@fransvilhelm/hooks';
 
-import { useComposedRefs } from 'lib/hooks';
 import { ElementProps } from 'lib/utils/types';
 
 import { Portal } from './Portal';

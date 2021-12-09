@@ -1,7 +1,6 @@
 import { IconCopy } from '@tabler/icons';
 import classNames from 'classnames';
-
-import { useHover } from 'lib/hooks';
+import { useHover } from '@fransvilhelm/hooks';
 
 import { toast } from './Toast';
 
@@ -9,7 +8,7 @@ type CopyProps = { children: string } | { value: string; children: React.ReactNo
 
 export const CopyInline = (props: CopyProps) => {
   const { children } = props;
-  const { isHovering, ...elProps } = useHover();
+  const [isHovering, elProps] = useHover();
 
   const handleClick = async () => {
     let text = 'value' in props ? props.value : props.children;

@@ -2,8 +2,8 @@ import React, { forwardRef, useCallback, useRef } from 'react';
 import FocusLock from 'react-focus-lock';
 import { RemoveScroll } from 'react-remove-scroll';
 import classNames from 'classnames';
+import { useComposedRefs } from '@fransvilhelm/hooks';
 
-import { useComposedRefs } from 'lib/hooks';
 import { composeEventHandlers } from 'lib/utils/events';
 import { ElementProps } from 'lib/utils/types';
 

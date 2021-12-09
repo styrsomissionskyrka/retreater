@@ -13,8 +13,9 @@ import {
   IconStrikethrough,
 } from '@tabler/icons';
 import classNames from 'classnames';
+import { useTextareaResize, useProxyRef, useIsomorphicLayoutEffect } from '@fransvilhelm/hooks';
 
-import { useIsomorphicLayoutEffect, useResizedTextarea, useId, useProxyRefObject } from 'lib/hooks';
+import { useId } from 'lib/hooks';
 import { setAttribute, toggleAttribute } from 'lib/utils/dom';
 
 import { Label } from './Controls';
@@ -37,8 +38,8 @@ export const Markdown = forwardRef<HTMLTextAreaElement, MarkdownProps>(
     const [tab, setTab] = useState<'write' | 'preview'>('write');
 
     const textareaId = useId('markdown-', id);
-    const textareaRef = useProxyRefObject<HTMLTextAreaElement>(null, ref);
-    useResizedTextarea(textareaRef, { minRows: 8 });
+    const textareaRef = useProxyRef<HTMLTextAreaElement>(null, ref);
+    useTextareaResize(textareaRef, { minRows: 8 });
 
     const hasSetDefaultValue = useRef(defaultValue == null);
     useIsomorphicLayoutEffect(() => {

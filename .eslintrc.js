@@ -29,7 +29,7 @@ module.exports = {
             name: 'react',
             importNames: ['useLayoutEffect'],
             message:
-              'Please use useIsomorphicLayoutEffect from "lib/hooks" instead. It is necessary since this application is server side rendered and useLayoutEffect does not work on SSR.',
+              'Please use useIsomorphicLayoutEffect from "@fransvilhelm/hooks" instead. It is necessary since this application is server side rendered and useLayoutEffect does not work on SSR.',
           },
           {
             name: 'next/link',

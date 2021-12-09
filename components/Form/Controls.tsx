@@ -1,8 +1,8 @@
 import { forwardRef, useRef } from 'react';
 import classNames, { Argument } from 'classnames';
+import { useTextareaResize, useComposedRefs } from '@fransvilhelm/hooks';
 
 import { ElementProps } from 'lib/utils/types';
-import { useComposedRefs, useResizedTextarea } from 'lib/hooks';
 
 type ClassNameOptions = {
   align?: 'left' | 'right';
@@ -108,7 +108,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     let ref = useRef<HTMLTextAreaElement>(null);
     let compoundRef = useComposedRefs(ref, forwardedRef);
 
-    useResizedTextarea(ref, { minRows: 3 });
+    useTextareaResize(ref, { minRows: 3 });
 
     return (
       <Label

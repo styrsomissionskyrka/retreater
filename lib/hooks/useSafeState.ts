@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
-
-import { useIsMounted } from './useIsMounted';
+import { useIsMounted } from '@fransvilhelm/hooks';
 
 export function useSafeState<T>(init: T | (() => T)): [T, React.Dispatch<React.SetStateAction<T>>] {
   const isMounted = useIsMounted();

@@ -902,10 +902,10 @@
   dependencies:
     feather-icons "^4.28.0"
 
-"@fransvilhelm/hooks@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@fransvilhelm/hooks/-/hooks-3.1.0.tgz#85e3225a87d36378ad4e3c5d234adf9060728251"
-  integrity sha512-QxSB6LZopRa+o79+1KESDu4xlqavMwHSn1NBW0hKi7EJK+pSSODNsBzbv1jVUncReTbQHrRqSfboHAqsa8WMFw==
+"@fransvilhelm/hooks@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@fransvilhelm/hooks/-/hooks-3.1.1.tgz#6893f47a90f279bf47b971357fecfc3f79db2f43"
+  integrity sha512-bunCqjREXQ9qYQ2dwlBAK3rhI1ZVPzXbUHHSBEcBqynxJm8ldqzsWOEVcoAnh4aH2Len8YYntLMEx+1ZWSdxxw==
   dependencies:
     lodash.debounce "^4.0.8"
     react-fast-compare "^3.2.0"

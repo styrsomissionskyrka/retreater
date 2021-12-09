@@ -1,7 +1,8 @@
 import { forwardRef, useRef } from 'react';
 import classNames from 'classnames';
+import { useControlledState, useIsomorphicLayoutEffect } from '@fransvilhelm/hooks';
 
-import { useControlledInput, useIsomorphicLayoutEffect, useSafeState } from 'lib/hooks';
+import { useSafeState } from 'lib/hooks';
 import { composeEventHandlers } from 'lib/utils/events';
 import { ElementProps } from 'lib/utils/types';
 
@@ -147,7 +148,7 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
   children,
   ...props
 }) => {
-  const [checked, setControlledChecked] = useControlledInput(providedChecked, defaultChecked);
+  const [checked, setControlledChecked] = useControlledState(providedChecked, defaultChecked);
   const ref = useRef<HTMLInputElement>(null);
 
   let state: 'checked' | 'unchecked' | 'pending' = checked ? 'checked' : 'unchecked';

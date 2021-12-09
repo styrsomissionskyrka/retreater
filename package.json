@@ -21,7 +21,7 @@
   "dependencies": {
     "@apollo/client": "^3.5.6",
     "@fransvilhelm/feather": "^2.0.0",
-    "@fransvilhelm/hooks": "^3.1.0",
+    "@fransvilhelm/hooks": "^3.1.1",
     "@prisma/client": "^3.6.0",
     "@reach/auto-id": "^0.16.0",
     "@reach/rect": "^0.16.0",

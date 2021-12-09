@@ -1,4 +1,4 @@
-import { useHover } from 'lib/hooks';
+import { useHover } from '@fransvilhelm/hooks';
 
 export interface ProgressProps {
   progress: number;
@@ -6,7 +6,7 @@ export interface ProgressProps {
 }
 
 export const Progress: React.FC<ProgressProps> = ({ progress, total }) => {
-  const { isHovering, ...elProps } = useHover();
+  const [isHovering, elProps] = useHover();
 
   return (
     <div className="relative w-full h-full" {...elProps}>

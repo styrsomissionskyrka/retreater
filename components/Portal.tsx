@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { useIsomorphicLayoutEffect } from '@fransvilhelm/hooks';
 
-import { useForceUpdate, useIsomorphicLayoutEffect } from 'lib/hooks';
+import { useForceUpdate } from 'lib/hooks';
 
 export const Portal: React.FC = ({ children }) => {
   let mountNode = useRef<HTMLDivElement | null>(null);

@@ -5,8 +5,9 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { IconCalendarEvent, IconChevronLeft, IconClipboardList, IconUsers } from '@tabler/icons';
 import { useRect } from '@reach/rect';
+import { useIsomorphicLayoutEffect } from '@fransvilhelm/hooks';
 
-import { useIsomorphicLayoutEffect, useAuthenticatedUser } from 'lib/hooks';
+import { useAuthenticatedUser } from 'lib/hooks';
 import { setGlobalVariable } from 'lib/utils/css';
 import { compact } from 'lib/utils/array';
 
