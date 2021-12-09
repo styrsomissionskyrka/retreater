@@ -15,7 +15,10 @@ export const DateScalar = n.scalarType({
     }
 
     try {
-      return new Date(value);
+      if (typeof value === 'string' || typeof value === 'number' || value instanceof Date) {
+        return new Date(value);
+      }
+      return null;
     } catch (err) {
       return null;
     }

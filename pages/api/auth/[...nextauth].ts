@@ -19,7 +19,5 @@ export default NextAuth({
     },
   },
 
-  jwt: {
-    secret: ensure(process.env.NEXTAUTH_SECRET, 'Env variable NEXTAUTH_SECRET must be defined'),
-  },
+  secret: ensure(process.env.NEXTAUTH_SECRET, 'Env variable NEXTAUTH_SECRET must be defined'),
 });

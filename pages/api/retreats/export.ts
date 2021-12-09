@@ -1,6 +1,6 @@
 import { NextApiHandler } from 'next';
 import { OrderStatus } from '@prisma/client';
-import stringify from 'csv-stringify';
+import { stringify } from 'csv-stringify';
 
 import { prisma } from 'api/context/prisma';
 import { format } from 'lib/utils/date-fns';
