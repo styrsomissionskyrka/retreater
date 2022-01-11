@@ -4,10 +4,15 @@
   "private": true,
   "scripts": {
     "build": "wp-bundler",
-    "dev": "wp-bundler --watch"
+    "dev": "wp-bundler --watch",
+    "bundle": "node ./scripts/package.mjs",
+    "sync": "node ./scripts/sync.mjs",
+    "sync:watch": "npx nodemon --exec 'yarn build && yarn sync' --watch . -e ts,tsx,php --ignore package --ignore dist --ignore languages --ignore inc/AssetLoader.php"
   },
   "devDependencies": {
-    "@fransvilhelm/wp-bundler": "^2.0.0"
+    "@fransvilhelm/wp-bundler": "^2.0.0",
+    "dotenv": "^11.0.0",
+    "fs-extra": "^10.0.0"
   },
   "wp-bundler": {
     "entryPoints": {

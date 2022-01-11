@@ -35,6 +35,8 @@ yarn-error.log*
 
 # swc
 .swc
+package
 
 # wp
 *.mo
+AssetLoader.php

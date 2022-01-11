@@ -11,6 +11,7 @@ msgid "Adam Bergman"
 msgstr ""
 
 #: index.php:13
+#: package/styrsomissionskyrka/index.php:13
 msgid "Hello world"
 msgstr ""
 

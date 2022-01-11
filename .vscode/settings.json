@@ -1,0 +1,6 @@
+{
+  // This allows Intelephens to index all WP files and gives you code completion
+  "intelephense.environment.includePaths": [
+    "/Users/adambergman/DevKinsta/public/styrsomissionskyrka-api"
+  ]
+}
