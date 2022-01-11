@@ -4,6 +4,10 @@ module.exports = {
     domains: ['s.gravatar.com'],
   },
   eslint: {
-    dirs: ['api', 'components', 'lib', 'pages'],
+    dirs: ['components', 'lib', 'pages'],
+  },
+  experimental: {
+    // concurrentFeatures: true,
+    // serverComponents: true,
   },
 };
