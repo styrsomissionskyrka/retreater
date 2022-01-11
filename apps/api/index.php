@@ -1,3 +1,8 @@
+<?php
+if (wp_redirect(admin_url(''))) {
+    exit();
+} ?>
+
 <!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -9,9 +14,7 @@
 </head>
 <body <?php body_class(); ?>>
   <?php wp_body_open(); ?>
-
-  <h1><?php __('Hello world', 'smk'); ?></h1>
-
+  <div><?php echo get_rest_url(); ?></div>
   <?php wp_footer(); ?>
 </body>
 </html>

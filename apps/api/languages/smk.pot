@@ -10,11 +10,6 @@ msgstr ""
 msgid "Adam Bergman"
 msgstr ""
 
-#: index.php:13
-#: package/styrsomissionskyrka/index.php:13
-msgid "Hello world"
-msgstr ""
-
 #: style.css:5
 #. translators: Author URI of the theme
 msgid "https://github.com/adambrgmn"
@@ -30,4 +25,14 @@ msgstr ""
 #. translators: Description of the theme
 #. translators: Theme Name of the theme
 msgid "Styrsö Missionskyrka API"
+msgstr ""
+
+#: functions.php:10
+#: package/styrsomissionskyrka/functions.php:10
+msgid "Styrsö Missionskyrka API theme can't work properly."
+msgstr ""
+
+#: functions.php:14
+#: package/styrsomissionskyrka/functions.php:14
+msgid "The plugin \"wp-rest-blocks\" is required for this theme to work as expected."
 msgstr ""
