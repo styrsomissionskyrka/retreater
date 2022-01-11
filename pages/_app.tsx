@@ -1,7 +1,7 @@
-import { Fragment } from 'react';
 import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
+import { ChakraProvider } from '@chakra-ui/react';
 
 import { PolyfillScript } from 'components';
 
@@ -10,13 +10,13 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
 
   return (
     <SessionProvider session={session}>
-      <Fragment>
+      <ChakraProvider>
         <Head>
           <title key="title">Retreater | Styrsö Missionskyrka</title>
         </Head>
         <PolyfillScript key="polyfills" />
         <Component {...props} />
-      </Fragment>
+      </ChakraProvider>
     </SessionProvider>
   );
 };
