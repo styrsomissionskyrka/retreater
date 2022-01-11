@@ -1,54 +1,56 @@
 {
-  "name": "retreater",
-  "version": "0.1.0",
+  "name": "styrsomissionskyrka",
+  "version": "0.0.0",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=14.0.0"
+  },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "jest",
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky install"
   },
-  "dependencies": {
-    "@chakra-ui/react": "^1.7.4",
-    "@emotion/react": "^11",
-    "@emotion/styled": "^11",
-    "@fransvilhelm/hooks": "^3.1.4",
-    "classnames": "^2.3.1",
-    "framer-motion": "^5",
-    "next": "^12.0.7",
-    "next-auth": "^4.1.0",
-    "react": "^18.0.0-rc.0",
-    "react-dom": "^18.0.0-rc.0",
-    "zod": "^3.11.6"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/classnames": "^2.3.1",
-    "@types/node": "^16.11.12",
-    "@types/react": "^17.0.37",
-    "@types/react-dom": "^17.0.11",
-    "eslint": "^8.6.0",
-    "eslint-config-next": "12.0.7",
-    "eslint-config-prettier": "^8.3.0",
     "husky": "^7.0.4",
-    "jest": "^27.4.3",
     "lint-staged": "^12.1.2",
     "prettier": "^2.5.1",
-    "typescript": "^4.5.2"
+    "turbo": "latest"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
+  "turbo": {
+    "pipeline": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "dist/**",
+          ".next/**"
+        ]
+      },
+      "lint": {
+        "outputs": []
+      },
+      "dev": {
+        "cache": false
+      }
     }
   },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx,json,md,mdx,yml,html}": "prettier --write"
+  },
   "prettier": {
+    "semi": true,
     "singleQuote": true,
     "trailingComma": "all",
     "proseWrap": "always",
-    "printWidth": 120
+    "arrowParens": "always"
   }
 }
