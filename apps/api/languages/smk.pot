@@ -1,0 +1,32 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"MIME-Version: 1.0\n"
+
+#: style.css:4
+#. translators: Author of the theme
+msgid "Adam Bergman"
+msgstr ""
+
+#: index.php:13
+msgid "Hello world"
+msgstr ""
+
+#: style.css:5
+#. translators: Author URI of the theme
+msgid "https://github.com/adambrgmn"
+msgstr ""
+
+#: style.css:3
+#. translators: Theme URI of the theme
+msgid "https://www.styrsomissionskyrka.se"
+msgstr ""
+
+#: style.css:2
+#: style.css:6
+#. translators: Description of the theme
+#. translators: Theme Name of the theme
+msgid "Styrsö Missionskyrka API"
+msgstr ""

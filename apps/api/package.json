@@ -1,0 +1,28 @@
+{
+  "name": "@styrsomissionskyrka/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "wp-bundler",
+    "dev": "wp-bundler --watch"
+  },
+  "devDependencies": {
+    "@fransvilhelm/wp-bundler": "^2.0.0"
+  },
+  "wp-bundler": {
+    "entryPoints": {
+      "app": "src/app.ts"
+    },
+    "assetLoader": {
+      "path": "inc/AssetLoader.php"
+    },
+    "translations": {
+      "domain": "smk",
+      "pot": "languages/smk.pot",
+      "pos": [
+        "languages/sv_SE.po",
+        "languages/en_US.po"
+      ]
+    }
+  }
+}
