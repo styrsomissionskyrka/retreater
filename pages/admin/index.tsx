@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+
 import { authenticated } from 'lib/auth/page';
 import { authenticatedGetServerSideProps } from 'lib/auth/ssr';
 

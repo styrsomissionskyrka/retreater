@@ -1,7 +1,8 @@
+import { ParsedUrlQuery } from 'querystring';
+
 import { GetServerSideProps, GetServerSidePropsContext, PreviewData } from 'next';
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
-import { ParsedUrlQuery } from 'querystring';
 
 export function authenticatedGetServerSideProps<
   P extends { [key: string]: any } = { [key: string]: any },
