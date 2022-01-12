@@ -2,6 +2,7 @@ import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser';
 import { Fragment, useMemo } from 'react';
 
 import { Link } from '../Link';
+import { getStyleFromClassName } from './utils';
 
 export type Replacements = Partial<{
   [Key in keyof JSX.IntrinsicElements]:
@@ -15,12 +16,6 @@ interface Props {
 }
 
 let defaultReplacements: Replacements = {
-  strong({ children, ...props }) {
-    return <strong {...props}>{children}</strong>;
-  },
-  em({ children, ...props }) {
-    return <em {...props}>{children}</em>;
-  },
   a({ children, href = '', ...props }) {
     try {
       let url = new URL(href);
@@ -35,6 +30,14 @@ let defaultReplacements: Replacements = {
       );
     }
   },
+  span({ children, className, ...props }) {
+    let style = getStyleFromClassName(className);
+    return (
+      <span style={style} className={className} {...props}>
+        {children}
+      </span>
+    );
+  },
 };
 
 function createReplaceOptions(
@@ -47,8 +50,10 @@ function createReplaceOptions(
         let Component = replace[node.name as keyof JSX.IntrinsicElements]!;
         if (Component === false) return <Fragment />;
 
+        let { class: className, ...props } = node.attribs;
+
         return (
-          <Component {...node.attribs}>
+          <Component {...props} className={className}>
             {domToReact(node.children, createReplaceOptions(replacements))}
           </Component>
         );

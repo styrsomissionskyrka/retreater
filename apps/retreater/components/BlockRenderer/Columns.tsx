@@ -6,14 +6,14 @@ import { BlockComponent } from './types';
 import {
   StyledBlockAttributes,
   useBlockAttributes,
-  useBlockStyles,
+  getStyleFromAttributes,
 } from './utils';
 
 const ColumnsAttributes = StyledBlockAttributes.extend({});
 
 export const Columns: BlockComponent = ({ block }) => {
   let attributes = useBlockAttributes(block, ColumnsAttributes);
-  let style = useBlockStyles(attributes);
+  let style = getStyleFromAttributes(attributes);
 
   return (
     <div id={attributes.anchor} className={attributes.className} style={style}>
@@ -32,7 +32,7 @@ const ColumnAttributes = StyledBlockAttributes.extend({
 
 const Column: BlockComponent = ({ block }) => {
   let attributes = useBlockAttributes(block, ColumnAttributes);
-  let style = useBlockStyles(attributes);
+  let style = getStyleFromAttributes(attributes);
 
   return (
     <div id={attributes.anchor} className={attributes.className} style={style}>

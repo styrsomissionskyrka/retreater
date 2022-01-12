@@ -6,7 +6,7 @@ import {
   NonEmptyString,
   StyledBlockAttributes,
   useBlockAttributes,
-  useBlockStyles,
+  getStyleFromAttributes,
 } from './utils';
 
 const HeadingAttributes = StyledBlockAttributes.extend({
@@ -23,7 +23,7 @@ const HeadingAttributes = StyledBlockAttributes.extend({
 
 export const Heading: BlockComponent = ({ block }) => {
   let attributes = useBlockAttributes(block, HeadingAttributes);
-  let style = useBlockStyles(attributes);
+  let style = getStyleFromAttributes(attributes);
 
   const Component: `h${typeof attributes.level}` = `h${attributes.level}`;
 

@@ -6,7 +6,7 @@ import {
   NonEmptyString,
   StyledBlockAttributes,
   useBlockAttributes,
-  useBlockStyles,
+  getStyleFromAttributes,
 } from './utils';
 
 const ListAttributes = StyledBlockAttributes.extend({
@@ -20,7 +20,7 @@ const ListAttributes = StyledBlockAttributes.extend({
 
 export const List: BlockComponent = ({ block }) => {
   let attributes = useBlockAttributes(block, ListAttributes);
-  let style = useBlockStyles(attributes);
+  let style = getStyleFromAttributes(attributes);
 
   const Component = attributes.ordered ? 'ol' : 'ul';
   return (

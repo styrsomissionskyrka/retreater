@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import * as z from 'zod';
 
 import * as theme from '../../styles/theme';
@@ -20,7 +20,7 @@ export function useBlockAttributes<
   return {} as Output;
 }
 
-export function useBlockStyles(
+export function getStyleFromAttributes(
   attributes: TStyledBlockAttributes,
 ): React.CSSProperties {
   let color = theme.get(
@@ -44,6 +44,22 @@ export function useBlockStyles(
   );
 
   return { color, background: gradient ?? backgroundColor, fontSize };
+}
+
+export function getStyleFromClassName(
+  className?: string | null,
+): React.CSSProperties {
+  if (className == null || className == '') return {};
+
+  let style: React.CSSProperties = {};
+  for (let c of className.split(' ')) {
+    let match = /has-(?<color>.+)-color/g.exec(c);
+    if (match?.groups?.color != null) {
+      style.color = theme.get('color', match.groups.color);
+    }
+  }
+
+  return style;
 }
 
 export const BlockAttributes = z.object({

@@ -6,7 +6,7 @@ import {
   NonEmptyString,
   StyledBlockAttributes,
   useBlockAttributes,
-  useBlockStyles,
+  getStyleFromAttributes,
 } from './utils';
 
 const ParagraphAttributes = StyledBlockAttributes.extend({
@@ -18,11 +18,11 @@ const ParagraphAttributes = StyledBlockAttributes.extend({
 
 export const Paragraph: BlockComponent = ({ block }) => {
   let attributes = useBlockAttributes(block, ParagraphAttributes);
-  let style = useBlockStyles(attributes);
+  let style = getStyleFromAttributes(attributes);
 
   return (
     <p id={attributes.anchor} className={attributes.className} style={style}>
-      <HTML html={attributes.content ?? ''} />
+      <HTML html={attributes.content} />
     </p>
   );
 };
