@@ -1,5 +1,6 @@
 import * as z from 'zod';
 
+import { HTML, Replacements } from './Html';
 import { BlockComponent } from './types';
 import {
   NonEmptyString,
@@ -29,7 +30,19 @@ export const List: BlockComponent = ({ block }) => {
       start={attributes.start}
       reversed={attributes.reversed}
       style={style}
-      dangerouslySetInnerHTML={{ __html: attributes.values ?? '' }}
-    />
+    >
+      <HTML html={attributes.values} replacements={replacements} />
+    </Component>
   );
+};
+
+const ListItem: React.FC<JSX.IntrinsicElements['li']> = ({
+  children,
+  ...props
+}) => {
+  return <li {...props}>{children}</li>;
+};
+
+const replacements: Replacements = {
+  li: ListItem,
 };

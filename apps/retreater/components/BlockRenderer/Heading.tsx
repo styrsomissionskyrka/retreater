@@ -1,5 +1,6 @@
 import * as z from 'zod';
 
+import { HTML } from './Html';
 import { BlockComponent } from './types';
 import {
   NonEmptyString,
@@ -31,7 +32,8 @@ export const Heading: BlockComponent = ({ block }) => {
       id={attributes.anchor}
       className={attributes.className}
       style={style}
-      dangerouslySetInnerHTML={{ __html: attributes.content ?? '' }}
-    />
+    >
+      <HTML html={attributes.content ?? ''} />
+    </Component>
   );
 };

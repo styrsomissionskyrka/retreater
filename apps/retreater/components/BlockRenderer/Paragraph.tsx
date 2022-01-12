@@ -1,5 +1,6 @@
 import * as z from 'zod';
 
+import { HTML } from './Html';
 import { BlockComponent } from './types';
 import {
   NonEmptyString,
@@ -20,11 +21,8 @@ export const Paragraph: BlockComponent = ({ block }) => {
   let style = useBlockStyles(attributes);
 
   return (
-    <p
-      id={attributes.anchor}
-      className={attributes.className}
-      style={style}
-      dangerouslySetInnerHTML={{ __html: attributes.content ?? '' }}
-    />
+    <p id={attributes.anchor} className={attributes.className} style={style}>
+      <HTML html={attributes.content ?? ''} />
+    </p>
   );
 };
