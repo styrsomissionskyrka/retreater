@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import * as z from 'zod';
 
+import * as theme from '../../styles/theme';
 import { Block } from '../../lib/api/schema';
 
 export const NonEmptyString = z
@@ -12,12 +13,37 @@ export function useBlockAttributes<
   Output = z.infer<Schema>,
 >(block: Block, schema: Schema) {
   let value = useMemo(() => {
-    let result = schema.safeParse(block.attrs);
-    if (result.success) return result.data;
-    return {};
+    return schema.safeParse(block.attrs);
   }, [block.attrs, schema]);
 
-  return value as Output;
+  if (value.success) return value.data as Output;
+  return {} as Output;
+}
+
+export function useBlockStyles(
+  attributes: TStyledBlockAttributes,
+): React.CSSProperties {
+  let color = theme.get(
+    'color',
+    attributes.textColor,
+    attributes.style?.color?.text,
+  );
+
+  let backgroundColor = theme.get(
+    'color',
+    attributes.backgroundColor,
+    attributes.style?.color?.background,
+  );
+
+  let gradient = theme.get('gradient', attributes.gradient);
+
+  let fontSize = theme.get(
+    'fontSize',
+    String(attributes.fontSize),
+    attributes.style?.typography?.fontSize,
+  );
+
+  return { color, background: gradient ?? backgroundColor, fontSize };
 }
 
 export const BlockAttributes = z.object({
@@ -36,10 +62,12 @@ const StyleSchema = z.object({
     .optional(),
 });
 
+type TStyledBlockAttributes = z.infer<typeof StyledBlockAttributes>;
 export const StyledBlockAttributes = BlockAttributes.extend({
   backgroundColor: NonEmptyString.optional(),
   fontSize: NonEmptyString.optional(),
   textColor: NonEmptyString.optional(),
+  gradient: NonEmptyString.optional(),
   style: z
     .union([z.array(z.unknown()), StyleSchema])
     .transform((x) => (Array.isArray(x) ? {} : x))

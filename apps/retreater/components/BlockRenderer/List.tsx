@@ -5,6 +5,7 @@ import {
   NonEmptyString,
   StyledBlockAttributes,
   useBlockAttributes,
+  useBlockStyles,
 } from './utils';
 
 const ListAttributes = StyledBlockAttributes.extend({
@@ -18,6 +19,7 @@ const ListAttributes = StyledBlockAttributes.extend({
 
 export const List: BlockComponent = ({ block }) => {
   let attributes = useBlockAttributes(block, ListAttributes);
+  let style = useBlockStyles(attributes);
 
   const Component = attributes.ordered ? 'ol' : 'ul';
   return (
@@ -26,6 +28,7 @@ export const List: BlockComponent = ({ block }) => {
       className={attributes.className}
       start={attributes.start}
       reversed={attributes.reversed}
+      style={style}
       dangerouslySetInnerHTML={{ __html: attributes.values ?? '' }}
     />
   );
