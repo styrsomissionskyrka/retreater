@@ -13,7 +13,7 @@ const Home: NextPage = () => {
       <ul>
         {posts.data?.map((post) => (
           <li key={post.id}>
-            <Link href={`/retreater/${post.slug}`}>{post.title.rendered}</Link>
+            <Link href={`/${post.slug}`}>{post.title.rendered}</Link>
           </li>
         ))}
       </ul>

@@ -1,10 +1,10 @@
 import { GetStaticPaths, NextPage } from 'next';
 import { useRouter } from 'next/router';
 
-import { BlockRenderer } from '../../components';
-import { posts, prefetchPost, usePost } from '../../lib/api/posts';
-import { Post } from '../../lib/api/schema';
-import { getStaticPropsWithClient } from '../../lib/api/ssr';
+import { BlockRenderer } from '../components';
+import { posts, prefetchPost, usePost } from '../lib/api/posts';
+import { Post } from '../lib/api/schema';
+import { getStaticPropsWithClient } from '../lib/api/ssr';
 
 type Props = {};
 
