@@ -125,13 +125,26 @@ const TermsFilterSchema = z.union([
   }),
 ]);
 
-export type PostListFilter = z.infer<typeof PostListFiltersSchema>;
-export type PostListFilterInput = z.input<typeof PostListFiltersSchema>;
-export const PostListFiltersSchema = z.object({
+export const GlobalParametersSchema = z.object({
+  _fields: z.array(z.string()).optional(),
+  _embed: z.union([z.array(z.string()), z.boolean()]).optional(),
+});
+
+export const ListParametersSchema = GlobalParametersSchema.extend({
+  order: OrderSchema.optional(),
+  orderby: z.string().optional(),
+  page: z.number().int().positive().optional(),
+  per_page: z.number().int().positive().min(1).max(100).optional(),
+  before: DateFilterSchema.optional(),
   after: DateFilterSchema.optional(),
+  offset: z.number().int().optional(),
+});
+
+export type PostListParameters = z.infer<typeof PostListParametersSchema>;
+export type PostListParameterInput = z.input<typeof PostListParametersSchema>;
+export const PostListParametersSchema = ListParametersSchema.extend({
   author: IdsFilterSchema.optional(),
   author_exclude: IdsFilterSchema.optional(),
-  before: DateFilterSchema.optional(),
   categories: TermsFilterSchema.optional(),
   categories_exclude: TermsFilterSchema.optional(),
   context: ContextSchema.optional(),
@@ -139,24 +152,6 @@ export const PostListFiltersSchema = z.object({
   include: IdsFilterSchema.optional(),
   modified_before: DateFilterSchema.optional(),
   modified_after: DateFilterSchema.optional(),
-  offset: z.number().int().optional(),
-  order: OrderSchema.optional(),
-  orderby: z
-    .enum([
-      'author',
-      'date',
-      'id',
-      'include',
-      'modified',
-      'parent',
-      'relevance',
-      'slug',
-      'include_slugs',
-      'title',
-    ])
-    .optional(),
-  page: z.number().int().positive().optional(),
-  per_page: z.number().int().positive().min(1).max(100).optional(),
   search: z.string().nonempty().optional(),
   slug: z.array(z.string()).optional(),
   status: z
