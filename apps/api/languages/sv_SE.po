@@ -41,4 +41,4 @@ msgstr "Styrsö Missionskyrka API temat kan inte fungera."
 #: functions.php:14
 #: package/styrsomissionskyrka/functions.php:14
 msgid "The plugin \"wp-rest-blocks\" is required for this theme to work as expected."
-msgstr "Pluginet \"wp-rest-blocks\” krävs för att temat ska fungera som väntat."
+msgstr "Pluginet \"wp-rest-blocks” krävs för att temat ska fungera som väntat."

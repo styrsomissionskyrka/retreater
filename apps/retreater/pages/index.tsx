@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 
 import { Link } from '../components';
 import { prefetchPosts, usePosts } from '../lib/api/posts';
-import { getStaticPropsWithClient } from '../lib/api/ssr';
+import { getServerSidePropsWithClient } from '../lib/api/ssr';
 
 const Home: NextPage = () => {
   const posts = usePosts(null);
@@ -12,7 +12,9 @@ const Home: NextPage = () => {
       <Link href="/">Home</Link>
       <ul>
         {posts.data?.map((post) => (
-          <li key={post.id}>{post.title.rendered}</li>
+          <li key={post.id}>
+            <Link href={`/retreater/${post.slug}`}>{post.title.rendered}</Link>
+          </li>
         ))}
       </ul>
     </div>
@@ -21,7 +23,7 @@ const Home: NextPage = () => {
 
 export default Home;
 
-export const getStaticProps = getStaticPropsWithClient(
+export const getServerSideProps = getServerSidePropsWithClient(
   async ({ queryClient }) => {
     await prefetchPosts(queryClient, null);
     return { props: {} };

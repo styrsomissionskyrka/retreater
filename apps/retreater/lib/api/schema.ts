@@ -43,7 +43,7 @@ export type CommentStatus = z.infer<typeof CommentStatusSchema>;
 export const CommentStatusSchema = z.enum(['open', 'closed']);
 
 export type ApiDate = z.infer<typeof ApiDateSchema>;
-export const ApiDateSchema = z.string(); //.transform((x) => new Date(x));
+export const ApiDateSchema = z.string();
 
 export type Rendered = z.infer<typeof RenderedSchema>;
 export const RenderedSchema = z.object({

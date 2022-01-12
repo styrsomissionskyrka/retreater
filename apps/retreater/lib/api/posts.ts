@@ -9,7 +9,7 @@ import {
   PostListFilter,
 } from './schema';
 
-let api = axios.create({
+export const posts = axios.create({
   baseURL: 'http://styrsomissionskyrka-api.local/wp-json',
 });
 
@@ -19,8 +19,8 @@ export const POST_KEYS = {
   list: (filters: PostListFilterInput | null) =>
     [...POST_KEYS.lists(), { filters }] as const,
   details: () => [...POST_KEYS.all(), 'detail'] as const,
-  detail: (id: number | string) =>
-    [...POST_KEYS.details(), Number(id)] as const,
+  detail: (idOrSlug: number | string) =>
+    [...POST_KEYS.details(), idOrSlug] as const,
 } as const;
 
 async function fetchPosts({
@@ -30,7 +30,7 @@ async function fetchPosts({
   let [, , options] = queryKey;
 
   let filters = PostListFiltersSchema.parse(options.filters ?? {});
-  let response = await api.get(`/wp/v2/posts`, { params: filters, signal });
+  let response = await posts.get(`/wp/v2/posts`, { params: filters, signal });
   return PostListSchema.parse(response.data);
 }
 
@@ -49,9 +49,23 @@ async function fetchPost({
   queryKey,
   signal,
 }: QueryFunctionContext<ReturnType<typeof POST_KEYS['detail']>>) {
-  let [, , id] = queryKey;
-  let response = await api.get(`/wp/v2/posts/${id}`, { signal });
-  return PostSchema.parse(response.data);
+  let [, , idOrSlug] = queryKey;
+
+  let post: any;
+
+  if (Number.isNaN(Number(idOrSlug))) {
+    let response = await posts.get(`/wp/v2/posts`, {
+      params: { slug: [idOrSlug] },
+      signal,
+    });
+
+    post = response.data[0];
+  } else {
+    let response = await posts.get(`/wp/v2/posts/${idOrSlug}`, { signal });
+    post = response.data;
+  }
+
+  return PostSchema.parse(post);
 }
 
 export function usePost(...args: Parameters<typeof POST_KEYS.detail>) {
