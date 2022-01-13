@@ -15,9 +15,6 @@
 </head>
 <body <?php body_class(); ?>>
   <?php wp_body_open(); ?>
-  <div><?php echo get_rest_url(); ?></div>
-
-  <pre><?php var_dump(get_theme_support('editor-color-palette')); ?></pre>
   <?php wp_footer(); ?>
 </body>
 </html>

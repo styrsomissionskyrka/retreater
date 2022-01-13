@@ -105,6 +105,22 @@ export const PostSchema = z.object({
 
 export const PostListSchema = z.array(PostSchema);
 
+export type Revision = z.infer<typeof RevisionSchema>;
+export const RevisionSchema = z.object({
+  author: IDSchema,
+  blocks: z.array(BlockSchema),
+  content: RenderedSchema,
+  date: ApiDateSchema,
+  date_gmt: ApiDateSchema,
+  excerpt: RenderedSchema,
+  guid: RenderedSchema,
+  has_blocks: z.boolean(),
+  modified: ApiDateSchema,
+  modified_gmt: ApiDateSchema,
+  parent: IDSchema,
+  title: RenderedSchema,
+});
+
 const IdsFilterSchema = z
   .union([z.array(IDSchema), IDSchema])
   .transform((x) => (Array.isArray(x) ? x : [x]));

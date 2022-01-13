@@ -1,17 +1,13 @@
-import { QueryClient, QueryFunctionContext, useQuery } from 'react-query';
-import axios from 'axios';
+import * as z from 'zod';
 
 import {
   PostSchema,
   PostListSchema,
   PostListParameterInput,
   PostListParametersSchema,
-  PostListParameters,
+  RevisionSchema,
 } from './schema';
-
-export const posts = axios.create({
-  baseURL: 'http://styrsomissionskyrka-api.local/wp-json',
-});
+import { wp } from './wp';
 
 export const POST_KEYS = {
   all: () => ['posts'] as const,
@@ -19,81 +15,61 @@ export const POST_KEYS = {
   list: (parameters: PostListParameterInput | null) =>
     [...POST_KEYS.lists(), { parameters }] as const,
   details: () => [...POST_KEYS.all(), 'detail'] as const,
-  detail: (idOrSlug: number | string) =>
-    [...POST_KEYS.details(), idOrSlug] as const,
+  detail: (id: number | string, revision: number | string | null = null) =>
+    [...POST_KEYS.details(), id, revision] as const,
 } as const;
 
-async function fetchPosts({
-  queryKey,
-  signal,
-}: QueryFunctionContext<ReturnType<typeof POST_KEYS['list']>>) {
-  let [, , options] = queryKey;
-
-  let params = PostListParametersSchema.parse(options.parameters ?? {});
-
-  let _embed = Array.isArray(params._embed)
-    ? params._embed
-    : params._embed
-    ? 1
-    : undefined;
-
-  let response = await posts.get(`/wp/v2/posts`, {
-    params: { ...params, _embed },
-    signal,
-  });
-  return PostListSchema.parse(response.data);
+interface FetchPostsArgs {
+  parameters?: PostListParameterInput;
 }
 
-export function usePosts(...args: Parameters<typeof POST_KEYS.list>) {
-  return useQuery(POST_KEYS.list(...args), fetchPosts);
-}
+export async function fetchPosts({ parameters }: FetchPostsArgs) {
+  try {
+    let params = PostListParametersSchema.parse(parameters ?? {});
 
-export async function prefetchPosts(
-  queryClient: QueryClient,
-  ...args: Parameters<typeof POST_KEYS.list>
-) {
-  return queryClient.fetchQuery(POST_KEYS.list(...args), fetchPosts);
-}
+    let _embed = Array.isArray(params._embed)
+      ? params._embed
+      : params._embed
+      ? 1
+      : undefined;
 
-async function fetchPost({
-  queryKey,
-  signal,
-}: QueryFunctionContext<ReturnType<typeof POST_KEYS['detail']>>) {
-  let [, , idOrSlug] = queryKey;
-
-  let post: any;
-
-  if (Number.isNaN(Number(idOrSlug))) {
-    let response = await posts.get(`/wp/v2/posts`, {
-      params: { slug: [idOrSlug] },
-      signal,
+    let response = await wp.get(`/wp/v2/posts`, {
+      params: { ...params, _embed },
     });
 
-    post = response.data[0];
-  } else {
-    let response = await posts.get(`/wp/v2/posts/${idOrSlug}`, { signal });
-    post = response.data;
+    return PostListSchema.parse(response.data);
+  } catch (error) {
+    return [];
   }
-
-  return PostSchema.parse(post);
 }
 
-export function usePost(...args: Parameters<typeof POST_KEYS.detail>) {
-  return useQuery(POST_KEYS.detail(...args), fetchPost);
+interface FetchPostArgs {
+  id: string | number;
+  revision?: string | number | null;
 }
 
-export async function prefetchPost(
-  queryClient: QueryClient,
-  ...args: Parameters<typeof POST_KEYS.detail>
-) {
-  return queryClient.fetchQuery(POST_KEYS.detail(...args), fetchPost);
-}
+export async function fetchPost({ id, revision }: FetchPostArgs) {
+  try {
+    let post: unknown;
 
-function emptyFilters(filters: PostListParameters): boolean {
-  return Object.entries(filters).every(([_, value]) => {
-    if (value == null) return true;
-    if (Array.isArray(value) && value.length < 1) return true;
-    if (typeof value === 'object' && Object.keys(value).length < 1) return true;
-    return false;
-  });
+    if (Number.isNaN(Number(id))) {
+      let response = await wp.get(`/wp/v2/posts`, {
+        params: { slug: [id] },
+      });
+
+      post = response.data[0];
+    } else {
+      let pathname = `/wp/v2/posts/${id}`;
+      if (revision != null) pathname += `/revisions/${revision}`;
+
+      let response = await wp.get(pathname);
+      post = response.data;
+    }
+
+    if (post == null) return null;
+    let schema = z.union([PostSchema, RevisionSchema]);
+    return schema.parse(post);
+  } catch (error) {
+    return null;
+  }
 }

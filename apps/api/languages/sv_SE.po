@@ -33,12 +33,34 @@ msgstr "https://www.styrsomissionskyrka.se"
 msgid "Styrsö Missionskyrka API"
 msgstr "Styrsö Missionskyrka API"
 
-#: functions.php:10
-#: package/styrsomissionskyrka/functions.php:10
+#: functions.php:13
+#: package/styrsomissionskyrka/functions.php:13
 msgid "Styrsö Missionskyrka API theme can't work properly."
 msgstr "Styrsö Missionskyrka API temat kan inte fungera."
+
+#: functions.php:22
+#: package/styrsomissionskyrka/functions.php:22
+msgid "The constant <code>SMK_CLIENT_BASE_URL</code> must be defined."
+msgstr ""
 
 #: functions.php:14
 #: package/styrsomissionskyrka/functions.php:14
 msgid "The plugin \"wp-rest-blocks\" is required for this theme to work as expected."
 msgstr "Pluginet \"wp-rest-blocks” krävs för att temat ska fungera som väntat."
+
+#: functions.php:23
+#: package/styrsomissionskyrka/functions.php:23
+msgid "Without it the app will not work as expected."
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+msgid "The constant CLIENT_BASE_URL must be defined"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+msgid "The constant CLIENT_BASE_URL must be defined."
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+msgid "The constant SMK_CLIENT_BASE_URL must be defined."
+msgstr ""
