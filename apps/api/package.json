@@ -5,9 +5,7 @@
   "scripts": {
     "build": "wp-bundler",
     "dev": "wp-bundler --watch",
-    "bundle": "node ./scripts/package.mjs",
-    "sync": "node ./scripts/sync.mjs",
-    "sync:watch": "npx nodemon --exec 'yarn build && yarn sync' --watch . -e ts,tsx,php --ignore package --ignore dist --ignore languages --ignore inc/AssetLoader.php"
+    "sync:watch": "npx nodemon ./scripts/sync.mjs --watch . -e ts,tsx,php"
   },
   "devDependencies": {
     "@fransvilhelm/wp-bundler": "^2.0.0",
