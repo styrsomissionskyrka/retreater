@@ -1,6 +1,7 @@
 import { Block } from '../../lib/api/schema';
 import { Columns } from './Columns';
 import { Heading } from './Heading';
+import { Image as ImageBlock } from './Image';
 import { List } from './List';
 import { Paragraph } from './Paragraph';
 import { Quote } from './Quote';
@@ -21,6 +22,9 @@ export function renderBlock(block: Block) {
 
     case 'core/heading':
       return <Heading block={block} />;
+
+    case 'core/image':
+      return <ImageBlock block={block} />;
 
     default:
       console.log(block.blockName);

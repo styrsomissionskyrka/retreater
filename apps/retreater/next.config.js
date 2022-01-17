@@ -1,7 +1,7 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ['s.gravatar.com'],
+    domains: ['styrsomissionskyrka-api.local'],
   },
   eslint: {
     dirs: ['components', 'lib', 'pages'],
