@@ -4,7 +4,17 @@ import * as path from 'path';
 
 dotenv.config({ path: '.env.local' });
 
-const ignore = ['.swc', '.turbo', 'node_modules', 'package', 'scripts', 'src'];
+const ignore = [
+  '.swc',
+  '.turbo',
+  'node_modules',
+  'package',
+  'scripts',
+  'src',
+  'composer.json',
+  'composer.lock',
+  'package.json',
+];
 
 let src = path.join(process.cwd(), '.');
 let dest = path.join(process.env.SYNC_PATH, '/styrsomissionskyrka');
