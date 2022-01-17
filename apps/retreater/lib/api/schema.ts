@@ -17,13 +17,7 @@ const EmptyArrayToObjectSchema = z
   .transform((x) => (Array.isArray(x) ? {} : x));
 
 export type PostStatus = z.infer<typeof PostStatusSchema>;
-export const PostStatusSchema = z.enum([
-  'publish',
-  'future',
-  'draft',
-  'pending',
-  'private',
-]);
+export const PostStatusSchema = z.enum(['publish', 'future', 'draft', 'pending', 'private']);
 
 export type Format = z.infer<typeof FormatSchema>;
 export const FormatSchema = z.enum([
@@ -107,6 +101,7 @@ export const PostListSchema = z.array(PostSchema);
 
 export type Revision = z.infer<typeof RevisionSchema>;
 export const RevisionSchema = z.object({
+  id: IDSchema,
   author: IDSchema,
   blocks: z.array(BlockSchema),
   content: RenderedSchema,
@@ -121,16 +116,12 @@ export const RevisionSchema = z.object({
   title: RenderedSchema,
 });
 
-const IdsFilterSchema = z
-  .union([z.array(IDSchema), IDSchema])
-  .transform((x) => (Array.isArray(x) ? x : [x]));
+const IdsFilterSchema = z.union([z.array(IDSchema), IDSchema]).transform((x) => (Array.isArray(x) ? x : [x]));
 
-const DateFilterSchema = z
-  .union([z.date(), z.number().int(), z.string()])
-  .transform((x) => {
-    if (x instanceof Date) return x.toISOString();
-    return new Date(x).toISOString();
-  });
+const DateFilterSchema = z.union([z.date(), z.number().int(), z.string()]).transform((x) => {
+  if (x instanceof Date) return x.toISOString();
+  return new Date(x).toISOString();
+});
 
 const TermsFilterSchema = z.union([
   IdsFilterSchema,

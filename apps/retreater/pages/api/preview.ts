@@ -3,7 +3,7 @@ import * as z from 'zod';
 
 import { generatePostTypeUrl } from '../../lib/links';
 
-const QuerySchema = z.object({
+export const PreviewDataSchema = z.object({
   id: z.string().transform((x) => Number(x)),
   type: z.string(),
   slug: z.string().transform((x) => (x === '' ? null : null)),
@@ -28,7 +28,7 @@ export default handler;
 
 const initPreviewMode: NextApiHandler = async (req, res) => {
   try {
-    let query = QuerySchema.parse(req.query);
+    let query = PreviewDataSchema.parse(req.query);
     let slug = generatePostTypeUrl(
       query.type === 'revision' ? query.parent_type : query.type,
       query.type === 'revision' ? query.parent_id! : query.id,

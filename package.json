@@ -52,6 +52,7 @@
     "singleQuote": true,
     "trailingComma": "all",
     "proseWrap": "always",
-    "arrowParens": "always"
+    "arrowParens": "always",
+    "printWidth": 120
   }
 }
