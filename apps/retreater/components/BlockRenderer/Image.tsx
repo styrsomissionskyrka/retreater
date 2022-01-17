@@ -43,9 +43,9 @@ export const Image: BlockComponent = ({ block }) => {
       case 'media':
       case 'custom':
         image = (
-          <a href={attributes.href} ref={attributes.rel} target={attributes.linkTarget}>
+          <Link href={attributes.href} ref={attributes.rel} target={attributes.linkTarget}>
             {image}
-          </a>
+          </Link>
         );
         break;
     }

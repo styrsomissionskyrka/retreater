@@ -5,9 +5,7 @@ import { Link } from '../Link';
 import { getStyleFromClassName } from './utils';
 
 export type Replacements = Partial<{
-  [Key in keyof JSX.IntrinsicElements]:
-    | React.FC<JSX.IntrinsicElements[Key]>
-    | false;
+  [Key in keyof JSX.IntrinsicElements]: React.FC<JSX.IntrinsicElements[Key]> | false;
 }>;
 
 interface Props {
@@ -17,18 +15,11 @@ interface Props {
 
 let defaultReplacements: Replacements = {
   a({ children, href = '', ...props }) {
-    try {
-      let url = new URL(href);
-      return (
-        <Link href={url.toString().replace(url.origin, '')}>{children}</Link>
-      );
-    } catch (error) {
-      return (
-        <a href={href} {...props}>
-          {children}
-        </a>
-      );
-    }
+    return (
+      <Link {...props} href={href}>
+        {children}
+      </Link>
+    );
   },
   span({ children, className, ...props }) {
     let style = getStyleFromClassName(className);
@@ -40,9 +31,7 @@ let defaultReplacements: Replacements = {
   },
 };
 
-function createReplaceOptions(
-  replacements: Replacements = {},
-): HTMLReactParserOptions {
+function createReplaceOptions(replacements: Replacements = {}): HTMLReactParserOptions {
   let replace = { ...defaultReplacements, ...replacements };
   return {
     replace(node) {

@@ -19,7 +19,7 @@ const handler: NextApiHandler = async (req, res) => {
   if (req.method?.toUpperCase() === 'GET') return initPreviewMode(req, res);
   if (req.method?.toUpperCase() === 'DELETE') return exitPreviewMode(req, res);
 
-  res.setHeader('Allow', 'GET, DELETE');
+  res.setHeader('Allow', ['GET', 'DELETE']);
   res.status(405);
   res.end('Method not allowed');
 };

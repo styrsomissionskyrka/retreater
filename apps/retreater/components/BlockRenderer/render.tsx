@@ -27,7 +27,7 @@ export function renderBlock(block: Block) {
       return <ImageBlock block={block} />;
 
     default:
-      console.log(block.blockName);
+      console.warn(`No implementation for block ${block.blockName}`);
       return null;
   }
 }

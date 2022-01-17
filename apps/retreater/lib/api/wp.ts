@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as z from 'zod';
 
+import * as config from '../config';
 import { Post, PostListParameterInput, PostListParametersSchema, PostSchema, Revision, RevisionSchema } from './schema';
 
 type Mask<T> = {
@@ -12,7 +13,7 @@ type PickMask<M, T> = {
 };
 
 export const wp = axios.create({
-  baseURL: 'http://styrsomissionskyrka-api.local/wp-json',
+  baseURL: new URL('/wp-json', config.url.api).toString(),
   auth:
     typeof window === 'undefined'
       ? {
@@ -53,14 +54,12 @@ export async function post<M extends Mask<Post>>(params: FetchPostArgs): Promise
 export async function post<M extends Mask<Post>>(params: FetchPostArgs, pick: M): Promise<PickMask<M, Post> | null>;
 export async function post<M extends Mask<Post>>({ id, embed }: FetchPostArgs, pick?: M) {
   let post: unknown;
-  let isSlug = Number.isNaN(Number(id));
 
   let _embed = typeof embed === 'boolean' ? 1 : embed;
   let _fields = pick != null ? Object.keys(pick) : undefined;
 
-  if (isSlug) {
-    let result = await wp.get(`/wp/v2/posts`, { params: { slug: [id], _embed, _fields } });
-    post = result.data[0];
+  if (typeof id === 'string' && Number.isNaN(Number(id))) {
+    [post] = await posts({ parameters: { slug: [id] }, embed }, pick);
   } else {
     let result = await wp.get(`/wp/v2/posts/${id}`, { params: { _embed, _fields } });
     post = result.data;
