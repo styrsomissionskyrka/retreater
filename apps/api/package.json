@@ -5,7 +5,15 @@
   "scripts": {
     "build": "wp-bundler",
     "dev": "wp-bundler --watch",
-    "sync:watch": "npx nodemon ./scripts/sync.mjs --watch . -e ts,tsx,php"
+    "sync:watch": "npx nodemon ./scripts/sync.mjs --watch . -e ts,tsx,php",
+    "lint": "eslint src --ext .ts --ext .tsx --ext .js"
+  },
+  "dependencies": {
+    "@wordpress/components": "^19.2.0",
+    "@wordpress/edit-post": "^5.0.20",
+    "@wordpress/i18n": "^4.2.4",
+    "@wordpress/plugins": "^4.0.7",
+    "react": "^17.0.2"
   },
   "devDependencies": {
     "@fransvilhelm/wp-bundler": "^2.0.0",
@@ -13,12 +21,14 @@
     "@types/wordpress__components": "^14.0.10",
     "@types/wordpress__edit-post": "^4.0.1",
     "@types/wordpress__plugins": "^3.0.0",
+    "config": "*",
     "dotenv": "^11.0.0",
-    "fs-extra": "^10.0.0"
+    "eslint": "7.32.0",
+    "fs-extra": "^10.0.0",
+    "tsconfig": "*"
   },
   "wp-bundler": {
     "entryPoints": {
-      "app": "src/app.ts",
       "edit-retreat": "src/edit-retreat.tsx"
     },
     "assetLoader": {
@@ -33,12 +43,5 @@
         "languages/en_US.po"
       ]
     }
-  },
-  "dependencies": {
-    "@wordpress/components": "^19.2.0",
-    "@wordpress/edit-post": "^5.0.20",
-    "@wordpress/i18n": "^4.2.4",
-    "@wordpress/plugins": "^4.0.7",
-    "react": "^17.0.2"
   }
 }
