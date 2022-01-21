@@ -8,14 +8,14 @@ use function WP_REST_Blocks\Data\get_blocks;
 
 class Core implements ActionHookSubscriber, FilterHookSubscriber
 {
-    public function get_actions()
+    public function get_actions(): array
     {
         return [
             'init' => ['load_theme_textdomain'],
         ];
     }
 
-    public function get_filters()
+    public function get_filters(): array
     {
         return [
             'preview_post_link' => ['preview_post_link'],

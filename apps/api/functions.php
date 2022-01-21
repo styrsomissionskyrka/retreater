@@ -6,9 +6,8 @@ use StyrsoMissionskyrka\Utils\HooksManager;
 
 require_once __DIR__ . '/inc/polyfills.php';
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/inc/AssetLoader.php';
 
-\WPBundler\AssetLoader::prepare();
+AssetLoader::prepare();
 
 $validation_has_get_blocks = function_exists('\\WP_REST_Blocks\\Data\\get_blocks');
 Helpers::admin_notice(
@@ -31,4 +30,6 @@ $is_valid = array_every([$validation_has_get_blocks, $validation_has_defined], f
 if ($is_valid) {
     $manager = new HooksManager();
     $manager->register(new Core());
+
+    $manager->register(new Retreats\PostType());
 }

@@ -20,5 +20,5 @@ interface ActionHookSubscriber
      *
      * @return array An array of actions
      */
-    public function get_actions();
+    public function get_actions(): array;
 }
