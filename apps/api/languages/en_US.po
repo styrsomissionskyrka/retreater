@@ -16,6 +16,10 @@ msgstr ""
 msgid "Adam Bergman"
 msgstr ""
 
+#: inc/Retreats/PostType.php:73
+msgid "End date"
+msgstr ""
+
 #: style.css:5
 #. translators: Author URI of the theme
 msgid "https://github.com/adambrgmn"
@@ -24,6 +28,10 @@ msgstr ""
 #: style.css:3
 #. translators: Theme URI of the theme
 msgid "https://www.styrsomissionskyrka.se"
+msgstr ""
+
+#: inc/Retreats/PostType.php:79
+msgid "Max participants"
 msgstr ""
 
 #: inc/Retreats/PostType.php:46
@@ -39,7 +47,11 @@ msgstr ""
 msgid "Retreats"
 msgstr ""
 
-#: inc/Retreats/PostType.php:78
+#: inc/Retreats/PostType.php:67
+msgid "Start date"
+msgstr ""
+
+#: inc/Retreats/PostType.php:96
 msgid ""
 "Stripe price, fetched based on the posts meta key `stripe_price_id`. Returns 0 if no price is previously "
 "defined"

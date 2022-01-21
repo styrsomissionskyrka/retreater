@@ -62,6 +62,24 @@ class PostType implements ActionHookSubscriber, FilterHookSubscriber
                 'single' => true,
                 'show_in_rest' => false,
             ],
+            'start_date' => [
+                'type' => 'string',
+                'description' => __('Start date', 'smk'),
+                'single' => true,
+                'show_in_rest' => true,
+            ],
+            'end_date' => [
+                'type' => 'string',
+                'description' => __('End date', 'smk'),
+                'single' => true,
+                'show_in_rest' => true,
+            ],
+            'max_participants' => [
+                'type' => 'number',
+                'description' => __('Max participants', 'smk'),
+                'single' => true,
+                'show_in_rest' => true,
+            ],
         ];
 
         foreach ($meta_keys as $meta_key => $args) {
