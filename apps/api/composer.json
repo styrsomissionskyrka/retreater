@@ -19,5 +19,7 @@
     "optimize-autoloader": true
   },
   "repositories": [],
-  "require": {}
+  "require": {
+    "stripe/stripe-php": "^7.111"
+  }
 }

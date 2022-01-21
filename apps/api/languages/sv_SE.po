@@ -26,21 +26,27 @@ msgstr "https://github.com/adambrgmn"
 msgid "https://www.styrsomissionskyrka.se"
 msgstr "https://www.styrsomissionskyrka.se"
 
-#: inc/Retreats/PostType.php:31
-#: src/edit-retreat.tsx:18
+#: inc/Retreats/PostType.php:46
+#: src/edit-retreat.tsx:20
 msgid "Retreat"
 msgstr "Retreat"
 
-#: src/edit-retreat.tsx:15
+#: src/edit-retreat.tsx:17
 msgid "Retreat settings"
 msgstr "Retreatinställningar"
 
-#: inc/Retreats/PostType.php:30
+#: inc/Retreats/PostType.php:45
 msgid "Retreats"
 msgstr "Retreater"
 
-#: inc/Retreats/PostType.php:46
+#: inc/Retreats/PostType.php:61
 msgid "Stripe price id related to this retreat"
+msgstr ""
+
+#: inc/Retreats/PostType.php:78
+msgid ""
+"Stripe price, fetched based on the posts meta key `stripe_price_id`. Returns 0 if no price is previously "
+"defined"
 msgstr ""
 
 #: style.css:2
@@ -50,22 +56,31 @@ msgstr ""
 msgid "Styrsö Missionskyrka API"
 msgstr "Styrsö Missionskyrka API"
 
-#: functions.php:15
+#: functions.php:16
 #: package/styrsomissionskyrka/functions.php:13
 msgid "Styrsö Missionskyrka API theme can't work properly."
 msgstr "Styrsö Missionskyrka API temat kan inte fungera."
 
-#: functions.php:22
+#: functions.php:23
 #: package/styrsomissionskyrka/functions.php:22
 msgid "The constant <code>SMK_CLIENT_BASE_URL</code> must be defined."
 msgstr ""
 
-#: functions.php:16
+#: functions.php:30
+msgid "The constant <code>STRIPE_SECRET_KEY</code> must be defined."
+msgstr ""
+
+#: functions.php:17
 #: package/styrsomissionskyrka/functions.php:14
 msgid "The plugin \"wp-rest-blocks\" is required for this theme to work as expected."
 msgstr "Pluginet \"wp-rest-blocks\" krävs för att temat ska fungera som väntat."
 
-#: functions.php:23
+#: functions.php:24
+#: functions.php:31
 #: package/styrsomissionskyrka/functions.php:23
 msgid "Without it the app will not work as expected."
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+msgid "Stripe product id related to this retreat"
 msgstr ""

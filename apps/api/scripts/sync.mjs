@@ -1,6 +1,7 @@
+import * as path from 'path';
+
 import dotenv from 'dotenv';
 import fs from 'fs-extra';
-import * as path from 'path';
 
 dotenv.config({ path: '.env.local' });
 
