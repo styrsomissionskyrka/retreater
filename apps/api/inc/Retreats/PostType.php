@@ -14,6 +14,7 @@ class PostType implements ActionHookSubscriber, FilterHookSubscriber
     {
         return [
             'init' => [['register_post_type', 10], ['register_post_meta', 11]],
+            'enqueue_block_editor_assets' => ['enqueue_editor_assets'],
         ];
     }
 
@@ -51,5 +52,10 @@ class PostType implements ActionHookSubscriber, FilterHookSubscriber
         foreach ($meta_keys as $meta_key => $args) {
             register_post_meta(self::$post_type, $meta_key, $args);
         }
+    }
+
+    public function enqueue_editor_assets()
+    {
+        AssetLoader::enqueue('edit-retreat');
     }
 }

@@ -9,14 +9,20 @@
   },
   "devDependencies": {
     "@fransvilhelm/wp-bundler": "^2.0.0",
+    "@types/react": "^17.0.38",
+    "@types/wordpress__components": "^14.0.10",
+    "@types/wordpress__edit-post": "^4.0.1",
+    "@types/wordpress__plugins": "^3.0.0",
     "dotenv": "^11.0.0",
     "fs-extra": "^10.0.0"
   },
   "wp-bundler": {
     "entryPoints": {
-      "app": "src/app.ts"
+      "app": "src/app.ts",
+      "edit-retreat": "src/edit-retreat.tsx"
     },
     "assetLoader": {
+      "namespace": "StyrsoMissionskyrka",
       "path": "inc/AssetLoader.php"
     },
     "translations": {
@@ -27,5 +33,12 @@
         "languages/en_US.po"
       ]
     }
+  },
+  "dependencies": {
+    "@wordpress/components": "^19.2.0",
+    "@wordpress/edit-post": "^5.0.20",
+    "@wordpress/i18n": "^4.2.4",
+    "@wordpress/plugins": "^4.0.7",
+    "react": "^17.0.2"
   }
 }
