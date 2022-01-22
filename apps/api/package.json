@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "build": "wp-bundler",
-    "dev": "wp-bundler --watch",
-    "sync:watch": "npx nodemon ./scripts/sync.mjs --watch . -e ts,tsx,php",
+    "dev": "npx concurrently 'wp-bundler --watch' 'npx nodemon ./scripts/sync.mjs --watch . -e ts,tsx,php'",
     "lint": "eslint src --ext .ts --ext .tsx --ext .js"
   },
   "dependencies": {
