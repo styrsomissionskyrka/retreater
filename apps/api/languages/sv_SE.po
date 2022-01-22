@@ -18,7 +18,7 @@ msgstr "Adam Bergman"
 
 #: inc/Retreats/PostType.php:73
 msgid "End date"
-msgstr ""
+msgstr "Slutdatum"
 
 #: style.css:5
 #. translators: Author URI of the theme
@@ -32,14 +32,14 @@ msgstr "https://www.styrsomissionskyrka.se"
 
 #: inc/Retreats/PostType.php:79
 msgid "Max participants"
-msgstr ""
+msgstr "Max antal deltagare"
 
 #: inc/Retreats/PostType.php:46
-#: src/edit-retreat.tsx:20
 msgid "Retreat"
 msgstr "Retreat"
 
-#: src/edit-retreat.tsx:17
+#: src/edit-retreat.tsx:20
+#: src/edit-retreat.tsx:23
 msgid "Retreat settings"
 msgstr "Retreatinställningar"
 
@@ -49,7 +49,7 @@ msgstr "Retreater"
 
 #: inc/Retreats/PostType.php:67
 msgid "Start date"
-msgstr ""
+msgstr "Startdatum"
 
 #: inc/Retreats/PostType.php:61
 msgid "Stripe price id related to this retreat"
@@ -69,12 +69,10 @@ msgid "Styrsö Missionskyrka API"
 msgstr "Styrsö Missionskyrka API"
 
 #: functions.php:16
-#: package/styrsomissionskyrka/functions.php:13
 msgid "Styrsö Missionskyrka API theme can't work properly."
 msgstr "Styrsö Missionskyrka API temat kan inte fungera."
 
 #: functions.php:23
-#: package/styrsomissionskyrka/functions.php:22
 msgid "The constant <code>SMK_CLIENT_BASE_URL</code> must be defined."
 msgstr ""
 
@@ -83,16 +81,10 @@ msgid "The constant <code>STRIPE_SECRET_KEY</code> must be defined."
 msgstr ""
 
 #: functions.php:17
-#: package/styrsomissionskyrka/functions.php:14
 msgid "The plugin \"wp-rest-blocks\" is required for this theme to work as expected."
 msgstr "Pluginet \"wp-rest-blocks\" krävs för att temat ska fungera som väntat."
 
 #: functions.php:24
 #: functions.php:31
-#: package/styrsomissionskyrka/functions.php:23
 msgid "Without it the app will not work as expected."
-msgstr ""
-
-# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-msgid "Stripe product id related to this retreat"
 msgstr ""

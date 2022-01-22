@@ -1,0 +1,20 @@
+{
+  "name": "@styrsomissionskyrka/types",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "./lib/index.ts",
+  "types": "./lib/index.ts",
+  "scripts": {
+    "lint": "eslint lib --ext .ts --ext .tsx --ext .js"
+  },
+  "devDependencies": {
+    "config": "*",
+    "eslint": "8.7.0",
+    "tsconfig": "*",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "zod": "^3.11.6"
+  }
+}
