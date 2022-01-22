@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "wp-bundler",
-    "dev": "npx concurrently 'wp-bundler --watch' 'npx nodemon ./scripts/sync.mjs --watch . -e ts,tsx,php'",
+    "dev": "npx concurrently 'wp-bundler --watch --port 8080' 'npx nodemon ./scripts/sync.mjs --watch . -e ts,tsx,php'",
     "lint": "eslint src --ext .ts --ext .tsx --ext .js"
   },
   "dependencies": {
@@ -15,7 +15,8 @@
     "react": "^17.0.2"
   },
   "devDependencies": {
-    "@fransvilhelm/wp-bundler": "^2.0.0",
+    "@fransvilhelm/wp-bundler": "^2.1.0",
+    "@styrsomissionskyrka/types": "*",
     "@types/react": "^17.0.38",
     "@types/wordpress__components": "^14.0.10",
     "@types/wordpress__edit-post": "^4.0.1",
@@ -24,7 +25,6 @@
     "dotenv": "^11.0.0",
     "eslint": "8.7.0",
     "fs-extra": "^10.0.0",
-    "@styrsomissionskyrka/types": "*",
     "tsconfig": "*",
     "typescript": "^4.5.5"
   },
