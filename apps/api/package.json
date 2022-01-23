@@ -12,6 +12,7 @@
     "@wordpress/edit-post": "^5.0.20",
     "@wordpress/i18n": "^4.2.4",
     "@wordpress/plugins": "^4.0.7",
+    "date-fns": "^2.28.0",
     "react": "^17.0.2"
   },
   "devDependencies": {

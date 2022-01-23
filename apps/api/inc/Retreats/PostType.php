@@ -45,6 +45,7 @@ class PostType implements ActionHookSubscriber, FilterHookSubscriber
                 'name' => __('Retreats', 'smk'),
                 'singular_name' => __('Retreat', 'smk'),
             ],
+            'menu_icon' => 'nametag',
             'public' => true,
             'has_archive' => true,
             'show_in_rest' => true,
@@ -60,7 +61,7 @@ class PostType implements ActionHookSubscriber, FilterHookSubscriber
                 'type' => 'string',
                 'description' => __('Stripe price id related to this retreat', 'smk'),
                 'single' => true,
-                'show_in_rest' => false,
+                'show_in_rest' => true,
             ],
             'start_date' => [
                 'type' => 'string',
@@ -117,6 +118,10 @@ class PostType implements ActionHookSubscriber, FilterHookSubscriber
 
     public function set_stripe_price(int $amount, \WP_Post $post)
     {
+        if ($amount == 0) {
+            return $amount;
+        }
+
         $price_id = get_post_meta($post->ID, 'stripe_price_id', true);
 
         $previous_product = '';
@@ -152,6 +157,6 @@ class PostType implements ActionHookSubscriber, FilterHookSubscriber
 
     public function enqueue_editor_assets()
     {
-        AssetLoader::enqueue('edit-retreat');
+        // AssetLoader::enqueue('edit-retreat');
     }
 }

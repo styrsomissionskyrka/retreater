@@ -5,6 +5,7 @@ import { BaseSchema } from './Post';
 
 export type RetreatMetadata = z.infer<typeof RetreatMetadataSchema>;
 export const RetreatMetadataSchema = z.object({
+  stripe_price_id: z.string().optional(),
   start_date: utils.apiDate,
   end_date: utils.apiDate,
   max_participants: z.number(),

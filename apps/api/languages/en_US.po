@@ -16,7 +16,12 @@ msgstr ""
 msgid "Adam Bergman"
 msgstr ""
 
-#: inc/Retreats/PostType.php:73
+#: src/components/EditRetreat/SectionDates.tsx:18
+msgid "Dates"
+msgstr ""
+
+#: inc/Retreats/PostType.php:74
+#: src/components/EditRetreat/SectionDates.tsx:29
 msgid "End date"
 msgstr ""
 
@@ -30,16 +35,29 @@ msgstr ""
 msgid "https://www.styrsomissionskyrka.se"
 msgstr ""
 
-#: inc/Retreats/PostType.php:79
+#: inc/Retreats/PostType.php:80
 msgid "Max participants"
+msgstr ""
+
+#: src/components/DropdownDatePicker.tsx:13
+msgid "Pick date"
+msgstr ""
+
+#: src/components/EditRetreat/SectionPrice.tsx:12
+#: src/components/EditRetreat/SectionPrice.tsx:14
+msgid "Price"
+msgstr ""
+
+#: src/components/EditRetreat/SectionPrice.tsx:17
+msgid "Price id: %s"
 msgstr ""
 
 #: inc/Retreats/PostType.php:46
 msgid "Retreat"
 msgstr ""
 
-#: src/edit-retreat.tsx:20
-#: src/edit-retreat.tsx:23
+#: src/components/EditRetreat/EditRetreat.tsx:18
+#: src/components/EditRetreat/EditRetreat.tsx:21
 msgid "Retreat settings"
 msgstr ""
 
@@ -47,11 +65,12 @@ msgstr ""
 msgid "Retreats"
 msgstr ""
 
-#: inc/Retreats/PostType.php:67
+#: inc/Retreats/PostType.php:68
+#: src/components/EditRetreat/SectionDates.tsx:20
 msgid "Start date"
 msgstr ""
 
-#: inc/Retreats/PostType.php:96
+#: inc/Retreats/PostType.php:97
 msgid ""
 "Stripe price, fetched based on the posts meta key `stripe_price_id`. Returns 0 if no price is previously "
 "defined"
@@ -86,7 +105,19 @@ msgid "Without it the app will not work as expected."
 msgstr ""
 
 # THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-#: inc/Retreats/PostType.php:61
+msgid "Price (%s)"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+msgid "Set end date"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+msgid "Set start date"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: inc/Retreats/PostType.php:62
 msgid "Stripe price id related to this retreat"
 msgstr ""
 

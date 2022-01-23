@@ -7,16 +7,12 @@ module.exports = {
   },
   rules: {
     '@next/next/no-html-link-for-pages': 'off',
+    'no-duplicate-imports': 'error',
     'import/order': [
       'error',
       {
         'newlines-between': 'always',
-        groups: [
-          'builtin',
-          'external',
-          'internal',
-          ['parent', 'sibling', 'index'],
-        ],
+        groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index']],
       },
     ],
 
