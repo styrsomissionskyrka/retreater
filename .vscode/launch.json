@@ -10,7 +10,7 @@
       "request": "launch",
       "port": 9003,
       "pathMappings": {
-        "/www/kinsta/public/styrsomissionskyrka-api/wp-content/themes/styrsomissionskyrka": "${workspaceRoot}/apps/api"
+        "/www/kinsta/public/styrsomissionskyrka/wp-content/themes/styrsomissionskyrka": "${workspaceRoot}/apps/api"
       }
     }
   ]
