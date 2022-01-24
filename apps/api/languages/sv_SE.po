@@ -67,7 +67,7 @@ msgstr "Ta bort ledare"
 msgid "Removed leader"
 msgstr "Tog bort ledare"
 
-#: inc/Retreats/PostType.php:46
+#: inc/Retreats/PostType.php:28
 msgid "Retreat"
 msgstr "Retreat"
 
@@ -80,7 +80,7 @@ msgstr "Retreatledare"
 msgid "Retreat settings"
 msgstr "Retreatinställningar"
 
-#: inc/Retreats/PostType.php:45
+#: inc/Retreats/PostType.php:27
 msgid "Retreats"
 msgstr "Retreater"
 

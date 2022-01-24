@@ -35,5 +35,6 @@ if ($is_valid) {
     $manager->register(new Core());
     $manager->register(new ApiBlocks());
 
-    $manager->register(new Retreats\PostType($stripe));
+    $manager->register(new Retreats\PostType());
+    $manager->register(new Retreats\Api($stripe));
 }
