@@ -14,10 +14,15 @@ msgstr ""
 msgid "Added leader"
 msgstr ""
 
+#: inc/Retreats/Admin.php:55
+msgid "Date not set"
+msgstr ""
+
 #: src/components/EditRetreat/SectionDates.tsx:36
 msgid "Dates"
 msgstr ""
 
+#: inc/Retreats/Admin.php:38
 #: src/components/EditRetreat/SectionDates.tsx:43
 msgid "End date"
 msgstr ""
@@ -78,6 +83,7 @@ msgstr ""
 msgid "Retreats"
 msgstr ""
 
+#: inc/Retreats/Admin.php:37
 #: src/components/EditRetreat/SectionDates.tsx:38
 msgid "Start date"
 msgstr ""

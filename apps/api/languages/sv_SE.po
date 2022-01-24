@@ -20,10 +20,15 @@ msgstr "Adam Bergman"
 msgid "Added leader"
 msgstr "La till ledare"
 
+#: inc/Retreats/Admin.php:55
+msgid "Date not set"
+msgstr "Datum inte satt"
+
 #: src/components/EditRetreat/SectionDates.tsx:36
 msgid "Dates"
 msgstr "Datum"
 
+#: inc/Retreats/Admin.php:38
 #: src/components/EditRetreat/SectionDates.tsx:43
 msgid "End date"
 msgstr "Slutdatum"
@@ -84,6 +89,7 @@ msgstr "Retreatinställningar"
 msgid "Retreats"
 msgstr "Retreater"
 
+#: inc/Retreats/Admin.php:37
 #: src/components/EditRetreat/SectionDates.tsx:38
 msgid "Start date"
 msgstr "Startdatum"

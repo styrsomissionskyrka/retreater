@@ -3,7 +3,6 @@
 namespace StyrsoMissionskyrka\Retreats;
 
 use Stripe\StripeClient;
-use StyrsoMissionskyrka\AssetLoader;
 use StyrsoMissionskyrka\Utils\ActionHookSubscriber;
 
 class Api implements ActionHookSubscriber

@@ -5,6 +5,7 @@
   "scripts": {
     "build": "wp-bundler",
     "dev": "npx concurrently 'wp-bundler --watch --port 8080' 'npx nodemon ./scripts/sync.mjs --watch . -e ts,tsx,php'",
+    "sync": "node ./scripts/sync.mjs",
     "lint": "eslint src --ext .ts --ext .tsx --ext .js"
   },
   "dependencies": {
