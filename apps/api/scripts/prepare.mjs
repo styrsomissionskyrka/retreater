@@ -20,7 +20,7 @@ for (let [key, value] of configurations) {
   wp(`config set ${key} ${value}`);
 }
 
-const plugins = ['rest-api-blocks'];
+const plugins = ['wordpress-beta-tester'];
 wp(`plugin install ${plugins.join(' ')} --activate`);
 
 function wp(script) {

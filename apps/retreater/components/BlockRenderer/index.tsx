@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
+import { Block as BlockType } from '@styrsomissionskyrka/types';
 
-import { Block as BlockType } from '../../lib/api/schema';
 import { renderBlock } from './render';
 
 interface Props {

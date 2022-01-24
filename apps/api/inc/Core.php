@@ -4,7 +4,6 @@ namespace StyrsoMissionskyrka;
 
 use StyrsoMissionskyrka\Utils\ActionHookSubscriber;
 use StyrsoMissionskyrka\Utils\FilterHookSubscriber;
-use function WP_REST_Blocks\Data\get_blocks;
 
 class Core implements ActionHookSubscriber, FilterHookSubscriber
 {
@@ -19,7 +18,6 @@ class Core implements ActionHookSubscriber, FilterHookSubscriber
     {
         return [
             'preview_post_link' => ['preview_post_link'],
-            'rest_prepare_revision' => ['rest_prepare_revision', 10, 2],
         ];
     }
 
@@ -53,23 +51,5 @@ class Core implements ActionHookSubscriber, FilterHookSubscriber
             ],
             \SMK_CLIENT_BASE_URL . '/api/preview'
         );
-    }
-
-    public function rest_prepare_revision(\WP_REST_Response $response, \WP_Post $post)
-    {
-        $has_blocks = \has_blocks($post);
-        $blocks = [];
-        if ($has_blocks) {
-            $blocks = get_blocks($post->post_content, $post->ID);
-        }
-
-        $response->set_data(
-            array_merge($response->get_data(), [
-                'has_blocks' => $has_blocks,
-                'blocks' => $blocks,
-            ])
-        );
-
-        return $response;
     }
 }

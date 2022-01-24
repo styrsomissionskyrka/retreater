@@ -10,6 +10,10 @@ msgstr ""
 msgid "Adam Bergman"
 msgstr ""
 
+#: inc/ApiBlocks.php:44
+msgid "Blocks."
+msgstr ""
+
 #: src/components/EditRetreat/SectionDates.tsx:18
 msgid "Dates"
 msgstr ""
@@ -17,6 +21,10 @@ msgstr ""
 #: inc/Retreats/PostType.php:74
 #: src/components/EditRetreat/SectionDates.tsx:29
 msgid "End date"
+msgstr ""
+
+#: inc/ApiBlocks.php:33
+msgid "Has blocks."
 msgstr ""
 
 #: style.css:5
@@ -82,22 +90,14 @@ msgid "Styrsö Missionskyrka API"
 msgstr ""
 
 #: functions.php:16
-msgid "Styrsö Missionskyrka API theme can't work properly."
-msgstr ""
-
-#: functions.php:23
 msgid "The constant <code>SMK_CLIENT_BASE_URL</code> must be defined."
 msgstr ""
 
-#: functions.php:30
+#: functions.php:23
 msgid "The constant <code>STRIPE_SECRET_KEY</code> must be defined."
 msgstr ""
 
 #: functions.php:17
-msgid "The plugin \"wp-rest-blocks\" is required for this theme to work as expected."
-msgstr ""
-
 #: functions.php:24
-#: functions.php:31
 msgid "Without it the app will not work as expected."
 msgstr ""

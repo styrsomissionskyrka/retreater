@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import * as z from 'zod';
+import { Block } from '@styrsomissionskyrka/types';
 
 import * as theme from '../../styles/theme';
-import { Block } from '../../lib/api/schema';
 
 export const NonEmptyString = z.string().transform((x) => (x === '' ? undefined : x));
 

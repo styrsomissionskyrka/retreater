@@ -1,8 +1,9 @@
 import axios from 'axios';
 import * as z from 'zod';
+import { Post, PostSchema } from '@styrsomissionskyrka/types';
 
 import * as config from '../config';
-import { Post, PostListParameterInput, PostListParametersSchema, PostSchema, Revision, RevisionSchema } from './schema';
+import { PostListParameterInput, PostListParametersSchema } from './schema';
 
 type Mask<T> = {
   [k in keyof T]?: true;
@@ -71,23 +72,23 @@ export async function post<M extends Mask<Post>>({ id, embed }: FetchPostArgs, p
   return PostSchema.parse(post);
 }
 
-export interface FetchRevisionArgs extends SharedArguments<{}, Revision> {
+export interface FetchRevisionArgs extends SharedArguments<{}, Post> {
   id: string | number;
   revision: string | number;
 }
 
-export async function revision<M extends Mask<Revision>>(args: FetchRevisionArgs): Promise<Revision | null>;
-export async function revision<M extends Mask<Revision>>(
+export async function revision<M extends Mask<Post>>(args: FetchRevisionArgs): Promise<Post | null>;
+export async function revision<M extends Mask<Post>>(
   args: FetchRevisionArgs,
   pick: M,
-): Promise<PickMask<M, Revision> | null>;
-export async function revision<M extends Mask<Revision>>({ id, revision, embed }: FetchRevisionArgs, pick?: M) {
+): Promise<PickMask<M, Post> | null>;
+export async function revision<M extends Mask<Post>>({ id, revision, embed }: FetchRevisionArgs, pick?: M) {
   let _embed = typeof embed === 'boolean' ? 1 : embed;
   let _fields = pick != null ? Object.keys(pick) : undefined;
   let result = await wp.get(`/wp/v2/posts/${id}/revisions/${revision}`, { params: { _embed, _fields } });
 
   if (result.data == null) return null;
 
-  if (pick != null) return RevisionSchema.pick(pick).parse(result.data);
-  return RevisionSchema.parse(result.data);
+  if (pick != null) return PostSchema.pick(pick).parse(result.data);
+  return PostSchema.parse(result.data);
 }

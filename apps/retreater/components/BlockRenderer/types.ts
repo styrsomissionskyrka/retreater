@@ -1,4 +1,4 @@
-import { Block as BlockType } from '../../lib/api/schema';
+import { Block as BlockType } from '@styrsomissionskyrka/types';
 
 interface BlockComponentProps {
   block: BlockType;

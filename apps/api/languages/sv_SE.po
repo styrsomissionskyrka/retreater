@@ -16,6 +16,10 @@ msgstr ""
 msgid "Adam Bergman"
 msgstr "Adam Bergman"
 
+#: inc/ApiBlocks.php:44
+msgid "Blocks."
+msgstr ""
+
 #: src/components/EditRetreat/SectionDates.tsx:18
 msgid "Dates"
 msgstr ""
@@ -24,6 +28,10 @@ msgstr ""
 #: src/components/EditRetreat/SectionDates.tsx:29
 msgid "End date"
 msgstr "Slutdatum"
+
+#: inc/ApiBlocks.php:33
+msgid "Has blocks."
+msgstr ""
 
 #: style.css:5
 #. translators: Author URI of the theme
@@ -87,35 +95,18 @@ msgstr ""
 msgid "Styrsö Missionskyrka API"
 msgstr "Styrsö Missionskyrka API"
 
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
 #: functions.php:16
-msgid "Styrsö Missionskyrka API theme can't work properly."
-msgstr "Styrsö Missionskyrka API temat kan inte fungera."
-
-#: functions.php:23
 msgid "The constant <code>SMK_CLIENT_BASE_URL</code> must be defined."
 msgstr ""
 
-#: functions.php:30
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: functions.php:23
 msgid "The constant <code>STRIPE_SECRET_KEY</code> must be defined."
 msgstr ""
 
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
 #: functions.php:17
-msgid "The plugin \"wp-rest-blocks\" is required for this theme to work as expected."
-msgstr "Pluginet \"wp-rest-blocks\" krävs för att temat ska fungera som väntat."
-
 #: functions.php:24
-#: functions.php:31
 msgid "Without it the app will not work as expected."
-msgstr ""
-
-# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-msgid "Price (%s)"
-msgstr ""
-
-# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-msgid "Set end date"
-msgstr ""
-
-# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-msgid "Set start date"
 msgstr ""

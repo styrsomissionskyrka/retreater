@@ -16,3 +16,9 @@ export const rendered = z.object({
   protected: z.boolean().optional(),
   rendered: z.string(),
 });
+
+export const context = z.enum(['view', 'embed', 'edit']);
+
+export const order = z.enum(['asc', 'desc']);
+
+export const operator = z.enum(['AND', 'OR']);

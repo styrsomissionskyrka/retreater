@@ -1,4 +1,5 @@
-import { Block } from '../../lib/api/schema';
+import { Block } from '@styrsomissionskyrka/types';
+
 import { Columns } from './Columns';
 import { Heading } from './Heading';
 import { Image as ImageBlock } from './Image';

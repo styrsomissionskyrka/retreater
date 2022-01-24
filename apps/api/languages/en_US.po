@@ -16,6 +16,10 @@ msgstr ""
 msgid "Adam Bergman"
 msgstr ""
 
+#: inc/ApiBlocks.php:44
+msgid "Blocks."
+msgstr ""
+
 #: src/components/EditRetreat/SectionDates.tsx:18
 msgid "Dates"
 msgstr ""
@@ -23,6 +27,10 @@ msgstr ""
 #: inc/Retreats/PostType.php:74
 #: src/components/EditRetreat/SectionDates.tsx:29
 msgid "End date"
+msgstr ""
+
+#: inc/ApiBlocks.php:33
+msgid "Has blocks."
 msgstr ""
 
 #: style.css:5
@@ -70,6 +78,10 @@ msgstr ""
 msgid "Start date"
 msgstr ""
 
+#: inc/Retreats/PostType.php:62
+msgid "Stripe price id related to this retreat"
+msgstr ""
+
 #: inc/Retreats/PostType.php:97
 msgid ""
 "Stripe price, fetched based on the posts meta key `stripe_price_id`. Returns 0 if no price is previously "
@@ -83,48 +95,18 @@ msgstr ""
 msgid "Styrsö Missionskyrka API"
 msgstr ""
 
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
 #: functions.php:16
-msgid "Styrsö Missionskyrka API theme can't work properly."
-msgstr ""
-
-#: functions.php:23
 msgid "The constant <code>SMK_CLIENT_BASE_URL</code> must be defined."
 msgstr ""
 
-#: functions.php:30
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: functions.php:23
 msgid "The constant <code>STRIPE_SECRET_KEY</code> must be defined."
 msgstr ""
 
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
 #: functions.php:17
-msgid "The plugin \"wp-rest-blocks\" is required for this theme to work as expected."
-msgstr ""
-
 #: functions.php:24
-#: functions.php:31
 msgid "Without it the app will not work as expected."
-msgstr ""
-
-# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-msgid "Price (%s)"
-msgstr ""
-
-# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-msgid "Set end date"
-msgstr ""
-
-# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-msgid "Set start date"
-msgstr ""
-
-# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-#: inc/Retreats/PostType.php:62
-msgid "Stripe price id related to this retreat"
-msgstr ""
-
-# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-msgid "Stripe price, fetched based on the posts meta key stripe_price_id. Returns 0 if no price is previously defined"
-msgstr ""
-
-# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-msgid "Stripe product id related to this retreat"
 msgstr ""

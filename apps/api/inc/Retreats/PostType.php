@@ -157,6 +157,6 @@ class PostType implements ActionHookSubscriber, FilterHookSubscriber
 
     public function enqueue_editor_assets()
     {
-        // AssetLoader::enqueue('edit-retreat');
+        AssetLoader::enqueue('edit-retreat');
     }
 }

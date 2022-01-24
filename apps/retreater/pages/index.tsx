@@ -1,8 +1,8 @@
 import { GetServerSideProps, NextPage } from 'next';
+import { Post } from '@styrsomissionskyrka/types';
 
 import { Link } from '../components';
 import * as wp from '../lib/api/wp';
-import { Post } from '../lib/api/schema';
 
 interface Props {
   posts: Pick<Post, 'id' | 'title' | 'slug'>[];
