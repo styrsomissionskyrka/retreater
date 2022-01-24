@@ -9,6 +9,7 @@ export const RetreatMetadataSchema = z.object({
   start_date: utils.apiDate,
   end_date: utils.apiDate,
   max_participants: z.number(),
+  leaders: z.array(z.string()),
 });
 
 export type Retreat = z.infer<typeof RetreatSchema>;

@@ -19,4 +19,11 @@ declare module '@wordpress/components' {
       ref?: React.RefObject<HTMLElement>;
     }
   }
+
+  namespace FormTokenField {
+    interface Props {
+      label?: React.ReactNode;
+      messages?: any;
+    }
+  }
 }

@@ -30,7 +30,7 @@ class ApiBlocks implements ActionHookSubscriber
             'get_callback' => [$this, 'has_blocks_get_callback'],
             'update_callback' => null,
             'schema' => [
-                'description' => __('Has blocks.', 'smk'),
+                'description' => 'Has blocks',
                 'type' => 'boolean',
                 'context' => ['embed', 'view', 'edit'],
                 'readonly' => true,
@@ -41,7 +41,7 @@ class ApiBlocks implements ActionHookSubscriber
             'get_callback' => [$this, 'blocks_get_callback'],
             'update_callback' => null,
             'schema' => [
-                'description' => __('Blocks.', 'smk'),
+                'description' => 'Blocks',
                 'type' => 'object',
                 'context' => ['embed', 'view', 'edit'],
                 'readonly' => true,

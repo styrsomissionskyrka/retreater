@@ -59,27 +59,38 @@ class PostType implements ActionHookSubscriber, FilterHookSubscriber
         $meta_keys = [
             'stripe_price_id' => [
                 'type' => 'string',
-                'description' => __('Stripe price id related to this retreat', 'smk'),
+                'description' => 'Stripe price id related to this retreat',
                 'single' => true,
                 'show_in_rest' => true,
             ],
             'start_date' => [
                 'type' => 'string',
-                'description' => __('Start date', 'smk'),
+                'description' => 'Start date',
                 'single' => true,
                 'show_in_rest' => true,
             ],
             'end_date' => [
                 'type' => 'string',
-                'description' => __('End date', 'smk'),
+                'description' => 'End date',
                 'single' => true,
                 'show_in_rest' => true,
             ],
             'max_participants' => [
                 'type' => 'number',
-                'description' => __('Max participants', 'smk'),
+                'description' => 'Max participants',
                 'single' => true,
                 'show_in_rest' => true,
+            ],
+            'leaders' => [
+                'type' => 'array',
+                'description' => 'Retreat leaders',
+                'single' => true,
+                'show_in_rest' => [
+                    'schema' => [
+                        'type' => 'array',
+                        'items' => ['type' => 'string'],
+                    ],
+                ],
             ],
         ];
 
@@ -94,10 +105,8 @@ class PostType implements ActionHookSubscriber, FilterHookSubscriber
             'get_callback' => [$this, 'get_stripe_price'],
             'update_callback' => [$this, 'set_stripe_price'],
             'schema' => [
-                'description' => __(
+                'description' =>
                     'Stripe price, fetched based on the posts meta key `stripe_price_id`. Returns 0 if no price is previously defined',
-                    'smk'
-                ),
                 'type' => 'number',
                 'required' => true,
             ],

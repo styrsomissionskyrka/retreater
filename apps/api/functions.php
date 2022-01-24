@@ -13,15 +13,15 @@ AssetLoader::prepare();
 $validation_has_defined_client_url = defined('SMK_CLIENT_BASE_URL');
 Helpers::admin_notice(
     !$validation_has_defined_client_url,
-    __('The constant <code>SMK_CLIENT_BASE_URL</code> must be defined.', 'smk'),
-    __('Without it the app will not work as expected.', 'smk')
+    'The constant <code>SMK_CLIENT_BASE_URL</code> must be defined.',
+    'Without it the app will not work as expected.'
 );
 
 $validation_has_defined_stripe = defined('STRIPE_SECRET_KEY');
 Helpers::admin_notice(
     !$validation_has_defined_stripe,
-    __('The constant <code>STRIPE_SECRET_KEY</code> must be defined.', 'smk'),
-    __('Without it the app will not work as expected.', 'smk')
+    'The constant <code>STRIPE_SECRET_KEY</code> must be defined.',
+    'Without it the app will not work as expected.'
 );
 
 $is_valid = array_every([$validation_has_defined_client_url, $validation_has_defined_stripe], function ($item) {

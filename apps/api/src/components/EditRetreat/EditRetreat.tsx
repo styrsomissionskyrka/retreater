@@ -5,6 +5,7 @@ import { __ } from '@wordpress/i18n';
 
 import { SectionPrice } from './SectionPrice';
 import { SectionDates } from './SectionDates';
+import { SectionParticipants } from './SectionParticipants';
 
 export interface EditRetreatProps {
   name: string;
@@ -22,6 +23,7 @@ export const EditRetreat: React.FC<EditRetreatProps> = ({ name, icon }) => {
         <Panel>
           <SectionPrice />
           <SectionDates />
+          <SectionParticipants />
         </Panel>
       </PluginSidebar>
     </Fragment>

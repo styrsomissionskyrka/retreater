@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Dashicon, PanelBody, TextControl } from '@wordpress/components';
+import { PanelBody, PanelRow, TextControl } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 
 import { useRetreatAttribute, useRetreatMeta, SetState } from '../../utils/data';
@@ -10,12 +10,14 @@ export const SectionPrice: React.FC = () => {
 
   return (
     <PanelBody title={__('Price', 'smk')} initialOpen>
-      <PriceControl
-        label={__('Price', 'smk')}
-        value={price}
-        onBlur={setPrice}
-        help={sprintf(__('Price id: %s', 'smk'), meta.stripe_price_id ?? '')}
-      />
+      <PanelRow>
+        <PriceControl
+          label={__('Price', 'smk')}
+          value={price}
+          onBlur={setPrice}
+          help={sprintf(__('Price id: %s', 'smk'), meta.stripe_price_id ?? '')}
+        />
+      </PanelRow>
     </PanelBody>
   );
 };
