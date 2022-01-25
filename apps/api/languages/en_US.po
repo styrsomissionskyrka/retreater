@@ -24,7 +24,7 @@ msgstr ""
 msgid "Booking"
 msgstr ""
 
-#: src/edit-booking.tsx:9
+#: src/edit-booking.tsx:13
 msgid "Booking id"
 msgstr ""
 
@@ -32,11 +32,16 @@ msgstr ""
 msgid "Bookings"
 msgstr ""
 
-#: src/edit-booking.tsx:33
-msgid "Comments"
+#: src/edit-booking.tsx:132
+msgid "City"
 msgstr ""
 
-#: src/edit-booking.tsx:61
+#: src/edit-booking.tsx:153
+#: src/edit-booking.tsx:155
+msgid "Comment"
+msgstr ""
+
+#: src/edit-booking.tsx:45
 msgid "Confirmed"
 msgstr ""
 
@@ -46,6 +51,10 @@ msgstr ""
 
 #: src/components/EditRetreat/SectionDates.tsx:36
 msgid "Dates"
+msgstr ""
+
+#: src/edit-booking.tsx:110
+msgid "E-mail"
 msgstr ""
 
 #: inc/Retreats/Admin.php:38
@@ -67,12 +76,24 @@ msgstr ""
 msgid "Max participants"
 msgstr ""
 
+#: src/edit-booking.tsx:105
+msgid "Name"
+msgstr ""
+
+#: src/edit-booking.tsx:139
+msgid "Participant"
+msgstr ""
+
 #: src/components/EditRetreat/SectionParticipants.tsx:13
 msgid "Participants"
 msgstr ""
 
-#: src/edit-booking.tsx:60
+#: src/edit-booking.tsx:44
 msgid "Payment pending"
+msgstr ""
+
+#: src/edit-booking.tsx:116
+msgid "Phone"
 msgstr ""
 
 #: src/components/DropdownDatePicker.tsx:13
@@ -88,7 +109,7 @@ msgstr ""
 msgid "Price id: %s"
 msgstr ""
 
-#: src/edit-booking.tsx:59
+#: src/edit-booking.tsx:43
 msgid "Queued"
 msgstr ""
 
@@ -117,11 +138,11 @@ msgstr ""
 msgid "Retreats"
 msgstr ""
 
-#: src/edit-booking.tsx:77
+#: src/edit-booking.tsx:61
 msgid "Save"
 msgstr ""
 
-#: src/edit-booking.tsx:56
+#: src/edit-booking.tsx:40
 msgid "Set status"
 msgstr ""
 
@@ -130,9 +151,25 @@ msgstr ""
 msgid "Start date"
 msgstr ""
 
+#: src/edit-booking.tsx:122
+msgid "Street"
+msgstr ""
+
 #: style.css:2
 #: style.css:6
 #. translators: Description of the theme
 #. translators: Theme Name of the theme
 msgid "Styrsö Missionskyrka API"
+msgstr ""
+
+#: src/edit-booking.tsx:127
+msgid "Zip code"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+msgid "Comments"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+msgid "Deltagare"
 msgstr ""

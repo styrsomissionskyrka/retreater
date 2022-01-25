@@ -28,6 +28,7 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
     {
         return [
             'admin_enqueue_scripts' => ['enqueue_edit_script'],
+            'save_post' => ['update_custom_post_meta', 10, 2],
         ];
     }
 
@@ -55,12 +56,39 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
         return substr($id, 0, 4) . '-' . substr($id, 4, 4) . '-' . substr($id, 8, 4);
     }
 
+    public function update_custom_post_meta(int $post_id, \WP_Post $post)
+    {
+        if (!current_user_can('edit_post', $post_id)) {
+            return $post_id;
+        }
+
+        if (!isset($_POST['booking_meta'])) {
+            return $post_id;
+        }
+
+        $next_meta = $_POST['booking_meta'];
+        foreach ($next_meta as $key => $value) {
+            $prev = get_post_meta($post_id, $key, true);
+            update_post_meta($post_id, $key, $value, $prev);
+        }
+    }
+
     public function enqueue_edit_script(string $hook)
     {
         global $post;
 
         if (($hook === 'post-new.php' || $hook === 'post.php') && $post->post_type === PostType::$post_type) {
-            AssetLoader::enqueue('edit-booking');
+            $handles = AssetLoader::enqueue('edit-booking');
+
+            $keys = ['name', 'email', 'phone', 'address'];
+            $data = [];
+
+            foreach ($keys as $key) {
+                $value = get_post_meta($post->ID, $key, true);
+                $data[$key] = $value ? $value : null;
+            }
+
+            wp_localize_script($handles['js'], 'SMK_BOOKING_META', $data);
         }
     }
 }

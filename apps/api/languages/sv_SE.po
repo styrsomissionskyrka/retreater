@@ -24,7 +24,7 @@ msgstr "La till ledare"
 msgid "Booking"
 msgstr "Bokning"
 
-#: src/edit-booking.tsx:9
+#: src/edit-booking.tsx:13
 msgid "Booking id"
 msgstr "Bokningsid"
 
@@ -32,11 +32,16 @@ msgstr "Bokningsid"
 msgid "Bookings"
 msgstr "Bokningar"
 
-#: src/edit-booking.tsx:33
-msgid "Comments"
-msgstr "Kommentarer"
+#: src/edit-booking.tsx:132
+msgid "City"
+msgstr "Stad"
 
-#: src/edit-booking.tsx:61
+#: src/edit-booking.tsx:153
+#: src/edit-booking.tsx:155
+msgid "Comment"
+msgstr "Kommentar"
+
+#: src/edit-booking.tsx:45
 msgid "Confirmed"
 msgstr "Bekräftad"
 
@@ -47,6 +52,10 @@ msgstr "Datum inte satt"
 #: src/components/EditRetreat/SectionDates.tsx:36
 msgid "Dates"
 msgstr "Datum"
+
+#: src/edit-booking.tsx:110
+msgid "E-mail"
+msgstr "E-post"
 
 #: inc/Retreats/Admin.php:38
 #: src/components/EditRetreat/SectionDates.tsx:43
@@ -67,13 +76,25 @@ msgstr "https://www.styrsomissionskyrka.se"
 msgid "Max participants"
 msgstr "Max antal deltagare"
 
+#: src/edit-booking.tsx:105
+msgid "Name"
+msgstr "Namn"
+
+#: src/edit-booking.tsx:139
+msgid "Participant"
+msgstr "Deltagare"
+
 #: src/components/EditRetreat/SectionParticipants.tsx:13
 msgid "Participants"
 msgstr "Deltagare"
 
-#: src/edit-booking.tsx:60
+#: src/edit-booking.tsx:44
 msgid "Payment pending"
 msgstr "Inväntar betalning"
+
+#: src/edit-booking.tsx:116
+msgid "Phone"
+msgstr "Telefon"
 
 #: src/components/DropdownDatePicker.tsx:13
 msgid "Pick date"
@@ -88,7 +109,7 @@ msgstr "Pris"
 msgid "Price id: %s"
 msgstr "ID: %s"
 
-#: src/edit-booking.tsx:59
+#: src/edit-booking.tsx:43
 msgid "Queued"
 msgstr "Väntlista"
 
@@ -117,11 +138,11 @@ msgstr "Retreatinställningar"
 msgid "Retreats"
 msgstr "Retreater"
 
-#: src/edit-booking.tsx:77
+#: src/edit-booking.tsx:61
 msgid "Save"
 msgstr "Spara"
 
-#: src/edit-booking.tsx:56
+#: src/edit-booking.tsx:40
 msgid "Set status"
 msgstr "Välj status"
 
@@ -130,9 +151,17 @@ msgstr "Välj status"
 msgid "Start date"
 msgstr "Startdatum"
 
+#: src/edit-booking.tsx:122
+msgid "Street"
+msgstr "Adress"
+
 #: style.css:2
 #: style.css:6
 #. translators: Description of the theme
 #. translators: Theme Name of the theme
 msgid "Styrsö Missionskyrka API"
 msgstr "Styrsö Missionskyrka API"
+
+#: src/edit-booking.tsx:127
+msgid "Zip code"
+msgstr "Postnummer"
