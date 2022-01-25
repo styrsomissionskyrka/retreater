@@ -38,4 +38,7 @@ if ($is_valid) {
     $manager->register(new Retreats\Admin());
     $manager->register(new Retreats\Api($stripe));
     $manager->register(new Retreats\PostType());
+
+    $manager->register(new Bookings\Edit());
+    $manager->register(new Bookings\PostType());
 }

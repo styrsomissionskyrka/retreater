@@ -14,6 +14,26 @@ msgstr ""
 msgid "Added leader"
 msgstr ""
 
+#: inc/Bookings/PostType.php:43
+msgid "Booking"
+msgstr ""
+
+#: src/edit-booking.tsx:9
+msgid "Booking id"
+msgstr ""
+
+#: inc/Bookings/PostType.php:42
+msgid "Bookings"
+msgstr ""
+
+#: src/edit-booking.tsx:33
+msgid "Comments"
+msgstr ""
+
+#: src/edit-booking.tsx:61
+msgid "Confirmed"
+msgstr ""
+
 #: inc/Retreats/Admin.php:55
 msgid "Date not set"
 msgstr ""
@@ -45,6 +65,10 @@ msgstr ""
 msgid "Participants"
 msgstr ""
 
+#: src/edit-booking.tsx:60
+msgid "Payment pending"
+msgstr ""
+
 #: src/components/DropdownDatePicker.tsx:13
 msgid "Pick date"
 msgstr ""
@@ -56,6 +80,10 @@ msgstr ""
 
 #: src/components/EditRetreat/SectionPrice.tsx:18
 msgid "Price id: %s"
+msgstr ""
+
+#: src/edit-booking.tsx:59
+msgid "Queued"
 msgstr ""
 
 #: src/components/EditRetreat/SectionParticipants.tsx:56
@@ -81,6 +109,14 @@ msgstr ""
 
 #: inc/Retreats/PostType.php:27
 msgid "Retreats"
+msgstr ""
+
+#: src/edit-booking.tsx:77
+msgid "Save"
+msgstr ""
+
+#: src/edit-booking.tsx:56
+msgid "Set status"
 msgstr ""
 
 #: inc/Retreats/Admin.php:37

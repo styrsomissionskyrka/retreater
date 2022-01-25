@@ -27,7 +27,7 @@ class PostType implements ActionHookSubscriber
                 'name' => __('Retreats', 'smk'),
                 'singular_name' => __('Retreat', 'smk'),
             ],
-            'menu_icon' => 'nametag',
+            'menu_icon' => 'dashicons-nametag',
             'public' => true,
             'has_archive' => true,
             'show_in_rest' => true,

@@ -20,6 +20,26 @@ msgstr "Adam Bergman"
 msgid "Added leader"
 msgstr "La till ledare"
 
+#: inc/Bookings/PostType.php:43
+msgid "Booking"
+msgstr "Bokning"
+
+#: src/edit-booking.tsx:9
+msgid "Booking id"
+msgstr "Bokningsid"
+
+#: inc/Bookings/PostType.php:42
+msgid "Bookings"
+msgstr "Bokningar"
+
+#: src/edit-booking.tsx:33
+msgid "Comments"
+msgstr "Kommentarer"
+
+#: src/edit-booking.tsx:61
+msgid "Confirmed"
+msgstr "Bekräftad"
+
 #: inc/Retreats/Admin.php:55
 msgid "Date not set"
 msgstr "Datum inte satt"
@@ -51,6 +71,10 @@ msgstr "Max antal deltagare"
 msgid "Participants"
 msgstr "Deltagare"
 
+#: src/edit-booking.tsx:60
+msgid "Payment pending"
+msgstr "Inväntar betalning"
+
 #: src/components/DropdownDatePicker.tsx:13
 msgid "Pick date"
 msgstr "Välj datum"
@@ -63,6 +87,10 @@ msgstr "Pris"
 #: src/components/EditRetreat/SectionPrice.tsx:18
 msgid "Price id: %s"
 msgstr "ID: %s"
+
+#: src/edit-booking.tsx:59
+msgid "Queued"
+msgstr "Väntlista"
 
 #: src/components/EditRetreat/SectionParticipants.tsx:56
 msgid "Remove leader"
@@ -88,6 +116,14 @@ msgstr "Retreatinställningar"
 #: inc/Retreats/PostType.php:27
 msgid "Retreats"
 msgstr "Retreater"
+
+#: src/edit-booking.tsx:77
+msgid "Save"
+msgstr "Spara"
+
+#: src/edit-booking.tsx:56
+msgid "Set status"
+msgstr "Välj status"
 
 #: inc/Retreats/Admin.php:37
 #: src/components/EditRetreat/SectionDates.tsx:38

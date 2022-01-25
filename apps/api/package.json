@@ -33,7 +33,8 @@
   },
   "wp-bundler": {
     "entryPoints": {
-      "edit-retreat": "src/edit-retreat.tsx"
+      "edit-retreat": "src/edit-retreat.tsx",
+      "edit-booking": "src/edit-booking.tsx"
     },
     "assetLoader": {
       "namespace": "StyrsoMissionskyrka",
