@@ -1,0 +1,7 @@
+#poststuff {
+  visibility: hidden;
+}
+
+#poststuff.ready {
+  visibility: visible;
+}

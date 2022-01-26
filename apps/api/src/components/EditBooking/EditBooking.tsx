@@ -1,4 +1,6 @@
-import { Fragment } from 'react';
+import './EditBooking.css';
+
+import { Fragment, useLayoutEffect } from 'react';
 
 import { Comment } from './Comment';
 import { ParticipantMeta } from './ParticipantMeta';
@@ -11,6 +13,11 @@ interface EditBookingProps {
 }
 
 export const EditBooking: React.FC<EditBookingProps> = ({ initialData }) => {
+  useLayoutEffect(() => {
+    let poststuff = document.getElementById('poststuff');
+    if (poststuff) poststuff.classList.add('ready');
+  }, []);
+
   return (
     <Fragment>
       <Title value={initialData.get('post_title')} />
