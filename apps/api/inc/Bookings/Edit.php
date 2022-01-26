@@ -4,6 +4,7 @@ namespace StyrsoMissionskyrka\Bookings;
 
 use Hidehalo\Nanoid\Client;
 use StyrsoMissionskyrka\AssetLoader;
+use StyrsoMissionskyrka\Retreats\PostType as RetreatPostType;
 use StyrsoMissionskyrka\Utils\ActionHookSubscriber;
 use StyrsoMissionskyrka\Utils\FilterHookSubscriber;
 
@@ -29,6 +30,7 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
         return [
             'admin_enqueue_scripts' => ['enqueue_edit_script'],
             'save_post' => ['update_custom_post_meta', 10, 2],
+            'smk/register-booking-data' => [['register_booking_meta', 10, 2], ['register_booking_retreat_data', 10, 2]],
         ];
     }
 
@@ -70,6 +72,10 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
             }
         }
 
+        if (isset($_POST['post_retreat_id'])) {
+            update_post_meta($post_id, 'retreat_id', $_POST['post_retreat_id']);
+        }
+
         return $post_id;
     }
 
@@ -79,16 +85,46 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
 
         if (($hook === 'post-new.php' || $hook === 'post.php') && $post->post_type === PostType::$post_type) {
             $handles = AssetLoader::enqueue('edit-booking');
-
-            $keys = ['name', 'email', 'phone', 'address'];
-            $data = [];
-
-            foreach ($keys as $key) {
-                $value = get_post_meta($post->ID, $key, true);
-                $data[$key] = $value ? $value : null;
-            }
-
-            wp_localize_script($handles['js'], 'SMK_BOOKING_META', $data);
+            do_action('smk/register-booking-data', $handles['js'], $post);
         }
+    }
+
+    public function register_booking_meta(string $handle, \WP_Post $post)
+    {
+        $keys = ['name', 'email', 'phone', 'address'];
+        $data = [];
+
+        foreach ($keys as $key) {
+            $value = get_post_meta($post->ID, $key, true);
+            $data[$key] = $value ? $value : null;
+        }
+
+        wp_localize_script($handle, 'SMK_BOOKING_META', $data);
+    }
+
+    public function register_booking_retreat_data(string $handle, \WP_Post $post)
+    {
+        $retreat_id = get_post_meta($post->ID, 'retreat_id', true);
+        $retreat = null;
+        if (!empty($retreat_id)) {
+            $related_retreat = get_post($retreat_id);
+            if (!empty($related_retreat)) {
+                $retreat = [
+                    'id' => $related_retreat->ID,
+                    'title' => $related_retreat->post_title,
+                ];
+            }
+        }
+
+        $retreats = [];
+        $query = new \WP_Query(['post_type' => RetreatPostType::$post_type]);
+        foreach ($query->get_posts() as $post) {
+            $retreats[] = ['id' => $post->ID, 'title' => $post->post_title];
+        }
+
+        wp_localize_script($handle, 'SMK_BOOKING_RELATED_RETREAT', [
+            'retreat' => $retreat,
+            'retreats' => $retreats,
+        ]);
     }
 }

@@ -33,7 +33,7 @@ msgid "Bookings"
 msgstr "Bokningar"
 
 #: inc/Bookings/PostType.php:125
-#: src/components/EditBooking/Publish.tsx:20
+#: src/components/EditBooking/Publish.tsx:38
 msgid "Cancelled"
 msgstr "Avbruten"
 
@@ -53,7 +53,7 @@ msgid "Comment"
 msgstr "Kommentar"
 
 #: inc/Bookings/PostType.php:117
-#: src/components/EditBooking/Publish.tsx:19
+#: src/components/EditBooking/Publish.tsx:37
 msgid "Confirmed"
 msgstr "Bekräftad"
 
@@ -64,7 +64,7 @@ msgstr[0] "Bekräftad <span class=\"count\">(%s)</span>"
 msgstr[1] "Bekräftad <span class=\"count\">(%s)</span>"
 
 #: inc/Bookings/PostType.php:101
-#: src/components/EditBooking/Publish.tsx:17
+#: src/components/EditBooking/Publish.tsx:35
 msgid "Created"
 msgstr "Skapad"
 
@@ -86,11 +86,11 @@ msgstr "Datum"
 msgid "E-mail"
 msgstr "E-post"
 
-#: src/components/EditBooking/Publish.tsx:75
+#: src/components/PublishSection/PublishSection.tsx:29
 msgid "Edit"
 msgstr "Redigera"
 
-#: src/components/EditBooking/Publish.tsx:76
+#: src/components/PublishSection/PublishSection.tsx:30
 msgid "Edit %s"
 msgstr "Redigera %s"
 
@@ -117,7 +117,7 @@ msgstr "Max antal deltagare"
 msgid "Name"
 msgstr "Namn"
 
-#: src/components/EditBooking/Publish.tsx:91
+#: src/components/PublishSection/PublishSection.tsx:46
 msgid "OK"
 msgstr "OK"
 
@@ -130,7 +130,7 @@ msgid "Participants"
 msgstr "Deltagare"
 
 #: inc/Bookings/PostType.php:109
-#: src/components/EditBooking/Publish.tsx:18
+#: src/components/EditBooking/Publish.tsx:36
 msgid "Pending"
 msgstr "Väntande"
 
@@ -166,6 +166,7 @@ msgid "Removed leader"
 msgstr "Tog bort ledare"
 
 #: inc/Retreats/PostType.php:28
+#: src/components/EditBooking/Publish.tsx:67
 msgid "Retreat"
 msgstr "Retreat"
 
@@ -186,7 +187,8 @@ msgstr "Retreater"
 msgid "Save"
 msgstr "Spara"
 
-#: src/components/EditBooking/Publish.tsx:81
+#: src/components/PublishSection/PublishSection.tsx:35
+#: src/components/PublishSection/PublishSection.tsx:38
 msgid "Set %s"
 msgstr "Välj %s"
 
@@ -195,7 +197,7 @@ msgstr "Välj %s"
 msgid "Start date"
 msgstr "Startdatum"
 
-#: src/components/EditBooking/Publish.tsx:51
+#: src/components/EditBooking/Publish.tsx:52
 msgid "Status"
 msgstr "Status"
 

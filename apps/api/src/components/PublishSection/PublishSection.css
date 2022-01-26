@@ -16,3 +16,7 @@
 .publish-row-status:before {
   content: '\f173';
 }
+
+.publish-row-retreat_id:before {
+  content: '\f484';
+}

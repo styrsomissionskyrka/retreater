@@ -1,5 +1,3 @@
-import './EditBooking.css';
-
 import { Fragment } from 'react';
 
 import { Comment } from './Comment';

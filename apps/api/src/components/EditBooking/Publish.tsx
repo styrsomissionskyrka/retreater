@@ -1,8 +1,26 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { sprintf, __ } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
+import * as z from 'zod';
 
+import { PublishSection, PublishRow } from '../PublishSection';
 import { useExistingPortal } from './utils';
+interface PublishProps {
+  status: unknown;
+}
+
+export const Publish: React.FC<PublishProps> = ({ status }) => {
+  const portal = useExistingPortal('minor-publishing');
+  if (portal == null) return null;
+
+  return createPortal(
+    <PublishSection>
+      <RelatedRetreat />
+      <Status value={status} />
+    </PublishSection>,
+    portal,
+  );
+};
 
 type StatusType = 'booking_created' | 'booking_pending' | 'booking_confirmed' | 'booking_cancelled';
 
@@ -18,23 +36,6 @@ const statusLabels: Record<StatusType, string> = {
   booking_pending: __('Pending', 'smk'),
   booking_confirmed: __('Confirmed', 'smk'),
   booking_cancelled: __('Cancelled', 'smk'),
-};
-
-interface PublishProps {
-  status: unknown;
-}
-
-export const Publish: React.FC<PublishProps> = ({ status }) => {
-  const portal = useExistingPortal('minor-publishing');
-
-  if (portal == null) return null;
-
-  return createPortal(
-    <div className="publish-section">
-      <Status value={status} />
-    </div>,
-    portal,
-  );
 };
 
 export const Status: React.FC<{ value: unknown }> = ({ value: initialValue }) => {
@@ -53,45 +54,28 @@ export const Status: React.FC<{ value: unknown }> = ({ value: initialValue }) =>
   );
 };
 
-interface PublishRowProps {
-  name: string;
-  value: string;
-  onChange: React.ChangeEventHandler<HTMLSelectElement>;
-  options: { value: string; label: React.ReactNode }[];
-  label: string;
-}
-
-const PublishRow: React.FC<PublishRowProps> = ({ name, value, onChange, options, label }) => {
-  const [state, setState] = useState<'idle' | 'edit'>('idle');
-
-  let currentValueLabel = options.find((o) => o.value === value);
+const RelatedRetreat: React.FC = () => {
+  const data = RelatedRetreatSchema.parse(window.SMK_BOOKING_RELATED_RETREAT);
+  const [value, setValue] = useState(data.retreat?.id ?? null);
 
   return (
-    <div className={`misc-pub-section publish-row publish-row-${name}`}>
-      <input type="hidden" name={`hidden_post_${name}`} id={`hidden_post_${name}`} value={value} />
-      <input type="hidden" name={`post_${name}`} id={`post_${name}`} value={value} />
-      {label}: <span style={{ fontWeight: 600 }}>{currentValueLabel?.label ?? '-'}</span>{' '}
-      <button type="button" onClick={() => setState('edit')}>
-        <span aria-hidden="true">{__('Edit', 'smk')}</span>
-        <span className="screen-reader-text">{sprintf(__('Edit %s', 'smk'), label)}</span>
-      </button>
-      {state === 'edit' ? (
-        <div style={{ marginTop: 3 }}>
-          <label htmlFor={`proxy_post_${name}`} className="screen-reader-text">
-            {sprintf(__('Set %s', 'smk'), label.toLowerCase())}
-          </label>
-          <select name={`proxy_post_${name}`} id={`proxy_post_${name}`} value={value} onChange={onChange}>
-            {options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <button className="button" type="button" onClick={() => setState('idle')}>
-            {__('OK', 'smk')}
-          </button>
-        </div>
-      ) : null}
-    </div>
+    <PublishRow
+      name="retreat_id"
+      value={value?.toString() ?? ''}
+      onChange={(e) => setValue(Number(e.currentTarget.value))}
+      options={data.retreats.map((r) => ({ value: r.id.toString(), label: r.title }))}
+      label={__('Retreat', 'smk')}
+    />
   );
 };
+
+const RelatedRetreatSchema = z.object({
+  retreat: z.object({ id: z.number(), title: z.string() }).nullable(),
+  retreats: z.array(z.object({ id: z.number(), title: z.string() })),
+});
+
+declare global {
+  interface Window {
+    SMK_BOOKING_RELATED_RETREAT: unknown;
+  }
+}

@@ -24,20 +24,43 @@ msgstr ""
 msgid "Booking"
 msgstr ""
 
+#: src/components/EditBooking/Title.tsx:16
+msgid "Booking id"
+msgstr ""
+
 #: inc/Bookings/PostType.php:42
 msgid "Bookings"
+msgstr ""
+
+#: inc/Bookings/PostType.php:125
+#: src/components/EditBooking/Publish.tsx:38
+msgid "Cancelled"
 msgstr ""
 
 #: inc/Bookings/PostType.php:126
 msgid "Cancelled <span class=\"count\">(%s)</span>"
 msgid_plural "Cancelled <span class=\"count\">(%s)</span>"
 
+#: src/components/EditBooking/ParticipantMeta.tsx:65
+msgid "City"
+msgstr ""
+
+#: src/components/EditBooking/Comment.tsx:7
+#: src/components/EditBooking/Comment.tsx:9
+msgid "Comment"
+msgstr ""
+
+#: inc/Bookings/PostType.php:117
+#: src/components/EditBooking/Publish.tsx:37
+msgid "Confirmed"
+msgstr ""
+
 #: inc/Bookings/PostType.php:118
 msgid "Confirmed <span class=\"count\">(%s)</span>"
 msgid_plural "Confirmed <span class=\"count\">(%s)</span>"
 
 #: inc/Bookings/PostType.php:101
-#: src/components/EditBooking/Publish.tsx:17
+#: src/components/EditBooking/Publish.tsx:35
 msgid "Created"
 msgstr ""
 
@@ -53,11 +76,15 @@ msgstr ""
 msgid "Dates"
 msgstr ""
 
-#: src/components/EditBooking/Publish.tsx:75
+#: src/components/EditBooking/ParticipantMeta.tsx:43
+msgid "E-mail"
+msgstr ""
+
+#: src/components/PublishSection/PublishSection.tsx:29
 msgid "Edit"
 msgstr ""
 
-#: src/components/EditBooking/Publish.tsx:76
+#: src/components/PublishSection/PublishSection.tsx:30
 msgid "Edit %s"
 msgstr ""
 
@@ -80,8 +107,16 @@ msgstr ""
 msgid "Max participants"
 msgstr ""
 
-#: src/components/EditBooking/Publish.tsx:91
+#: src/components/EditBooking/ParticipantMeta.tsx:38
+msgid "Name"
+msgstr ""
+
+#: src/components/PublishSection/PublishSection.tsx:46
 msgid "OK"
+msgstr ""
+
+#: src/components/EditBooking/ParticipantMeta.tsx:72
+msgid "Participant"
 msgstr ""
 
 #: src/components/EditRetreat/SectionParticipants.tsx:13
@@ -89,13 +124,17 @@ msgid "Participants"
 msgstr ""
 
 #: inc/Bookings/PostType.php:109
-#: src/components/EditBooking/Publish.tsx:18
+#: src/components/EditBooking/Publish.tsx:36
 msgid "Pending"
 msgstr ""
 
 #: inc/Bookings/PostType.php:110
 msgid "Pending <span class=\"count\">(%s)</span>"
 msgid_plural "Pending <span class=\"count\">(%s)</span>"
+
+#: src/components/EditBooking/ParticipantMeta.tsx:49
+msgid "Phone"
+msgstr ""
 
 #: src/components/DropdownDatePicker.tsx:13
 msgid "Pick date"
@@ -119,6 +158,7 @@ msgid "Removed leader"
 msgstr ""
 
 #: inc/Retreats/PostType.php:28
+#: src/components/EditBooking/Publish.tsx:67
 msgid "Retreat"
 msgstr ""
 
@@ -135,7 +175,12 @@ msgstr ""
 msgid "Retreats"
 msgstr ""
 
-#: src/components/EditBooking/Publish.tsx:81
+#: src/components/EditBooking/Save.tsx:15
+msgid "Save"
+msgstr ""
+
+#: src/components/PublishSection/PublishSection.tsx:35
+#: src/components/PublishSection/PublishSection.tsx:38
 msgid "Set %s"
 msgstr ""
 
@@ -144,8 +189,12 @@ msgstr ""
 msgid "Start date"
 msgstr ""
 
-#: src/components/EditBooking/Publish.tsx:51
+#: src/components/EditBooking/Publish.tsx:52
 msgid "Status"
+msgstr ""
+
+#: src/components/EditBooking/ParticipantMeta.tsx:55
+msgid "Street"
 msgstr ""
 
 #: style.css:2
@@ -153,4 +202,8 @@ msgstr ""
 #. translators: Description of the theme
 #. translators: Theme Name of the theme
 msgid "Styrsö Missionskyrka API"
+msgstr ""
+
+#: src/components/EditBooking/ParticipantMeta.tsx:60
+msgid "Zip code"
 msgstr ""
