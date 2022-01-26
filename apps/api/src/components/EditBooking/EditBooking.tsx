@@ -1,9 +1,11 @@
+import './EditBooking.css';
+
 import { Fragment } from 'react';
 
 import { Comment } from './Comment';
 import { ParticipantMeta } from './ParticipantMeta';
 import { Save } from './Save';
-import { Status } from './Status';
+import { Publish } from './Publish';
 import { Title } from './Title';
 
 interface EditBookingProps {
@@ -16,7 +18,7 @@ export const EditBooking: React.FC<EditBookingProps> = ({ initialData }) => {
       <Title value={initialData.get('post_title')} />
       <ParticipantMeta />
       <Comment value={initialData.get('content')} />
-      <Status value={initialData.get('hidden_post_status')} />
+      <Publish status={initialData.get('original_post_status')} />
       <Save />
     </Fragment>
   );

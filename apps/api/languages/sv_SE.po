@@ -33,7 +33,7 @@ msgid "Bookings"
 msgstr "Bokningar"
 
 #: inc/Bookings/PostType.php:125
-#: src/components/EditBooking/Status.tsx:20
+#: src/components/EditBooking/Publish.tsx:20
 msgid "Cancelled"
 msgstr "Avbruten"
 
@@ -53,7 +53,7 @@ msgid "Comment"
 msgstr "Kommentar"
 
 #: inc/Bookings/PostType.php:117
-#: src/components/EditBooking/Status.tsx:19
+#: src/components/EditBooking/Publish.tsx:19
 msgid "Confirmed"
 msgstr "Bekräftad"
 
@@ -64,7 +64,7 @@ msgstr[0] "Bekräftad <span class=\"count\">(%s)</span>"
 msgstr[1] "Bekräftad <span class=\"count\">(%s)</span>"
 
 #: inc/Bookings/PostType.php:101
-#: src/components/EditBooking/Status.tsx:17
+#: src/components/EditBooking/Publish.tsx:17
 msgid "Created"
 msgstr "Skapad"
 
@@ -86,13 +86,13 @@ msgstr "Datum"
 msgid "E-mail"
 msgstr "E-post"
 
-#: src/components/EditBooking/Status.tsx:36
+#: src/components/EditBooking/Publish.tsx:75
 msgid "Edit"
 msgstr "Redigera"
 
-#: src/components/EditBooking/Status.tsx:37
-msgid "Edit status"
-msgstr "Redigera status"
+#: src/components/EditBooking/Publish.tsx:76
+msgid "Edit %s"
+msgstr "Redigera %s"
 
 #: inc/Retreats/Admin.php:38
 #: src/components/EditRetreat/SectionDates.tsx:43
@@ -117,7 +117,7 @@ msgstr "Max antal deltagare"
 msgid "Name"
 msgstr "Namn"
 
-#: src/components/EditBooking/Status.tsx:59
+#: src/components/EditBooking/Publish.tsx:91
 msgid "OK"
 msgstr "OK"
 
@@ -130,7 +130,7 @@ msgid "Participants"
 msgstr "Deltagare"
 
 #: inc/Bookings/PostType.php:109
-#: src/components/EditBooking/Status.tsx:18
+#: src/components/EditBooking/Publish.tsx:18
 msgid "Pending"
 msgstr "Väntande"
 
@@ -186,16 +186,16 @@ msgstr "Retreater"
 msgid "Save"
 msgstr "Spara"
 
-#: src/components/EditBooking/Status.tsx:42
-msgid "Set status"
-msgstr "Välj status"
+#: src/components/EditBooking/Publish.tsx:81
+msgid "Set %s"
+msgstr "Välj %s"
 
 #: inc/Retreats/Admin.php:37
 #: src/components/EditRetreat/SectionDates.tsx:38
 msgid "Start date"
 msgstr "Startdatum"
 
-#: src/components/EditBooking/Status.tsx:34
+#: src/components/EditBooking/Publish.tsx:51
 msgid "Status"
 msgstr "Status"
 
