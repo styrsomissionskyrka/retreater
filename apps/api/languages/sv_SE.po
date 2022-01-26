@@ -24,24 +24,24 @@ msgstr "La till ledare"
 msgid "Booking"
 msgstr "Bokning"
 
-#: src/edit-booking.tsx:13
+#: src/components/EditBooking/Title.tsx:16
 msgid "Booking id"
-msgstr "Bokningsid"
+msgstr "Bokningsnummer"
 
 #: inc/Bookings/PostType.php:42
 msgid "Bookings"
 msgstr "Bokningar"
 
-#: src/edit-booking.tsx:132
+#: src/components/EditBooking/ParticipantMeta.tsx:65
 msgid "City"
 msgstr "Stad"
 
-#: src/edit-booking.tsx:153
-#: src/edit-booking.tsx:155
+#: src/components/EditBooking/Comment.tsx:7
+#: src/components/EditBooking/Comment.tsx:9
 msgid "Comment"
 msgstr "Kommentar"
 
-#: src/edit-booking.tsx:45
+#: src/components/EditBooking/Status.tsx:16
 msgid "Confirmed"
 msgstr "Bekräftad"
 
@@ -53,9 +53,17 @@ msgstr "Datum inte satt"
 msgid "Dates"
 msgstr "Datum"
 
-#: src/edit-booking.tsx:110
+#: src/components/EditBooking/ParticipantMeta.tsx:43
 msgid "E-mail"
 msgstr "E-post"
+
+#: src/components/EditBooking/Status.tsx:32
+msgid "Edit"
+msgstr "Redigera"
+
+#: src/components/EditBooking/Status.tsx:33
+msgid "Edit status"
+msgstr "Redigera status"
 
 #: inc/Retreats/Admin.php:38
 #: src/components/EditRetreat/SectionDates.tsx:43
@@ -76,11 +84,15 @@ msgstr "https://www.styrsomissionskyrka.se"
 msgid "Max participants"
 msgstr "Max antal deltagare"
 
-#: src/edit-booking.tsx:105
+#: src/components/EditBooking/ParticipantMeta.tsx:38
 msgid "Name"
 msgstr "Namn"
 
-#: src/edit-booking.tsx:139
+#: src/components/EditBooking/Status.tsx:53
+msgid "OK"
+msgstr "OK"
+
+#: src/components/EditBooking/ParticipantMeta.tsx:72
 msgid "Participant"
 msgstr "Deltagare"
 
@@ -88,11 +100,11 @@ msgstr "Deltagare"
 msgid "Participants"
 msgstr "Deltagare"
 
-#: src/edit-booking.tsx:44
+#: src/components/EditBooking/Status.tsx:15
 msgid "Payment pending"
 msgstr "Inväntar betalning"
 
-#: src/edit-booking.tsx:116
+#: src/components/EditBooking/ParticipantMeta.tsx:49
 msgid "Phone"
 msgstr "Telefon"
 
@@ -109,7 +121,7 @@ msgstr "Pris"
 msgid "Price id: %s"
 msgstr "ID: %s"
 
-#: src/edit-booking.tsx:43
+#: src/components/EditBooking/Status.tsx:14
 msgid "Queued"
 msgstr "Väntlista"
 
@@ -138,11 +150,11 @@ msgstr "Retreatinställningar"
 msgid "Retreats"
 msgstr "Retreater"
 
-#: src/edit-booking.tsx:61
+#: src/components/EditBooking/Save.tsx:15
 msgid "Save"
 msgstr "Spara"
 
-#: src/edit-booking.tsx:40
+#: src/components/EditBooking/Status.tsx:38
 msgid "Set status"
 msgstr "Välj status"
 
@@ -151,9 +163,13 @@ msgstr "Välj status"
 msgid "Start date"
 msgstr "Startdatum"
 
-#: src/edit-booking.tsx:122
+#: src/components/EditBooking/Status.tsx:30
+msgid "Status"
+msgstr "Status"
+
+#: src/components/EditBooking/ParticipantMeta.tsx:55
 msgid "Street"
-msgstr "Adress"
+msgstr "Gata"
 
 #: style.css:2
 #: style.css:6
@@ -162,6 +178,6 @@ msgstr "Adress"
 msgid "Styrsö Missionskyrka API"
 msgstr "Styrsö Missionskyrka API"
 
-#: src/edit-booking.tsx:127
+#: src/components/EditBooking/ParticipantMeta.tsx:60
 msgid "Zip code"
 msgstr "Postnummer"

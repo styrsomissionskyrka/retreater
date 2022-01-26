@@ -24,25 +24,8 @@ msgstr ""
 msgid "Booking"
 msgstr ""
 
-#: src/edit-booking.tsx:13
-msgid "Booking id"
-msgstr ""
-
 #: inc/Bookings/PostType.php:42
 msgid "Bookings"
-msgstr ""
-
-#: src/edit-booking.tsx:132
-msgid "City"
-msgstr ""
-
-#: src/edit-booking.tsx:153
-#: src/edit-booking.tsx:155
-msgid "Comment"
-msgstr ""
-
-#: src/edit-booking.tsx:45
-msgid "Confirmed"
 msgstr ""
 
 #: inc/Retreats/Admin.php:55
@@ -53,8 +36,12 @@ msgstr ""
 msgid "Dates"
 msgstr ""
 
-#: src/edit-booking.tsx:110
-msgid "E-mail"
+#: src/components/EditBooking/Status.tsx:32
+msgid "Edit"
+msgstr ""
+
+#: src/components/EditBooking/Status.tsx:33
+msgid "Edit status"
 msgstr ""
 
 #: inc/Retreats/Admin.php:38
@@ -76,24 +63,12 @@ msgstr ""
 msgid "Max participants"
 msgstr ""
 
-#: src/edit-booking.tsx:105
-msgid "Name"
-msgstr ""
-
-#: src/edit-booking.tsx:139
-msgid "Participant"
+#: src/components/EditBooking/Status.tsx:53
+msgid "OK"
 msgstr ""
 
 #: src/components/EditRetreat/SectionParticipants.tsx:13
 msgid "Participants"
-msgstr ""
-
-#: src/edit-booking.tsx:44
-msgid "Payment pending"
-msgstr ""
-
-#: src/edit-booking.tsx:116
-msgid "Phone"
 msgstr ""
 
 #: src/components/DropdownDatePicker.tsx:13
@@ -107,10 +82,6 @@ msgstr ""
 
 #: src/components/EditRetreat/SectionPrice.tsx:18
 msgid "Price id: %s"
-msgstr ""
-
-#: src/edit-booking.tsx:43
-msgid "Queued"
 msgstr ""
 
 #: src/components/EditRetreat/SectionParticipants.tsx:56
@@ -138,21 +109,13 @@ msgstr ""
 msgid "Retreats"
 msgstr ""
 
-#: src/edit-booking.tsx:61
-msgid "Save"
-msgstr ""
-
-#: src/edit-booking.tsx:40
-msgid "Set status"
-msgstr ""
-
 #: inc/Retreats/Admin.php:37
 #: src/components/EditRetreat/SectionDates.tsx:38
 msgid "Start date"
 msgstr ""
 
-#: src/edit-booking.tsx:122
-msgid "Street"
+#: src/components/EditBooking/Status.tsx:30
+msgid "Status"
 msgstr ""
 
 #: style.css:2
@@ -162,8 +125,20 @@ msgstr ""
 msgid "Styrsö Missionskyrka API"
 msgstr ""
 
-#: src/edit-booking.tsx:127
-msgid "Zip code"
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/Title.tsx:16
+msgid "Booking id"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/ParticipantMeta.tsx:65
+msgid "City"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/Comment.tsx:7
+#: src/components/EditBooking/Comment.tsx:9
+msgid "Comment"
 msgstr ""
 
 # THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
@@ -171,5 +146,60 @@ msgid "Comments"
 msgstr ""
 
 # THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/Status.tsx:16
+msgid "Confirmed"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
 msgid "Deltagare"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/ParticipantMeta.tsx:43
+msgid "E-mail"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/ParticipantMeta.tsx:38
+msgid "Name"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/ParticipantMeta.tsx:72
+msgid "Participant"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/Status.tsx:15
+msgid "Payment pending"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/ParticipantMeta.tsx:49
+msgid "Phone"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/Status.tsx:14
+msgid "Queued"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/Save.tsx:15
+msgid "Save"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/Status.tsx:38
+msgid "Set status"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/ParticipantMeta.tsx:55
+msgid "Street"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: src/components/EditBooking/ParticipantMeta.tsx:60
+msgid "Zip code"
 msgstr ""

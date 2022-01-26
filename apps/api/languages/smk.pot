@@ -18,7 +18,7 @@ msgstr ""
 msgid "Booking"
 msgstr ""
 
-#: src/edit-booking.tsx:13
+#: src/components/EditBooking/Title.tsx:16
 msgid "Booking id"
 msgstr ""
 
@@ -26,16 +26,16 @@ msgstr ""
 msgid "Bookings"
 msgstr ""
 
-#: src/edit-booking.tsx:132
+#: src/components/EditBooking/ParticipantMeta.tsx:65
 msgid "City"
 msgstr ""
 
-#: src/edit-booking.tsx:153
-#: src/edit-booking.tsx:155
+#: src/components/EditBooking/Comment.tsx:7
+#: src/components/EditBooking/Comment.tsx:9
 msgid "Comment"
 msgstr ""
 
-#: src/edit-booking.tsx:45
+#: src/components/EditBooking/Status.tsx:16
 msgid "Confirmed"
 msgstr ""
 
@@ -47,8 +47,16 @@ msgstr ""
 msgid "Dates"
 msgstr ""
 
-#: src/edit-booking.tsx:110
+#: src/components/EditBooking/ParticipantMeta.tsx:43
 msgid "E-mail"
+msgstr ""
+
+#: src/components/EditBooking/Status.tsx:32
+msgid "Edit"
+msgstr ""
+
+#: src/components/EditBooking/Status.tsx:33
+msgid "Edit status"
 msgstr ""
 
 #: inc/Retreats/Admin.php:38
@@ -70,11 +78,15 @@ msgstr ""
 msgid "Max participants"
 msgstr ""
 
-#: src/edit-booking.tsx:105
+#: src/components/EditBooking/ParticipantMeta.tsx:38
 msgid "Name"
 msgstr ""
 
-#: src/edit-booking.tsx:139
+#: src/components/EditBooking/Status.tsx:53
+msgid "OK"
+msgstr ""
+
+#: src/components/EditBooking/ParticipantMeta.tsx:72
 msgid "Participant"
 msgstr ""
 
@@ -82,11 +94,11 @@ msgstr ""
 msgid "Participants"
 msgstr ""
 
-#: src/edit-booking.tsx:44
+#: src/components/EditBooking/Status.tsx:15
 msgid "Payment pending"
 msgstr ""
 
-#: src/edit-booking.tsx:116
+#: src/components/EditBooking/ParticipantMeta.tsx:49
 msgid "Phone"
 msgstr ""
 
@@ -103,7 +115,7 @@ msgstr ""
 msgid "Price id: %s"
 msgstr ""
 
-#: src/edit-booking.tsx:43
+#: src/components/EditBooking/Status.tsx:14
 msgid "Queued"
 msgstr ""
 
@@ -132,11 +144,11 @@ msgstr ""
 msgid "Retreats"
 msgstr ""
 
-#: src/edit-booking.tsx:61
+#: src/components/EditBooking/Save.tsx:15
 msgid "Save"
 msgstr ""
 
-#: src/edit-booking.tsx:40
+#: src/components/EditBooking/Status.tsx:38
 msgid "Set status"
 msgstr ""
 
@@ -145,7 +157,11 @@ msgstr ""
 msgid "Start date"
 msgstr ""
 
-#: src/edit-booking.tsx:122
+#: src/components/EditBooking/Status.tsx:30
+msgid "Status"
+msgstr ""
+
+#: src/components/EditBooking/ParticipantMeta.tsx:55
 msgid "Street"
 msgstr ""
 
@@ -156,6 +172,6 @@ msgstr ""
 msgid "Styrsö Missionskyrka API"
 msgstr ""
 
-#: src/edit-booking.tsx:127
+#: src/components/EditBooking/ParticipantMeta.tsx:60
 msgid "Zip code"
 msgstr ""
