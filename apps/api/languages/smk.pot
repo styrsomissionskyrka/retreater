@@ -26,12 +26,12 @@ msgstr ""
 msgid "Bookings"
 msgstr ""
 
-#: inc/Bookings/PostType.php:125
+#: inc/Bookings/PostType.php:121
 #: src/components/EditBooking/Publish.tsx:38
 msgid "Cancelled"
 msgstr ""
 
-#: inc/Bookings/PostType.php:126
+#: inc/Bookings/PostType.php:122
 msgid "Cancelled <span class=\"count\">(%s)</span>"
 msgid_plural "Cancelled <span class=\"count\">(%s)</span>"
 
@@ -44,21 +44,21 @@ msgstr ""
 msgid "Comment"
 msgstr ""
 
-#: inc/Bookings/PostType.php:117
+#: inc/Bookings/PostType.php:113
 #: src/components/EditBooking/Publish.tsx:37
 msgid "Confirmed"
 msgstr ""
 
-#: inc/Bookings/PostType.php:118
+#: inc/Bookings/PostType.php:114
 msgid "Confirmed <span class=\"count\">(%s)</span>"
 msgid_plural "Confirmed <span class=\"count\">(%s)</span>"
 
-#: inc/Bookings/PostType.php:101
+#: inc/Bookings/PostType.php:97
 #: src/components/EditBooking/Publish.tsx:35
 msgid "Created"
 msgstr ""
 
-#: inc/Bookings/PostType.php:102
+#: inc/Bookings/PostType.php:98
 msgid "Created <span class=\"count\">(%s)</span>"
 msgid_plural "Created <span class=\"count\">(%s)</span>"
 
@@ -105,6 +105,10 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+#: src/components/EditBooking/Price.tsx:32
+msgid "No payment"
+msgstr ""
+
 #: src/components/PublishSection/PublishSection.tsx:46
 msgid "OK"
 msgstr ""
@@ -117,12 +121,12 @@ msgstr ""
 msgid "Participants"
 msgstr ""
 
-#: inc/Bookings/PostType.php:109
+#: inc/Bookings/PostType.php:105
 #: src/components/EditBooking/Publish.tsx:36
 msgid "Pending"
 msgstr ""
 
-#: inc/Bookings/PostType.php:110
+#: inc/Bookings/PostType.php:106
 msgid "Pending <span class=\"count\">(%s)</span>"
 msgid_plural "Pending <span class=\"count\">(%s)</span>"
 
@@ -134,6 +138,8 @@ msgstr ""
 msgid "Pick date"
 msgstr ""
 
+#: src/components/EditBooking/Price.tsx:22
+#: src/components/EditBooking/Price.tsx:37
 #: src/components/EditRetreat/SectionPrice.tsx:12
 #: src/components/EditRetreat/SectionPrice.tsx:15
 msgid "Price"
@@ -187,6 +193,10 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+#: src/components/EditBooking/Price.tsx:26
+msgid "Strategy"
+msgstr ""
+
 #: src/components/EditBooking/ParticipantMeta.tsx:55
 msgid "Street"
 msgstr ""
@@ -196,6 +206,14 @@ msgstr ""
 #. translators: Description of the theme
 #. translators: Theme Name of the theme
 msgid "Styrsö Missionskyrka API"
+msgstr ""
+
+#: src/components/EditBooking/Price.tsx:31
+msgid "Use custom price"
+msgstr ""
+
+#: src/components/EditBooking/Price.tsx:30
+msgid "Use retreat price"
 msgstr ""
 
 #: src/components/EditBooking/ParticipantMeta.tsx:60

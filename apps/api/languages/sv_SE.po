@@ -32,12 +32,12 @@ msgstr "Bokningsnummer"
 msgid "Bookings"
 msgstr "Bokningar"
 
-#: inc/Bookings/PostType.php:125
+#: inc/Bookings/PostType.php:121
 #: src/components/EditBooking/Publish.tsx:38
 msgid "Cancelled"
 msgstr "Avbruten"
 
-#: inc/Bookings/PostType.php:126
+#: inc/Bookings/PostType.php:122
 msgid "Cancelled <span class=\"count\">(%s)</span>"
 msgid_plural "Cancelled <span class=\"count\">(%s)</span>"
 msgstr[0] "Avbruten <span class=\"count\">(%s)</span>"
@@ -52,23 +52,23 @@ msgstr "Stad"
 msgid "Comment"
 msgstr "Kommentar"
 
-#: inc/Bookings/PostType.php:117
+#: inc/Bookings/PostType.php:113
 #: src/components/EditBooking/Publish.tsx:37
 msgid "Confirmed"
 msgstr "Bekräftad"
 
-#: inc/Bookings/PostType.php:118
+#: inc/Bookings/PostType.php:114
 msgid "Confirmed <span class=\"count\">(%s)</span>"
 msgid_plural "Confirmed <span class=\"count\">(%s)</span>"
 msgstr[0] "Bekräftad <span class=\"count\">(%s)</span>"
 msgstr[1] "Bekräftad <span class=\"count\">(%s)</span>"
 
-#: inc/Bookings/PostType.php:101
+#: inc/Bookings/PostType.php:97
 #: src/components/EditBooking/Publish.tsx:35
 msgid "Created"
 msgstr "Skapad"
 
-#: inc/Bookings/PostType.php:102
+#: inc/Bookings/PostType.php:98
 msgid "Created <span class=\"count\">(%s)</span>"
 msgid_plural "Created <span class=\"count\">(%s)</span>"
 msgstr[0] "Skapad <span class=\"count\">(%s)</span>"
@@ -117,6 +117,10 @@ msgstr "Max antal deltagare"
 msgid "Name"
 msgstr "Namn"
 
+#: src/components/EditBooking/Price.tsx:32
+msgid "No payment"
+msgstr "Ingen betalning"
+
 #: src/components/PublishSection/PublishSection.tsx:46
 msgid "OK"
 msgstr "OK"
@@ -129,12 +133,12 @@ msgstr "Deltagare"
 msgid "Participants"
 msgstr "Deltagare"
 
-#: inc/Bookings/PostType.php:109
+#: inc/Bookings/PostType.php:105
 #: src/components/EditBooking/Publish.tsx:36
 msgid "Pending"
 msgstr "Väntande"
 
-#: inc/Bookings/PostType.php:110
+#: inc/Bookings/PostType.php:106
 msgid "Pending <span class=\"count\">(%s)</span>"
 msgid_plural "Pending <span class=\"count\">(%s)</span>"
 msgstr[0] "Väntande <span class=\"count\">(%s)</span>"
@@ -148,6 +152,8 @@ msgstr "Telefon"
 msgid "Pick date"
 msgstr "Välj datum"
 
+#: src/components/EditBooking/Price.tsx:22
+#: src/components/EditBooking/Price.tsx:37
 #: src/components/EditRetreat/SectionPrice.tsx:12
 #: src/components/EditRetreat/SectionPrice.tsx:15
 msgid "Price"
@@ -201,6 +207,10 @@ msgstr "Startdatum"
 msgid "Status"
 msgstr "Status"
 
+#: src/components/EditBooking/Price.tsx:26
+msgid "Strategy"
+msgstr "Strategi"
+
 #: src/components/EditBooking/ParticipantMeta.tsx:55
 msgid "Street"
 msgstr "Gata"
@@ -211,6 +221,14 @@ msgstr "Gata"
 #. translators: Theme Name of the theme
 msgid "Styrsö Missionskyrka API"
 msgstr "Styrsö Missionskyrka API"
+
+#: src/components/EditBooking/Price.tsx:31
+msgid "Use custom price"
+msgstr "Anpassat pris"
+
+#: src/components/EditBooking/Price.tsx:30
+msgid "Use retreat price"
+msgstr "Retreatens pris"
 
 #: src/components/EditBooking/ParticipantMeta.tsx:60
 msgid "Zip code"

@@ -3,6 +3,7 @@
 namespace StyrsoMissionskyrka\Bookings;
 
 use Hidehalo\Nanoid\Client;
+use Stripe\StripeClient;
 use StyrsoMissionskyrka\AssetLoader;
 use StyrsoMissionskyrka\Retreats\PostType as RetreatPostType;
 use StyrsoMissionskyrka\Utils\ActionHookSubscriber;
@@ -25,12 +26,26 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
      */
     public static $post_type = 'booking';
 
+    /**
+     * @var StripeClient
+     */
+    protected $stripe;
+
+    public function __construct(StripeClient $stripe)
+    {
+        $this->stripe = $stripe;
+    }
+
     public function get_actions(): array
     {
         return [
             'admin_enqueue_scripts' => ['enqueue_edit_script'],
             'save_post' => ['update_custom_post_meta', 10, 2],
-            'smk/register-booking-data' => [['register_booking_meta', 10, 2], ['register_booking_retreat_data', 10, 2]],
+            'smk/register-booking-data' => [
+                ['register_booking_meta', 10, 2],
+                ['register_booking_retreat_data', 10, 2],
+                ['register_booking_price_data', 10, 2],
+            ],
         ];
     }
 
@@ -74,6 +89,58 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
 
         if (isset($_POST['post_retreat_id'])) {
             update_post_meta($post_id, 'retreat_id', $_POST['post_retreat_id']);
+        }
+
+        if (isset($_POST['booking_price'])) {
+            $config = $_POST['booking_price'];
+            $mode = $config['mode'];
+
+            switch ($mode) {
+                case 'no_payment':
+                    delete_post_meta($post_id, 'stripe_price_id');
+                    delete_post_meta($post_id, 'stripe_session_id');
+                    break;
+
+                case 'retreat':
+                    $retreat_id = get_post_meta($post_id, 'retreat_id', true);
+                    if (empty($retreat_id)) {
+                        break;
+                    }
+
+                    $retreat_price_id = get_post_meta($retreat_id, 'stripe_price_id', true);
+                    update_post_meta($post_id, 'stripe_price_id', $retreat_price_id);
+                    break;
+
+                case 'custom':
+                    $retreat_id = get_post_meta($post_id, 'retreat_id', true);
+                    if (empty($retreat_id)) {
+                        break;
+                    }
+
+                    $retreat = get_post($retreat_id);
+
+                    $current_amount = 0;
+                    $current_price_id = get_post_meta($post_id, 'stripe_price_id', true);
+
+                    if (!empty($current_price_id)) {
+                        $current_amount = $this->retrieve_amount($current_price_id);
+                    }
+
+                    if ($current_amount !== (int) $config['amount']) {
+                        $data = [
+                            'unit_amount' => (int) $config['amount'],
+                            'currency' => 'sek',
+                            'product_data' => [
+                                'name' => $retreat->post_title ?? $retreat_id,
+                                'metadata' => ['retreat_id' => $retreat_id],
+                            ],
+                        ];
+                        $price = $this->stripe->prices->create($data);
+                        update_post_meta($post_id, 'stripe_price_id', $price->id);
+                    }
+
+                    break;
+            }
         }
 
         return $post_id;
@@ -126,5 +193,42 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
             'retreat' => $retreat,
             'retreats' => $retreats,
         ]);
+    }
+
+    public function register_booking_price_data(string $handle, \WP_Post $post)
+    {
+        $booking_price_id = get_post_meta($post->ID, 'stripe_price_id', true);
+        $booking_price = null;
+
+        if (!empty($booking_price_id)) {
+            $booking_price = $this->retrieve_amount($booking_price_id);
+        }
+
+        $retreat_id = get_post_meta($post->ID, 'retreat_id', true);
+        $retreat_price_id = get_post_meta($retreat_id, 'stripe_price_id', true);
+        $retreat_price = null;
+
+        if (!empty($retreat_price_id)) {
+            $retreat_price = $this->retrieve_amount($retreat_price_id);
+        }
+
+        $mode = 'no_payment';
+        if ($booking_price_id === $retreat_price_id) {
+            $mode = 'retreat';
+        } elseif (!empty($booking_price)) {
+            $mode = 'custom';
+        }
+
+        wp_localize_script($handle, 'SMK_BOOKING_RELATED_PRICE', [
+            'mode' => $mode,
+            'booking_price' => $booking_price,
+            'retreat_price' => $retreat_price,
+        ]);
+    }
+
+    protected function retrieve_amount(string $id)
+    {
+        $stripe_price = $this->stripe->prices->retrieve($id);
+        return $stripe_price->unit_amount;
     }
 }

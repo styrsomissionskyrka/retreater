@@ -7,6 +7,7 @@ import { ParticipantMeta } from './ParticipantMeta';
 import { Save } from './Save';
 import { Publish } from './Publish';
 import { Title } from './Title';
+import { Price } from './Price';
 
 interface EditBookingProps {
   initialData: FormData;
@@ -21,6 +22,7 @@ export const EditBooking: React.FC<EditBookingProps> = ({ initialData }) => {
   return (
     <Fragment>
       <Title value={initialData.get('post_title')} />
+      <Price />
       <ParticipantMeta />
       <Comment value={initialData.get('content')} />
       <Publish status={initialData.get('original_post_status')} />

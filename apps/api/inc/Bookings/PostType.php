@@ -62,10 +62,6 @@ class PostType implements ActionHookSubscriber, FilterHookSubscriber
                 'type' => 'string',
                 'single' => true,
             ],
-            'stripe_discount_id' => [
-                'type' => 'string',
-                'single' => true,
-            ],
             'stripe_session_id' => [
                 'type' => 'string',
                 'single' => true,
