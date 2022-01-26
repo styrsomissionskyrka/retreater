@@ -26,7 +26,7 @@ class PostType implements ActionHookSubscriber, FilterHookSubscriber
     public function get_actions(): array
     {
         return [
-            'init' => [['register_post_type', 10], ['register_post_meta', 11]],
+            'init' => [['register_post_type', 10], ['register_post_meta', 11], ['register_post_status', 12]],
         ];
     }
 
@@ -91,6 +91,56 @@ class PostType implements ActionHookSubscriber, FilterHookSubscriber
 
         foreach ($meta_keys as $meta_key => $args) {
             register_post_meta(self::$post_type, $meta_key, $args);
+        }
+    }
+
+    public function register_post_status()
+    {
+        $statuses = [
+            'booking_created' => [
+                'label' => __('Created', 'smk'),
+                'label_count' => _n_noop(
+                    'Created <span class="count">(%s)</span>',
+                    'Created <span class="count">(%s)</span>',
+                    'smk'
+                ),
+            ],
+            'booking_pending' => [
+                'label' => __('Pending', 'smk'),
+                'label_count' => _n_noop(
+                    'Pending <span class="count">(%s)</span>',
+                    'Pending <span class="count">(%s)</span>',
+                    'smk'
+                ),
+            ],
+            'booking_confirmed' => [
+                'label' => __('Confirmed', 'smk'),
+                'label_count' => _n_noop(
+                    'Confirmed <span class="count">(%s)</span>',
+                    'Confirmed <span class="count">(%s)</span>',
+                    'smk'
+                ),
+            ],
+            'booking_cancelled' => [
+                'label' => __('Cancelled', 'smk'),
+                'label_count' => _n_noop(
+                    'Cancelled <span class="count">(%s)</span>',
+                    'Cancelled <span class="count">(%s)</span>',
+                    'smk'
+                ),
+            ],
+        ];
+
+        foreach ($statuses as $status => $label) {
+            register_post_status($status, [
+                'label' => $label['label'],
+                'label_count' => $label['label_count'],
+                'public' => false,
+                'internal' => true,
+                'private' => true,
+                'show_in_admin_all_list' => true,
+                'show_in_admin_status_list' => true,
+            ]);
         }
     }
 }

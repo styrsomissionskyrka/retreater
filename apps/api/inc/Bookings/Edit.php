@@ -62,15 +62,15 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
             return $post_id;
         }
 
-        if (!isset($_POST['booking_meta'])) {
-            return $post_id;
+        if (isset($_POST['booking_meta'])) {
+            $next_meta = $_POST['booking_meta'];
+            foreach ($next_meta as $key => $value) {
+                $prev = get_post_meta($post_id, $key, true);
+                update_post_meta($post_id, $key, $value, $prev);
+            }
         }
 
-        $next_meta = $_POST['booking_meta'];
-        foreach ($next_meta as $key => $value) {
-            $prev = get_post_meta($post_id, $key, true);
-            update_post_meta($post_id, $key, $value, $prev);
-        }
+        return $post_id;
     }
 
     public function enqueue_edit_script(string $hook)

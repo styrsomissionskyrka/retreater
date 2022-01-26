@@ -28,6 +28,23 @@ msgstr ""
 msgid "Bookings"
 msgstr ""
 
+#: inc/Bookings/PostType.php:126
+msgid "Cancelled <span class=\"count\">(%s)</span>"
+msgid_plural "Cancelled <span class=\"count\">(%s)</span>"
+
+#: inc/Bookings/PostType.php:118
+msgid "Confirmed <span class=\"count\">(%s)</span>"
+msgid_plural "Confirmed <span class=\"count\">(%s)</span>"
+
+#: inc/Bookings/PostType.php:101
+#: src/components/EditBooking/Status.tsx:17
+msgid "Created"
+msgstr ""
+
+#: inc/Bookings/PostType.php:102
+msgid "Created <span class=\"count\">(%s)</span>"
+msgid_plural "Created <span class=\"count\">(%s)</span>"
+
 #: inc/Retreats/Admin.php:55
 msgid "Date not set"
 msgstr ""
@@ -36,11 +53,11 @@ msgstr ""
 msgid "Dates"
 msgstr ""
 
-#: src/components/EditBooking/Status.tsx:32
+#: src/components/EditBooking/Status.tsx:36
 msgid "Edit"
 msgstr ""
 
-#: src/components/EditBooking/Status.tsx:33
+#: src/components/EditBooking/Status.tsx:37
 msgid "Edit status"
 msgstr ""
 
@@ -63,13 +80,22 @@ msgstr ""
 msgid "Max participants"
 msgstr ""
 
-#: src/components/EditBooking/Status.tsx:53
+#: src/components/EditBooking/Status.tsx:59
 msgid "OK"
 msgstr ""
 
 #: src/components/EditRetreat/SectionParticipants.tsx:13
 msgid "Participants"
 msgstr ""
+
+#: inc/Bookings/PostType.php:109
+#: src/components/EditBooking/Status.tsx:18
+msgid "Pending"
+msgstr ""
+
+#: inc/Bookings/PostType.php:110
+msgid "Pending <span class=\"count\">(%s)</span>"
+msgid_plural "Pending <span class=\"count\">(%s)</span>"
 
 #: src/components/DropdownDatePicker.tsx:13
 msgid "Pick date"
@@ -114,7 +140,7 @@ msgstr ""
 msgid "Start date"
 msgstr ""
 
-#: src/components/EditBooking/Status.tsx:30
+#: src/components/EditBooking/Status.tsx:34
 msgid "Status"
 msgstr ""
 
@@ -128,6 +154,12 @@ msgstr ""
 # THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
 #: src/components/EditBooking/Title.tsx:16
 msgid "Booking id"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+#: inc/Bookings/PostType.php:125
+#: src/components/EditBooking/Status.tsx:20
+msgid "Cancelled"
 msgstr ""
 
 # THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
@@ -146,7 +178,8 @@ msgid "Comments"
 msgstr ""
 
 # THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-#: src/components/EditBooking/Status.tsx:16
+#: inc/Bookings/PostType.php:117
+#: src/components/EditBooking/Status.tsx:19
 msgid "Confirmed"
 msgstr ""
 
@@ -170,7 +203,6 @@ msgid "Participant"
 msgstr ""
 
 # THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-#: src/components/EditBooking/Status.tsx:15
 msgid "Payment pending"
 msgstr ""
 
@@ -180,7 +212,6 @@ msgid "Phone"
 msgstr ""
 
 # THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-#: src/components/EditBooking/Status.tsx:14
 msgid "Queued"
 msgstr ""
 
@@ -190,7 +221,7 @@ msgid "Save"
 msgstr ""
 
 # THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
-#: src/components/EditBooking/Status.tsx:38
+#: src/components/EditBooking/Status.tsx:42
 msgid "Set status"
 msgstr ""
 

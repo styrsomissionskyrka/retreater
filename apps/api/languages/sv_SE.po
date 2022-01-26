@@ -32,6 +32,17 @@ msgstr "Bokningsnummer"
 msgid "Bookings"
 msgstr "Bokningar"
 
+#: inc/Bookings/PostType.php:125
+#: src/components/EditBooking/Status.tsx:20
+msgid "Cancelled"
+msgstr "Avbruten"
+
+#: inc/Bookings/PostType.php:126
+msgid "Cancelled <span class=\"count\">(%s)</span>"
+msgid_plural "Cancelled <span class=\"count\">(%s)</span>"
+msgstr[0] "Avbruten <span class=\"count\">(%s)</span>"
+msgstr[1] "Avbruten <span class=\"count\">(%s)</span>"
+
 #: src/components/EditBooking/ParticipantMeta.tsx:65
 msgid "City"
 msgstr "Stad"
@@ -41,9 +52,27 @@ msgstr "Stad"
 msgid "Comment"
 msgstr "Kommentar"
 
-#: src/components/EditBooking/Status.tsx:16
+#: inc/Bookings/PostType.php:117
+#: src/components/EditBooking/Status.tsx:19
 msgid "Confirmed"
 msgstr "Bekräftad"
+
+#: inc/Bookings/PostType.php:118
+msgid "Confirmed <span class=\"count\">(%s)</span>"
+msgid_plural "Confirmed <span class=\"count\">(%s)</span>"
+msgstr[0] "Bekräftad <span class=\"count\">(%s)</span>"
+msgstr[1] "Bekräftad <span class=\"count\">(%s)</span>"
+
+#: inc/Bookings/PostType.php:101
+#: src/components/EditBooking/Status.tsx:17
+msgid "Created"
+msgstr "Skapad"
+
+#: inc/Bookings/PostType.php:102
+msgid "Created <span class=\"count\">(%s)</span>"
+msgid_plural "Created <span class=\"count\">(%s)</span>"
+msgstr[0] "Skapad <span class=\"count\">(%s)</span>"
+msgstr[1] "Skapad <span class=\"count\">(%s)</span>"
 
 #: inc/Retreats/Admin.php:55
 msgid "Date not set"
@@ -57,11 +86,11 @@ msgstr "Datum"
 msgid "E-mail"
 msgstr "E-post"
 
-#: src/components/EditBooking/Status.tsx:32
+#: src/components/EditBooking/Status.tsx:36
 msgid "Edit"
 msgstr "Redigera"
 
-#: src/components/EditBooking/Status.tsx:33
+#: src/components/EditBooking/Status.tsx:37
 msgid "Edit status"
 msgstr "Redigera status"
 
@@ -88,7 +117,7 @@ msgstr "Max antal deltagare"
 msgid "Name"
 msgstr "Namn"
 
-#: src/components/EditBooking/Status.tsx:53
+#: src/components/EditBooking/Status.tsx:59
 msgid "OK"
 msgstr "OK"
 
@@ -100,9 +129,16 @@ msgstr "Deltagare"
 msgid "Participants"
 msgstr "Deltagare"
 
-#: src/components/EditBooking/Status.tsx:15
-msgid "Payment pending"
-msgstr "Inväntar betalning"
+#: inc/Bookings/PostType.php:109
+#: src/components/EditBooking/Status.tsx:18
+msgid "Pending"
+msgstr "Väntande"
+
+#: inc/Bookings/PostType.php:110
+msgid "Pending <span class=\"count\">(%s)</span>"
+msgid_plural "Pending <span class=\"count\">(%s)</span>"
+msgstr[0] "Väntande <span class=\"count\">(%s)</span>"
+msgstr[1] "Väntande <span class=\"count\">(%s)</span>"
 
 #: src/components/EditBooking/ParticipantMeta.tsx:49
 msgid "Phone"
@@ -120,10 +156,6 @@ msgstr "Pris"
 #: src/components/EditRetreat/SectionPrice.tsx:18
 msgid "Price id: %s"
 msgstr "ID: %s"
-
-#: src/components/EditBooking/Status.tsx:14
-msgid "Queued"
-msgstr "Väntlista"
 
 #: src/components/EditRetreat/SectionParticipants.tsx:56
 msgid "Remove leader"
@@ -154,7 +186,7 @@ msgstr "Retreater"
 msgid "Save"
 msgstr "Spara"
 
-#: src/components/EditBooking/Status.tsx:38
+#: src/components/EditBooking/Status.tsx:42
 msgid "Set status"
 msgstr "Välj status"
 
@@ -163,7 +195,7 @@ msgstr "Välj status"
 msgid "Start date"
 msgstr "Startdatum"
 
-#: src/components/EditBooking/Status.tsx:30
+#: src/components/EditBooking/Status.tsx:34
 msgid "Status"
 msgstr "Status"
 

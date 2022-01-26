@@ -4,21 +4,25 @@ import { __ } from '@wordpress/i18n';
 
 import { useExistingPortal } from './utils';
 
-type Status = 'draft' | 'pending' | 'publish';
+type Status = 'booking_created' | 'booking_pending' | 'booking_confirmed' | 'booking_cancelled';
 
 const isStatus = (value: unknown): value is Status => {
-  return typeof value === 'string' && ['draft', 'pending', 'publish'].includes(value);
+  return (
+    typeof value === 'string' &&
+    ['booking_created', 'booking_pending', 'booking_confirmed', 'booking_cancelled'].includes(value)
+  );
 };
 
-const statusLabels: Record<string, string> = {
-  draft: __('Queued', 'smk'),
-  pending: __('Payment pending', 'smk'),
-  publish: __('Confirmed', 'smk'),
+const statusLabels: Record<Status, string> = {
+  booking_created: __('Created', 'smk'),
+  booking_pending: __('Pending', 'smk'),
+  booking_confirmed: __('Confirmed', 'smk'),
+  booking_cancelled: __('Cancelled', 'smk'),
 };
 
 export const Status: React.FC<{ value: unknown }> = ({ value: initialValue }) => {
   const portal = useExistingPortal('minor-publishing');
-  const [value, setValue] = useState(isStatus(initialValue) ? initialValue : 'draft');
+  const [value, setValue] = useState(isStatus(initialValue) ? initialValue : 'booking_created');
   const [state, setState] = useState<'idle' | 'edit'>('idle');
 
   if (portal == null) return null;
@@ -45,9 +49,11 @@ export const Status: React.FC<{ value: unknown }> = ({ value: initialValue }) =>
               if (isStatus(e.currentTarget.value)) setValue(e.currentTarget.value);
             }}
           >
-            <option value="draft">{statusLabels['draft']}</option>
-            <option value="pending">{statusLabels['pending']}</option>
-            <option value="publish">{statusLabels['publish']}</option>
+            {Object.keys(statusLabels).map((key) => (
+              <option key={key} value={key}>
+                {statusLabels[key as Status]}
+              </option>
+            ))}
           </select>
           <button className="save-post-status button" type="button" onClick={() => setState('idle')}>
             {__('OK', 'smk')}

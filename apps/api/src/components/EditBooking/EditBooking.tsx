@@ -16,7 +16,7 @@ export const EditBooking: React.FC<EditBookingProps> = ({ initialData }) => {
       <Title value={initialData.get('post_title')} />
       <ParticipantMeta />
       <Comment value={initialData.get('content')} />
-      <Status value={initialData.get('post_status')} />
+      <Status value={initialData.get('hidden_post_status')} />
       <Save />
     </Fragment>
   );
