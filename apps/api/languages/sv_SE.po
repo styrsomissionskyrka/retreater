@@ -20,9 +20,9 @@ msgstr "Adam Bergman"
 msgid "Added leader"
 msgstr "La till ledare"
 
-#: inc/Bookings/Admin.php:123
-msgid "All retreats"
-msgstr "All retreater"
+#: inc/Utils/AdminTable.php:105
+msgid "All %s"
+msgstr "Alla %s"
 
 #: inc/Bookings/PostType.php:43
 msgid "Booking"
@@ -78,7 +78,7 @@ msgid_plural "Created <span class=\"count\">(%s)</span>"
 msgstr[0] "Skapad <span class=\"count\">(%s)</span>"
 msgstr[1] "Skapad <span class=\"count\">(%s)</span>"
 
-#: inc/Retreats/Admin.php:55
+#: inc/Retreats/Admin.php:49
 msgid "Date not set"
 msgstr "Datum inte satt"
 
@@ -86,6 +86,7 @@ msgstr "Datum inte satt"
 msgid "Dates"
 msgstr "Datum"
 
+#: inc/Bookings/Admin.php:92
 #: src/components/EditBooking/ParticipantMeta.tsx:43
 msgid "E-mail"
 msgstr "E-post"
@@ -98,18 +99,15 @@ msgstr "Redigera"
 msgid "Edit %s"
 msgstr "Redigera %s"
 
-#: inc/Retreats/Admin.php:38
+#: inc/Retreats/Admin.php:36
 #: src/components/EditRetreat/SectionDates.tsx:43
 msgid "End date"
 msgstr "Slutdatum"
 
-#: inc/Bookings/Admin.php:139
-msgid "Filter by email"
-msgstr "Filtrera efter e-post"
-
-#: inc/Bookings/Admin.php:119
-msgid "Filter by retreat"
-msgstr "Filtrera efter retreat"
+#: inc/Utils/AdminTable.php:139
+#: inc/Utils/AdminTable.php:99
+msgid "Filter by %s"
+msgstr "Filtrera efter %s"
 
 #: style.css:5
 #. translators: Author URI of the theme
@@ -141,7 +139,7 @@ msgstr "Ingen betalning"
 msgid "OK"
 msgstr "OK"
 
-#: inc/Bookings/Admin.php:38
+#: inc/Bookings/Admin.php:35
 #: src/components/EditBooking/ParticipantMeta.tsx:72
 msgid "Participant"
 msgstr "Deltagare"
@@ -188,7 +186,8 @@ msgstr "Ta bort ledare"
 msgid "Removed leader"
 msgstr "Tog bort ledare"
 
-#: inc/Bookings/Admin.php:39
+#: inc/Bookings/Admin.php:53
+#: inc/Bookings/Admin.php:69
 #: inc/Retreats/PostType.php:28
 #: src/components/EditBooking/Publish.tsx:67
 msgid "Retreat"
@@ -207,6 +206,7 @@ msgstr "Retreatledare"
 msgid "Retreat settings"
 msgstr "Retreatinställningar"
 
+#: inc/Bookings/Admin.php:70
 #: inc/Retreats/PostType.php:27
 msgid "Retreats"
 msgstr "Retreater"
@@ -220,12 +220,12 @@ msgstr "Spara"
 msgid "Set %s"
 msgstr "Välj %s"
 
-#: inc/Retreats/Admin.php:37
+#: inc/Retreats/Admin.php:23
 #: src/components/EditRetreat/SectionDates.tsx:38
 msgid "Start date"
 msgstr "Startdatum"
 
-#: inc/Bookings/Admin.php:37
+#: inc/Bookings/Admin.php:23
 #: src/components/EditBooking/Publish.tsx:52
 msgid "Status"
 msgstr "Status"
