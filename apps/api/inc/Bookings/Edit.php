@@ -40,7 +40,7 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
     {
         return [
             'admin_enqueue_scripts' => ['enqueue_edit_script'],
-            'save_post' => ['update_custom_post_meta', 10, 2],
+            'save_post' => ['save_post', 10, 2],
             'smk/register-booking-data' => [
                 ['register_booking_meta', 10, 2],
                 ['register_booking_retreat_data', 10, 2],
@@ -73,72 +73,34 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
         return substr($id, 0, 4) . '-' . substr($id, 4, 4) . '-' . substr($id, 8, 4);
     }
 
-    public function update_custom_post_meta(int $post_id, \WP_Post $post)
+    public function save_post(int $post_id, \WP_Post $post)
     {
         if (!current_user_can('edit_post', $post_id)) {
             return $post_id;
         }
 
-        if (isset($_POST['booking_meta'])) {
-            $next_meta = $_POST['booking_meta'];
-            foreach ($next_meta as $key => $value) {
-                $prev = get_post_meta($post_id, $key, true);
-                update_post_meta($post_id, $key, $value, $prev);
-            }
+        if ($post->post_type !== PostType::$post_type) {
+            return $post_id;
         }
 
-        if (isset($_POST['post_retreat_id'])) {
-            update_post_meta($post_id, 'retreat_id', $_POST['post_retreat_id']);
-        }
-
-        if (isset($_POST['booking_price'])) {
-            $config = $_POST['booking_price'];
-            $mode = $config['mode'];
-
-            switch ($mode) {
-                case 'no_payment':
-                    delete_post_meta($post_id, 'stripe_price_id');
-                    delete_post_meta($post_id, 'stripe_session_id');
+        $update_post_data = $_POST;
+        foreach ($update_post_data as $key => $data) {
+            switch ($key) {
+                case 'booking_meta':
+                    foreach ($data as $key => $value) {
+                        $prev = get_post_meta($post_id, $key, true);
+                        update_post_meta($post_id, $key, $value, $prev);
+                    }
                     break;
 
-                case 'retreat':
-                    $retreat_id = get_post_meta($post_id, 'retreat_id', true);
-                    if (empty($retreat_id)) {
-                        break;
-                    }
-
-                    $retreat_price_id = get_post_meta($retreat_id, 'stripe_price_id', true);
-                    update_post_meta($post_id, 'stripe_price_id', $retreat_price_id);
+                case 'post_retreat_id':
+                    update_post_meta($post_id, 'retreat_id', $data);
                     break;
 
-                case 'custom':
-                    $retreat_id = get_post_meta($post_id, 'retreat_id', true);
-                    if (empty($retreat_id)) {
-                        break;
+                case 'booking_price':
+                    if ($data['status'] !== 'paid') {
+                        $this->update_retreat_price($data, $post_id);
                     }
-
-                    $retreat = get_post($retreat_id);
-
-                    $current_amount = 0;
-                    $current_price_id = get_post_meta($post_id, 'stripe_price_id', true);
-
-                    if (!empty($current_price_id)) {
-                        $current_amount = $this->retrieve_amount($current_price_id);
-                    }
-
-                    if ($current_amount !== (int) $config['amount']) {
-                        $data = [
-                            'unit_amount' => (int) $config['amount'],
-                            'currency' => 'sek',
-                            'product_data' => [
-                                'name' => $retreat->post_title ?? $retreat_id,
-                                'metadata' => ['retreat_id' => $retreat_id],
-                            ],
-                        ];
-                        $price = $this->stripe->prices->create($data);
-                        update_post_meta($post_id, 'stripe_price_id', $price->id);
-                    }
-
                     break;
             }
         }
@@ -219,16 +181,86 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
             $mode = 'custom';
         }
 
+        $stripe_session_id = get_post_meta($post->ID, 'stripe_session_id', true);
+        $payment_status = 'no_payment_required';
+        $payment_intent = null;
+        if (!empty($stripe_session_id)) {
+            try {
+                $session = $this->stripe->checkout->sessions->retrieve($stripe_session_id);
+                $payment_status = $session->payment_status;
+                $payment_intent = $session->payment_intent;
+            } catch (\Stripe\Exception\ApiErrorException $exception) {
+            }
+        }
+
         wp_localize_script($handle, 'SMK_BOOKING_RELATED_PRICE', [
             'mode' => $mode,
+            'status' => $payment_status,
             'booking_price' => $booking_price,
             'retreat_price' => $retreat_price,
+            'payment_intent' => $payment_intent,
         ]);
+    }
+
+    protected function update_retreat_price(array $config, int $post_id)
+    {
+        $mode = $config['mode'];
+
+        switch ($mode) {
+            case 'no_payment':
+                delete_post_meta($post_id, 'stripe_price_id');
+                delete_post_meta($post_id, 'stripe_session_id');
+                break;
+
+            case 'retreat':
+                $retreat_id = get_post_meta($post_id, 'retreat_id', true);
+                if (empty($retreat_id)) {
+                    break;
+                }
+
+                $retreat_price_id = get_post_meta($retreat_id, 'stripe_price_id', true);
+                update_post_meta($post_id, 'stripe_price_id', $retreat_price_id);
+                break;
+
+            case 'custom':
+                $retreat_id = get_post_meta($post_id, 'retreat_id', true);
+                if (empty($retreat_id)) {
+                    break;
+                }
+
+                $retreat = get_post($retreat_id);
+
+                $current_amount = 0;
+                $current_price_id = get_post_meta($post_id, 'stripe_price_id', true);
+
+                if (!empty($current_price_id)) {
+                    $current_amount = $this->retrieve_amount($current_price_id);
+                }
+
+                if ($current_amount !== (int) $config['amount']) {
+                    $data = [
+                        'unit_amount' => (int) $config['amount'],
+                        'currency' => 'sek',
+                        'product_data' => [
+                            'name' => $retreat->post_title ?? $retreat_id,
+                            'metadata' => ['retreat_id' => $retreat_id],
+                        ],
+                    ];
+                    $price = $this->stripe->prices->create($data);
+                    update_post_meta($post_id, 'stripe_price_id', $price->id);
+                }
+
+                break;
+        }
     }
 
     protected function retrieve_amount(string $id)
     {
-        $stripe_price = $this->stripe->prices->retrieve($id);
-        return $stripe_price->unit_amount;
+        try {
+            $stripe_price = $this->stripe->prices->retrieve($id);
+            return $stripe_price->unit_amount;
+        } catch (\Stripe\Exception\ApiErrorException $exception) {
+            return null;
+        }
     }
 }
