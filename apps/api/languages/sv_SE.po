@@ -20,6 +20,10 @@ msgstr "Adam Bergman"
 msgid "Added leader"
 msgstr "La till ledare"
 
+#: inc/Bookings/Admin.php:123
+msgid "All retreats"
+msgstr "All retreater"
+
 #: inc/Bookings/PostType.php:43
 msgid "Booking"
 msgstr "Bokning"
@@ -99,6 +103,14 @@ msgstr "Redigera %s"
 msgid "End date"
 msgstr "Slutdatum"
 
+#: inc/Bookings/Admin.php:139
+msgid "Filter by email"
+msgstr "Filtrera efter e-post"
+
+#: inc/Bookings/Admin.php:119
+msgid "Filter by retreat"
+msgstr "Filtrera efter retreat"
+
 #: style.css:5
 #. translators: Author URI of the theme
 msgid "https://github.com/adambrgmn"
@@ -129,6 +141,7 @@ msgstr "Ingen betalning"
 msgid "OK"
 msgstr "OK"
 
+#: inc/Bookings/Admin.php:38
 #: src/components/EditBooking/ParticipantMeta.tsx:72
 msgid "Participant"
 msgstr "Deltagare"
@@ -175,6 +188,7 @@ msgstr "Ta bort ledare"
 msgid "Removed leader"
 msgstr "Tog bort ledare"
 
+#: inc/Bookings/Admin.php:39
 #: inc/Retreats/PostType.php:28
 #: src/components/EditBooking/Publish.tsx:67
 msgid "Retreat"
@@ -211,6 +225,7 @@ msgstr "Välj %s"
 msgid "Start date"
 msgstr "Startdatum"
 
+#: inc/Bookings/Admin.php:37
 #: src/components/EditBooking/Publish.tsx:52
 msgid "Status"
 msgstr "Status"

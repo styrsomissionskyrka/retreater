@@ -14,6 +14,10 @@ msgstr ""
 msgid "Added leader"
 msgstr ""
 
+#: inc/Bookings/Admin.php:123
+msgid "All retreats"
+msgstr ""
+
 #: inc/Bookings/PostType.php:43
 msgid "Booking"
 msgstr ""
@@ -87,6 +91,14 @@ msgstr ""
 msgid "End date"
 msgstr ""
 
+#: inc/Bookings/Admin.php:139
+msgid "Filter by email"
+msgstr ""
+
+#: inc/Bookings/Admin.php:119
+msgid "Filter by retreat"
+msgstr ""
+
 #: style.css:5
 #. translators: Author URI of the theme
 msgid "https://github.com/adambrgmn"
@@ -117,6 +129,7 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
+#: inc/Bookings/Admin.php:38
 #: src/components/EditBooking/ParticipantMeta.tsx:72
 msgid "Participant"
 msgstr ""
@@ -161,6 +174,7 @@ msgstr ""
 msgid "Removed leader"
 msgstr ""
 
+#: inc/Bookings/Admin.php:39
 #: inc/Retreats/PostType.php:28
 #: src/components/EditBooking/Publish.tsx:67
 msgid "Retreat"
@@ -197,6 +211,7 @@ msgstr ""
 msgid "Start date"
 msgstr ""
 
+#: inc/Bookings/Admin.php:37
 #: src/components/EditBooking/Publish.tsx:52
 msgid "Status"
 msgstr ""
