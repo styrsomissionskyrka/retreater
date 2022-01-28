@@ -2,6 +2,7 @@
   "name": "@styrsomissionskyrka/api",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "start": "wp-env start --xdebug",
     "build": "wp-bundler",
