@@ -1,0 +1,5 @@
+{
+  "config": {
+    "STRIPE_SECRET_KEY": "..."
+  }
+}

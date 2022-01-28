@@ -1,0 +1,60 @@
+{
+  "name": "@styrsomissionskyrka/api",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "wp-env start --xdebug",
+    "build": "wp-bundler",
+    "dev": "wp-bundler --watch --port 8080",
+    "lint": "eslint src --ext .ts --ext .tsx --ext .js",
+    "wp": "wp-env run cli wp",
+    "wp:prepare": "wp core download --path=.wp"
+  },
+  "dependencies": {
+    "@fransvilhelm/hooks": "^3.1.4",
+    "@wordpress/components": "^19.2.0",
+    "@wordpress/edit-post": "^5.0.20",
+    "@wordpress/i18n": "^4.2.4",
+    "@wordpress/plugins": "^4.0.7",
+    "date-fns": "^2.28.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "zod": "^3.11.6"
+  },
+  "devDependencies": {
+    "@fransvilhelm/wp-bundler": "^2.1.0",
+    "@styrsomissionskyrka/config": "*",
+    "@styrsomissionskyrka/tsconfig": "*",
+    "@styrsomissionskyrka/types": "*",
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "@types/wordpress__components": "^14.0.10",
+    "@types/wordpress__edit-post": "^4.0.1",
+    "@types/wordpress__plugins": "^3.0.0",
+    "@wordpress/env": "^4.2.0",
+    "dotenv": "^11.0.0",
+    "eslint": "8.7.0",
+    "fs-extra": "^10.0.0",
+    "typescript": "^4.5.5"
+  },
+  "wp-bundler": {
+    "entryPoints": {
+      "retreat-edit": "src/retreat-edit.tsx",
+      "booking-edit": "src/booking-edit.tsx",
+      "booking-quick-edit": "src/booking-quick-edit.tsx"
+    },
+    "assetLoader": {
+      "namespace": "StyrsoMissionskyrka",
+      "path": "inc/AssetLoader.php"
+    },
+    "translations": {
+      "domain": "smk",
+      "pot": "languages/smk.pot",
+      "pos": [
+        "languages/sv_SE.po",
+        "languages/en_US.po"
+      ]
+    }
+  }
+}

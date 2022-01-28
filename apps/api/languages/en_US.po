@@ -1,0 +1,271 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: info@styrsomissionskyrka.se\n"
+"Last-Translator: Adam Bergman <adam@fransvilhelm.com>\n"
+"Language-Team: Styrso Missionskyrka\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: smk\n"
+
+#: style.css:4
+#. translators: Author of the theme
+msgid "Adam Bergman"
+msgstr ""
+
+#: src/components/EditRetreat/SectionParticipants.tsx:54
+msgid "Added leader"
+msgstr ""
+
+#: inc/Utils/AdminTable.php:108
+msgid "All %s"
+msgstr ""
+
+#: inc/Bookings/PostType.php:43
+msgid "Booking"
+msgstr ""
+
+#: src/components/EditBooking/Title.tsx:16
+msgid "Booking id"
+msgstr ""
+
+#: inc/Bookings/PostType.php:42
+msgid "Bookings"
+msgstr ""
+
+#: inc/Bookings/PostType.php:121
+#: src/components/EditBooking/Publish.tsx:38
+msgid "Cancelled"
+msgstr ""
+
+#: inc/Bookings/PostType.php:122
+msgid "Cancelled <span class=\"count\">(%s)</span>"
+msgid_plural "Cancelled <span class=\"count\">(%s)</span>"
+
+#: src/components/EditBooking/ParticipantMeta.tsx:65
+msgid "City"
+msgstr ""
+
+#: src/components/EditBooking/Comment.tsx:7
+#: src/components/EditBooking/Comment.tsx:9
+msgid "Comment"
+msgstr ""
+
+#: inc/Bookings/PostType.php:113
+#: src/components/EditBooking/Publish.tsx:37
+msgid "Confirmed"
+msgstr ""
+
+#: inc/Bookings/PostType.php:114
+msgid "Confirmed <span class=\"count\">(%s)</span>"
+msgid_plural "Confirmed <span class=\"count\">(%s)</span>"
+
+#: inc/Bookings/PostType.php:97
+#: src/components/EditBooking/Publish.tsx:35
+msgid "Created"
+msgstr ""
+
+#: inc/Bookings/PostType.php:98
+msgid "Created <span class=\"count\">(%s)</span>"
+msgid_plural "Created <span class=\"count\">(%s)</span>"
+
+#: inc/Retreats/Admin.php:49
+msgid "Date not set"
+msgstr ""
+
+#: src/components/EditRetreat/SectionDates.tsx:36
+msgid "Dates"
+msgstr ""
+
+#: inc/Bookings/Admin.php:110
+#: src/components/EditBooking/ParticipantMeta.tsx:43
+msgid "E-mail"
+msgstr ""
+
+#: src/components/PublishSection/PublishSection.tsx:29
+msgid "Edit"
+msgstr ""
+
+#: src/components/PublishSection/PublishSection.tsx:30
+msgid "Edit %s"
+msgstr ""
+
+#: inc/Retreats/Admin.php:36
+#: src/components/EditRetreat/SectionDates.tsx:43
+msgid "End date"
+msgstr ""
+
+#: inc/Utils/AdminTable.php:102
+#: inc/Utils/AdminTable.php:145
+msgid "Filter by %s"
+msgstr ""
+
+#: style.css:5
+#. translators: Author URI of the theme
+msgid "https://github.com/adambrgmn"
+msgstr ""
+
+#: style.css:3
+#. translators: Theme URI of the theme
+msgid "https://www.styrsomissionskyrka.se"
+msgstr ""
+
+#: src/components/EditBooking/Price.tsx:30
+msgid "Manage refunds and more on Stripe's dashboard."
+msgstr ""
+
+#: src/components/EditRetreat/SectionParticipants.tsx:16
+msgid "Max participants"
+msgstr ""
+
+#: src/components/EditBooking/ParticipantMeta.tsx:38
+msgid "Name"
+msgstr ""
+
+#: src/components/EditBooking/Price.tsx:46
+msgid "No payment"
+msgstr ""
+
+#: src/components/PublishSection/PublishSection.tsx:46
+msgid "OK"
+msgstr ""
+
+#: inc/Bookings/Admin.php:37
+#: src/components/EditBooking/ParticipantMeta.tsx:72
+msgid "Participant"
+msgstr ""
+
+#: src/components/EditRetreat/SectionParticipants.tsx:13
+msgid "Participants"
+msgstr ""
+
+#: inc/Bookings/PostType.php:105
+#: src/components/EditBooking/Publish.tsx:36
+msgid "Pending"
+msgstr ""
+
+#: inc/Bookings/PostType.php:106
+msgid "Pending <span class=\"count\">(%s)</span>"
+msgid_plural "Pending <span class=\"count\">(%s)</span>"
+
+#: src/components/EditBooking/ParticipantMeta.tsx:49
+msgid "Phone"
+msgstr ""
+
+#: src/components/DropdownDatePicker.tsx:13
+msgid "Pick date"
+msgstr ""
+
+#: src/components/EditBooking/Price.tsx:36
+#: src/components/EditBooking/Price.tsx:53
+#: src/components/EditRetreat/SectionPrice.tsx:12
+#: src/components/EditRetreat/SectionPrice.tsx:15
+msgid "Price"
+msgstr ""
+
+#: src/components/EditRetreat/SectionPrice.tsx:18
+msgid "Price id: %s"
+msgstr ""
+
+#: src/components/EditRetreat/SectionParticipants.tsx:56
+msgid "Remove leader"
+msgstr ""
+
+#: src/components/EditRetreat/SectionParticipants.tsx:55
+msgid "Removed leader"
+msgstr ""
+
+#: inc/Bookings/Admin.php:55
+#: inc/Bookings/Admin.php:87
+#: inc/Retreats/PostType.php:28
+#: src/components/EditBooking/Publish.tsx:67
+msgid "Retreat"
+msgstr ""
+
+#: src/components/EditBooking/Price.tsx:23
+msgid "Retreat is already paid. The price can't be changed after that."
+msgstr ""
+
+#: src/components/EditRetreat/SectionParticipants.tsx:52
+msgid "Retreat leaders"
+msgstr ""
+
+#: src/components/EditRetreat/EditRetreat.tsx:19
+#: src/components/EditRetreat/EditRetreat.tsx:22
+msgid "Retreat settings"
+msgstr ""
+
+#: inc/Bookings/Admin.php:88
+#: inc/Retreats/PostType.php:27
+msgid "Retreats"
+msgstr ""
+
+#: src/components/EditBooking/Save.tsx:15
+msgid "Save"
+msgstr ""
+
+#: src/components/PublishSection/PublishSection.tsx:35
+#: src/components/PublishSection/PublishSection.tsx:38
+msgid "Set %s"
+msgstr ""
+
+#: inc/Retreats/Admin.php:23
+#: src/components/EditRetreat/SectionDates.tsx:38
+msgid "Start date"
+msgstr ""
+
+#: inc/Bookings/Admin.php:25
+#: inc/Bookings/Admin.php:71
+#: src/components/EditBooking/Publish.tsx:52
+msgid "Status"
+msgstr ""
+
+#: inc/Bookings/Admin.php:72
+msgid "Statuses"
+msgstr ""
+
+#: src/components/EditBooking/Price.tsx:40
+msgid "Strategy"
+msgstr ""
+
+#: src/components/EditBooking/ParticipantMeta.tsx:55
+msgid "Street"
+msgstr ""
+
+#: style.css:2
+#: style.css:6
+#. translators: Description of the theme
+#. translators: Theme Name of the theme
+msgid "Styrsö Missionskyrka API"
+msgstr ""
+
+#: src/components/EditBooking/Price.tsx:45
+msgid "Use custom price"
+msgstr ""
+
+#: src/components/EditBooking/Price.tsx:44
+msgid "Use retreat price"
+msgstr ""
+
+#: src/components/EditBooking/ParticipantMeta.tsx:60
+msgid "Zip code"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+msgid "All retreats"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+msgid "Email"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+msgid "Filter by email"
+msgstr ""
+
+# THIS TRANSLATION IS NO LONGER REFERENCED INSIDE YOUR PROJECT
+msgid "Filter by retreat"
+msgstr ""

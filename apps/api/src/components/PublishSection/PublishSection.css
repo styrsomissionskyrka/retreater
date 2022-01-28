@@ -1,0 +1,22 @@
+.publish-section {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.publish-row:before {
+  font: normal 20px/1 dashicons;
+  speak: never;
+  display: inline-block;
+  margin-left: -1px;
+  padding-right: 3px;
+  vertical-align: top;
+  color: #8c8f94;
+}
+
+.publish-row-status:before {
+  content: '\f173';
+}
+
+.publish-row-retreat_id:before {
+  content: '\f484';
+}

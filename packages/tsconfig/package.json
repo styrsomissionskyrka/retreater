@@ -1,0 +1,12 @@
+{
+  "name": "@styrsomissionskyrka/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "base.json",
+    "nextjs.json",
+    "react-library.json"
+  ]
+}

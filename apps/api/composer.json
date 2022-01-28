@@ -1,0 +1,27 @@
+{
+  "name": "styrsomissionskyrka/theme",
+  "description": "Styrsö Missionskyrka theme",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Adam Bergman",
+      "email": "adam@fransvilhelm.com",
+      "homepage": "https://github.com/adambrgmn"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "StyrsoMissionskyrka\\": "./inc"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true
+  },
+  "repositories": [],
+  "require": {
+    "stripe/stripe-php": "^7.111",
+    "tburry/pquery": "^1.1",
+    "hidehalo/nanoid-php": "^1.1"
+  }
+}

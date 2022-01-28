@@ -1,134 +1,60 @@
 {
-  "name": "retreater",
-  "version": "0.1.0",
+  "name": "styrsomissionskyrka",
+  "version": "0.0.0",
   "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=14.0.0"
+  },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "jest",
-    "prepare": "husky install",
-    "codegen": "yarn codegen:nexus && yarn codegen:graphql",
-    "codegen:watch": "npx nodemon -e ts,tsx --exec 'yarn codegen'",
-    "codegen:nexus": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' --transpile-only api/schema.ts",
-    "codegen:graphql": "graphql-codegen --config codegen.yml",
-    "prisma:generate": "prisma generate",
-    "prisma:seed": "prisma db seed --preview-feature",
-    "prisma:migrate": "prisma migrate dev",
-    "ts-node": "ts-node --compiler-options '{\"module\":\"CommonJS\"}'"
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md,php}\"",
+    "prepare": "husky install"
   },
-  "dependencies": {
-    "@apollo/client": "^3.5.6",
-    "@fransvilhelm/changeset-changelog": "^1.1.1",
-    "@fransvilhelm/feather": "^2.0.0",
-    "@fransvilhelm/hooks": "^3.1.4",
-    "@prisma/client": "^3.6.0",
-    "@reach/auto-id": "^0.16.0",
-    "@reach/rect": "^0.16.0",
-    "@sendgrid/mail": "^7.6.0",
-    "@stripe/stripe-js": "^1.21.2",
-    "apollo-server-micro": "^3.5.0",
-    "auth0": "^2.37.0",
-    "axios": "^0.24.0",
-    "classnames": "^2.3.1",
-    "csv": "^6.0.4",
-    "dataloader": "^2.0.0",
-    "date-fns": "^2.27.0",
-    "graphql": "^15.7.0",
-    "graphql-tag": "^2.12.6",
-    "lodash.debounce": "^4.0.8",
-    "lodash.get": "^4.4.2",
-    "micro": "^9.3.4",
-    "micro-cors": "^0.1.1",
-    "nanoid": "^3.1.30",
-    "next": "^12.0.7",
-    "next-auth": "^4.0.5",
-    "nexus": "^1.1.0",
-    "nprogress": "^0.2.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-focus-lock": "^2.6.0",
-    "react-hook-form": "^7.21.0",
-    "react-hot-toast": "^2.1.1",
-    "react-mde": "^11.5.0",
-    "react-remove-scroll": "^2.4.3",
-    "react-table": "^7.7.0",
-    "slug": "^5.1.0",
-    "stripe": "^8.192.0",
-    "zod": "^3.11.6"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@graphql-codegen/cli": "2.3.0",
-    "@graphql-codegen/fragment-matcher": "^3.2.0",
-    "@graphql-codegen/introspection": "^2.1.0",
-    "@graphql-codegen/named-operations-object": "^2.2.0",
-    "@graphql-codegen/typescript": "2.4.1",
-    "@graphql-codegen/typescript-apollo-client-helpers": "^2.1.8",
-    "@graphql-codegen/typescript-operations": "2.2.1",
-    "@graphql-codegen/typescript-react-apollo": "3.2.2",
-    "@tabler/icons": "^1.47.0",
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/auth0": "^2.34.7",
-    "@types/classnames": "^2.3.1",
-    "@types/faker": "^5.5.9",
-    "@types/jest": "^27.0.3",
-    "@types/lodash.debounce": "^4.0.6",
-    "@types/lodash.get": "^4.4.6",
-    "@types/micro": "^7.3.6",
-    "@types/micro-cors": "^0.1.2",
-    "@types/node": "^16.11.12",
-    "@types/react": "^17.0.37",
-    "@types/react-dom": "^17.0.11",
-    "@types/react-table": "^7.7.9",
-    "@types/slug": "^5.0.3",
-    "@types/wicg-native-file-system": "^2020.6.0",
-    "@typescript-eslint/eslint-plugin": "^4.29.0",
-    "@typescript-eslint/parser": "^4.29.0",
-    "autoprefixer": "^10.4.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.32.0",
-    "eslint-config-next": "^11.0.1",
-    "eslint-config-react-app": "^6.0.0",
-    "eslint-import-resolver-typescript": "^2.4.0",
-    "eslint-plugin-flowtype": "^5.9.0",
-    "eslint-plugin-graphql": "^4.0.0",
-    "eslint-plugin-jest": "^24.4.0",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.24.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "eslint-plugin-testing-library": "^4.10.1",
-    "faker": "^5.5.3",
-    "fishery": "^2.1.0",
+    "@prettier/plugin-php": "^0.17.6",
     "husky": "^7.0.4",
-    "jest": "^27.4.3",
     "lint-staged": "^12.1.2",
-    "postcss": "^8.4.4",
     "prettier": "^2.5.1",
-    "prisma": "^3.6.0",
-    "tailwindcss": "^2.2.19",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.2"
+    "turbo": "latest"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
+  "turbo": {
+    "pipeline": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "dist/**",
+          ".next/**"
+        ]
+      },
+      "lint": {
+        "outputs": []
+      },
+      "dev": {
+        "cache": false
+      }
     }
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": [
-      "next lint --fix ."
-    ],
-    "*.{js,ts,jsx,tsx,json,md,yml,html}": [
-      "prettier --write"
-    ]
+    "*.{mjs,cjs,js,ts,jsx,tsx,json,md,yml,html,php}": "prettier --write",
+    "*.{mjs,cjs,js,ts,jsx,tsx}": "eslint --fix"
   },
   "prettier": {
+    "semi": true,
     "singleQuote": true,
     "trailingComma": "all",
     "proseWrap": "always",
+    "arrowParens": "always",
     "printWidth": 120
   }
 }
