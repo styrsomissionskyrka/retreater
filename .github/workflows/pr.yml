@@ -27,7 +27,7 @@ jobs:
             turbo-${{ github.job }}-${{ github.ref_name }}-
 
       - name: install
-        run: yarn install --frozen-lockfile
+        run: yarn install
         env:
           HUSKY: 0
 
