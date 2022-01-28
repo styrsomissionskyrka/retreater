@@ -20,7 +20,7 @@ msgstr ""
 msgid "Added leader"
 msgstr ""
 
-#: inc/Utils/AdminTable.php:105
+#: inc/Utils/AdminTable.php:108
 msgid "All %s"
 msgstr ""
 
@@ -80,7 +80,7 @@ msgstr ""
 msgid "Dates"
 msgstr ""
 
-#: inc/Bookings/Admin.php:92
+#: inc/Bookings/Admin.php:108
 #: src/components/EditBooking/ParticipantMeta.tsx:43
 msgid "E-mail"
 msgstr ""
@@ -98,8 +98,8 @@ msgstr ""
 msgid "End date"
 msgstr ""
 
-#: inc/Utils/AdminTable.php:139
-#: inc/Utils/AdminTable.php:99
+#: inc/Utils/AdminTable.php:102
+#: inc/Utils/AdminTable.php:145
 msgid "Filter by %s"
 msgstr ""
 
@@ -179,7 +179,7 @@ msgid "Removed leader"
 msgstr ""
 
 #: inc/Bookings/Admin.php:53
-#: inc/Bookings/Admin.php:69
+#: inc/Bookings/Admin.php:85
 #: inc/Retreats/PostType.php:28
 #: src/components/EditBooking/Publish.tsx:67
 msgid "Retreat"
@@ -198,7 +198,7 @@ msgstr ""
 msgid "Retreat settings"
 msgstr ""
 
-#: inc/Bookings/Admin.php:70
+#: inc/Bookings/Admin.php:86
 #: inc/Retreats/PostType.php:27
 msgid "Retreats"
 msgstr ""
@@ -218,8 +218,13 @@ msgid "Start date"
 msgstr ""
 
 #: inc/Bookings/Admin.php:23
+#: inc/Bookings/Admin.php:69
 #: src/components/EditBooking/Publish.tsx:52
 msgid "Status"
+msgstr ""
+
+#: inc/Bookings/Admin.php:70
+msgid "Statuses"
 msgstr ""
 
 #: src/components/EditBooking/Price.tsx:40

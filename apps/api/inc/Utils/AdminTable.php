@@ -82,7 +82,10 @@ class AdminTable
 
     public static function add_select_filter(array $args)
     {
-        self::prepare_filter_query($args);
+        if (isset($args['sort'])) {
+            self::prepare_filter_query($args);
+        }
+
         add_action(
             'restrict_manage_posts',
             function (string $post_type) use ($args) {
@@ -123,7 +126,10 @@ class AdminTable
 
     public static function add_input_filter(array $args)
     {
-        self::prepare_filter_query($args);
+        if (isset($args['sort'])) {
+            self::prepare_filter_query($args);
+        }
+
         add_action(
             'restrict_manage_posts',
             function (string $post_type) use ($args) {

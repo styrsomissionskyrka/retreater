@@ -65,6 +65,22 @@ class Admin implements ActionHookSubscriber
 
         AdminTable::add_select_filter([
             'post_type' => PostType::$post_type,
+            'name' => 'post_status',
+            'label' => __('Status', 'smk'),
+            'label_plural' => __('Statuses', 'smk'),
+            'options' => function () {
+                $statuses = [];
+                foreach (get_post_stati([], 'objects') as $status => $args) {
+                    if (str_contains($status, 'booking_')) {
+                        $statuses[$status] = $args->label;
+                    }
+                }
+                return $statuses;
+            },
+        ]);
+
+        AdminTable::add_select_filter([
+            'post_type' => PostType::$post_type,
             'name' => 'retreat_id',
             'label' => __('Retreat', 'smk'),
             'label_plural' => __('Retreats', 'smk'),
