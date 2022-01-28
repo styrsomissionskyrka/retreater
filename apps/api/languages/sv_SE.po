@@ -86,7 +86,7 @@ msgstr "Datum inte satt"
 msgid "Dates"
 msgstr "Datum"
 
-#: inc/Bookings/Admin.php:108
+#: inc/Bookings/Admin.php:110
 #: src/components/EditBooking/ParticipantMeta.tsx:43
 msgid "E-mail"
 msgstr "E-post"
@@ -139,7 +139,7 @@ msgstr "Ingen betalning"
 msgid "OK"
 msgstr "OK"
 
-#: inc/Bookings/Admin.php:35
+#: inc/Bookings/Admin.php:37
 #: src/components/EditBooking/ParticipantMeta.tsx:72
 msgid "Participant"
 msgstr "Deltagare"
@@ -186,8 +186,8 @@ msgstr "Ta bort ledare"
 msgid "Removed leader"
 msgstr "Tog bort ledare"
 
-#: inc/Bookings/Admin.php:53
-#: inc/Bookings/Admin.php:85
+#: inc/Bookings/Admin.php:55
+#: inc/Bookings/Admin.php:87
 #: inc/Retreats/PostType.php:28
 #: src/components/EditBooking/Publish.tsx:67
 msgid "Retreat"
@@ -206,7 +206,7 @@ msgstr "Retreatledare"
 msgid "Retreat settings"
 msgstr "Retreatinställningar"
 
-#: inc/Bookings/Admin.php:86
+#: inc/Bookings/Admin.php:88
 #: inc/Retreats/PostType.php:27
 msgid "Retreats"
 msgstr "Retreater"
@@ -225,13 +225,13 @@ msgstr "Välj %s"
 msgid "Start date"
 msgstr "Startdatum"
 
-#: inc/Bookings/Admin.php:23
-#: inc/Bookings/Admin.php:69
+#: inc/Bookings/Admin.php:25
+#: inc/Bookings/Admin.php:71
 #: src/components/EditBooking/Publish.tsx:52
 msgid "Status"
 msgstr "Status"
 
-#: inc/Bookings/Admin.php:70
+#: inc/Bookings/Admin.php:72
 msgid "Statuses"
 msgstr "Status"
 

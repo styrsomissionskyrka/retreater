@@ -117,7 +117,7 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
         global $post;
 
         if (($hook === 'post-new.php' || $hook === 'post.php') && $post->post_type === PostType::$post_type) {
-            $handles = AssetLoader::enqueue('edit-booking');
+            $handles = AssetLoader::enqueue('booking-edit');
             do_action('smk/register-booking-data', $handles['js'], $post);
         }
     }

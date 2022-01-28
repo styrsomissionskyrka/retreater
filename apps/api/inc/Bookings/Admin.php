@@ -2,6 +2,7 @@
 
 namespace StyrsoMissionskyrka\Bookings;
 
+use StyrsoMissionskyrka\AssetLoader;
 use StyrsoMissionskyrka\Utils\ActionHookSubscriber;
 use StyrsoMissionskyrka\Utils\AdminTable;
 
@@ -11,6 +12,7 @@ class Admin implements ActionHookSubscriber
     {
         return [
             'init' => ['setup_table'],
+            'admin_enqueue_scripts' => ['load_dashboard_scripts'],
         ];
     }
 
@@ -113,5 +115,13 @@ class Admin implements ActionHookSubscriber
                 $query->set('meta_query', $meta_query);
             },
         ]);
+    }
+
+    public function load_dashboard_scripts(string $hook)
+    {
+        $post_type = isset($_GET['post_type']) ? $_GET['post_type'] : 'post';
+        if ($hook === 'edit.php' && $post_type === PostType::$post_type) {
+            AssetLoader::enqueue('booking-quick-edit');
+        }
     }
 }
