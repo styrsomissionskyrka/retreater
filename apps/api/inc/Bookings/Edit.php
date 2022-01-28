@@ -53,7 +53,7 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
     {
         return [
             'use_block_editor_for_post_type' => ['disable_block_editor', 10, 2],
-            'default_title' => ['set_default_title'],
+            'default_title' => ['set_default_title', 10, 2],
         ];
     }
 
@@ -66,8 +66,12 @@ class Edit implements ActionHookSubscriber, FilterHookSubscriber
         return $status;
     }
 
-    public function set_default_title(): string
+    public function set_default_title(string $title, \WP_Post $post): string
     {
+        if ($post->post_type !== PostType::$post_type) {
+            return $title;
+        }
+
         $client = new Client();
         $id = $client->formattedId('abcdefghijklmnopqrstuvwxyz0123456789', 12);
         return substr($id, 0, 4) . '-' . substr($id, 4, 4) . '-' . substr($id, 8, 4);
