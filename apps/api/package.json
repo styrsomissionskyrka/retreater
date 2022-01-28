@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start": "wp-env start --xdebug",
     "build": "wp-bundler",
-    "dev": "npx concurrently 'wp-bundler --watch --port 8080' 'npx nodemon ./scripts/sync.mjs --watch . -e ts,tsx,php'",
-    "sync": "node ./scripts/sync.mjs",
-    "lint": "eslint src --ext .ts --ext .tsx --ext .js"
+    "dev": "wp-bundler --watch --port 8080",
+    "lint": "eslint src --ext .ts --ext .tsx --ext .js",
+    "wp": "wp-env run cli wp",
+    "wp:prepare": "wp core download --path=.wp"
   },
   "dependencies": {
     "@fransvilhelm/hooks": "^3.1.4",
@@ -25,6 +27,7 @@
     "@types/wordpress__components": "^14.0.10",
     "@types/wordpress__edit-post": "^4.0.1",
     "@types/wordpress__plugins": "^3.0.0",
+    "@wordpress/env": "^4.2.0",
     "config": "*",
     "dotenv": "^11.0.0",
     "eslint": "8.7.0",
