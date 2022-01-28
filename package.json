@@ -46,7 +46,8 @@
     }
   },
   "lint-staged": {
-    "*.{mjs,cjs,js,ts,jsx,tsx,json,md,yml,html,php}": "prettier --write"
+    "*.{mjs,cjs,js,ts,jsx,tsx,json,md,yml,html,php}": "prettier --write",
+    "*.{mjs,cjs,js,ts,jsx,tsx}": "eslint --fix"
   },
   "prettier": {
     "semi": true,
