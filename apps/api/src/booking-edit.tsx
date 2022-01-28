@@ -9,4 +9,5 @@ window.addEventListener('DOMContentLoaded', () => {
   const root = document.getElementById('postdivrich');
 
   render(<EditBooking initialData={initialData} />, root);
+  console.log('test cache');
 });
