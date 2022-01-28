@@ -5,6 +5,7 @@ import { addDays, isBefore } from 'date-fns';
 
 import { useRetreatMeta } from '../../utils/data';
 import { DropdownDatePicker } from '../DropdownDatePicker';
+import { dbDatetime } from '../../utils/date';
 
 export const SectionDates: React.FC = () => {
   let [meta, setMeta] = useRetreatMeta();
@@ -25,11 +26,14 @@ export const SectionDates: React.FC = () => {
       nextEndDate = addDays(next, 1);
     }
 
-    setMeta({ start_date: next?.toISOString() ?? '', end_date: nextEndDate?.toISOString() ?? '' });
+    setMeta({
+      start_date: next != null ? dbDatetime(next) : '',
+      end_date: nextEndDate != null ? dbDatetime(nextEndDate) : '',
+    });
   };
 
   const handleEndDateChange = (next: Date | null) => {
-    setMeta({ end_date: next?.toISOString() ?? '' });
+    setMeta({ end_date: next != null ? dbDatetime(next) : '' });
   };
 
   return (

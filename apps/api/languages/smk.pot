@@ -70,7 +70,7 @@ msgid_plural "Created <span class=\"count\">(%s)</span>"
 msgid "Date not set"
 msgstr ""
 
-#: src/components/EditRetreat/SectionDates.tsx:36
+#: src/components/EditRetreat/SectionDates.tsx:40
 msgid "Dates"
 msgstr ""
 
@@ -88,7 +88,7 @@ msgid "Edit %s"
 msgstr ""
 
 #: inc/Retreats/Admin.php:36
-#: src/components/EditRetreat/SectionDates.tsx:43
+#: src/components/EditRetreat/SectionDates.tsx:47
 msgid "End date"
 msgstr ""
 
@@ -207,7 +207,7 @@ msgid "Set %s"
 msgstr ""
 
 #: inc/Retreats/Admin.php:23
-#: src/components/EditRetreat/SectionDates.tsx:38
+#: src/components/EditRetreat/SectionDates.tsx:42
 msgid "Start date"
 msgstr ""
 
