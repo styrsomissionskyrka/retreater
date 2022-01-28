@@ -82,7 +82,7 @@ msgstr[1] "Skapad <span class=\"count\">(%s)</span>"
 msgid "Date not set"
 msgstr "Datum inte satt"
 
-#: src/components/EditRetreat/SectionDates.tsx:36
+#: src/components/EditRetreat/SectionDates.tsx:40
 msgid "Dates"
 msgstr "Datum"
 
@@ -100,7 +100,7 @@ msgid "Edit %s"
 msgstr "Redigera %s"
 
 #: inc/Retreats/Admin.php:36
-#: src/components/EditRetreat/SectionDates.tsx:43
+#: src/components/EditRetreat/SectionDates.tsx:47
 msgid "End date"
 msgstr "Slutdatum"
 
@@ -221,7 +221,7 @@ msgid "Set %s"
 msgstr "Välj %s"
 
 #: inc/Retreats/Admin.php:23
-#: src/components/EditRetreat/SectionDates.tsx:38
+#: src/components/EditRetreat/SectionDates.tsx:42
 msgid "Start date"
 msgstr "Startdatum"
 

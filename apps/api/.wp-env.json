@@ -3,6 +3,8 @@
   "plugins": [],
   "themes": ["."],
   "config": {
+    "WP_LANG": "sv_SE",
+    "WP_DEFAULT_THEME": "api",
     "SMK_CLIENT_BASE_URL": "http://localhost:3000"
   }
 }
