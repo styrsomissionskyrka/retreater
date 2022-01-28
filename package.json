@@ -56,5 +56,6 @@
     "proseWrap": "always",
     "arrowParens": "always",
     "printWidth": 120
-  }
+  },
+  "packageManager": "yarn@1.22.17"
 }
