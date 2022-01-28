@@ -28,11 +28,11 @@
     "@types/wordpress__edit-post": "^4.0.1",
     "@types/wordpress__plugins": "^3.0.0",
     "@wordpress/env": "^4.2.0",
-    "config": "*",
+    "@styrsomissionskyrka/config": "*",
     "dotenv": "^11.0.0",
     "eslint": "8.7.0",
     "fs-extra": "^10.0.0",
-    "tsconfig": "*",
+    "@styrsomissionskyrka/tsconfig": "*",
     "typescript": "^4.5.5"
   },
   "wp-bundler": {

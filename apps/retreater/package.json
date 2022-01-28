@@ -29,10 +29,10 @@
     "@types/node": "^16.11.12",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
-    "config": "*",
+    "@styrsomissionskyrka/config": "*",
     "eslint": "8.7.0",
     "jest": "^27.4.3",
-    "tsconfig": "*",
+    "@styrsomissionskyrka/tsconfig": "*",
     "typescript": "^4.5.5"
   }
 }

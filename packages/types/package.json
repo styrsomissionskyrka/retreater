@@ -9,9 +9,9 @@
     "lint": "eslint lib --ext .ts --ext .tsx --ext .js"
   },
   "devDependencies": {
-    "config": "*",
+    "@styrsomissionskyrka/config": "*",
     "eslint": "8.7.0",
-    "tsconfig": "*",
+    "@styrsomissionskyrka/tsconfig": "*",
     "typescript": "^4.5.5"
   },
   "dependencies": {
