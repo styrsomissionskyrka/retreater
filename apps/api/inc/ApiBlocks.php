@@ -26,7 +26,7 @@ class ApiBlocks implements ActionHookSubscriber
             return;
         }
 
-        register_rest_field($types, 'smk_has_blocks', [
+        register_rest_field($types, 'has_content_blocks', [
             'get_callback' => [$this, 'has_blocks_get_callback'],
             'update_callback' => null,
             'schema' => [
@@ -37,7 +37,7 @@ class ApiBlocks implements ActionHookSubscriber
             ],
         ]);
 
-        register_rest_field($types, 'smk_blocks', [
+        register_rest_field($types, 'content_blocks', [
             'get_callback' => [$this, 'blocks_get_callback'],
             'update_callback' => null,
             'schema' => [
@@ -59,8 +59,8 @@ class ApiBlocks implements ActionHookSubscriber
 
         $response->set_data(
             array_merge($response->get_data(), [
-                'smk_has_blocks' => $has_blocks,
-                'smk_blocks' => $blocks,
+                'has_content_blocks' => $has_blocks,
+                'content_blocks' => $blocks,
             ])
         );
 
