@@ -6,8 +6,4 @@ module.exports = {
   eslint: {
     dirs: ['components', 'lib', 'pages'],
   },
-  experimental: {
-    // concurrentFeatures: true,
-    // serverComponents: true,
-  },
 };

@@ -27,7 +27,7 @@ const Retreat: NextPage<Props> = ({ post }) => {
 export default Retreat;
 
 export const getStaticPaths: GetStaticPaths<Query> = async () => {
-  let posts = await wp.posts({ parameters: { status: 'publish' } }, { id: true, slug: true });
+  let posts: any[] = await wp.posts({ parameters: { status: 'publish' } }, { id: true, slug: true }).catch(() => []);
 
   return {
     paths: posts.map((post) => ({ params: { slug: post.slug } })),

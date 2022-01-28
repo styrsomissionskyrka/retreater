@@ -18,21 +18,23 @@
     "@wordpress/plugins": "^4.0.7",
     "date-fns": "^2.28.0",
     "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "zod": "^3.11.6"
   },
   "devDependencies": {
     "@fransvilhelm/wp-bundler": "^2.1.0",
+    "@styrsomissionskyrka/config": "*",
+    "@styrsomissionskyrka/tsconfig": "*",
     "@styrsomissionskyrka/types": "*",
     "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
     "@types/wordpress__components": "^14.0.10",
     "@types/wordpress__edit-post": "^4.0.1",
     "@types/wordpress__plugins": "^3.0.0",
     "@wordpress/env": "^4.2.0",
-    "@styrsomissionskyrka/config": "*",
     "dotenv": "^11.0.0",
     "eslint": "8.7.0",
     "fs-extra": "^10.0.0",
-    "@styrsomissionskyrka/tsconfig": "*",
     "typescript": "^4.5.5"
   },
   "wp-bundler": {
