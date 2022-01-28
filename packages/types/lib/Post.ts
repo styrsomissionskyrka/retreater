@@ -20,8 +20,8 @@ export const BaseSchema = z.object({
   modified: utils.apiDate,
   modified_gmt: utils.apiDate,
   meta: utils.emptyArrayToObject,
-  smk_blocks: z.array(BlockSchema),
-  smk_has_blocks: z.boolean(),
+  content_blocks: z.array(BlockSchema),
+  has_content_blocks: z.boolean(),
 });
 
 export type Post = z.infer<typeof PostSchema>;
