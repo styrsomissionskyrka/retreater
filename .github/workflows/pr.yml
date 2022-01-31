@@ -1,9 +1,13 @@
-name: Pull Request
-on: pull_request
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
-  validate:
-    name: validate
+  ci:
+    name: ci
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
@@ -20,9 +24,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules/.cache/turbo
-          key: turbo-${{ github.job }}-${{ github.sha }}
+          key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
-            turbo-${{ github.job }}-
+            turbo-${{ github.job }}-${{ github.ref_name }}-
 
       - name: install
         run: yarn install
