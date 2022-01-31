@@ -27,6 +27,7 @@ jobs:
           key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
             turbo-${{ github.job }}-${{ github.ref_name }}-
+            turbo-${{ github.job }}-main-
 
       - name: install
         run: yarn install
