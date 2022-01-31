@@ -20,7 +20,7 @@ msgstr "Adam Bergman"
 msgid "Added leader"
 msgstr "La till ledare"
 
-#: inc/Utils/AdminTable.php:108
+#: inc/Utils/AdminTable.php:241
 msgid "All %s"
 msgstr "Alla %s"
 
@@ -28,6 +28,7 @@ msgstr "Alla %s"
 msgid "Booking"
 msgstr "Bokning"
 
+#: inc/Bookings/Admin.php:24
 #: src/components/EditBooking/Title.tsx:16
 msgid "Booking id"
 msgstr "Bokningsnummer"
@@ -86,7 +87,7 @@ msgstr "Datum inte satt"
 msgid "Dates"
 msgstr "Datum"
 
-#: inc/Bookings/Admin.php:110
+#: inc/Bookings/Admin.php:117
 #: src/components/EditBooking/ParticipantMeta.tsx:43
 msgid "E-mail"
 msgstr "E-post"
@@ -104,8 +105,8 @@ msgstr "Redigera %s"
 msgid "End date"
 msgstr "Slutdatum"
 
-#: inc/Utils/AdminTable.php:102
-#: inc/Utils/AdminTable.php:145
+#: inc/Utils/AdminTable.php:235
+#: inc/Utils/AdminTable.php:292
 msgid "Filter by %s"
 msgstr "Filtrera efter %s"
 
@@ -139,7 +140,7 @@ msgstr "Ingen betalning"
 msgid "OK"
 msgstr "OK"
 
-#: inc/Bookings/Admin.php:37
+#: inc/Bookings/Admin.php:44
 #: src/components/EditBooking/ParticipantMeta.tsx:72
 msgid "Participant"
 msgstr "Deltagare"
@@ -186,8 +187,8 @@ msgstr "Ta bort ledare"
 msgid "Removed leader"
 msgstr "Tog bort ledare"
 
-#: inc/Bookings/Admin.php:55
-#: inc/Bookings/Admin.php:87
+#: inc/Bookings/Admin.php:62
+#: inc/Bookings/Admin.php:94
 #: inc/Retreats/PostType.php:28
 #: src/components/EditBooking/Publish.tsx:67
 msgid "Retreat"
@@ -206,7 +207,7 @@ msgstr "Retreatledare"
 msgid "Retreat settings"
 msgstr "Retreatinställningar"
 
-#: inc/Bookings/Admin.php:88
+#: inc/Bookings/Admin.php:95
 #: inc/Retreats/PostType.php:27
 msgid "Retreats"
 msgstr "Retreater"
@@ -225,13 +226,13 @@ msgstr "Välj %s"
 msgid "Start date"
 msgstr "Startdatum"
 
-#: inc/Bookings/Admin.php:25
-#: inc/Bookings/Admin.php:71
+#: inc/Bookings/Admin.php:32
+#: inc/Bookings/Admin.php:78
 #: src/components/EditBooking/Publish.tsx:52
 msgid "Status"
 msgstr "Status"
 
-#: inc/Bookings/Admin.php:72
+#: inc/Bookings/Admin.php:79
 msgid "Statuses"
 msgstr "Status"
 

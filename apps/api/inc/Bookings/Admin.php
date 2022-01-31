@@ -18,6 +18,13 @@ class Admin implements ActionHookSubscriber
 
     public function setup_table()
     {
+        AdminTable::edit_column([
+            'post_type' => PostType::$post_type,
+            'name' => 'title',
+            'label' => __('Booking id', 'smk'),
+            'sortable' => false,
+        ]);
+
         AdminTable::add_column([
             'post_type' => PostType::$post_type,
             'index' => 2,

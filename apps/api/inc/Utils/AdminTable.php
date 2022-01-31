@@ -4,7 +4,22 @@ namespace StyrsoMissionskyrka\Utils;
 
 class AdminTable
 {
-    public static function add_column(array $args)
+    /**
+     * Add a new column to a post types admin archive page.
+     *
+     * @param array $args {
+     *   Parameters to use to setup the new column.
+     *
+     *   @type string   $post_type Post type archive.
+     *   @type int      $index     Index to place the column in.
+     *   @type string   $name      Name (id) of column.
+     *   @type string   $label     Optional. Label (title) of column.
+     *   @type callable $render    Callback to render the column. Receives current int $post_id as argument.
+     *   @type callable $sort      Optional. Callback to modify the current query if currently sorted upon.
+     * }
+     * @return void
+     */
+    public static function add_column(array $args): void
     {
         $post_type = $args['post_type'];
 
@@ -68,8 +83,8 @@ class AdminTable
                         $query->is_admin &&
                         $query->is_archive
                     ) {
-                        $meta_key = $query->get('orderby');
-                        if ($meta_key === $args['name']) {
+                        $order_by = $query->get('orderby');
+                        if ($order_by === $args['name']) {
                             call_user_func($args['sort'], $query);
                         }
                     }
@@ -80,7 +95,125 @@ class AdminTable
         }
     }
 
-    public static function add_select_filter(array $args)
+    /**
+     * Edit an existing column. You can update the title and/or make it sortable/non-sortable.
+     *
+     * @param array $args {
+     *   Parameters to edit the column.
+     *
+     *   @type string $post_type Post type in which to edit the column.
+     *   @type string $label     Optional. New title label to use for column.
+     *   @type bool   $sortable  Optional. Boolean to change if column is sortable or not.
+     * }
+     * @return void
+     */
+    public static function edit_column(array $args): void
+    {
+        $post_type = $args['post_type'];
+
+        if (isset($args['name'])) {
+            add_filter(
+                "manage_${post_type}_posts_columns",
+                function (array $columns) use ($args) {
+                    foreach ($columns as $key => $_) {
+                        if ($key === $args['name']) {
+                            $columns[$key] = $args['label'];
+                        }
+                    }
+                    return $columns;
+                },
+                10,
+                1
+            );
+        }
+
+        if (isset($args['sortable'])) {
+            add_filter(
+                "manage_edit-${post_type}_sortable_columns",
+                function (array $columns) use ($args) {
+                    $new_columns = [];
+                    foreach ($columns as $key => $value) {
+                        if ($key !== $args['name']) {
+                            $new_columns[$key] = $value;
+                        }
+
+                        if ($args['sortable']) {
+                            $new_columns[$args['name']] = $args['name'];
+                        }
+                    }
+
+                    return $new_columns;
+                },
+                10,
+                1
+            );
+        }
+    }
+
+    /**
+     * Remove a column from a post type's admin archive page.
+     *
+     * @param array $args {
+     *   Argument to indicate which column and post type to edit.
+     *
+     *   @type string $post_type Post type from which to remove the column.
+     *   @type string $name      Name of column to remove.
+     * }
+     * @return void
+     */
+    public static function remove_column(array $args): void
+    {
+        $post_type = $args['post_type'];
+        add_filter(
+            "manage_${post_type}_posts_columns",
+            function (array $columns) use ($args) {
+                $new_columns = [];
+                foreach ($columns as $key => $value) {
+                    if ($key !== $args['name']) {
+                        $new_columns[$key] = $value;
+                    }
+                }
+                return $new_columns;
+            },
+            10,
+            1
+        );
+
+        add_filter(
+            "manage_edit-${post_type}_sortable_columns",
+            function (array $columns) use ($args) {
+                $new_columns = [];
+                foreach ($columns as $key => $value) {
+                    if ($key !== $args['name']) {
+                        $new_columns[$key] = $value;
+                    }
+                }
+
+                return $new_columns;
+            },
+            10,
+            1
+        );
+    }
+
+    /**
+     * Add a new select filter to a post types admin archive page.
+     *
+     * @param array $args {
+     *   Configuration for the new select filter.
+     *
+     *   @type string   $post_type    Post type to which to add the new filter.
+     *   @type string   $name         Name (id) of the new filter.
+     *   @type string   $label        Singular label of the entity.
+     *   @type string   $label_plural Plural label of entity.
+     *   @type callable $options      Callback that gives back all available options. Should return an array with
+     *                                [$value => $label]. These will be transformed into <option value="">label</option>.
+     *   @type callable $sort         Optional. Callback used to modify the query to enable filtering. Receives the
+     *                                current WP_Query and the $value (string) as parameters.
+     * }
+     * @return void
+     */
+    public static function add_select_filter(array $args): void
     {
         if (isset($args['sort'])) {
             self::prepare_filter_query($args);
@@ -124,6 +257,20 @@ class AdminTable
         );
     }
 
+    /**
+     * Add a new input filter to a post types admin archive page.
+     *
+     * @param array $args {
+     *   Configuration for the new input filter.
+     *
+     *   @type string   $post_type    Post type to which to add the new filter.
+     *   @type string   $name         Name (id) of the new filter.
+     *   @type string   $label        Singular label of the entity.
+     *   @type callable $sort         Optional. Callback used to modify the query to enable filtering. Receives the
+     *                                current WP_Query and the $value (string) as parameters.
+     * }
+     * @return void
+     */
     public static function add_input_filter(array $args)
     {
         if (isset($args['sort'])) {

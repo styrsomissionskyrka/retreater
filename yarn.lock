@@ -769,10 +769,10 @@
     react-fast-compare "^3.2.0"
     use-subscription "^1.5.1"
 
-"@fransvilhelm/wp-bundler@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@fransvilhelm/wp-bundler/-/wp-bundler-2.1.0.tgz#62d88cbe916da39d3bab0e3a07462905443993db"
-  integrity sha512-VTVy5IqaiVD8yn1y7ibU3JODSvuX6Ob3XyuW9qFTc5ygsqfsHLncYYFjoq55Ngr/EQ3+XxhN/oSmD4DeqVLFqQ==
+"@fransvilhelm/wp-bundler@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@fransvilhelm/wp-bundler/-/wp-bundler-2.1.1.tgz#c0d91ab9647c26816d78d8964be6436e880e656b"
+  integrity sha512-VvNodpRc2FekNdGatxZqskuoMRzS/DYDLlZnBdMB4p1516g8sxB1F5X+K0VFVy7C57Ilh/pSHp9pkULVZrKsFQ==
   dependencies:
     "@swc/core" "^1.2.118"
     chokidar "^3.5.2"
