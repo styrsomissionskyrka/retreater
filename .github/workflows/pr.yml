@@ -21,9 +21,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules/.cache/turbo
-          key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+          key: turbo-${{ github.job }}-${{ github.sha }}
           restore-keys: |
-            turbo-${{ github.job }}-${{ github.ref_name }}-
+            turbo-${{ github.job }}-
 
       - name: install
         run: yarn install
