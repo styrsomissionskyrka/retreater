@@ -5,13 +5,13 @@ import { addDays, isBefore } from 'date-fns';
 
 import { useRetreatMeta } from '../../utils/data';
 import { DropdownDatePicker } from '../DropdownDatePicker';
-import { dbDatetime } from '../../utils/date';
+import { db } from '../../utils/date';
 
 export const SectionDates: React.FC = () => {
   let [meta, setMeta] = useRetreatMeta();
 
-  let startDate = parseApiDate(meta.start_date);
-  let endDate = parseApiDate(meta.end_date);
+  let startDate = meta.start_date ? db.parse(meta.start_date) : null;
+  let endDate = meta.end_date ? db.parse(meta.end_date) : null;
 
   let startRowRef = useRef<HTMLElement>(null);
   let endRowRef = useRef<HTMLElement>(null);
@@ -27,13 +27,13 @@ export const SectionDates: React.FC = () => {
     }
 
     setMeta({
-      start_date: next != null ? dbDatetime(next) : '',
-      end_date: nextEndDate != null ? dbDatetime(nextEndDate) : '',
+      start_date: next != null ? db.format(next) : '',
+      end_date: nextEndDate != null ? db.format(nextEndDate) : '',
     });
   };
 
   const handleEndDateChange = (next: Date | null) => {
-    setMeta({ end_date: next != null ? dbDatetime(next) : '' });
+    setMeta({ end_date: next != null ? db.format(next) : '' });
   };
 
   return (
@@ -50,15 +50,3 @@ export const SectionDates: React.FC = () => {
     </PanelBody>
   );
 };
-
-function parseApiDate(date: string | null | undefined): Date | null {
-  if (date == null || date === '') return null;
-
-  try {
-    let parsed = new Date(date);
-    if (parsed.toString() === 'Invalid Date') return null;
-    return parsed;
-  } catch (error) {
-    return null;
-  }
-}
