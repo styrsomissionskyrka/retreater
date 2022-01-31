@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "wp-env start --xdebug",
+    "stop": "wp-env stop",
     "build": "wp-bundler",
     "dev": "wp-bundler --watch --port 8080",
     "lint": "eslint src --ext .ts --ext .tsx --ext .js",
@@ -23,7 +24,7 @@
     "zod": "^3.11.6"
   },
   "devDependencies": {
-    "@fransvilhelm/wp-bundler": "^2.1.0",
+    "@fransvilhelm/wp-bundler": "^2.1.1",
     "@styrsomissionskyrka/config": "*",
     "@styrsomissionskyrka/tsconfig": "*",
     "@styrsomissionskyrka/types": "*",
