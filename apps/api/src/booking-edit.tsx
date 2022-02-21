@@ -1,4 +1,3 @@
-import { __ } from '@wordpress/i18n';
 import { render } from 'react-dom';
 
 import { EditBooking } from './components/EditBooking';

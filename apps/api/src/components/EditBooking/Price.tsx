@@ -1,5 +1,5 @@
-import { __, sprintf } from '@wordpress/i18n';
-import { Fragment, useState } from 'react';
+import { __ } from '@wordpress/i18n';
+import { useState } from 'react';
 import * as z from 'zod';
 
 import { usePriceInput } from '../../hooks/use-price-input';

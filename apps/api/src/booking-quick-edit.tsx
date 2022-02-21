@@ -1,4 +1,4 @@
-import * as _ from './utils/array';
+export {};
 
 window.addEventListener('DOMContentLoaded', () => {
   setupStatusQuickEdit();
