@@ -1,13 +1,12 @@
-import './EditBooking.css';
-
 import { Fragment, useLayoutEffect } from 'react';
 
 import { Comment } from './Comment';
+import './EditBooking.css';
 import { ParticipantMeta } from './ParticipantMeta';
-import { Save } from './Save';
-import { Publish } from './Publish';
-import { Title } from './Title';
 import { Price } from './Price';
+import { Publish } from './Publish';
+import { Save } from './Save';
+import { Title } from './Title';
 
 interface EditBookingProps {
   initialData: FormData;

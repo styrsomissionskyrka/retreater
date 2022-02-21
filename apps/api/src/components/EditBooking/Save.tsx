@@ -1,6 +1,6 @@
+import { __ } from '@wordpress/i18n';
 import { Fragment } from 'react';
 import { createPortal } from 'react-dom';
-import { __ } from '@wordpress/i18n';
 
 import { useExistingPortal } from './utils';
 

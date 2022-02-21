@@ -1,4 +1,4 @@
-import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser';
+import parse, { HTMLReactParserOptions, domToReact } from 'html-react-parser';
 import { Fragment, useMemo } from 'react';
 
 import { Link } from '../Link';

@@ -1,11 +1,11 @@
-import { Fragment } from 'react';
-import { PluginSidebarMoreMenuItem, PluginSidebar } from '@wordpress/edit-post';
 import { Dashicon, Panel } from '@wordpress/components';
+import { PluginSidebar, PluginSidebarMoreMenuItem } from '@wordpress/edit-post';
 import { __ } from '@wordpress/i18n';
+import { Fragment } from 'react';
 
-import { SectionPrice } from './SectionPrice';
 import { SectionDates } from './SectionDates';
 import { SectionParticipants } from './SectionParticipants';
+import { SectionPrice } from './SectionPrice';
 
 export interface EditRetreatProps {
   name: string;

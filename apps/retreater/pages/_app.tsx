@@ -1,5 +1,5 @@
-import Head from 'next/head';
 import { AppProps } from 'next/app';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 

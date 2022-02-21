@@ -1,6 +1,6 @@
+import { useDispatch, useSelect } from '@wordpress/data';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { useSelect, useDispatch } from '@wordpress/data';
-import { Retreat, Base } from '@styrsomissionskyrka/types';
+import { Base, Retreat } from '@styrsomissionskyrka/types';
 
 export type SetState<V> = React.Dispatch<React.SetStateAction<V>>;
 export type StateReturn<V, SV = V> = [state: V, setState: SetState<SV>];

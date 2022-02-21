@@ -1,7 +1,7 @@
-import './PublishSection.css';
-
+import { __, sprintf } from '@wordpress/i18n';
 import { useState } from 'react';
-import { sprintf, __ } from '@wordpress/i18n';
+
+import './PublishSection.css';
 
 export const PublishSection: React.FC = ({ children }) => {
   return <div className="publish-section">{children}</div>;

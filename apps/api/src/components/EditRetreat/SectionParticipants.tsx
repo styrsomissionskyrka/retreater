@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import { PanelBody, PanelRow, TextControl, FormTokenField } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
 import { usePersistedState } from '@fransvilhelm/hooks';
+import { FormTokenField, PanelBody, PanelRow, TextControl } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+import { useEffect } from 'react';
 
-import { useRetreatMeta } from '../../utils/data';
 import { uniq } from '../../utils/array';
+import { useRetreatMeta } from '../../utils/data';
 
 export const SectionParticipants: React.FC = () => {
   let [meta, setMeta] = useRetreatMeta();

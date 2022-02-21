@@ -2,12 +2,7 @@ import * as z from 'zod';
 
 import { HTML } from './Html';
 import { BlockComponent } from './types';
-import {
-  NonEmptyString,
-  StyledBlockAttributes,
-  useBlockAttributes,
-  getStyleFromAttributes,
-} from './utils';
+import { NonEmptyString, StyledBlockAttributes, getStyleFromAttributes, useBlockAttributes } from './utils';
 
 const ParagraphAttributes = StyledBlockAttributes.extend({
   content: NonEmptyString.optional(),

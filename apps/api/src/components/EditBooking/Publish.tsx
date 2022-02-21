@@ -1,10 +1,11 @@
+import { __ } from '@wordpress/i18n';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { __ } from '@wordpress/i18n';
 import * as z from 'zod';
 
-import { PublishSection, PublishRow } from '../PublishSection';
+import { PublishRow, PublishSection } from '../PublishSection';
 import { useExistingPortal } from './utils';
+
 interface PublishProps {
   status: unknown;
 }

@@ -1,9 +1,9 @@
-import * as z from 'zod';
 import NextImage, { ImageProps } from 'next/image';
+import * as z from 'zod';
 
-import { BlockComponent } from './types';
-import { getStyleFromAttributes, NonEmptyString, StyledBlockAttributes, useBlockAttributes } from './utils';
 import { Link } from '../Link';
+import { BlockComponent } from './types';
+import { NonEmptyString, StyledBlockAttributes, getStyleFromAttributes, useBlockAttributes } from './utils';
 
 let NonZeroInt = z
   .number()

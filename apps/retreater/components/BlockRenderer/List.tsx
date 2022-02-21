@@ -2,12 +2,7 @@ import * as z from 'zod';
 
 import { HTML, Replacements } from './Html';
 import { BlockComponent } from './types';
-import {
-  NonEmptyString,
-  StyledBlockAttributes,
-  useBlockAttributes,
-  getStyleFromAttributes,
-} from './utils';
+import { NonEmptyString, StyledBlockAttributes, getStyleFromAttributes, useBlockAttributes } from './utils';
 
 const ListAttributes = StyledBlockAttributes.extend({
   ordered: z.boolean().optional(),
@@ -36,10 +31,7 @@ export const List: BlockComponent = ({ block }) => {
   );
 };
 
-const ListItem: React.FC<JSX.IntrinsicElements['li']> = ({
-  children,
-  ...props
-}) => {
+const ListItem: React.FC<JSX.IntrinsicElements['li']> = ({ children, ...props }) => {
   return <li {...props}>{children}</li>;
 };
 

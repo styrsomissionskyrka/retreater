@@ -1,5 +1,5 @@
-import React from 'react';
 import * as components from '@wordpress/components';
+import React from 'react';
 
 declare module '@wordpress/components' {
   namespace Dropdown {

@@ -1,7 +1,7 @@
 import * as z from 'zod';
 
-import * as utils from './utils';
 import { BaseSchema } from './Post';
+import * as utils from './utils';
 
 export type RetreatMetadata = z.infer<typeof RetreatMetadataSchema>;
 export const RetreatMetadataSchema = z.object({

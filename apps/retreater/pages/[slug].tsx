@@ -1,4 +1,4 @@
-import { GetStaticPaths, GetStaticPropsContext, GetStaticProps, NextPage } from 'next';
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from 'next';
 import * as z from 'zod';
 import { Post } from '@styrsomissionskyrka/types';
 

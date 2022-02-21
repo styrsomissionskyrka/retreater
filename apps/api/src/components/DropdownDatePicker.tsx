@@ -1,4 +1,4 @@
-import { DateTimePicker, Dropdown, Button } from '@wordpress/components';
+import { Button, DateTimePicker, Dropdown } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { format } from 'date-fns';
 

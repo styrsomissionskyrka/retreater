@@ -6,11 +6,7 @@ const palette = theme.settings.color.palette;
 const gradients = theme.settings.color.gradients;
 const fontSize = theme.settings.typography.fontSizes;
 
-export function get(
-  type: ThemeSettingKey,
-  name?: string,
-  fallback?: string | undefined,
-): string | undefined {
+export function get(type: ThemeSettingKey, name?: string, fallback?: string | undefined): string | undefined {
   if (name == null) return undefined;
 
   if (type === 'color') {
@@ -18,9 +14,7 @@ export function get(
   }
 
   if (type === 'gradient') {
-    return (
-      gradients.find((gradient) => gradient.slug === name)?.gradient ?? fallback
-    );
+    return gradients.find((gradient) => gradient.slug === name)?.gradient ?? fallback;
   }
 
   if (type === 'fontSize') {

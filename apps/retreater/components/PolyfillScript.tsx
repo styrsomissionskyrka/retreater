@@ -21,7 +21,5 @@ const src = new URL('https://polyfill.io/v3/polyfill.min.js');
 src.searchParams.set('features', features);
 
 export const PolyfillScript: React.FC = () => {
-  return (
-    <Script key="polyfills" src={src.toString()} strategy="beforeInteractive" />
-  );
+  return <Script key="polyfills" src={src.toString()} strategy="beforeInteractive" />;
 };

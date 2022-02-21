@@ -3,11 +3,7 @@ import * as z from 'zod';
 
 import { renderBlock } from './render';
 import { BlockComponent } from './types';
-import {
-  StyledBlockAttributes,
-  useBlockAttributes,
-  getStyleFromAttributes,
-} from './utils';
+import { StyledBlockAttributes, getStyleFromAttributes, useBlockAttributes } from './utils';
 
 const ColumnsAttributes = StyledBlockAttributes.extend({});
 

@@ -1,7 +1,7 @@
 import * as z from 'zod';
 
-import * as utils from './utils';
 import * as filters from './filters';
+import * as utils from './utils';
 
 export const GlobalParametersSchema = z.object({
   _fields: z.array(z.string()).optional(),

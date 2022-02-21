@@ -2,7 +2,7 @@ import { PanelBody, PanelRow, TextControl } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 
 import { usePriceInput } from '../../hooks/use-price-input';
-import { useRetreatAttribute, useRetreatMeta, SetState } from '../../utils/data';
+import { SetState, useRetreatAttribute, useRetreatMeta } from '../../utils/data';
 
 export const SectionPrice: React.FC = () => {
   let [price, setPrice] = useRetreatAttribute('stripe_price');

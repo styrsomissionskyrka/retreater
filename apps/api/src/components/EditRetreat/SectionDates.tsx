@@ -1,11 +1,11 @@
-import { useRef } from 'react';
 import { PanelBody, PanelRow } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { addDays, isBefore } from 'date-fns';
+import { useRef } from 'react';
 
 import { useRetreatMeta } from '../../utils/data';
-import { DropdownDatePicker } from '../DropdownDatePicker';
 import { db } from '../../utils/date';
+import { DropdownDatePicker } from '../DropdownDatePicker';
 
 export const SectionDates: React.FC = () => {
   let [meta, setMeta] = useRetreatMeta();

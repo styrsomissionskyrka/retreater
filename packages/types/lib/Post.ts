@@ -1,7 +1,7 @@
 import * as z from 'zod';
 
-import * as utils from './utils';
 import { BlockSchema } from './Block';
+import * as utils from './utils';
 
 export type PostStatus = z.infer<typeof PostStatusSchema>;
 export const PostStatusSchema = z.enum(['publish', 'future', 'draft', 'pending', 'private']);
