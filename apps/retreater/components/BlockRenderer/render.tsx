@@ -1,4 +1,4 @@
-import { Block } from '@styrsomissionskyrka/types';
+import { Block } from '@smk/types';
 
 import { Columns } from './Columns';
 import { Heading } from './Heading';

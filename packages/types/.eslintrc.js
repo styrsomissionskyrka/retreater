@@ -1,1 +1,1 @@
-module.exports = require('@styrsomissionskyrka/config/eslint-preset');
+module.exports = require('@smk/config/eslint-preset');

@@ -1,14 +1,14 @@
 {
-  "name": "@styrsomissionskyrka/retreater",
+  "name": "@smk/retreater",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "jest"
+    "_dev": "next dev",
+    "_build": "next build",
+    "_start": "next start",
+    "_lint": "next lint",
+    "_test": "jest"
   },
   "dependencies": {
     "@fransvilhelm/hooks": "^3.1.4",
@@ -21,9 +21,9 @@
     "zod": "^3.11.6"
   },
   "devDependencies": {
-    "@styrsomissionskyrka/config": "*",
-    "@styrsomissionskyrka/tsconfig": "*",
-    "@styrsomissionskyrka/types": "*",
+    "@smk/config": "*",
+    "@smk/tsconfig": "*",
+    "@smk/types": "*",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",

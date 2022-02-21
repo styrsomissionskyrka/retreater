@@ -39,7 +39,7 @@
     "arrowParens": "always",
     "printWidth": 120,
     "importOrder": [
-      "^@styrsomissionskyrka/(.*)$",
+      "^@smk/(.*)$",
       "^[./]"
     ],
     "importOrderSeparation": true,

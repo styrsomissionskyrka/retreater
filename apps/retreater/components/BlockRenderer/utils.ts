@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import * as z from 'zod';
-import { Block } from '@styrsomissionskyrka/types';
+import { Block } from '@smk/types';
 
 import * as theme from '../../styles/theme';
 

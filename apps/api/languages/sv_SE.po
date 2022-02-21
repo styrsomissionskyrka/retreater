@@ -38,7 +38,7 @@ msgid "Bookings"
 msgstr "Bokningar"
 
 #: inc/Bookings/PostType.php:121
-#: src/components/EditBooking/Publish.tsx:38
+#: src/components/EditBooking/Publish.tsx:39
 msgid "Cancelled"
 msgstr "Avbruten"
 
@@ -58,7 +58,7 @@ msgid "Comment"
 msgstr "Kommentar"
 
 #: inc/Bookings/PostType.php:113
-#: src/components/EditBooking/Publish.tsx:37
+#: src/components/EditBooking/Publish.tsx:38
 msgid "Confirmed"
 msgstr "Bekräftad"
 
@@ -69,7 +69,7 @@ msgstr[0] "Bekräftad <span class=\"count\">(%s)</span>"
 msgstr[1] "Bekräftad <span class=\"count\">(%s)</span>"
 
 #: inc/Bookings/PostType.php:97
-#: src/components/EditBooking/Publish.tsx:35
+#: src/components/EditBooking/Publish.tsx:36
 msgid "Created"
 msgstr "Skapad"
 
@@ -150,7 +150,7 @@ msgid "Participants"
 msgstr "Deltagare"
 
 #: inc/Bookings/PostType.php:105
-#: src/components/EditBooking/Publish.tsx:36
+#: src/components/EditBooking/Publish.tsx:37
 msgid "Pending"
 msgstr "Väntande"
 
@@ -190,7 +190,7 @@ msgstr "Tog bort ledare"
 #: inc/Bookings/Admin.php:62
 #: inc/Bookings/Admin.php:94
 #: inc/Retreats/PostType.php:28
-#: src/components/EditBooking/Publish.tsx:67
+#: src/components/EditBooking/Publish.tsx:68
 msgid "Retreat"
 msgstr "Retreat"
 
@@ -228,7 +228,7 @@ msgstr "Startdatum"
 
 #: inc/Bookings/Admin.php:32
 #: inc/Bookings/Admin.php:78
-#: src/components/EditBooking/Publish.tsx:52
+#: src/components/EditBooking/Publish.tsx:53
 msgid "Status"
 msgstr "Status"
 

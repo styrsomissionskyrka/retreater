@@ -1,4 +1,4 @@
-import { Block as BlockType } from '@styrsomissionskyrka/types';
+import { Block as BlockType } from '@smk/types';
 
 interface BlockComponentProps {
   block: BlockType;

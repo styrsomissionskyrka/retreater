@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from 'next';
 import * as z from 'zod';
-import { Post } from '@styrsomissionskyrka/types';
+import { Post } from '@smk/types';
 
 import { BlockRenderer } from '../components';
 import * as wp from '../lib/api/wp';

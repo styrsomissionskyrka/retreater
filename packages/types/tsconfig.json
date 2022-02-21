@@ -1,5 +1,5 @@
 {
-  "extends": "@styrsomissionskyrka/tsconfig/react-library.json",
+  "extends": "@smk/tsconfig/react-library.json",
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {

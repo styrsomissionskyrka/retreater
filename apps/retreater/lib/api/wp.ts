@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as z from 'zod';
-import { Post, PostSchema } from '@styrsomissionskyrka/types';
+import { Post, PostSchema } from '@smk/types';
 
 import * as config from '../config';
 import { PostListParameterInput, PostListParametersSchema } from './schema';

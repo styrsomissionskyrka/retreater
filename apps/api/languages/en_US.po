@@ -38,7 +38,7 @@ msgid "Bookings"
 msgstr ""
 
 #: inc/Bookings/PostType.php:121
-#: src/components/EditBooking/Publish.tsx:38
+#: src/components/EditBooking/Publish.tsx:39
 msgid "Cancelled"
 msgstr ""
 
@@ -58,7 +58,7 @@ msgid "Comment"
 msgstr ""
 
 #: inc/Bookings/PostType.php:113
-#: src/components/EditBooking/Publish.tsx:37
+#: src/components/EditBooking/Publish.tsx:38
 msgid "Confirmed"
 msgstr ""
 
@@ -69,7 +69,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: inc/Bookings/PostType.php:97
-#: src/components/EditBooking/Publish.tsx:35
+#: src/components/EditBooking/Publish.tsx:36
 msgid "Created"
 msgstr ""
 
@@ -150,7 +150,7 @@ msgid "Participants"
 msgstr ""
 
 #: inc/Bookings/PostType.php:105
-#: src/components/EditBooking/Publish.tsx:36
+#: src/components/EditBooking/Publish.tsx:37
 msgid "Pending"
 msgstr ""
 
@@ -190,7 +190,7 @@ msgstr ""
 #: inc/Bookings/Admin.php:62
 #: inc/Bookings/Admin.php:94
 #: inc/Retreats/PostType.php:28
-#: src/components/EditBooking/Publish.tsx:67
+#: src/components/EditBooking/Publish.tsx:68
 msgid "Retreat"
 msgstr ""
 
@@ -228,7 +228,7 @@ msgstr ""
 
 #: inc/Bookings/Admin.php:32
 #: inc/Bookings/Admin.php:78
-#: src/components/EditBooking/Publish.tsx:52
+#: src/components/EditBooking/Publish.tsx:53
 msgid "Status"
 msgstr ""
 

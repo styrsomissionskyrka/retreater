@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import { ListParametersSchema, PostStatusSchema, filters, utils } from '@styrsomissionskyrka/types';
+import { ListParametersSchema, PostStatusSchema, filters, utils } from '@smk/types';
 
 export type PostListParameters = z.infer<typeof PostListParametersSchema>;
 export type PostListParameterInput = z.input<typeof PostListParametersSchema>;

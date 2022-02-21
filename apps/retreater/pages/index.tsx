@@ -1,5 +1,5 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { Post } from '@styrsomissionskyrka/types';
+import { Post } from '@smk/types';
 
 import { Link } from '../components';
 import * as wp from '../lib/api/wp';
